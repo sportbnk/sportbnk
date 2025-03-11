@@ -100,26 +100,7 @@
   img {
     @apply transition-opacity duration-300;
   }
-
-  .hexagon-pattern {
-    background-image: url('/lovable-uploads/9347a39c-a8e7-4351-8636-1a08454618b6.png');
-    background-size: contain;
-    background-repeat: repeat;
-    background-position: center;
-    position: relative;
-  }
   
-  .hexagon-pattern::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(255, 255, 255, 0.7);
-    z-index: 0;
-  }
-
   .section-fade-in {
     opacity: 0;
     animation: fadeIn 0.8s ease-out forwards;

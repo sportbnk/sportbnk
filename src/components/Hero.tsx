@@ -26,7 +26,7 @@ const Hero = () => {
   }, []);
 
   return (
-    <section className="relative pt-24 pb-16 md:pt-32 md:pb-24 overflow-hidden hexagon-pattern">
+    <section className="relative pt-24 pb-16 md:pt-32 md:pb-24 overflow-hidden bg-white">
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         <div className="grid md:grid-cols-2 gap-8 items-center">
           <div className="flex flex-col space-y-6 max-w-xl">
@@ -53,12 +53,6 @@ const Hero = () => {
             <div className="relative">
               <div className="absolute -top-10 -left-10 w-40 h-40 bg-sportbnk-green/20 rounded-full blur-2xl"></div>
               <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-sportbnk-navy/20 rounded-full blur-2xl"></div>
-              
-              <img 
-                src="/lovable-uploads/0f03f161-1515-4345-a85a-b662e12c71bd.png" 
-                alt="SportBNK Platform Interface" 
-                className="w-full rounded-lg shadow-xl border-4 border-white relative z-10 hidden" 
-              />
               
               <div className="relative z-10">
                 <img 
