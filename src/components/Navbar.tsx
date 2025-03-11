@@ -29,9 +29,11 @@ const Navbar = () => {
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex items-center justify-between">
           <a href="/" className="flex items-center">
-            <span className="text-sportbnk-navy font-bold text-2xl">
-              <span className="text-sportbnk-green">SPORT</span>BNK
-            </span>
+            <img 
+              src="/lovable-uploads/fe95d116-e43a-4e1e-9439-b2fee1207d72.png" 
+              alt="SportBNK Logo" 
+              className="h-10"
+            />
           </a>
 
           {/* Desktop Navigation */}

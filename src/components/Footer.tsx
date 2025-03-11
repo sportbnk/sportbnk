@@ -8,9 +8,11 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           <div>
             <a href="/" className="flex items-center mb-4">
-              <span className="text-sportbnk-navy font-bold text-2xl">
-                <span className="text-sportbnk-green">SPORT</span>BNK
-              </span>
+              <img 
+                src="/lovable-uploads/fe95d116-e43a-4e1e-9439-b2fee1207d72.png" 
+                alt="SportBNK Logo" 
+                className="h-12" 
+              />
             </a>
             <p className="text-gray-600 text-sm">
               Sports intelligence platform for businesses, connecting data from 750k+ teams and 360k+ competitions.

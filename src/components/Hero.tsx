@@ -31,7 +31,7 @@ const Hero = () => {
         <div className="grid md:grid-cols-2 gap-8 items-center">
           <div className="flex flex-col space-y-6 max-w-xl">
             <div className="flex items-center mb-2">
-              <img src="/lovable-uploads/0f03f161-1515-4345-a85a-b662e12c71bd.png" alt="SportBNK Logo" className="w-20 h-20" />
+              <img src="/lovable-uploads/fe95d116-e43a-4e1e-9439-b2fee1207d72.png" alt="SportBNK Logo" className="w-48" />
             </div>
             <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-sportbnk-navy animate-slideUp">
               B2B Sports<br />Intelligence Platform
