@@ -48,17 +48,29 @@ const Hero = () => {
             className="animate-when-visible"
           >
             <div className="relative">
+              <div className="absolute -top-10 -left-10 w-40 h-40 bg-sportbnk-green/20 rounded-full blur-2xl"></div>
+              <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-sportbnk-navy/20 rounded-full blur-2xl"></div>
+              
               <img 
                 src="/lovable-uploads/9347a39c-a8e7-4351-8636-1a08454618b6.png" 
-                alt="SportBNK Platform Screenshots" 
-                className="w-full rounded-lg shadow-2xl" 
+                alt="SportBNK Platform Interface" 
+                className="w-full rounded-lg shadow-xl border-4 border-white relative z-10" 
               />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <img 
-                  src="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=800&q=80" 
-                  alt="SportBNK Platform Dashboard" 
-                  className="w-full rounded-lg shadow-2xl border-4 border-white" 
-                />
+              
+              <div className="absolute -bottom-6 -right-6 bg-white p-4 rounded-lg shadow-lg z-20">
+                <div className="flex items-center space-x-2">
+                  <div className="w-3 h-3 bg-sportbnk-green rounded-full"></div>
+                  <span className="text-sportbnk-navy font-medium">Live Data</span>
+                </div>
+                <p className="text-gray-600 text-sm mt-1">360,000+ competitions</p>
+              </div>
+              
+              <div className="absolute -top-6 -left-6 bg-white p-4 rounded-lg shadow-lg z-20">
+                <div className="flex items-center space-x-2">
+                  <div className="w-3 h-3 bg-sportbnk-green rounded-full"></div>
+                  <span className="text-sportbnk-navy font-medium">Global Coverage</span>
+                </div>
+                <p className="text-gray-600 text-sm mt-1">110+ sports disciplines</p>
               </div>
             </div>
           </div>
