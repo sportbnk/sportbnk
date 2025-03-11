@@ -9,7 +9,7 @@ const CTA = () => {
           Looking to upscale your business?
         </h2>
         <Button className="bg-sportbnk-navy hover:bg-sportbnk-navy/90 text-white px-8 py-6 rounded-md">
-          Get In Touch
+          Book A Demo
         </Button>
         <p className="text-sportbnk-navy mt-4 opacity-80 text-sm">
           www.sportbnk.com | info@sportbnk.com
