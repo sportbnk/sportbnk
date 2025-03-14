@@ -51,11 +51,30 @@ const Hero = () => {
               <div className="absolute -top-10 -left-10 w-40 h-40 bg-sportbnk-green/20 rounded-full blur-2xl"></div>
               <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-sportbnk-navy/20 rounded-full blur-2xl"></div>
               
-              <div className="relative z-10">
+              {/* Main UI screenshot - Teams table */}
+              <div className="relative z-10 mb-4">
                 <img 
-                  src="/lovable-uploads/0f03f161-1515-4345-a85a-b662e12c71bd.png" 
-                  alt="SportBNK Platform Interface" 
+                  src="/lovable-uploads/08f9a58b-fe6c-4ee9-9058-d4d13a5cf79e.png" 
+                  alt="SportBNK Teams Table" 
                   className="w-full rounded-lg shadow-xl border border-gray-200" 
+                />
+              </div>
+              
+              {/* Contacts table */}
+              <div className="relative z-10 mb-4 -mt-10 ml-10">
+                <img 
+                  src="/lovable-uploads/645d8320-b99d-4282-97d7-2639fc82c060.png" 
+                  alt="SportBNK Contacts Table" 
+                  className="w-full rounded-lg shadow-xl border border-gray-200 transform rotate-1" 
+                />
+              </div>
+              
+              {/* Team profile */}
+              <div className="relative z-10 -mt-20 mr-8">
+                <img 
+                  src="/lovable-uploads/b0f94fb5-f923-4243-b466-86aa2a7738d0.png" 
+                  alt="Cricket Ireland Team Profile" 
+                  className="w-full rounded-lg shadow-xl border border-gray-200 transform -rotate-2" 
                 />
               </div>
               
