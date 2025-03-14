@@ -69,12 +69,12 @@ const Hero = () => {
                 />
               </div>
               
-              {/* Team profile - repositioned to be more centered and to the left */}
-              <div className="relative z-30 -mt-28 ml-4 w-[60%]">
+              {/* Team profile - centered and aligned with heading */}
+              <div className="relative z-30 -mt-24 mx-auto ml-14 w-[65%]">
                 <img 
                   src="/lovable-uploads/b0f94fb5-f923-4243-b466-86aa2a7738d0.png" 
                   alt="Cricket Ireland Team Profile" 
-                  className="w-full rounded-lg shadow-xl border border-gray-200 transform -rotate-3" 
+                  className="w-full rounded-lg shadow-xl border border-gray-200 transform -rotate-2" 
                 />
               </div>
             </div>
