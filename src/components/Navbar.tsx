@@ -284,7 +284,7 @@ const Navbar = () => {
               className="hidden md:flex bg-sportbnk-green hover:bg-sportbnk-green/90 text-white rounded-md items-center"
               onClick={() => window.location.href = '/book-demo'}
             >
-              <Calendar className="h-4 w-4 mr-1" /> Book A Demo
+              Book A Demo
             </Button>
 
             {/* Mobile Menu Button */}
@@ -430,7 +430,7 @@ const Navbar = () => {
                 setIsMobileMenuOpen(false);
               }}
             >
-              <Calendar className="h-4 w-4 mr-1" /> Book A Demo
+              Book A Demo
             </Button>
           </div>
         </div>
