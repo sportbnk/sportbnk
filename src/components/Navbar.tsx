@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -240,7 +239,10 @@ const Navbar = () => {
               </NavigationMenuList>
             </NavigationMenu>
 
-            <Button className="hidden md:flex bg-sportbnk-green hover:bg-sportbnk-green/90 text-white rounded-md">
+            <Button 
+              className="hidden md:flex bg-sportbnk-green hover:bg-sportbnk-green/90 text-white rounded-md"
+              onClick={() => window.location.href = '/book-demo'}
+            >
               Book A Demo
             </Button>
 
@@ -342,7 +344,13 @@ const Navbar = () => {
               <Link to="/pricing" className="text-sportbnk-navy w-full block">Pricing</Link>
             </div>
             
-            <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white rounded-md w-full mt-4">
+            <Button 
+              className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white rounded-md w-full mt-4"
+              onClick={() => {
+                window.location.href = '/book-demo';
+                setIsMobileMenuOpen(false);
+              }}
+            >
               Book A Demo
             </Button>
           </div>
