@@ -36,33 +36,38 @@ const Navbar = () => {
             />
           </a>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
-            <a href="/" className="text-sm font-medium text-sportbnk-navy hover:text-sportbnk-green transition-colors">
-              Home
-            </a>
-            <a href="#about" className="text-sm font-medium text-sportbnk-navy hover:text-sportbnk-green transition-colors">
-              About Us
-            </a>
-            <a href="#features" className="text-sm font-medium text-sportbnk-navy hover:text-sportbnk-green transition-colors">
-              Features
-            </a>
-            <a href="#contact" className="text-sm font-medium text-sportbnk-navy hover:text-sportbnk-green transition-colors">
-              Contact Us
-            </a>
-          </nav>
+          <div className="flex items-center space-x-4">
+            {/* Desktop Navigation */}
+            <nav className="hidden md:flex items-center space-x-8">
+              <a href="#product" className="text-sm font-medium text-sportbnk-navy hover:text-sportbnk-green transition-colors">
+                Product
+              </a>
+              <a href="#data" className="text-sm font-medium text-sportbnk-navy hover:text-sportbnk-green transition-colors">
+                Data
+              </a>
+              <a href="#company" className="text-sm font-medium text-sportbnk-navy hover:text-sportbnk-green transition-colors">
+                Company
+              </a>
+              <a href="#resources" className="text-sm font-medium text-sportbnk-navy hover:text-sportbnk-green transition-colors">
+                Resources
+              </a>
+              <a href="#pricing" className="text-sm font-medium text-sportbnk-navy hover:text-sportbnk-green transition-colors">
+                Pricing
+              </a>
+            </nav>
 
-          <Button className="hidden md:flex bg-sportbnk-green hover:bg-sportbnk-green/90 text-white rounded-md">
-            Get in Touch
-          </Button>
+            <Button className="hidden md:flex bg-sportbnk-green hover:bg-sportbnk-green/90 text-white rounded-md">
+              Book a Demo
+            </Button>
 
-          {/* Mobile Menu Button */}
-          <button 
-            className="md:hidden text-sportbnk-navy" 
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          >
-            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+            {/* Mobile Menu Button */}
+            <button 
+              className="md:hidden text-sportbnk-navy" 
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -70,20 +75,23 @@ const Navbar = () => {
       {isMobileMenuOpen && (
         <div className="md:hidden bg-white shadow-lg absolute top-full left-0 right-0 animate-slideUp">
           <div className="container mx-auto px-4 py-4 flex flex-col space-y-4">
-            <a href="/" className="text-base font-medium text-sportbnk-navy hover:text-sportbnk-green transition-colors py-2">
-              Home
+            <a href="#product" className="text-base font-medium text-sportbnk-navy hover:text-sportbnk-green transition-colors py-2">
+              Product
             </a>
-            <a href="#about" className="text-base font-medium text-sportbnk-navy hover:text-sportbnk-green transition-colors py-2">
-              About Us
+            <a href="#data" className="text-base font-medium text-sportbnk-navy hover:text-sportbnk-green transition-colors py-2">
+              Data
             </a>
-            <a href="#features" className="text-base font-medium text-sportbnk-navy hover:text-sportbnk-green transition-colors py-2">
-              Features
+            <a href="#company" className="text-base font-medium text-sportbnk-navy hover:text-sportbnk-green transition-colors py-2">
+              Company
             </a>
-            <a href="#contact" className="text-base font-medium text-sportbnk-navy hover:text-sportbnk-green transition-colors py-2">
-              Contact Us
+            <a href="#resources" className="text-base font-medium text-sportbnk-navy hover:text-sportbnk-green transition-colors py-2">
+              Resources
+            </a>
+            <a href="#pricing" className="text-base font-medium text-sportbnk-navy hover:text-sportbnk-green transition-colors py-2">
+              Pricing
             </a>
             <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white rounded-md w-full">
-              Get in Touch
+              Book a Demo
             </Button>
           </div>
         </div>
