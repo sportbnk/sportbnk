@@ -162,16 +162,6 @@ const Navbar = () => {
                           </Link>
                         </NavigationMenuLink>
                       </li>
-                      <li>
-                        <NavigationMenuLink asChild>
-                          <Link to="/contact" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
-                            <div className="text-sm font-medium text-sportbnk-navy flex items-center">
-                              <Phone className="h-4 w-4 mr-2" /> Contact Us
-                            </div>
-                            <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Get in touch with our team</p>
-                          </Link>
-                        </NavigationMenuLink>
-                      </li>
                     </ul>
                   </NavigationMenuContent>
                 </NavigationMenuItem>
@@ -360,11 +350,6 @@ const Navbar = () => {
                     <Newspaper className="h-4 w-4 mr-2" />Latest News
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Link to="/company#contact-us" className="w-full flex items-center">
-                    <Phone className="h-4 w-4 mr-2" />Contact Us
-                  </Link>
-                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
             
@@ -439,4 +424,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
