@@ -34,7 +34,7 @@ const Hero = () => {
               B2B Sports<br />Intelligence Platform
             </h1>
             <p className="text-lg text-gray-600 animate-slideUp delay-100">
-              the sports industry is to be an estimated $760 Billion market by 2026
+              The sports industry is to be an estimated $760 Billion market by 2026
             </p>
             <div className="pt-4 animate-slideUp delay-200">
               <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white rounded-md px-8 py-6 text-lg">

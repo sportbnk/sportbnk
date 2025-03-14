@@ -31,7 +31,7 @@ const TrustedSection = () => {
     <section className="py-16 md:py-24 bg-sportbnk-lightGrey">
       <div className="container mx-auto px-4 md:px-6">
         <h2 className="text-3xl font-bold mb-16 text-center text-sportbnk-navy">
-          Most trusted sports b2b
+          Most Trusted Sports B2B
         </h2>
         
         <div className="grid md:grid-cols-2 gap-8 items-center">
@@ -40,7 +40,7 @@ const TrustedSection = () => {
             className="animate-when-visible"
           >
             <p className="text-lg text-gray-700 mb-6">
-              Sportbnk is the trusted value B2B Sports Intelligence Platform, connecting you with data from more than 750,000 sports teams and 360,000+ contests. Our AI-driven platform offers outstanding UX personalization, combined with machine learning predictions. With seamless CRM and Native Integration, and help from professionals, it's true all-in-one solution.
+              SportBNK is the trusted value B2B Sports Intelligence Platform, connecting you with data from more than 750,000 sports teams and 360,000+ contests. Our AI-driven platform offers outstanding UX personalization, combined with machine learning predictions. With seamless CRM and Native Integration, and help from professionals, it's true all-in-one solution.
             </p>
           </div>
           
