@@ -6,11 +6,13 @@ import Footer from '@/components/Footer';
 interface PageLayoutProps {
   children: ReactNode;
   pageTitle?: string;
+  siteTitle?: string; // Added new prop for site title
 }
 
-const PageLayout = ({ children, pageTitle }: PageLayoutProps) => {
+const PageLayout = ({ children, pageTitle, siteTitle = "SportsBnk" }: PageLayoutProps) => {
   return (
     <div className="min-h-screen bg-white flex flex-col">
+      <title>{siteTitle}</title>
       <Navbar />
       <main className="flex-grow pt-20"> {/* Increased padding top to ensure content starts well below navbar */}
         {pageTitle && (
