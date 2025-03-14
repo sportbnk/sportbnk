@@ -10,7 +10,7 @@ const Footer = () => {
             <a href="/" className="flex items-center mb-4">
               <img 
                 src="/lovable-uploads/fe95d116-e43a-4e1e-9439-b2fee1207d72.png" 
-                alt="SportBNK Logo" 
+                alt="Sportbnk Logo" 
                 className="h-12" 
               />
             </a>
@@ -78,7 +78,7 @@ const Footer = () => {
         </div>
         
         <div className="border-t pt-6 text-center text-gray-500 text-sm">
-          &copy; {new Date().getFullYear()} SportBNK. All rights reserved.
+          &copy; {new Date().getFullYear()} Sportbnk. All rights reserved.
         </div>
       </div>
     </footer>

@@ -34,7 +34,7 @@ const AboutUs = () => {
         >
           <h2 className="text-3xl font-bold mb-6 text-center">About Us</h2>
           <p className="text-lg max-w-4xl mx-auto mb-6 text-center leading-relaxed">
-            The mission of B2B SportsBNK is creating single space to find sports-data solutions for all
+            The mission of B2B Sportbnk is creating single space to find sports-data solutions for all
             industries with one click. It's using the most innovative technologies in all environments, focused on providing clients with modern, safe, and necessary datasets for every sport. Our platform includes more than 360,000+ live competitions and more than 750,000+ sports teams all over the world.
           </p>
           <div className="flex justify-center mt-8">

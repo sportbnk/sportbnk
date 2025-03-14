@@ -75,13 +75,13 @@ const CaseStudies = () => {
     <section className="py-8 md:py-16">
       <CaseStudy
         title="The Global Sports Industry"
-        description="The Sports Analytics Market size was estimated at $2.2 Billion in 2021 and is expected to reach $6.4 Billion by 2025, with a CAGR of 31.2% during the forecast period. With SportBNK's platform, you'll be at the forefront of this growing market, powered by comprehensive data insights. Our platform was designed to handle this kind of growth making the the most innovative solution in the marketplace."
+        description="The Sports Analytics Market size was estimated at $2.2 Billion in 2021 and is expected to reach $6.4 Billion by 2025, with a CAGR of 31.2% during the forecast period. With Sportbnk's platform, you'll be at the forefront of this growing market, powered by comprehensive data insights. Our platform was designed to handle this kind of growth making the most innovative solution in the marketplace."
         image="/lovable-uploads/d09f910d-17b2-4f81-bc3b-66badacf3de2.png"
         color="green"
       />
       <CaseStudy
         title="The European Sports Market"
-        description="Europe's sports industry is one of the fastest growing sectors, accounting for 2% of EU's total GDP. With SportBNK's platform, you get access to data from teams and competitions all across Europe, leveraging comprehensive statistics. Our AI-powered predictions enable precise forecasting, while our seamless CRM integration streamlines workflow for sports organizations across the continent."
+        description="Europe's sports industry is one of the fastest growing sectors, accounting for 2% of EU's total GDP. With Sportbnk's platform, you get access to data from teams and competitions all across Europe, leveraging comprehensive statistics. Our AI-powered predictions enable precise forecasting, while our seamless CRM integration streamlines workflow for sports organizations across the continent."
         image="/lovable-uploads/c5351de4-d54d-424f-99a5-b07ddc3fcc40.png"
         color="navy"
         isReversed={true}

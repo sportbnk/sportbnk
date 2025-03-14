@@ -31,7 +31,7 @@ const Navbar = () => {
           <a href="/" className="flex items-center">
             <img 
               src="/lovable-uploads/fe95d116-e43a-4e1e-9439-b2fee1207d72.png" 
-              alt="SportBNK Logo" 
+              alt="Sportbnk Logo" 
               className="h-10"
             />
           </a>
@@ -57,7 +57,7 @@ const Navbar = () => {
             </nav>
 
             <Button className="hidden md:flex bg-sportbnk-green hover:bg-sportbnk-green/90 text-white rounded-md">
-              Book a Demo
+              Book A Demo
             </Button>
 
             {/* Mobile Menu Button */}
@@ -91,7 +91,7 @@ const Navbar = () => {
               Pricing
             </a>
             <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white rounded-md w-full">
-              Book a Demo
+              Book A Demo
             </Button>
           </div>
         </div>

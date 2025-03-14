@@ -40,7 +40,7 @@ const TrustedSection = () => {
             className="animate-when-visible"
           >
             <p className="text-lg text-gray-700 mb-6">
-              SportBNK is the trusted value B2B Sports Intelligence Platform, connecting you with data from more than 750,000 sports teams and 360,000+ contests. Our AI-driven platform offers outstanding UX personalization, combined with machine learning predictions. With seamless CRM and Native Integration, and help from professionals, it's true all-in-one solution.
+              Sportbnk is the trusted value B2B Sports Intelligence Platform, connecting you with data from more than 750,000 sports teams and 360,000+ contests. Our AI-driven platform offers outstanding UX personalization, combined with machine learning predictions. With seamless CRM and Native Integration, and help from professionals, it's true all-in-one solution.
             </p>
           </div>
           

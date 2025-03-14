@@ -34,7 +34,7 @@ const Hero = () => {
               B2B Sports<br />Intelligence Platform
             </h1>
             <p className="text-lg text-gray-600 animate-slideUp delay-100">
-              The sports industry is to be an estimated $760 Billion market by 2026
+              The sports industry is to be an estimated $760 Billion market by 2026.
             </p>
             <div className="pt-4 animate-slideUp delay-200">
               <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white rounded-md px-8 py-6 text-lg">
@@ -55,7 +55,7 @@ const Hero = () => {
               <div className="relative z-10 mb-4 w-[80%] mx-auto">
                 <img 
                   src="/lovable-uploads/08f9a58b-fe6c-4ee9-9058-d4d13a5cf79e.png" 
-                  alt="SportBNK Teams Table" 
+                  alt="Sportbnk Teams Table" 
                   className="w-full rounded-lg shadow-xl border border-gray-200" 
                 />
               </div>
@@ -64,13 +64,13 @@ const Hero = () => {
               <div className="relative z-20 -mt-16 ml-auto mr-2 w-[60%]">
                 <img 
                   src="/lovable-uploads/645d8320-b99d-4282-97d7-2639fc82c060.png" 
-                  alt="SportBNK Contacts Table" 
+                  alt="Sportbnk Contacts Table" 
                   className="w-full rounded-lg shadow-xl border border-gray-200 transform rotate-3" 
                 />
               </div>
               
               {/* Team profile - centered and aligned with heading */}
-              <div className="relative z-30 -mt-24 mx-auto ml-14 w-[65%]">
+              <div className="relative z-30 -mt-24 mx-auto ml-4 w-[65%]">
                 <img 
                   src="/lovable-uploads/b0f94fb5-f923-4243-b466-86aa2a7738d0.png" 
                   alt="Cricket Ireland Team Profile" 
