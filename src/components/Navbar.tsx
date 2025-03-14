@@ -1,5 +1,6 @@
+
 import { useState, useEffect } from 'react';
-import { Menu, X, ChevronDown } from 'lucide-react';
+import { Menu, X, ChevronDown, Package, BarChart3, Building, BookOpen, DollarSign, Calendar, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Link } from 'react-router-dom';
@@ -56,7 +57,9 @@ const Navbar = () => {
             <NavigationMenu className="hidden md:flex">
               <NavigationMenuList>
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger className="text-sm font-medium text-sportbnk-navy hover:text-sportbnk-green">Products</NavigationMenuTrigger>
+                  <NavigationMenuTrigger className="text-sm font-medium text-sportbnk-navy hover:text-sportbnk-green">
+                    <Package className="h-4 w-4 mr-1" /> Products
+                  </NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <ul className="grid w-[400px] gap-3 p-4">
                       <li className="row-span-3">
@@ -99,15 +102,17 @@ const Navbar = () => {
                   <NavigationMenuLink asChild>
                     <Link 
                       to="/data"
-                      className={navigationMenuTriggerStyle() + " text-sm font-medium text-sportbnk-navy hover:text-sportbnk-green"}
+                      className={navigationMenuTriggerStyle() + " text-sm font-medium text-sportbnk-navy hover:text-sportbnk-green flex items-center"}
                     >
-                      Data
+                      <BarChart3 className="h-4 w-4 mr-1" /> Data
                     </Link>
                   </NavigationMenuLink>
                 </NavigationMenuItem>
                 
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger className="text-sm font-medium text-sportbnk-navy hover:text-sportbnk-green">Company</NavigationMenuTrigger>
+                  <NavigationMenuTrigger className="text-sm font-medium text-sportbnk-navy hover:text-sportbnk-green">
+                    <Building className="h-4 w-4 mr-1" /> Company
+                  </NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2">
                       <li>
@@ -155,7 +160,9 @@ const Navbar = () => {
                 </NavigationMenuItem>
                 
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger className="text-sm font-medium text-sportbnk-navy hover:text-sportbnk-green">Resources</NavigationMenuTrigger>
+                  <NavigationMenuTrigger className="text-sm font-medium text-sportbnk-navy hover:text-sportbnk-green">
+                    <BookOpen className="h-4 w-4 mr-1" /> Resources
+                  </NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <ul className="grid w-[400px] gap-3 p-4 md:w-[600px] md:grid-cols-2 lg:w-[700px]">
                       <li>
@@ -230,9 +237,9 @@ const Navbar = () => {
                   <NavigationMenuLink asChild>
                     <Link 
                       to="/pricing"
-                      className={navigationMenuTriggerStyle() + " text-sm font-medium text-sportbnk-navy hover:text-sportbnk-green"}
+                      className={navigationMenuTriggerStyle() + " text-sm font-medium text-sportbnk-navy hover:text-sportbnk-green flex items-center"}
                     >
-                      Pricing
+                      <DollarSign className="h-4 w-4 mr-1" /> Pricing
                     </Link>
                   </NavigationMenuLink>
                 </NavigationMenuItem>
@@ -240,10 +247,10 @@ const Navbar = () => {
             </NavigationMenu>
 
             <Button 
-              className="hidden md:flex bg-sportbnk-green hover:bg-sportbnk-green/90 text-white rounded-md"
+              className="hidden md:flex bg-sportbnk-green hover:bg-sportbnk-green/90 text-white rounded-md items-center"
               onClick={() => window.location.href = '/book-demo'}
             >
-              Book A Demo
+              <Calendar className="h-4 w-4 mr-1" /> Book A Demo
             </Button>
 
             {/* Mobile Menu Button */}
@@ -263,7 +270,7 @@ const Navbar = () => {
           <div className="container mx-auto px-4 py-4 flex flex-col space-y-2">
             <DropdownMenu>
               <DropdownMenuTrigger className="flex items-center justify-between w-full py-2 text-left text-sportbnk-navy">
-                Products <ChevronDown size={16} />
+                <span className="flex items-center"><Package className="h-4 w-4 mr-1" /> Products</span> <ChevronDown size={16} />
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-full">
                 <DropdownMenuItem>
@@ -282,12 +289,14 @@ const Navbar = () => {
             </DropdownMenu>
             
             <div className="py-2 w-full">
-              <Link to="/data" className="text-sportbnk-navy w-full block">Data</Link>
+              <Link to="/data" className="text-sportbnk-navy w-full block flex items-center">
+                <BarChart3 className="h-4 w-4 mr-1" /> Data
+              </Link>
             </div>
             
             <DropdownMenu>
               <DropdownMenuTrigger className="flex items-center justify-between w-full py-2 text-left text-sportbnk-navy">
-                Company <ChevronDown size={16} />
+                <span className="flex items-center"><Building className="h-4 w-4 mr-1" /> Company</span> <ChevronDown size={16} />
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-full">
                 <DropdownMenuItem>
@@ -310,7 +319,7 @@ const Navbar = () => {
             
             <DropdownMenu>
               <DropdownMenuTrigger className="flex items-center justify-between w-full py-2 text-left text-sportbnk-navy">
-                Resources <ChevronDown size={16} />
+                <span className="flex items-center"><BookOpen className="h-4 w-4 mr-1" /> Resources</span> <ChevronDown size={16} />
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-full">
                 <DropdownMenuItem>
@@ -341,17 +350,19 @@ const Navbar = () => {
             </DropdownMenu>
             
             <div className="py-2 w-full">
-              <Link to="/pricing" className="text-sportbnk-navy w-full block">Pricing</Link>
+              <Link to="/pricing" className="text-sportbnk-navy w-full block flex items-center">
+                <DollarSign className="h-4 w-4 mr-1" /> Pricing
+              </Link>
             </div>
             
             <Button 
-              className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white rounded-md w-full mt-4"
+              className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white rounded-md w-full mt-4 flex items-center justify-center"
               onClick={() => {
                 window.location.href = '/book-demo';
                 setIsMobileMenuOpen(false);
               }}
             >
-              Book A Demo
+              <Calendar className="h-4 w-4 mr-1" /> Book A Demo
             </Button>
           </div>
         </div>
