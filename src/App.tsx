@@ -42,7 +42,7 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <FaviconUpdater iconUrl="/favicon.ico" />
+      <FaviconUpdater iconUrl="/lovable-uploads/5a649dfb-5709-4042-bda2-aec41e85a32d.png" />
       <Toaster />
       <Sonner />
       <BrowserRouter>
