@@ -129,9 +129,6 @@ export default {
 			},
 			backgroundImage: {
 				'pattern-hexagon': "url('/lovable-uploads/9347a39c-a8e7-4351-8636-1a08454618b6.png')"
-			},
-			clipPath: {
-				octagon: 'polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)'
 			}
 		}
 	},
