@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { Link } from 'react-router-dom';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -43,13 +44,13 @@ const Navbar = () => {
     )}>
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex items-center justify-between">
-          <a href="/" className="flex items-center">
+          <Link to="/" className="flex items-center">
             <img 
               src="/lovable-uploads/fe95d116-e43a-4e1e-9439-b2fee1207d72.png" 
               alt="Sportbnk Logo" 
               className="h-10"
             />
-          </a>
+          </Link>
 
           <div className="flex items-center space-x-4">
             {/* Desktop Navigation */}
@@ -61,34 +62,34 @@ const Navbar = () => {
                     <ul className="grid w-[400px] gap-3 p-4">
                       <li className="row-span-3">
                         <NavigationMenuLink asChild>
-                          <a href="#discover" className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-sportbnk-lightGrey/50 to-white p-6 no-underline outline-none focus:shadow-md">
+                          <Link to="/products" className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-sportbnk-lightGrey/50 to-white p-6 no-underline outline-none focus:shadow-md">
                             <div className="mb-2 mt-4 text-lg font-medium text-sportbnk-navy">Discover</div>
                             <p className="text-sm leading-tight text-sportbnk-navy/90">Explore our product offerings</p>
-                          </a>
+                          </Link>
                         </NavigationMenuLink>
                       </li>
                       <li>
                         <NavigationMenuLink asChild>
-                          <a href="#boost" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
+                          <Link to="/products#boost" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
                             <div className="text-sm font-medium text-sportbnk-navy">Boost</div>
                             <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Enhance your sports data</p>
-                          </a>
+                          </Link>
                         </NavigationMenuLink>
                       </li>
                       <li>
                         <NavigationMenuLink asChild>
-                          <a href="#intent-data" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
+                          <Link to="/products#intent-data" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
                             <div className="text-sm font-medium text-sportbnk-navy">Intent Data</div>
                             <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Data-driven insights</p>
-                          </a>
+                          </Link>
                         </NavigationMenuLink>
                       </li>
                       <li>
                         <NavigationMenuLink asChild>
-                          <a href="#recruit" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
+                          <Link to="/products#recruit" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
                             <div className="text-sm font-medium text-sportbnk-navy">Recruit</div>
                             <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Find talents in sports</p>
-                          </a>
+                          </Link>
                         </NavigationMenuLink>
                       </li>
                     </ul>
@@ -96,11 +97,13 @@ const Navbar = () => {
                 </NavigationMenuItem>
                 
                 <NavigationMenuItem>
-                  <NavigationMenuLink 
-                    href="#data"
-                    className={navigationMenuTriggerStyle() + " text-sm font-medium text-sportbnk-navy hover:text-sportbnk-green"}
-                  >
-                    Data
+                  <NavigationMenuLink asChild>
+                    <Link 
+                      to="/data"
+                      className={navigationMenuTriggerStyle() + " text-sm font-medium text-sportbnk-navy hover:text-sportbnk-green"}
+                    >
+                      Data
+                    </Link>
                   </NavigationMenuLink>
                 </NavigationMenuItem>
                 
@@ -110,42 +113,42 @@ const Navbar = () => {
                     <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2">
                       <li>
                         <NavigationMenuLink asChild>
-                          <a href="#about" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
+                          <Link to="/company#about" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
                             <div className="text-sm font-medium text-sportbnk-navy">About</div>
                             <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Learn about our mission</p>
-                          </a>
+                          </Link>
                         </NavigationMenuLink>
                       </li>
                       <li>
                         <NavigationMenuLink asChild>
-                          <a href="#careers" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
+                          <Link to="/company#careers" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
                             <div className="text-sm font-medium text-sportbnk-navy">Careers</div>
                             <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Join our team</p>
-                          </a>
+                          </Link>
                         </NavigationMenuLink>
                       </li>
                       <li>
                         <NavigationMenuLink asChild>
-                          <a href="#partner-program" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
+                          <Link to="/company#partner-program" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
                             <div className="text-sm font-medium text-sportbnk-navy">Partner Program</div>
                             <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Collaborate with us</p>
-                          </a>
+                          </Link>
                         </NavigationMenuLink>
                       </li>
                       <li>
                         <NavigationMenuLink asChild>
-                          <a href="#latest-news" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
+                          <Link to="/company#latest-news" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
                             <div className="text-sm font-medium text-sportbnk-navy">Latest News</div>
                             <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Company updates and announcements</p>
-                          </a>
+                          </Link>
                         </NavigationMenuLink>
                       </li>
                       <li className="md:col-span-2">
                         <NavigationMenuLink asChild>
-                          <a href="#contact-us" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
+                          <Link to="/company#contact-us" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
                             <div className="text-sm font-medium text-sportbnk-navy">Contact Us</div>
                             <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Get in touch with our team</p>
-                          </a>
+                          </Link>
                         </NavigationMenuLink>
                       </li>
                     </ul>
@@ -158,66 +161,66 @@ const Navbar = () => {
                     <ul className="grid w-[400px] gap-3 p-4 md:w-[600px] md:grid-cols-2 lg:w-[700px]">
                       <li>
                         <NavigationMenuLink asChild>
-                          <a href="#sportbnk-startups" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
+                          <Link to="/resources#sportbnk-startups" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
                             <div className="text-sm font-medium text-sportbnk-navy">SportsBnk for Startups</div>
                             <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Resources for growing businesses</p>
-                          </a>
+                          </Link>
                         </NavigationMenuLink>
                       </li>
                       <li>
                         <NavigationMenuLink asChild>
-                          <a href="#community" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
+                          <Link to="/resources#community" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
                             <div className="text-sm font-medium text-sportbnk-navy">Community</div>
                             <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Join our sports data community</p>
-                          </a>
+                          </Link>
                         </NavigationMenuLink>
                       </li>
                       <li>
                         <NavigationMenuLink asChild>
-                          <a href="#articles" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
+                          <Link to="/resources#articles" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
                             <div className="text-sm font-medium text-sportbnk-navy">Articles</div>
                             <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Latest industry insights</p>
-                          </a>
+                          </Link>
                         </NavigationMenuLink>
                       </li>
                       <li>
                         <NavigationMenuLink asChild>
-                          <a href="#webinars" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
+                          <Link to="/resources#webinars" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
                             <div className="text-sm font-medium text-sportbnk-navy">Webinars</div>
                             <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Educational video content</p>
-                          </a>
+                          </Link>
                         </NavigationMenuLink>
                       </li>
                       <li>
                         <NavigationMenuLink asChild>
-                          <a href="#podcasts" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
+                          <Link to="/resources#podcasts" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
                             <div className="text-sm font-medium text-sportbnk-navy">Podcasts</div>
                             <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Listen to our sports data discussions</p>
-                          </a>
+                          </Link>
                         </NavigationMenuLink>
                       </li>
                       <li>
                         <NavigationMenuLink asChild>
-                          <a href="#case-studies" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
+                          <Link to="/resources#case-studies" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
                             <div className="text-sm font-medium text-sportbnk-navy">Case Studies</div>
                             <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Success stories from our clients</p>
-                          </a>
+                          </Link>
                         </NavigationMenuLink>
                       </li>
                       <li>
                         <NavigationMenuLink asChild>
-                          <a href="#reviews" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
+                          <Link to="/resources#reviews" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
                             <div className="text-sm font-medium text-sportbnk-navy">Reviews</div>
                             <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">What our customers say</p>
-                          </a>
+                          </Link>
                         </NavigationMenuLink>
                       </li>
                       <li>
                         <NavigationMenuLink asChild>
-                          <a href="#help-center" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
+                          <Link to="/resources#help-center" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
                             <div className="text-sm font-medium text-sportbnk-navy">Help Centre</div>
                             <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Support and documentation</p>
-                          </a>
+                          </Link>
                         </NavigationMenuLink>
                       </li>
                     </ul>
@@ -225,11 +228,13 @@ const Navbar = () => {
                 </NavigationMenuItem>
                 
                 <NavigationMenuItem>
-                  <NavigationMenuLink 
-                    href="#pricing"
-                    className={navigationMenuTriggerStyle() + " text-sm font-medium text-sportbnk-navy hover:text-sportbnk-green"}
-                  >
-                    Pricing
+                  <NavigationMenuLink asChild>
+                    <Link 
+                      to="/pricing"
+                      className={navigationMenuTriggerStyle() + " text-sm font-medium text-sportbnk-navy hover:text-sportbnk-green"}
+                    >
+                      Pricing
+                    </Link>
                   </NavigationMenuLink>
                 </NavigationMenuItem>
               </NavigationMenuList>
@@ -260,22 +265,22 @@ const Navbar = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-full">
                 <DropdownMenuItem>
-                  <a href="#discover" className="w-full">Discover</a>
+                  <Link to="/products" className="w-full">Discover</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <a href="#boost" className="w-full">Boost</a>
+                  <Link to="/products#boost" className="w-full">Boost</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <a href="#intent-data" className="w-full">Intent Data</a>
+                  <Link to="/products#intent-data" className="w-full">Intent Data</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <a href="#recruit" className="w-full">Recruit</a>
+                  <Link to="/products#recruit" className="w-full">Recruit</Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
             
             <div className="py-2 w-full">
-              <a href="#data" className="text-sportbnk-navy w-full block">Data</a>
+              <Link to="/data" className="text-sportbnk-navy w-full block">Data</Link>
             </div>
             
             <DropdownMenu>
@@ -284,19 +289,19 @@ const Navbar = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-full">
                 <DropdownMenuItem>
-                  <a href="#about" className="w-full">About</a>
+                  <Link to="/company#about" className="w-full">About</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <a href="#careers" className="w-full">Careers</a>
+                  <Link to="/company#careers" className="w-full">Careers</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <a href="#partner-program" className="w-full">Partner Program</a>
+                  <Link to="/company#partner-program" className="w-full">Partner Program</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <a href="#latest-news" className="w-full">Latest News</a>
+                  <Link to="/company#latest-news" className="w-full">Latest News</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <a href="#contact-us" className="w-full">Contact Us</a>
+                  <Link to="/company#contact-us" className="w-full">Contact Us</Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -307,34 +312,34 @@ const Navbar = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-full">
                 <DropdownMenuItem>
-                  <a href="#sportbnk-startups" className="w-full">SportsBnk for Startups</a>
+                  <Link to="/resources#sportbnk-startups" className="w-full">SportsBnk for Startups</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <a href="#community" className="w-full">Community</a>
+                  <Link to="/resources#community" className="w-full">Community</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <a href="#articles" className="w-full">Articles</a>
+                  <Link to="/resources#articles" className="w-full">Articles</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <a href="#webinars" className="w-full">Webinars</a>
+                  <Link to="/resources#webinars" className="w-full">Webinars</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <a href="#podcasts" className="w-full">Podcasts</a>
+                  <Link to="/resources#podcasts" className="w-full">Podcasts</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <a href="#case-studies" className="w-full">Case Studies</a>
+                  <Link to="/resources#case-studies" className="w-full">Case Studies</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <a href="#reviews" className="w-full">Reviews</a>
+                  <Link to="/resources#reviews" className="w-full">Reviews</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <a href="#help-center" className="w-full">Help Centre</a>
+                  <Link to="/resources#help-center" className="w-full">Help Centre</Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
             
             <div className="py-2 w-full">
-              <a href="#pricing" className="text-sportbnk-navy w-full block">Pricing</a>
+              <Link to="/pricing" className="text-sportbnk-navy w-full block">Pricing</Link>
             </div>
             
             <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white rounded-md w-full mt-4">
