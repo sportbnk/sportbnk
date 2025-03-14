@@ -49,8 +49,8 @@ const TrustedSection = () => {
             className="animate-when-visible"
           >
             <img 
-              src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=800&q=80" 
-              alt="Sports Data Analytics" 
+              src="/lovable-uploads/1d95a70d-8230-4647-9c16-d5c94a124864.png" 
+              alt="Young hockey players facing off on the ice" 
               className="rounded-lg shadow-lg w-full object-cover aspect-video"
             />
           </div>
