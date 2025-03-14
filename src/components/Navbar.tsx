@@ -96,27 +96,12 @@ const Navbar = () => {
                 </NavigationMenuItem>
                 
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger className="text-sm font-medium text-sportbnk-navy hover:text-sportbnk-green">Data</NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <div className="w-[500px] p-4">
-                      <div className="text-lg font-medium mb-2 text-sportbnk-navy">Data</div>
-                      <p className="text-sm text-sportbnk-navy/90 mb-4">Learn about our data, how we get our data and compliance</p>
-                      <div className="grid gap-3">
-                        <NavigationMenuLink asChild>
-                          <a href="#data-sources" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
-                            <div className="text-sm font-medium text-sportbnk-navy">Data Sources</div>
-                            <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">How we collect our data</p>
-                          </a>
-                        </NavigationMenuLink>
-                        <NavigationMenuLink asChild>
-                          <a href="#compliance" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
-                            <div className="text-sm font-medium text-sportbnk-navy">Compliance</div>
-                            <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Our data compliance policies</p>
-                          </a>
-                        </NavigationMenuLink>
-                      </div>
-                    </div>
-                  </NavigationMenuContent>
+                  <NavigationMenuLink 
+                    href="#data"
+                    className={navigationMenuTriggerStyle() + " text-sm font-medium text-sportbnk-navy hover:text-sportbnk-green"}
+                  >
+                    Data
+                  </NavigationMenuLink>
                 </NavigationMenuItem>
                 
                 <NavigationMenuItem>
@@ -240,38 +225,12 @@ const Navbar = () => {
                 </NavigationMenuItem>
                 
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger className="text-sm font-medium text-sportbnk-navy hover:text-sportbnk-green">Pricing</NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <div className="w-[400px] p-4">
-                      <div className="text-lg font-medium mb-2 text-sportbnk-navy">Pricing Plans</div>
-                      <div className="grid gap-3">
-                        <NavigationMenuLink asChild>
-                          <a href="#free-trial" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
-                            <div className="text-sm font-medium text-sportbnk-navy">Free Trial</div>
-                            <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Try our platform for free</p>
-                          </a>
-                        </NavigationMenuLink>
-                        <NavigationMenuLink asChild>
-                          <a href="#basic" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
-                            <div className="text-sm font-medium text-sportbnk-navy">Basic</div>
-                            <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Essential features for small teams</p>
-                          </a>
-                        </NavigationMenuLink>
-                        <NavigationMenuLink asChild>
-                          <a href="#professional" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
-                            <div className="text-sm font-medium text-sportbnk-navy">Professional</div>
-                            <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Advanced features for professionals</p>
-                          </a>
-                        </NavigationMenuLink>
-                        <NavigationMenuLink asChild>
-                          <a href="#enterprise" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
-                            <div className="text-sm font-medium text-sportbnk-navy">Enterprise</div>
-                            <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Customized solutions for large organizations</p>
-                          </a>
-                        </NavigationMenuLink>
-                      </div>
-                    </div>
-                  </NavigationMenuContent>
+                  <NavigationMenuLink 
+                    href="#pricing"
+                    className={navigationMenuTriggerStyle() + " text-sm font-medium text-sportbnk-navy hover:text-sportbnk-green"}
+                  >
+                    Pricing
+                  </NavigationMenuLink>
                 </NavigationMenuItem>
               </NavigationMenuList>
             </NavigationMenu>
@@ -315,19 +274,9 @@ const Navbar = () => {
               </DropdownMenuContent>
             </DropdownMenu>
             
-            <DropdownMenu>
-              <DropdownMenuTrigger className="flex items-center justify-between w-full py-2 text-left text-sportbnk-navy">
-                Data <ChevronDown size={16} />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-full">
-                <DropdownMenuItem>
-                  <a href="#data-sources" className="w-full">Data Sources</a>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <a href="#compliance" className="w-full">Compliance</a>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <div className="py-2 w-full">
+              <a href="#data" className="text-sportbnk-navy w-full block">Data</a>
+            </div>
             
             <DropdownMenu>
               <DropdownMenuTrigger className="flex items-center justify-between w-full py-2 text-left text-sportbnk-navy">
@@ -384,25 +333,9 @@ const Navbar = () => {
               </DropdownMenuContent>
             </DropdownMenu>
             
-            <DropdownMenu>
-              <DropdownMenuTrigger className="flex items-center justify-between w-full py-2 text-left text-sportbnk-navy">
-                Pricing <ChevronDown size={16} />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-full">
-                <DropdownMenuItem>
-                  <a href="#free-trial" className="w-full">Free Trial</a>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <a href="#basic" className="w-full">Basic</a>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <a href="#professional" className="w-full">Professional</a>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <a href="#enterprise" className="w-full">Enterprise</a>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <div className="py-2 w-full">
+              <a href="#pricing" className="text-sportbnk-navy w-full block">Pricing</a>
+            </div>
             
             <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white rounded-md w-full mt-4">
               Book A Demo
