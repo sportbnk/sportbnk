@@ -23,9 +23,11 @@ const Footer = () => {
             <h3 className="font-semibold text-sportbnk-navy mb-4">Links</h3>
             <ul className="space-y-2">
               <li><a href="/" className="text-gray-600 hover:text-sportbnk-green transition-colors">Home</a></li>
-              <li><a href="#about" className="text-gray-600 hover:text-sportbnk-green transition-colors">About</a></li>
-              <li><a href="#features" className="text-gray-600 hover:text-sportbnk-green transition-colors">Features</a></li>
-              <li><a href="#contact" className="text-gray-600 hover:text-sportbnk-green transition-colors">Contact</a></li>
+              <li><a href="#product" className="text-gray-600 hover:text-sportbnk-green transition-colors">Product</a></li>
+              <li><a href="#data" className="text-gray-600 hover:text-sportbnk-green transition-colors">Data</a></li>
+              <li><a href="#company" className="text-gray-600 hover:text-sportbnk-green transition-colors">Company</a></li>
+              <li><a href="#resources" className="text-gray-600 hover:text-sportbnk-green transition-colors">Resources</a></li>
+              <li><a href="#pricing" className="text-gray-600 hover:text-sportbnk-green transition-colors">Pricing</a></li>
             </ul>
           </div>
           
@@ -35,7 +37,7 @@ const Footer = () => {
               <li><a href="#" className="text-gray-600 hover:text-sportbnk-green transition-colors">Terms</a></li>
               <li><a href="#" className="text-gray-600 hover:text-sportbnk-green transition-colors">Privacy</a></li>
               <li><a href="#" className="text-gray-600 hover:text-sportbnk-green transition-colors">Cookies</a></li>
-              <li><a href="#" className="text-gray-600 hover:text-sportbnk-green transition-colors">Contact</a></li>
+              <li><a href="#contact" className="text-gray-600 hover:text-sportbnk-green transition-colors">Contact</a></li>
             </ul>
           </div>
           
