@@ -1,10 +1,10 @@
-
 import { useState } from 'react';
 import PageLayout from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Check } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const PricingCard = ({ 
   name, 
@@ -205,8 +205,11 @@ const Pricing = () => {
             <p className="text-lg mb-8 opacity-90">
               Our team is here to help you find the perfect solution for your business needs.
             </p>
-            <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white px-8 py-6 text-lg">
-              Schedule a Consultation
+            <Button 
+              className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white px-8 py-6 text-lg"
+              asChild
+            >
+              <Link to="/book-demo">Book A Demo</Link>
             </Button>
           </div>
         </div>
