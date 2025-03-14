@@ -77,20 +77,6 @@ const Hero = () => {
                   className="w-full rounded-lg shadow-xl border border-gray-200 transform -rotate-6" 
                 />
               </div>
-              
-              <div className="absolute bottom-0 right-0 bg-green-100 p-3 rounded-lg shadow-lg z-40 -translate-y-12 -translate-x-8">
-                <div className="flex items-center space-x-2">
-                  <span className="text-green-600 font-medium">Revenue</span>
-                </div>
-                <p className="text-green-700 text-xl font-bold">$2.5M</p>
-              </div>
-              
-              <div className="absolute bottom-0 left-0 bg-blue-100 p-3 rounded-lg shadow-lg z-40 -translate-y-12 translate-x-8">
-                <div className="flex items-center space-x-2">
-                  <span className="text-blue-600 font-medium">Employees</span>
-                </div>
-                <p className="text-blue-700 text-xl font-bold">20</p>
-              </div>
             </div>
           </div>
         </div>
