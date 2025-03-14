@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Menu, X, ChevronDown, Package, BarChart3, Building, BookOpen, DollarSign, Calendar, Users, Rocket, Shield, Briefcase, Newspaper, Phone, BookmarkPlus, Users2, FileText, Video, Headphones, Clipboard, MessageSquare, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -163,13 +162,13 @@ const Navbar = () => {
                           </Link>
                         </NavigationMenuLink>
                       </li>
-                      <li className="md:col-span-2">
+                      <li>
                         <NavigationMenuLink asChild>
                           <Link to="/contact" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
-                            <div className="text-sm font-medium text-sportbnk-navy flex items-center justify-center">
+                            <div className="text-sm font-medium text-sportbnk-navy flex items-center">
                               <Phone className="h-4 w-4 mr-2" /> Contact Us
                             </div>
-                            <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80 text-center">Get in touch with our team</p>
+                            <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Get in touch with our team</p>
                           </Link>
                         </NavigationMenuLink>
                       </li>
@@ -440,3 +439,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
