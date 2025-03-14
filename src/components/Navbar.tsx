@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { Menu, X, ChevronDown, Package, BarChart3, Building, BookOpen, DollarSign, Calendar, Users } from 'lucide-react';
+import { Menu, X, ChevronDown, Package, BarChart3, Building, BookOpen, DollarSign, Calendar, Users, Rocket, Shield, Briefcase, Newspaper, Phone, BookmarkPlus, Users2, FileText, Video, Headphones, Clipboard, MessageSquare, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Link } from 'react-router-dom';
@@ -58,14 +58,16 @@ const Navbar = () => {
               <NavigationMenuList>
                 <NavigationMenuItem>
                   <NavigationMenuTrigger className="text-sm font-medium text-sportbnk-navy hover:text-sportbnk-green">
-                    <Package className="h-4 w-4 mr-1" /> Products
+                    Products
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <ul className="grid w-[400px] gap-3 p-4">
                       <li className="row-span-3">
                         <NavigationMenuLink asChild>
                           <Link to="/products" className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-sportbnk-lightGrey/50 to-white p-6 no-underline outline-none focus:shadow-md">
-                            <div className="mb-2 mt-4 text-lg font-medium text-sportbnk-navy">Discover</div>
+                            <div className="mb-2 mt-4 text-lg font-medium text-sportbnk-navy flex items-center">
+                              <Package className="h-5 w-5 mr-2" /> Discover
+                            </div>
                             <p className="text-sm leading-tight text-sportbnk-navy/90">Explore our product offerings</p>
                           </Link>
                         </NavigationMenuLink>
@@ -73,7 +75,9 @@ const Navbar = () => {
                       <li>
                         <NavigationMenuLink asChild>
                           <Link to="/products#boost" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
-                            <div className="text-sm font-medium text-sportbnk-navy">Boost</div>
+                            <div className="text-sm font-medium text-sportbnk-navy flex items-center">
+                              <Rocket className="h-4 w-4 mr-2" /> Boost
+                            </div>
                             <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Enhance your sports data</p>
                           </Link>
                         </NavigationMenuLink>
@@ -81,7 +85,9 @@ const Navbar = () => {
                       <li>
                         <NavigationMenuLink asChild>
                           <Link to="/products#intent-data" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
-                            <div className="text-sm font-medium text-sportbnk-navy">Intent Data</div>
+                            <div className="text-sm font-medium text-sportbnk-navy flex items-center">
+                              <BarChart3 className="h-4 w-4 mr-2" /> Intent Data
+                            </div>
                             <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Data-driven insights</p>
                           </Link>
                         </NavigationMenuLink>
@@ -89,7 +95,9 @@ const Navbar = () => {
                       <li>
                         <NavigationMenuLink asChild>
                           <Link to="/products#recruit" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
-                            <div className="text-sm font-medium text-sportbnk-navy">Recruit</div>
+                            <div className="text-sm font-medium text-sportbnk-navy flex items-center">
+                              <Users className="h-4 w-4 mr-2" /> Recruit
+                            </div>
                             <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Find talents in sports</p>
                           </Link>
                         </NavigationMenuLink>
@@ -104,21 +112,23 @@ const Navbar = () => {
                       to="/data"
                       className={navigationMenuTriggerStyle() + " text-sm font-medium text-sportbnk-navy hover:text-sportbnk-green flex items-center"}
                     >
-                      <BarChart3 className="h-4 w-4 mr-1" /> Data
+                      Data
                     </Link>
                   </NavigationMenuLink>
                 </NavigationMenuItem>
                 
                 <NavigationMenuItem>
                   <NavigationMenuTrigger className="text-sm font-medium text-sportbnk-navy hover:text-sportbnk-green">
-                    <Building className="h-4 w-4 mr-1" /> Company
+                    Company
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2">
                       <li>
                         <NavigationMenuLink asChild>
                           <Link to="/company#about" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
-                            <div className="text-sm font-medium text-sportbnk-navy">About</div>
+                            <div className="text-sm font-medium text-sportbnk-navy flex items-center">
+                              <Building className="h-4 w-4 mr-2" /> About
+                            </div>
                             <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Learn about our mission</p>
                           </Link>
                         </NavigationMenuLink>
@@ -126,7 +136,9 @@ const Navbar = () => {
                       <li>
                         <NavigationMenuLink asChild>
                           <Link to="/company#careers" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
-                            <div className="text-sm font-medium text-sportbnk-navy">Careers</div>
+                            <div className="text-sm font-medium text-sportbnk-navy flex items-center">
+                              <Briefcase className="h-4 w-4 mr-2" /> Careers
+                            </div>
                             <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Join our team</p>
                           </Link>
                         </NavigationMenuLink>
@@ -134,7 +146,9 @@ const Navbar = () => {
                       <li>
                         <NavigationMenuLink asChild>
                           <Link to="/company#partner-program" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
-                            <div className="text-sm font-medium text-sportbnk-navy">Partner Program</div>
+                            <div className="text-sm font-medium text-sportbnk-navy flex items-center">
+                              <Shield className="h-4 w-4 mr-2" /> Partner Program
+                            </div>
                             <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Collaborate with us</p>
                           </Link>
                         </NavigationMenuLink>
@@ -142,7 +156,9 @@ const Navbar = () => {
                       <li>
                         <NavigationMenuLink asChild>
                           <Link to="/company#latest-news" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
-                            <div className="text-sm font-medium text-sportbnk-navy">Latest News</div>
+                            <div className="text-sm font-medium text-sportbnk-navy flex items-center">
+                              <Newspaper className="h-4 w-4 mr-2" /> Latest News
+                            </div>
                             <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Company updates and announcements</p>
                           </Link>
                         </NavigationMenuLink>
@@ -150,7 +166,9 @@ const Navbar = () => {
                       <li className="md:col-span-2">
                         <NavigationMenuLink asChild>
                           <Link to="/company#contact-us" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
-                            <div className="text-sm font-medium text-sportbnk-navy">Contact Us</div>
+                            <div className="text-sm font-medium text-sportbnk-navy flex items-center">
+                              <Phone className="h-4 w-4 mr-2" /> Contact Us
+                            </div>
                             <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Get in touch with our team</p>
                           </Link>
                         </NavigationMenuLink>
@@ -161,14 +179,16 @@ const Navbar = () => {
                 
                 <NavigationMenuItem>
                   <NavigationMenuTrigger className="text-sm font-medium text-sportbnk-navy hover:text-sportbnk-green">
-                    <BookOpen className="h-4 w-4 mr-1" /> Resources
+                    Resources
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <ul className="grid w-[400px] gap-3 p-4 md:w-[600px] md:grid-cols-2 lg:w-[700px]">
                       <li>
                         <NavigationMenuLink asChild>
                           <Link to="/resources#sportbnk-startups" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
-                            <div className="text-sm font-medium text-sportbnk-navy">SportsBnk for Startups</div>
+                            <div className="text-sm font-medium text-sportbnk-navy flex items-center">
+                              <Rocket className="h-4 w-4 mr-2" /> SportsBnk for Startups
+                            </div>
                             <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Resources for growing businesses</p>
                           </Link>
                         </NavigationMenuLink>
@@ -176,7 +196,9 @@ const Navbar = () => {
                       <li>
                         <NavigationMenuLink asChild>
                           <Link to="/resources#community" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
-                            <div className="text-sm font-medium text-sportbnk-navy">Community</div>
+                            <div className="text-sm font-medium text-sportbnk-navy flex items-center">
+                              <Users2 className="h-4 w-4 mr-2" /> Community
+                            </div>
                             <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Join our sports data community</p>
                           </Link>
                         </NavigationMenuLink>
@@ -184,7 +206,9 @@ const Navbar = () => {
                       <li>
                         <NavigationMenuLink asChild>
                           <Link to="/resources#articles" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
-                            <div className="text-sm font-medium text-sportbnk-navy">Articles</div>
+                            <div className="text-sm font-medium text-sportbnk-navy flex items-center">
+                              <FileText className="h-4 w-4 mr-2" /> Articles
+                            </div>
                             <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Latest industry insights</p>
                           </Link>
                         </NavigationMenuLink>
@@ -192,7 +216,9 @@ const Navbar = () => {
                       <li>
                         <NavigationMenuLink asChild>
                           <Link to="/resources#webinars" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
-                            <div className="text-sm font-medium text-sportbnk-navy">Webinars</div>
+                            <div className="text-sm font-medium text-sportbnk-navy flex items-center">
+                              <Video className="h-4 w-4 mr-2" /> Webinars
+                            </div>
                             <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Educational video content</p>
                           </Link>
                         </NavigationMenuLink>
@@ -200,7 +226,9 @@ const Navbar = () => {
                       <li>
                         <NavigationMenuLink asChild>
                           <Link to="/resources#podcasts" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
-                            <div className="text-sm font-medium text-sportbnk-navy">Podcasts</div>
+                            <div className="text-sm font-medium text-sportbnk-navy flex items-center">
+                              <Headphones className="h-4 w-4 mr-2" /> Podcasts
+                            </div>
                             <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Listen to our sports data discussions</p>
                           </Link>
                         </NavigationMenuLink>
@@ -208,7 +236,9 @@ const Navbar = () => {
                       <li>
                         <NavigationMenuLink asChild>
                           <Link to="/resources#case-studies" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
-                            <div className="text-sm font-medium text-sportbnk-navy">Case Studies</div>
+                            <div className="text-sm font-medium text-sportbnk-navy flex items-center">
+                              <Clipboard className="h-4 w-4 mr-2" /> Case Studies
+                            </div>
                             <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Success stories from our clients</p>
                           </Link>
                         </NavigationMenuLink>
@@ -216,7 +246,9 @@ const Navbar = () => {
                       <li>
                         <NavigationMenuLink asChild>
                           <Link to="/resources#reviews" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
-                            <div className="text-sm font-medium text-sportbnk-navy">Reviews</div>
+                            <div className="text-sm font-medium text-sportbnk-navy flex items-center">
+                              <MessageSquare className="h-4 w-4 mr-2" /> Reviews
+                            </div>
                             <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">What our customers say</p>
                           </Link>
                         </NavigationMenuLink>
@@ -224,7 +256,9 @@ const Navbar = () => {
                       <li>
                         <NavigationMenuLink asChild>
                           <Link to="/resources#help-center" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
-                            <div className="text-sm font-medium text-sportbnk-navy">Help Centre</div>
+                            <div className="text-sm font-medium text-sportbnk-navy flex items-center">
+                              <HelpCircle className="h-4 w-4 mr-2" /> Help Centre
+                            </div>
                             <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Support and documentation</p>
                           </Link>
                         </NavigationMenuLink>
@@ -239,7 +273,7 @@ const Navbar = () => {
                       to="/pricing"
                       className={navigationMenuTriggerStyle() + " text-sm font-medium text-sportbnk-navy hover:text-sportbnk-green flex items-center"}
                     >
-                      <DollarSign className="h-4 w-4 mr-1" /> Pricing
+                      Pricing
                     </Link>
                   </NavigationMenuLink>
                 </NavigationMenuItem>
@@ -270,88 +304,122 @@ const Navbar = () => {
           <div className="container mx-auto px-4 py-4 flex flex-col space-y-2">
             <DropdownMenu>
               <DropdownMenuTrigger className="flex items-center justify-between w-full py-2 text-left text-sportbnk-navy">
-                <span className="flex items-center"><Package className="h-4 w-4 mr-1" /> Products</span> <ChevronDown size={16} />
+                <span className="flex items-center">Products</span> <ChevronDown size={16} />
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-full">
                 <DropdownMenuItem>
-                  <Link to="/products" className="w-full">Discover</Link>
+                  <Link to="/products" className="w-full flex items-center">
+                    <Package className="h-4 w-4 mr-2" />Discover
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link to="/products#boost" className="w-full">Boost</Link>
+                  <Link to="/products#boost" className="w-full flex items-center">
+                    <Rocket className="h-4 w-4 mr-2" />Boost
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link to="/products#intent-data" className="w-full">Intent Data</Link>
+                  <Link to="/products#intent-data" className="w-full flex items-center">
+                    <BarChart3 className="h-4 w-4 mr-2" />Intent Data
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link to="/products#recruit" className="w-full">Recruit</Link>
+                  <Link to="/products#recruit" className="w-full flex items-center">
+                    <Users className="h-4 w-4 mr-2" />Recruit
+                  </Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
             
             <div className="py-2 w-full">
               <Link to="/data" className="text-sportbnk-navy w-full block flex items-center">
-                <BarChart3 className="h-4 w-4 mr-1" /> Data
+                Data
               </Link>
             </div>
             
             <DropdownMenu>
               <DropdownMenuTrigger className="flex items-center justify-between w-full py-2 text-left text-sportbnk-navy">
-                <span className="flex items-center"><Building className="h-4 w-4 mr-1" /> Company</span> <ChevronDown size={16} />
+                <span className="flex items-center">Company</span> <ChevronDown size={16} />
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-full">
                 <DropdownMenuItem>
-                  <Link to="/company#about" className="w-full">About</Link>
+                  <Link to="/company#about" className="w-full flex items-center">
+                    <Building className="h-4 w-4 mr-2" />About
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link to="/company#careers" className="w-full">Careers</Link>
+                  <Link to="/company#careers" className="w-full flex items-center">
+                    <Briefcase className="h-4 w-4 mr-2" />Careers
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link to="/company#partner-program" className="w-full">Partner Program</Link>
+                  <Link to="/company#partner-program" className="w-full flex items-center">
+                    <Shield className="h-4 w-4 mr-2" />Partner Program
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link to="/company#latest-news" className="w-full">Latest News</Link>
+                  <Link to="/company#latest-news" className="w-full flex items-center">
+                    <Newspaper className="h-4 w-4 mr-2" />Latest News
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link to="/company#contact-us" className="w-full">Contact Us</Link>
+                  <Link to="/company#contact-us" className="w-full flex items-center">
+                    <Phone className="h-4 w-4 mr-2" />Contact Us
+                  </Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
             
             <DropdownMenu>
               <DropdownMenuTrigger className="flex items-center justify-between w-full py-2 text-left text-sportbnk-navy">
-                <span className="flex items-center"><BookOpen className="h-4 w-4 mr-1" /> Resources</span> <ChevronDown size={16} />
+                <span className="flex items-center">Resources</span> <ChevronDown size={16} />
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-full">
                 <DropdownMenuItem>
-                  <Link to="/resources#sportbnk-startups" className="w-full">SportsBnk for Startups</Link>
+                  <Link to="/resources#sportbnk-startups" className="w-full flex items-center">
+                    <Rocket className="h-4 w-4 mr-2" />SportsBnk for Startups
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link to="/resources#community" className="w-full">Community</Link>
+                  <Link to="/resources#community" className="w-full flex items-center">
+                    <Users2 className="h-4 w-4 mr-2" />Community
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link to="/resources#articles" className="w-full">Articles</Link>
+                  <Link to="/resources#articles" className="w-full flex items-center">
+                    <FileText className="h-4 w-4 mr-2" />Articles
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link to="/resources#webinars" className="w-full">Webinars</Link>
+                  <Link to="/resources#webinars" className="w-full flex items-center">
+                    <Video className="h-4 w-4 mr-2" />Webinars
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link to="/resources#podcasts" className="w-full">Podcasts</Link>
+                  <Link to="/resources#podcasts" className="w-full flex items-center">
+                    <Headphones className="h-4 w-4 mr-2" />Podcasts
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link to="/resources#case-studies" className="w-full">Case Studies</Link>
+                  <Link to="/resources#case-studies" className="w-full flex items-center">
+                    <Clipboard className="h-4 w-4 mr-2" />Case Studies
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link to="/resources#reviews" className="w-full">Reviews</Link>
+                  <Link to="/resources#reviews" className="w-full flex items-center">
+                    <MessageSquare className="h-4 w-4 mr-2" />Reviews
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link to="/resources#help-center" className="w-full">Help Centre</Link>
+                  <Link to="/resources#help-center" className="w-full flex items-center">
+                    <HelpCircle className="h-4 w-4 mr-2" />Help Centre
+                  </Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
             
             <div className="py-2 w-full">
               <Link to="/pricing" className="text-sportbnk-navy w-full block flex items-center">
-                <DollarSign className="h-4 w-4 mr-1" /> Pricing
+                Pricing
               </Link>
             </div>
             
