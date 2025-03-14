@@ -62,19 +62,19 @@ const Navbar = () => {
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <ul className="grid w-[400px] gap-3 p-4">
-                      <li className="row-span-3">
+                      <li>
                         <NavigationMenuLink asChild>
-                          <Link to="/products" className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-sportbnk-lightGrey/50 to-white p-6 no-underline outline-none focus:shadow-md">
-                            <div className="mb-2 mt-4 text-lg font-medium text-sportbnk-navy flex items-center">
-                              <Package className="h-5 w-5 mr-2" /> Discover
+                          <Link to="/products/discover" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
+                            <div className="text-sm font-medium text-sportbnk-navy flex items-center">
+                              <Package className="h-4 w-4 mr-2" /> Discover
                             </div>
-                            <p className="text-sm leading-tight text-sportbnk-navy/90">Explore our product offerings</p>
+                            <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Explore our product offerings</p>
                           </Link>
                         </NavigationMenuLink>
                       </li>
                       <li>
                         <NavigationMenuLink asChild>
-                          <Link to="/products#boost" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
+                          <Link to="/products/boost" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
                             <div className="text-sm font-medium text-sportbnk-navy flex items-center">
                               <Rocket className="h-4 w-4 mr-2" /> Boost
                             </div>
@@ -84,7 +84,7 @@ const Navbar = () => {
                       </li>
                       <li>
                         <NavigationMenuLink asChild>
-                          <Link to="/products#intent-data" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
+                          <Link to="/products/intent-data" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
                             <div className="text-sm font-medium text-sportbnk-navy flex items-center">
                               <BarChart3 className="h-4 w-4 mr-2" /> Intent Data
                             </div>
@@ -94,7 +94,7 @@ const Navbar = () => {
                       </li>
                       <li>
                         <NavigationMenuLink asChild>
-                          <Link to="/products#recruit" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
+                          <Link to="/products/recruit" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
                             <div className="text-sm font-medium text-sportbnk-navy flex items-center">
                               <Users className="h-4 w-4 mr-2" /> Recruit
                             </div>
@@ -125,7 +125,7 @@ const Navbar = () => {
                     <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2">
                       <li>
                         <NavigationMenuLink asChild>
-                          <Link to="/company#about" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
+                          <Link to="/company/about" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
                             <div className="text-sm font-medium text-sportbnk-navy flex items-center">
                               <Building className="h-4 w-4 mr-2" /> About
                             </div>
@@ -135,7 +135,7 @@ const Navbar = () => {
                       </li>
                       <li>
                         <NavigationMenuLink asChild>
-                          <Link to="/company#careers" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
+                          <Link to="/company/careers" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
                             <div className="text-sm font-medium text-sportbnk-navy flex items-center">
                               <Briefcase className="h-4 w-4 mr-2" /> Careers
                             </div>
@@ -145,7 +145,7 @@ const Navbar = () => {
                       </li>
                       <li>
                         <NavigationMenuLink asChild>
-                          <Link to="/company#partner-program" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
+                          <Link to="/company/partner-program" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
                             <div className="text-sm font-medium text-sportbnk-navy flex items-center">
                               <Shield className="h-4 w-4 mr-2" /> Partner Program
                             </div>
@@ -155,7 +155,7 @@ const Navbar = () => {
                       </li>
                       <li>
                         <NavigationMenuLink asChild>
-                          <Link to="/company#latest-news" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
+                          <Link to="/company/latest-news" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
                             <div className="text-sm font-medium text-sportbnk-navy flex items-center">
                               <Newspaper className="h-4 w-4 mr-2" /> Latest News
                             </div>
@@ -165,11 +165,11 @@ const Navbar = () => {
                       </li>
                       <li className="md:col-span-2">
                         <NavigationMenuLink asChild>
-                          <Link to="/company#contact-us" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
-                            <div className="text-sm font-medium text-sportbnk-navy flex items-center">
+                          <Link to="/contact" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
+                            <div className="text-sm font-medium text-sportbnk-navy flex items-center justify-center">
                               <Phone className="h-4 w-4 mr-2" /> Contact Us
                             </div>
-                            <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Get in touch with our team</p>
+                            <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80 text-center">Get in touch with our team</p>
                           </Link>
                         </NavigationMenuLink>
                       </li>
