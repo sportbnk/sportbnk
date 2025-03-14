@@ -64,7 +64,7 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				sportbnk: {
-					green: '#00D8AA',
+					green: '#00ce7c',
 					darkBlue: '#111B4E',
 					navy: '#0F1741',
 					lightGrey: '#F5F6FA'
