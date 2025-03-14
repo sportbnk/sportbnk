@@ -1,5 +1,4 @@
 
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap');
 
 @tailwind base;
@@ -130,7 +129,7 @@
     transform: translateY(0);
   }
   
-  /* Octagon decoration styles */
+  /* Enhanced octagon decoration styles */
   .octagon-light {
     position: relative;
     z-index: 0;
@@ -139,9 +138,10 @@
   .octagon-light::before {
     content: '';
     position: absolute;
-    width: 20px;
-    height: 20px;
-    background-color: rgba(0, 206, 124, 0.1);
+    width: 30px;
+    height: 30px;
+    background-color: rgba(0, 206, 124, 0.25);
+    border: 1px solid rgba(0, 206, 124, 0.4);
     clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
     z-index: -1;
   }
@@ -155,12 +155,13 @@
   .octagon-pattern::after {
     content: '';
     position: absolute;
-    width: 40px;
-    height: 40px;
-    background-color: rgba(0, 206, 124, 0.05);
+    width: 60px;
+    height: 60px;
+    background-color: rgba(0, 206, 124, 0.15);
+    border: 1px solid rgba(0, 206, 124, 0.3);
     clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
     z-index: 0;
-    opacity: 0.7;
+    opacity: 0.8;
   }
   
   .octagon-pattern::before {
@@ -180,9 +181,10 @@
   .octagon-float::before {
     content: '';
     position: absolute;
-    width: 16px;
-    height: 16px;
-    background-color: rgba(0, 206, 124, 0.15);
+    width: 24px;
+    height: 24px;
+    background-color: rgba(0, 206, 124, 0.3);
+    border: 1px solid rgba(0, 206, 124, 0.4);
     clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
     animation: floatAnimation 4s ease-in-out infinite;
   }
@@ -210,21 +212,22 @@
   }
   
   .octagon-cluster::before {
-    width: 24px;
-    height: 24px;
-    background-color: rgba(0, 206, 124, 0.1);
+    width: 35px;
+    height: 35px;
+    background-color: rgba(0, 206, 124, 0.25);
+    border: 1px solid rgba(0, 206, 124, 0.4);
     clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
     top: -10px;
     right: 10px;
   }
   
   .octagon-cluster::after {
-    width: 14px;
-    height: 14px;
-    background-color: rgba(0, 206, 124, 0.1);
+    width: 20px;
+    height: 20px;
+    background-color: rgba(0, 206, 124, 0.25);
+    border: 1px solid rgba(0, 206, 124, 0.4);
     clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
     top: 10px;
     right: -5px;
   }
 }
-
