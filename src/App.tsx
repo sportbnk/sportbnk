@@ -18,7 +18,6 @@ import ContactUs from "./pages/ContactUs";
 // Product pages
 import Discover from "./pages/products/Discover";
 import Boost from "./pages/products/Boost";
-import IntentData from "./pages/products/IntentData";
 import Recruit from "./pages/products/Recruit";
 
 // Company pages
@@ -61,7 +60,6 @@ const App = () => (
           {/* Product sub-pages */}
           <Route path="/products/discover" element={<Discover />} />
           <Route path="/products/boost" element={<Boost />} />
-          <Route path="/products/intent-data" element={<IntentData />} />
           <Route path="/products/recruit" element={<Recruit />} />
           
           {/* Company sub-pages */}

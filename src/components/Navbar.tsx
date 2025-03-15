@@ -52,7 +52,6 @@ const Navbar = () => {
           </Link>
 
           <div className="flex items-center space-x-4">
-            {/* Desktop Navigation */}
             <NavigationMenu className="hidden md:flex">
               <NavigationMenuList>
                 <NavigationMenuItem>
@@ -78,16 +77,6 @@ const Navbar = () => {
                               <Rocket className="h-4 w-4 mr-2" /> Boost
                             </div>
                             <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Enhance your sports data</p>
-                          </Link>
-                        </NavigationMenuLink>
-                      </li>
-                      <li>
-                        <NavigationMenuLink asChild>
-                          <Link to="/products/intent-data" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
-                            <div className="text-sm font-medium text-sportbnk-navy flex items-center">
-                              <BarChart3 className="h-4 w-4 mr-2" /> Intent Data
-                            </div>
-                            <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Data-driven insights</p>
                           </Link>
                         </NavigationMenuLink>
                       </li>
@@ -276,7 +265,6 @@ const Navbar = () => {
               Book A Demo
             </Button>
 
-            {/* Mobile Menu Button */}
             <button 
               className="md:hidden text-sportbnk-navy" 
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -287,7 +275,6 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div className="md:hidden bg-white shadow-lg absolute top-full left-0 right-0 animate-slideUp">
           <div className="container mx-auto px-4 py-4 flex flex-col space-y-2">
@@ -304,11 +291,6 @@ const Navbar = () => {
                 <DropdownMenuItem>
                   <Link to="/products#boost" className="w-full flex items-center">
                     <Rocket className="h-4 w-4 mr-2" />Boost
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Link to="/products#intent-data" className="w-full flex items-center">
-                    <BarChart3 className="h-4 w-4 mr-2" />Intent Data
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>

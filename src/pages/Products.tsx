@@ -2,7 +2,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import PageLayout from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
-import { Search, BarChart3, Rocket, UserPlus } from "lucide-react";
+import { Search, Rocket, UserPlus } from "lucide-react";
 
 const ProductCard = ({ 
   title, 
@@ -49,7 +49,7 @@ const Products = () => {
             empowers your business to connect, engage, and grow in this specialized market.
           </p>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             <ProductCard 
               title="Discover" 
               icon={<Search size={24} />}
@@ -71,18 +71,6 @@ const Products = () => {
                 "Update incomplete records",
                 "Maintain accurate profiles",
                 "Improve conversion rates"
-              ]}
-            />
-            
-            <ProductCard 
-              title="Intent Data" 
-              icon={<BarChart3 size={24} />}
-              description="Get actionable insights into organizations actively seeking products or services in the sports industry."
-              features={[
-                "Identify high-priority leads",
-                "Increase conversion rates",
-                "Prioritize sales efforts",
-                "Comprehensive analytics"
               ]}
             />
             

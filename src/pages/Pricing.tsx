@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import PageLayout from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
@@ -134,7 +135,7 @@ const Pricing = () => {
               description="Customized solutions with API access and premium support for large organizations."
               features={[
                 "Everything in Professional",
-                "Access to Intent Data",
+                "Access to Recruit tool",
                 "Custom data enrichment options",
                 "Unlimited exports",
                 "Advanced API access",
