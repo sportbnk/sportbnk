@@ -4,6 +4,7 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Lock, Mail, LogIn } from "lucide-react";
+import { Link } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -135,9 +136,9 @@ export function SignInDialog({ className, triggerClassName }: SignInDialogProps)
         </Card>
         <div className="text-center text-sm mt-2">
           Don't have an account?{" "}
-          <a href="#" className="text-sportbnk-green hover:underline font-medium">
+          <Link to="/pricing" className="text-sportbnk-green hover:underline font-medium">
             Sign up
-          </a>
+          </Link>
         </div>
       </DialogContent>
     </Dialog>
