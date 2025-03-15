@@ -4,6 +4,7 @@ import { Menu, X, ChevronDown, Package, BarChart3, Building, BookOpen, DollarSig
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Link } from 'react-router-dom';
+import { SignInDialog } from '@/components/SignInDialog';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -259,12 +260,16 @@ const Navbar = () => {
               </NavigationMenuList>
             </NavigationMenu>
 
-            <Button 
-              className="hidden md:flex bg-sportbnk-green hover:bg-sportbnk-green/90 text-white rounded-md items-center"
-              onClick={() => window.location.href = '/book-demo'}
-            >
-              Book A Demo
-            </Button>
+            <div className="hidden md:flex items-center space-x-3">
+              <SignInDialog triggerClassName="px-4 py-2 text-sm" />
+              
+              <Button 
+                className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white rounded-md items-center"
+                onClick={() => window.location.href = '/book-demo'}
+              >
+                Book A Demo
+              </Button>
+            </div>
 
             <button 
               className="md:hidden text-sportbnk-navy" 
@@ -390,15 +395,19 @@ const Navbar = () => {
               </Link>
             </div>
             
-            <Button 
-              className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white rounded-md w-full mt-4 flex items-center justify-center"
-              onClick={() => {
-                window.location.href = '/book-demo';
-                setIsMobileMenuOpen(false);
-              }}
-            >
-              Book A Demo
-            </Button>
+            <div className="flex flex-col space-y-3 mt-4">
+              <SignInDialog triggerClassName="w-full justify-center" />
+              
+              <Button 
+                className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white rounded-md w-full flex items-center justify-center"
+                onClick={() => {
+                  window.location.href = '/book-demo';
+                  setIsMobileMenuOpen(false);
+                }}
+              >
+                Book A Demo
+              </Button>
+            </div>
           </div>
         </div>
       )}
