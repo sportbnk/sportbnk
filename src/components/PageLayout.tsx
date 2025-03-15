@@ -26,6 +26,127 @@ const PageLayout = ({
   // Default canonical URL based on current path
   const defaultCanonicalUrl = typeof window !== 'undefined' ? `https://sportbnk.com${window.location.pathname}` : 'https://sportbnk.com/';
   
+  // Site navigation structured data for rich results with dropdowns
+  const siteNavigationData = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "SportsBnk",
+    "url": "https://sportbnk.com/",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://sportbnk.com/search?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    },
+    "hasPart": [
+      {
+        "@type": "SiteNavigationElement",
+        "name": "Products",
+        "url": "https://sportbnk.com/products",
+        "hasPart": [
+          {
+            "@type": "SiteNavigationElement",
+            "name": "Discover",
+            "url": "https://sportbnk.com/products/discover"
+          },
+          {
+            "@type": "SiteNavigationElement",
+            "name": "Boost",
+            "url": "https://sportbnk.com/products/boost"
+          },
+          {
+            "@type": "SiteNavigationElement",
+            "name": "Recruit",
+            "url": "https://sportbnk.com/products/recruit"
+          }
+        ]
+      },
+      {
+        "@type": "SiteNavigationElement",
+        "name": "Data",
+        "url": "https://sportbnk.com/data"
+      },
+      {
+        "@type": "SiteNavigationElement",
+        "name": "Company",
+        "url": "https://sportbnk.com/company",
+        "hasPart": [
+          {
+            "@type": "SiteNavigationElement",
+            "name": "About",
+            "url": "https://sportbnk.com/company/about"
+          },
+          {
+            "@type": "SiteNavigationElement",
+            "name": "Careers",
+            "url": "https://sportbnk.com/company/careers"
+          },
+          {
+            "@type": "SiteNavigationElement",
+            "name": "Partner Program",
+            "url": "https://sportbnk.com/company/partner-program"
+          },
+          {
+            "@type": "SiteNavigationElement",
+            "name": "Latest News",
+            "url": "https://sportbnk.com/company/latest-news"
+          }
+        ]
+      },
+      {
+        "@type": "SiteNavigationElement",
+        "name": "Resources",
+        "url": "https://sportbnk.com/resources",
+        "hasPart": [
+          {
+            "@type": "SiteNavigationElement",
+            "name": "Startups",
+            "url": "https://sportbnk.com/resources/startups"
+          },
+          {
+            "@type": "SiteNavigationElement",
+            "name": "Articles",
+            "url": "https://sportbnk.com/resources/articles"
+          },
+          {
+            "@type": "SiteNavigationElement",
+            "name": "Community",
+            "url": "https://sportbnk.com/resources/community"
+          },
+          {
+            "@type": "SiteNavigationElement",
+            "name": "Webinars",
+            "url": "https://sportbnk.com/resources/webinars"
+          },
+          {
+            "@type": "SiteNavigationElement",
+            "name": "Podcasts",
+            "url": "https://sportbnk.com/resources/podcasts"
+          },
+          {
+            "@type": "SiteNavigationElement",
+            "name": "Case Studies",
+            "url": "https://sportbnk.com/resources/case-studies"
+          },
+          {
+            "@type": "SiteNavigationElement",
+            "name": "Reviews",
+            "url": "https://sportbnk.com/resources/reviews"
+          },
+          {
+            "@type": "SiteNavigationElement",
+            "name": "Help Center",
+            "url": "https://sportbnk.com/resources/help-center"
+          }
+        ]
+      },
+      {
+        "@type": "SiteNavigationElement",
+        "name": "Pricing",
+        "url": "https://sportbnk.com/pricing"
+      }
+    ]
+  };
+  
   return (
     <div className="min-h-screen bg-white flex flex-col">
       <Helmet>
@@ -44,6 +165,9 @@ const PageLayout = ({
         <meta name="twitter:title" content={fullTitle} />
         <meta name="twitter:description" content={metaDescription} />
         <meta name="twitter:image" content="/lovable-uploads/5de360aa-8105-490e-bf75-94ff7ac0832d.png" />
+        <script type="application/ld+json">
+          {JSON.stringify(siteNavigationData)}
+        </script>
       </Helmet>
       
       <Navbar />
