@@ -9,6 +9,7 @@ import Reviews from "@/components/Reviews";
 import CaseStudy from "@/components/CaseStudy";
 import Clients from "@/components/Clients";
 import CTA from "@/components/CTA";
+import ChatPopup from "@/components/ChatPopup";
 
 const Index = () => {
   return (
@@ -25,6 +26,7 @@ const Index = () => {
       <Reviews />
       <Clients />
       <CTA />
+      <ChatPopup />
     </PageLayout>
   );
 };
