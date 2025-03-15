@@ -96,7 +96,7 @@ const Hero = () => {
                 <div className="relative z-10 transform transition-transform hover:rotate-y-3 hover:rotate-x-2">
                   <div className="p-2 bg-white shadow-xl border border-gray-100 rounded-xl">
                     <img 
-                      src="/lovable-uploads/08f9a58b-fe6c-4ee9-9058-d4d13a5cf79e.png" 
+                      src="/lovable-uploads/f5c8dc20-3de5-497c-bb2a-f7b149472312.png" 
                       alt="SportBnk Dashboard" 
                       className="w-full rounded-lg transform transition-all hover:scale-[1.01]" 
                     />
