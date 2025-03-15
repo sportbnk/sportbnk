@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import PageLayout from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
@@ -131,7 +132,6 @@ const Pricing = () => {
     "Export up to 1,000 contacts per month",
     "CRM integration (HubSpot, Salesforce)",
     "Email and chat support",
-    "7-day free trial",
     "Cancel anytime"
   ];
   
@@ -191,7 +191,7 @@ const Pricing = () => {
               annualPrice="$470"
               description="All the features you need to grow your business in the sports industry"
               features={standardFeatures}
-              buttonText="Start 7-Day Free Trial"
+              buttonText="Subscribe Now"
               isAnnual={isAnnual}
               onSelectPlan={() => handleSelectPlan("Standard Plan", isAnnual ? "$470/year" : "$49/month")}
             />
@@ -202,7 +202,7 @@ const Pricing = () => {
               annualPrice="$950"
               description="Enhanced features and support for growing teams and enterprises"
               features={proFeatures}
-              buttonText="Start 7-Day Free Trial"
+              buttonText="Subscribe Now"
               highlighted={true}
               isAnnual={isAnnual}
               onSelectPlan={() => handleSelectPlan("Pro Plan", isAnnual ? "$950/year" : "$99/month")}
