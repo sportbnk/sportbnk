@@ -35,30 +35,30 @@ const ContactsFilters = ({ onFilterChange }: ContactsFiltersProps) => {
   };
 
   return (
-    <div>
-      <div className="flex justify-between items-center mb-2">
-        <div className="flex items-center gap-1 text-sm font-medium">
-          <Filter className="h-3.5 w-3.5" />
+    <div className="w-full">
+      <div className="flex justify-between items-center mb-3">
+        <div className="flex items-center gap-1 text-base font-medium">
+          <Filter className="h-4 w-4" />
           Filter by
         </div>
         <Button 
           variant="ghost" 
           size="sm" 
           onClick={clearFilters}
-          className="h-6 px-2 text-xs text-muted-foreground"
+          className="h-8 px-2 text-sm text-muted-foreground"
         >
-          <X className="h-3 w-3 mr-1" />
+          <X className="h-4 w-4 mr-1" />
           Clear
         </Button>
       </div>
-      <div className="space-y-3">
-        <div className="space-y-1">
-          <Label htmlFor="position" className="text-xs">Position</Label>
+      <div className="space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor="position" className="text-sm">Position</Label>
           <Select 
             value={filters.position} 
             onValueChange={(value) => handleFilterChange("position", value)}
           >
-            <SelectTrigger id="position" className="h-7 text-xs">
+            <SelectTrigger id="position" className="h-9 text-sm">
               <SelectValue placeholder="All positions" />
             </SelectTrigger>
             <SelectContent>
@@ -76,13 +76,13 @@ const ContactsFilters = ({ onFilterChange }: ContactsFiltersProps) => {
           </Select>
         </div>
 
-        <div className="space-y-1">
-          <Label htmlFor="team" className="text-xs">Team</Label>
+        <div className="space-y-2">
+          <Label htmlFor="team" className="text-sm">Team</Label>
           <Select 
             value={filters.team} 
             onValueChange={(value) => handleFilterChange("team", value)}
           >
-            <SelectTrigger id="team" className="h-7 text-xs">
+            <SelectTrigger id="team" className="h-9 text-sm">
               <SelectValue placeholder="All teams" />
             </SelectTrigger>
             <SelectContent>
@@ -97,13 +97,13 @@ const ContactsFilters = ({ onFilterChange }: ContactsFiltersProps) => {
           </Select>
         </div>
 
-        <div className="space-y-1">
-          <Label htmlFor="sport" className="text-xs">Sport</Label>
+        <div className="space-y-2">
+          <Label htmlFor="sport" className="text-sm">Sport</Label>
           <Select 
             value={filters.sport} 
             onValueChange={(value) => handleFilterChange("sport", value)}
           >
-            <SelectTrigger id="sport" className="h-7 text-xs">
+            <SelectTrigger id="sport" className="h-9 text-sm">
               <SelectValue placeholder="All sports" />
             </SelectTrigger>
             <SelectContent>
@@ -118,13 +118,13 @@ const ContactsFilters = ({ onFilterChange }: ContactsFiltersProps) => {
           </Select>
         </div>
 
-        <div className="space-y-1">
-          <Label htmlFor="country" className="text-xs">Country</Label>
+        <div className="space-y-2">
+          <Label htmlFor="country" className="text-sm">Country</Label>
           <Select 
             value={filters.country} 
             onValueChange={(value) => handleFilterChange("country", value)}
           >
-            <SelectTrigger id="country" className="h-7 text-xs">
+            <SelectTrigger id="country" className="h-9 text-sm">
               <SelectValue placeholder="All countries" />
             </SelectTrigger>
             <SelectContent>

@@ -146,8 +146,8 @@ const People = () => {
   };
   
   return (
-    <div className="container mx-auto px-0 py-6">
-      <div className="flex justify-between items-center mb-6 px-2">
+    <div className="container max-w-full px-2 py-6">
+      <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-sportbnk-navy">People Database</h1>
         <div className="flex gap-2">
           <Button variant="outline" className="flex items-center gap-1">
@@ -159,20 +159,20 @@ const People = () => {
         </div>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-6 gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-7 gap-4">
         <div className="md:col-span-1">
           <Card className="shadow-md mb-4">
-            <CardHeader className="pb-2 pt-3 px-3">
-              <CardTitle className="text-base">Filters</CardTitle>
+            <CardHeader className="pb-2 pt-4 px-4">
+              <CardTitle className="text-base font-semibold">Filters</CardTitle>
             </CardHeader>
-            <CardContent className="p-2">
+            <CardContent className="p-3">
               <ContactsFilters onFilterChange={handleFilterChange} />
             </CardContent>
           </Card>
           
           <Card className="shadow-md mb-4">
-            <CardHeader className="pb-2 pt-3 px-3">
-              <CardTitle className="text-base flex items-center gap-2">
+            <CardHeader className="pb-2 pt-4 px-4">
+              <CardTitle className="text-base font-semibold flex items-center gap-2">
                 <Users className="h-4 w-4" />
                 Saved List ({savedList.length})
               </CardTitle>
@@ -190,54 +190,56 @@ const People = () => {
                   isSavedList={true}
                 />
               ) : (
-                <div className="py-4 px-3 text-center text-muted-foreground">
+                <div className="py-5 px-4 text-center text-muted-foreground">
                   <p>No contacts added to your list yet.</p>
-                  <p className="text-sm mt-1">Add contacts to create your export list.</p>
+                  <p className="text-sm mt-2">Add contacts to create your export list.</p>
                 </div>
               )}
             </CardContent>
           </Card>
           
           <Card className="shadow-md mb-4">
-            <CardHeader className="pb-2 pt-3 px-3">
-              <CardTitle className="text-base">Upgrade</CardTitle>
+            <CardHeader className="pb-2 pt-4 px-4">
+              <CardTitle className="text-base font-semibold">Upgrade</CardTitle>
             </CardHeader>
-            <CardContent className="px-3 py-2">
-              <Button className="w-full bg-sportbnk-navy hover:bg-sportbnk-navy/90 text-sm">
+            <CardContent className="px-4 py-3">
+              <Button className="w-full bg-sportbnk-navy hover:bg-sportbnk-navy/90 text-base">
                 Get Pro Plan
               </Button>
             </CardContent>
           </Card>
           
           <Card className="shadow-md">
-            <CardHeader className="pb-2 pt-3 px-3">
-              <CardTitle className="text-base">Credits</CardTitle>
+            <CardHeader className="pb-2 pt-4 px-4">
+              <CardTitle className="text-base font-semibold">Credits</CardTitle>
             </CardHeader>
-            <CardContent className="px-3 py-2">
+            <CardContent className="px-4 py-3">
               <p className="text-2xl font-bold text-sportbnk-green">{credits}</p>
-              <p className="text-xs text-muted-foreground">Credits remaining</p>
-              <Button className="w-full mt-3 bg-sportbnk-navy hover:bg-sportbnk-navy/90 text-sm">
+              <p className="text-sm text-muted-foreground">Credits remaining</p>
+              <Button className="w-full mt-4 bg-sportbnk-navy hover:bg-sportbnk-navy/90 text-base">
                 Buy More Credits
               </Button>
             </CardContent>
           </Card>
         </div>
         
-        <div className="md:col-span-5">
+        <div className="md:col-span-6">
           <Card className="shadow-md h-full">
-            <CardHeader className="pb-3 border-b">
-              <CardTitle className="text-lg">People List</CardTitle>
+            <CardHeader className="pb-3 border-b pt-4 px-4">
+              <CardTitle className="text-lg font-semibold">People List</CardTitle>
             </CardHeader>
             <CardContent className="p-0">
-              <ContactsView 
-                data={contactsData}
-                revealedEmails={revealedEmails}
-                revealedPhones={revealedPhones}
-                onRevealEmail={revealEmail}
-                onRevealPhone={revealPhone}
-                onViewTeam={viewTeam}
-                onAddToList={addToList}
-              />
+              <div className="overflow-x-auto">
+                <ContactsView 
+                  data={contactsData}
+                  revealedEmails={revealedEmails}
+                  revealedPhones={revealedPhones}
+                  onRevealEmail={revealEmail}
+                  onRevealPhone={revealPhone}
+                  onViewTeam={viewTeam}
+                  onAddToList={addToList}
+                />
+              </div>
             </CardContent>
           </Card>
         </div>
