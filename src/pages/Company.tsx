@@ -3,6 +3,7 @@ import PageLayout from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
 import { UserCheck, Building, Handshake, Phone } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import MeetTheTeam from "@/components/MeetTheTeam";
 
 const CompanySection = ({ 
   title, 
@@ -28,30 +29,6 @@ const CompanySection = ({
       />
     </div>
   </div>
-);
-
-const TeamMember = ({ 
-  name, 
-  role, 
-  image = "/placeholder.svg" 
-}: { 
-  name: string; 
-  role: string; 
-  image?: string;
-}) => (
-  <Card className="border-0 shadow-sm overflow-hidden">
-    <div className="aspect-square overflow-hidden bg-gray-100">
-      <img 
-        src={image} 
-        alt={name} 
-        className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-      />
-    </div>
-    <CardContent className="pt-4">
-      <h3 className="font-bold text-sportbnk-navy">{name}</h3>
-      <p className="text-gray-600">{role}</p>
-    </CardContent>
-  </Card>
 );
 
 const CompanyValueCard = ({ 
@@ -120,22 +97,7 @@ const Company = () => {
         </div>
       </section>
       
-      <section className="py-16 md:py-24">
-        <div className="container mx-auto px-4 md:px-6">
-          <h2 className="text-3xl font-bold text-sportbnk-navy mb-4 text-center">Our Team</h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto text-center mb-12">
-            Meet the passionate professionals behind Sportsbnk who are dedicated to transforming how 
-            businesses connect in the sports industry.
-          </p>
-          
-          <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-6">
-            <TeamMember name="Alex Johnson" role="CEO & Founder" />
-            <TeamMember name="Sarah Williams" role="CTO" />
-            <TeamMember name="David Chen" role="Head of Data" />
-            <TeamMember name="Emma Roberts" role="Chief Marketing Officer" />
-          </div>
-        </div>
-      </section>
+      <MeetTheTeam />
       
       <section className="py-16 bg-sportbnk-navy text-white">
         <div className="container mx-auto px-4 md:px-6">

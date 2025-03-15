@@ -53,38 +53,64 @@ const About = () => {
         </div>
       </section>
       
-      <section className="py-16 md:py-24">
+      <section id="team" className="py-16 md:py-24">
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-sportbnk-navy mb-4">
-              Why Sportsbnk?
+              Meet Our Team
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Unlike broader sales intelligence platforms, we're dedicated exclusively to the sports sector, 
-              providing solutions tailored to your industry-specific challenges.
+              Meet the passionate professionals behind Sportsbnk who are dedicated to transforming how 
+              businesses connect in the sports industry.
             </p>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="p-6 border border-gray-200 rounded-lg">
-              <h3 className="text-xl font-bold text-sportbnk-navy mb-2">Sports-Focused</h3>
-              <p className="text-gray-600">
-                Every feature and data point is designed specifically for the sports industry's unique needs.
-              </p>
-            </div>
-            
-            <div className="p-6 border border-gray-200 rounded-lg">
-              <h3 className="text-xl font-bold text-sportbnk-navy mb-2">Quality Over Quantity</h3>
-              <p className="text-gray-600">
-                We prioritize data accuracy and relevance over simply providing massive databases of mixed-quality leads.
-              </p>
-            </div>
-            
-            <div className="p-6 border border-gray-200 rounded-lg">
-              <h3 className="text-xl font-bold text-sportbnk-navy mb-2">Compliance First</h3>
-              <p className="text-gray-600">
-                All our data is collected and maintained in full compliance with global privacy regulations.
-              </p>
+          <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <TeamMember 
+              name="Alex Johnson" 
+              role="CEO & Founder" 
+              image="/lovable-uploads/5a649dfb-5709-4042-bda2-aec41e85a32d.png"
+            />
+            <TeamMember 
+              name="Sarah Williams" 
+              role="CTO" 
+              image="/lovable-uploads/c5351de4-d54d-424f-99a5-b07ddc3fcc40.png"
+            />
+            <TeamMember 
+              name="David Chen" 
+              role="Head of Data" 
+              image="/lovable-uploads/b727ac17-df3d-4270-a031-139c82129d27.png"
+            />
+            <TeamMember 
+              name="Emma Roberts" 
+              role="Chief Marketing Officer" 
+              image="/lovable-uploads/d09f910d-17b2-4f81-bc3b-66badacf3de2.png"
+            />
+          </div>
+        </div>
+      </section>
+      
+      <section className="py-16 bg-sportbnk-navy text-white">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="max-w-4xl mx-auto">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+              <div>
+                <h2 className="text-3xl font-bold mb-4">Contact Us</h2>
+                <p className="text-lg opacity-90 mb-6">
+                  Have questions or want to learn more about how Sportsbnk can help your business?
+                </p>
+                <div className="flex items-center mb-2">
+                  <phone size={18} className="mr-2" />
+                  <span>+44 (0) 123 456 7890</span>
+                </div>
+                <div className="flex items-center">
+                  <span className="mr-2">✉</span>
+                  <span>info@sportbnk.com</span>
+                </div>
+              </div>
+              <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white px-8 py-6 text-lg">
+                Get In Touch
+              </Button>
             </div>
           </div>
         </div>
