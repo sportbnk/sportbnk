@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -77,6 +78,7 @@ const App = () => (
             {/* CRM System with sidebar layout */}
             <Route element={<CrmLayout />}>
               <Route path="/database" element={<ContactDatabase />} />
+              <Route path="/crm/database" element={<ContactDatabase />} />
               <Route path="/database/lists" element={<Lists />} />
               <Route path="/database/emails" element={<Emails />} />
               <Route path="/database/meetings" element={<Meetings />} />
