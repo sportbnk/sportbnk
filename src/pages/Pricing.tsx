@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import PageLayout from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
@@ -6,6 +5,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Check, Star } from "lucide-react";
 import { Link } from "react-router-dom";
 import { PricingToggle } from "@/components/PricingToggle";
+import { useToast } from "@/hooks/use-toast";
 
 const PricingCard = ({ 
   title,
@@ -19,7 +19,8 @@ const PricingCard = ({
   highlighted = false,
   isFree = false,
   isEnterprise = false,
-  isAnnual = false
+  isAnnual = false,
+  onSelectPlan = () => {}
 }: { 
   title: string;
   price: string;
@@ -33,57 +34,85 @@ const PricingCard = ({
   isFree?: boolean;
   isEnterprise?: boolean;
   isAnnual?: boolean;
-}) => (
-  <Card className={`border ${highlighted ? 'border-sportbnk-green border-2' : 'border-gray-200'} shadow-lg max-w-md mx-auto`}>
-    {highlighted && (
-      <div className="bg-sportbnk-green text-white text-center py-1 text-sm font-medium">
-        Most Popular
-      </div>
-    )}
-    <CardHeader className="pb-4 text-center">
-      <CardTitle className="text-2xl font-bold text-sportbnk-navy">{title}</CardTitle>
-      <div className="mt-4">
-        <span className="text-4xl font-bold text-sportbnk-navy">
-          {isFree ? price : isEnterprise ? price : isAnnual && annualPrice ? annualPrice : price}
-        </span>
-        {!isEnterprise && (
-          <span className="text-gray-500 ml-2">
-            {isAnnual && !isFree ? "/ year" : period}
+  onSelectPlan?: () => void;
+}) => {
+  const isPaidPlan = !isFree && !isEnterprise;
+  
+  return (
+    <Card className={`border ${highlighted ? 'border-sportbnk-green border-2' : 'border-gray-200'} shadow-lg max-w-md mx-auto`}>
+      {highlighted && (
+        <div className="bg-sportbnk-green text-white text-center py-1 text-sm font-medium">
+          Most Popular
+        </div>
+      )}
+      <CardHeader className="pb-4 text-center">
+        <CardTitle className="text-2xl font-bold text-sportbnk-navy">{title}</CardTitle>
+        <div className="mt-4">
+          <span className="text-4xl font-bold text-sportbnk-navy">
+            {isFree ? price : isEnterprise ? price : isAnnual && annualPrice ? annualPrice : price}
           </span>
+          {!isEnterprise && (
+            <span className="text-gray-500 ml-2">
+              {isAnnual && !isFree ? "/ year" : period}
+            </span>
+          )}
+        </div>
+        <p className="text-gray-600 mt-4">{description}</p>
+      </CardHeader>
+      <CardContent>
+        <ul className="space-y-3">
+          {features.map((feature, index) => (
+            <li key={index} className="flex items-start">
+              <div className="mr-2 mt-1 text-sportbnk-green">
+                <Check size={16} />
+              </div>
+              <span className="text-gray-600">{feature}</span>
+            </li>
+          ))}
+        </ul>
+      </CardContent>
+      <CardFooter className="pb-6">
+        {isPaidPlan ? (
+          <Button 
+            className={`w-full ${
+              highlighted ? 'bg-sportbnk-green hover:bg-sportbnk-green/90' : 
+              'bg-sportbnk-navy hover:bg-sportbnk-navy/90'
+            } text-white`}
+            onClick={onSelectPlan}
+          >
+            {buttonText}
+          </Button>
+        ) : (
+          <Button 
+            className={`w-full ${
+              highlighted ? 'bg-sportbnk-green hover:bg-sportbnk-green/90' : 
+              isFree ? 'bg-sportbnk-navy hover:bg-sportbnk-navy/90' :
+              isEnterprise ? 'bg-sportbnk-darkBlue hover:bg-sportbnk-darkBlue/90' :
+              'bg-sportbnk-navy hover:bg-sportbnk-navy/90'
+            } text-white`}
+            asChild
+          >
+            <Link to={buttonLink}>{buttonText}</Link>
+          </Button>
         )}
-      </div>
-      <p className="text-gray-600 mt-4">{description}</p>
-    </CardHeader>
-    <CardContent>
-      <ul className="space-y-3">
-        {features.map((feature, index) => (
-          <li key={index} className="flex items-start">
-            <div className="mr-2 mt-1 text-sportbnk-green">
-              <Check size={16} />
-            </div>
-            <span className="text-gray-600">{feature}</span>
-          </li>
-        ))}
-      </ul>
-    </CardContent>
-    <CardFooter className="pb-6">
-      <Button 
-        className={`w-full ${
-          highlighted ? 'bg-sportbnk-green hover:bg-sportbnk-green/90' : 
-          isFree ? 'bg-sportbnk-navy hover:bg-sportbnk-navy/90' :
-          isEnterprise ? 'bg-sportbnk-darkBlue hover:bg-sportbnk-darkBlue/90' :
-          'bg-sportbnk-navy hover:bg-sportbnk-navy/90'
-        } text-white`}
-        asChild
-      >
-        <Link to={buttonLink}>{buttonText}</Link>
-      </Button>
-    </CardFooter>
-  </Card>
-);
+      </CardFooter>
+    </Card>
+  );
+};
 
 const Pricing = () => {
   const [isAnnual, setIsAnnual] = useState(false);
+  const { toast } = useToast();
+  
+  const handleSelectPlan = (planName: string, planPrice: string) => {
+    toast({
+      title: "Payment processing",
+      description: `You've selected the ${planName} plan (${planPrice}). Stripe integration will be added soon.`,
+      duration: 5000,
+    });
+    
+    console.log(`Selected plan: ${planName}, Price: ${planPrice}`);
+  };
 
   const freeTrialFeatures = [
     "Access to basic Discover tool filters",
@@ -163,6 +192,7 @@ const Pricing = () => {
               features={standardFeatures}
               buttonText="Start 7-Day Free Trial"
               isAnnual={isAnnual}
+              onSelectPlan={() => handleSelectPlan("Standard Plan", isAnnual ? "$470/year" : "$49/month")}
             />
             
             <PricingCard 
@@ -174,6 +204,7 @@ const Pricing = () => {
               buttonText="Start 7-Day Free Trial"
               highlighted={true}
               isAnnual={isAnnual}
+              onSelectPlan={() => handleSelectPlan("Pro Plan", isAnnual ? "$950/year" : "$99/month")}
             />
 
             <PricingCard 
