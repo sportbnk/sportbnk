@@ -1,4 +1,3 @@
-
 import PageLayout from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
 import { Building, Phone } from "lucide-react";
@@ -20,11 +19,6 @@ const About = () => {
               <p className="text-lg text-gray-600 mb-6">
                 What began as a specialized database has evolved into a comprehensive suite of tools designed to help businesses connect, engage, and grow within the sports ecosystem.
               </p>
-              <a href="#team">
-                <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white">
-                  Meet Our Team
-                </Button>
-              </a>
             </div>
             <div>
               <img 
