@@ -9,7 +9,6 @@ import Reviews from "@/components/Reviews";
 import CaseStudy from "@/components/CaseStudy";
 import Clients from "@/components/Clients";
 import CTA from "@/components/CTA";
-import GoogleReviewCTA from '@/components/GoogleReviewCTA';
 
 const Index = () => {
   return (
@@ -24,7 +23,6 @@ const Index = () => {
       <Features />
       <CaseStudy />
       <Reviews />
-      <GoogleReviewCTA />
       <Clients />
       <CTA />
     </PageLayout>
