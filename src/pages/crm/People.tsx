@@ -152,13 +152,20 @@ const People = () => {
           <Button variant="outline" className="flex items-center gap-1">
             <Download className="h-4 w-4" /> Export
           </Button>
-          <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 flex items-center gap-1">
+          <Button 
+            className="bg-sportbnk-green hover:bg-sportbnk-green/90 flex items-center gap-1"
+          >
+            <Users className="h-4 w-4" /> Team
+          </Button>
+          <Button 
+            className="bg-sportbnk-navy hover:bg-sportbnk-navy/90 flex items-center gap-1"
+          >
             <Plus className="h-4 w-4" /> Add Person
           </Button>
         </div>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-7 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
         <div className="md:col-span-1">
           <Card className="shadow-md mb-4">
             <CardHeader className="pb-2 pt-4 px-4">
@@ -183,7 +190,7 @@ const People = () => {
           </Card>
         </div>
         
-        <div className="md:col-span-6">
+        <div className="md:col-span-5">
           <Card className="shadow-md h-full">
             <CardHeader className="pb-3 border-b pt-4 px-4">
               <CardTitle className="text-lg font-semibold">People List</CardTitle>
