@@ -92,7 +92,7 @@ const PricingCard = ({
             } text-white`}
             asChild
           >
-            <Link to={buttonLink}>{buttonText}</Link>
+            <Link to={isFree ? "/free-trial" : buttonLink}>{buttonText}</Link>
           </Button>
         )}
       </CardFooter>
@@ -180,6 +180,7 @@ const Pricing = () => {
               description="Try our platform with limited features at no cost"
               features={freeTrialFeatures}
               buttonText="Start Free Trial"
+              buttonLink="/free-trial"
               isFree={true}
               isAnnual={isAnnual}
             />

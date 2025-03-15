@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -15,31 +14,12 @@ import Resources from "./pages/Resources";
 import Pricing from "./pages/Pricing";
 import BookDemo from "./pages/BookDemo";
 import ContactUs from "./pages/ContactUs";
+import FreeTrial from "./pages/FreeTrial";
 
 // Product pages
 import Discover from "./pages/products/Discover";
 import Boost from "./pages/products/Boost";
 import Recruit from "./pages/products/Recruit";
-
-// Company pages
-import About from "./pages/company/About";
-import Careers from "./pages/company/Careers";
-import PartnerProgram from "./pages/company/PartnerProgram";
-import LatestNews from "./pages/company/LatestNews";
-
-// Resources pages
-import Startups from "./pages/resources/Startups";
-import Articles from "./pages/resources/Articles";
-import Community from "./pages/resources/Community";
-import Webinars from "./pages/resources/Webinars";
-import Podcasts from "./pages/resources/Podcasts";
-import CaseStudies from "./pages/resources/CaseStudies";
-import Reviews from "./pages/resources/Reviews";
-import HelpCenter from "./pages/resources/HelpCenter";
-
-// Legal pages
-import Privacy from "./pages/legal/Privacy";
-import Terms from "./pages/legal/Terms";
 
 const queryClient = new QueryClient();
 
@@ -62,6 +42,7 @@ const App = () => (
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/book-demo" element={<BookDemo />} />
             <Route path="/contact" element={<ContactUs />} />
+            <Route path="/free-trial" element={<FreeTrial />} />
             
             {/* Product sub-pages */}
             <Route path="/products/discover" element={<Discover />} />
