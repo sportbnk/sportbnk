@@ -8,7 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Mail, Phone, Linkedin, ArrowDown, ArrowUp } from "lucide-react";
+import { Mail, Phone, Linkedin, ArrowDown, ArrowUp, Plus, Trash } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -33,6 +33,9 @@ interface ContactsViewProps {
   onRevealEmail: (email: string) => void;
   onRevealPhone: (phone: string) => void;
   onViewTeam: (teamId: number) => void;
+  onAddToList?: (contact: Contact) => void;
+  onRemoveFromList?: (contactId: number) => void;
+  isSavedList?: boolean;
 }
 
 const ContactsView = ({ 
@@ -41,7 +44,10 @@ const ContactsView = ({
   revealedPhones, 
   onRevealEmail, 
   onRevealPhone, 
-  onViewTeam 
+  onViewTeam,
+  onAddToList,
+  onRemoveFromList,
+  isSavedList = false
 }: ContactsViewProps) => {
   const [sortField, setSortField] = useState<keyof Contact>("name");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
@@ -65,9 +71,9 @@ const ContactsView = ({
     <Card>
       <CardContent className="p-0">
         <Table>
-          <TableHeader>
+          <TableHeader className="bg-sportbnk-navy">
             <TableRow>
-              <TableHead className="cursor-pointer" onClick={() => handleSort("name")}>
+              <TableHead className="cursor-pointer text-white" onClick={() => handleSort("name")}>
                 <div className="flex items-center gap-1">
                   Contact
                   {sortField === "name" && (
@@ -75,7 +81,7 @@ const ContactsView = ({
                   )}
                 </div>
               </TableHead>
-              <TableHead className="cursor-pointer" onClick={() => handleSort("position")}>
+              <TableHead className="cursor-pointer text-white" onClick={() => handleSort("position")}>
                 <div className="flex items-center gap-1">
                   Position
                   {sortField === "position" && (
@@ -83,7 +89,7 @@ const ContactsView = ({
                   )}
                 </div>
               </TableHead>
-              <TableHead className="cursor-pointer" onClick={() => handleSort("team")}>
+              <TableHead className="cursor-pointer text-white" onClick={() => handleSort("team")}>
                 <div className="flex items-center gap-1">
                   Team
                   {sortField === "team" && (
@@ -91,7 +97,7 @@ const ContactsView = ({
                   )}
                 </div>
               </TableHead>
-              <TableHead className="cursor-pointer hidden md:table-cell" onClick={() => handleSort("sport")}>
+              <TableHead className="cursor-pointer hidden md:table-cell text-white" onClick={() => handleSort("sport")}>
                 <div className="flex items-center gap-1">
                   Sport
                   {sortField === "sport" && (
@@ -99,16 +105,19 @@ const ContactsView = ({
                   )}
                 </div>
               </TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead className="hidden md:table-cell">Phone</TableHead>
-              <TableHead className="hidden md:table-cell">LinkedIn</TableHead>
+              <TableHead className="text-white">Email</TableHead>
+              <TableHead className="hidden md:table-cell text-white">Phone</TableHead>
+              <TableHead className="hidden md:table-cell text-white">LinkedIn</TableHead>
+              <TableHead className="text-white">
+                {isSavedList ? "Remove" : "Add to List"}
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {sortedData.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={7} className="text-center py-10 text-muted-foreground">
-                  No results found. Try adjusting your filters.
+                <TableCell colSpan={8} className="text-center py-10 text-muted-foreground">
+                  {isSavedList ? "Your list is empty. Add contacts to create your export list." : "No results found. Try adjusting your filters."}
                 </TableCell>
               </TableRow>
             ) : (
@@ -124,7 +133,7 @@ const ContactsView = ({
                         <AvatarImage src={contact.teamLogo} alt={contact.team} />
                         <AvatarFallback>{contact.team.substring(0, 2)}</AvatarFallback>
                       </Avatar>
-                      <span className="text-blue-600 hover:underline">{contact.team}</span>
+                      <span className="text-blue-600 hover:underline whitespace-nowrap">{contact.team}</span>
                     </div>
                   </TableCell>
                   <TableCell className="hidden md:table-cell">{contact.sport}</TableCell>
@@ -178,6 +187,27 @@ const ContactsView = ({
                       </a>
                     ) : (
                       <span className="text-muted-foreground">Not available</span>
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {isSavedList ? (
+                      <Button 
+                        size="sm" 
+                        variant="ghost" 
+                        onClick={() => onRemoveFromList && onRemoveFromList(contact.id)}
+                        className="text-red-500 hover:text-red-700 p-1"
+                      >
+                        <Trash className="h-4 w-4" />
+                      </Button>
+                    ) : (
+                      <Button 
+                        size="sm" 
+                        variant="ghost" 
+                        onClick={() => onAddToList && onAddToList(contact)}
+                        className="text-sportbnk-green hover:text-sportbnk-darkBlue p-1"
+                      >
+                        <Plus className="h-4 w-4" />
+                      </Button>
                     )}
                   </TableCell>
                 </TableRow>

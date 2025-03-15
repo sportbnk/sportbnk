@@ -7,10 +7,11 @@ import ContactsTable from "@/components/database/ContactsTable";
 import ContactsView from "@/components/database/ContactsView";
 import CreditDisplay from "@/components/database/CreditDisplay";
 import { Input } from "@/components/ui/input";
-import { Search, DatabaseIcon, Users } from "lucide-react";
+import { Search, DatabaseIcon, Users, FileDown, List } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import TeamProfile from "@/components/database/TeamProfile";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 
 interface Contact {
   id: number;
@@ -35,6 +36,8 @@ const ContactDatabase = () => {
   const [profileOpen, setProfileOpen] = useState(false);
   const [revealedEmails, setRevealedEmails] = useState<Record<string, boolean>>({});
   const [revealedPhones, setRevealedPhones] = useState<Record<string, boolean>>({});
+  const [savedList, setSavedList] = useState<Contact[]>([]);
+  const [showSavedList, setShowSavedList] = useState(false);
 
   useEffect(() => {
     const contacts: Contact[] = [];
@@ -212,6 +215,7 @@ const ContactDatabase = () => {
   
   const handleTabChange = (value: string) => {
     setActiveTab(value);
+    setShowSavedList(false);
   };
 
   const handleViewTeam = (teamId: number) => {
@@ -246,6 +250,60 @@ const ContactDatabase = () => {
     toast.success("Phone number revealed! 3 credits used.");
   };
 
+  const addToList = (contact: Contact) => {
+    if (!savedList.some(item => item.id === contact.id)) {
+      setSavedList([...savedList, contact]);
+      toast.success(`Added ${contact.name} to saved list`);
+    } else {
+      toast.info(`${contact.name} is already in your list`);
+    }
+  };
+
+  const removeFromList = (contactId: number) => {
+    setSavedList(savedList.filter(contact => contact.id !== contactId));
+    toast.success("Contact removed from list");
+  };
+
+  const exportToCsv = () => {
+    if (savedList.length === 0) {
+      toast.error("Your list is empty");
+      return;
+    }
+
+    const headers = ["Name", "Position", "Team", "Sport", "Email", "Phone", "LinkedIn"];
+    const csvContent = [
+      headers.join(","),
+      ...savedList.map(contact => {
+        const email = revealedEmails[contact.email] ? contact.email.replace(/\*/g, "") : "Not revealed";
+        const phone = contact.phone && revealedPhones[contact.phone] ? contact.phone : "Not revealed";
+        return [
+          `"${contact.name}"`,
+          `"${contact.position}"`,
+          `"${contact.team}"`,
+          `"${contact.sport}"`,
+          `"${email}"`,
+          `"${phone || "Not available"}"`,
+          `"${contact.linkedin || "Not available"}"`
+        ].join(",");
+      })
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "contacts-list.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    toast.success("Export successful");
+  };
+
+  const toggleSavedList = () => {
+    setShowSavedList(!showSavedList);
+  };
+
   return (
     <PageLayout>
       <Helmet>
@@ -253,59 +311,104 @@ const ContactDatabase = () => {
         <meta name="description" content="Find key contacts in sports teams with our powerful database" />
       </Helmet>
 
-      <div className="container mx-auto py-8">
-        <div className="flex flex-col space-y-6">
+      <div className="w-full py-8">
+        <div className="flex flex-col space-y-6 px-4">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <h1 className="text-3xl font-bold text-sportbnk-navy">Sports Contact Database</h1>
-            <CreditDisplay credits={credits} />
-          </div>
-
-          <div className="relative">
-            <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-            <Input
-              placeholder="Search teams, contacts, sports, locations..."
-              className="pl-10 h-12"
-              value={searchTerm}
-              onChange={handleSearch}
-            />
-          </div>
-
-          <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-6">
-              <TabsTrigger value="teams" className="flex items-center gap-2">
-                <DatabaseIcon className="h-5 w-5" />
-                Teams
-              </TabsTrigger>
-              <TabsTrigger value="contacts" className="flex items-center gap-2">
-                <Users className="h-5 w-5" />
-                Contacts
-              </TabsTrigger>
-            </TabsList>
-
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-              <div className="lg:col-span-1">
-                {activeTab === "teams" ? (
-                  <DatabaseFilters onFilterChange={handleTeamFilterChange} />
-                ) : (
-                  <ContactsFilters onFilterChange={handleContactFilterChange} />
-                )}
-              </div>
-              <div className="lg:col-span-3">
-                {activeTab === "teams" ? (
-                  <ContactsTable data={filteredTeamData} useCredits={useCredits} />
-                ) : (
-                  <ContactsView 
-                    data={filteredContactData} 
-                    revealedEmails={revealedEmails}
-                    revealedPhones={revealedPhones}
-                    onRevealEmail={revealEmail}
-                    onRevealPhone={revealPhone}
-                    onViewTeam={handleViewTeam}
-                  />
-                )}
-              </div>
+            <div className="flex items-center gap-4">
+              <Button 
+                variant="outline" 
+                onClick={toggleSavedList}
+                className="flex items-center gap-2"
+              >
+                <List className="h-4 w-4" />
+                {showSavedList ? "Back to Results" : `Saved List (${savedList.length})`}
+              </Button>
+              {showSavedList && (
+                <Button 
+                  onClick={exportToCsv}
+                  className="flex items-center gap-2 bg-sportbnk-navy text-white hover:bg-sportbnk-darkBlue"
+                  disabled={savedList.length === 0}
+                >
+                  <FileDown className="h-4 w-4" />
+                  Export CSV
+                </Button>
+              )}
+              <CreditDisplay credits={credits} />
             </div>
-          </Tabs>
+          </div>
+
+          {!showSavedList && (
+            <div className="relative">
+              <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+              <Input
+                placeholder="Search teams, contacts, sports, locations..."
+                className="pl-10 h-12"
+                value={searchTerm}
+                onChange={handleSearch}
+              />
+            </div>
+          )}
+
+          {showSavedList ? (
+            <div className="bg-white rounded-lg shadow">
+              <h2 className="text-xl font-bold p-4 border-b">Saved Contacts List</h2>
+              <ContactsView 
+                data={savedList} 
+                revealedEmails={revealedEmails}
+                revealedPhones={revealedPhones}
+                onRevealEmail={revealEmail}
+                onRevealPhone={revealPhone}
+                onViewTeam={handleViewTeam}
+                onAddToList={addToList}
+                onRemoveFromList={removeFromList}
+                isSavedList={true}
+              />
+            </div>
+          ) : (
+            <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
+              <TabsList className="grid w-full grid-cols-2 mb-6">
+                <TabsTrigger value="teams" className="flex items-center gap-2">
+                  <DatabaseIcon className="h-5 w-5" />
+                  Teams
+                </TabsTrigger>
+                <TabsTrigger value="contacts" className="flex items-center gap-2">
+                  <Users className="h-5 w-5" />
+                  Contacts
+                </TabsTrigger>
+              </TabsList>
+
+              <div className="grid grid-cols-5 gap-6">
+                <div className="col-span-1">
+                  {activeTab === "teams" ? (
+                    <DatabaseFilters onFilterChange={handleTeamFilterChange} />
+                  ) : (
+                    <ContactsFilters onFilterChange={handleContactFilterChange} />
+                  )}
+                </div>
+                <div className="col-span-4">
+                  {activeTab === "teams" ? (
+                    <ContactsTable 
+                      data={filteredTeamData} 
+                      useCredits={useCredits} 
+                    />
+                  ) : (
+                    <ContactsView 
+                      data={filteredContactData} 
+                      revealedEmails={revealedEmails}
+                      revealedPhones={revealedPhones}
+                      onRevealEmail={revealEmail}
+                      onRevealPhone={revealPhone}
+                      onViewTeam={handleViewTeam}
+                      onAddToList={addToList}
+                      onRemoveFromList={removeFromList}
+                      isSavedList={false}
+                    />
+                  )}
+                </div>
+              </div>
+            </Tabs>
+          )}
         </div>
       </div>
 
