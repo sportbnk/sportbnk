@@ -18,19 +18,17 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { 
-  Users, 
+  UserPlus, 
   List, 
-  Mail, 
-  Calendar, 
-  CheckSquare, 
-  PhoneCall, 
-  CreditCard, 
-  Plus, 
-  SearchIcon,
-  UserPlus,
-  MessageSquare,
+  MessageSquare, 
   DollarSign,
-  User
+  Mail,
+  PhoneCall,
+  Calendar,
+  CheckSquare,
+  Plus,
+  SearchIcon,
+  CreditCard
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import AccountBadge from "./AccountBadge";
@@ -69,48 +67,12 @@ const CrmSidebar = () => {
                 >
                   <Link to="/database">
                     <UserPlus />
-                    <span>Prospects</span>
+                    <span>🔍 Prospects</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               
-              {/* Teams submenu */}
-              <SidebarMenuItem>
-                <SidebarMenuButton>
-                  <Users />
-                  <span>Teams</span>
-                </SidebarMenuButton>
-                <SidebarMenuSub>
-                  <SidebarMenuSubItem>
-                    <SidebarMenuSubButton 
-                      asChild 
-                      isActive={location.pathname === "/database/teams"}
-                    >
-                      <Link to="/database/teams">All Teams</Link>
-                    </SidebarMenuSubButton>
-                  </SidebarMenuSubItem>
-                </SidebarMenuSub>
-              </SidebarMenuItem>
-              
-              {/* Contacts submenu */}
-              <SidebarMenuItem>
-                <SidebarMenuButton>
-                  <User />
-                  <span>Contacts</span>
-                </SidebarMenuButton>
-                <SidebarMenuSub>
-                  <SidebarMenuSubItem>
-                    <SidebarMenuSubButton 
-                      asChild 
-                      isActive={location.pathname === "/database/contacts"}
-                    >
-                      <Link to="/database/contacts">All Contacts</Link>
-                    </SidebarMenuSubButton>
-                  </SidebarMenuSubItem>
-                </SidebarMenuSub>
-              </SidebarMenuItem>
-              
-              {/* Lists submenu */}
+              {/* Lists menu item */}
               <SidebarMenuItem>
                 <SidebarMenuButton 
                   asChild 
@@ -119,7 +81,7 @@ const CrmSidebar = () => {
                 >
                   <Link to="/database/lists">
                     <List />
-                    <span>Lists</span>
+                    <span>📋 Lists</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -128,7 +90,7 @@ const CrmSidebar = () => {
               <SidebarMenuItem>
                 <SidebarMenuButton>
                   <MessageSquare />
-                  <span>Engage</span>
+                  <span>💬 Engage</span>
                 </SidebarMenuButton>
                 <SidebarMenuSub>
                   <SidebarMenuSubItem>
@@ -136,7 +98,10 @@ const CrmSidebar = () => {
                       asChild 
                       isActive={location.pathname === "/database/emails"}
                     >
-                      <Link to="/database/emails">Emails</Link>
+                      <Link to="/database/emails">
+                        <Mail className="h-4 w-4 mr-2" />
+                        📧 Emails
+                      </Link>
                     </SidebarMenuSubButton>
                   </SidebarMenuSubItem>
                   <SidebarMenuSubItem>
@@ -144,7 +109,10 @@ const CrmSidebar = () => {
                       asChild 
                       isActive={location.pathname === "/database/calls"}
                     >
-                      <Link to="/database/calls">Calls</Link>
+                      <Link to="/database/calls">
+                        <PhoneCall className="h-4 w-4 mr-2" />
+                        📞 Calls
+                      </Link>
                     </SidebarMenuSubButton>
                   </SidebarMenuSubItem>
                 </SidebarMenuSub>
@@ -154,7 +122,7 @@ const CrmSidebar = () => {
               <SidebarMenuItem>
                 <SidebarMenuButton>
                   <DollarSign />
-                  <span>Deals</span>
+                  <span>💰 Deals</span>
                 </SidebarMenuButton>
                 <SidebarMenuSub>
                   <SidebarMenuSubItem>
@@ -162,7 +130,10 @@ const CrmSidebar = () => {
                       asChild 
                       isActive={location.pathname === "/database/meetings"}
                     >
-                      <Link to="/database/meetings">Meetings</Link>
+                      <Link to="/database/meetings">
+                        <Calendar className="h-4 w-4 mr-2" />
+                        📅 Meetings
+                      </Link>
                     </SidebarMenuSubButton>
                   </SidebarMenuSubItem>
                   <SidebarMenuSubItem>
@@ -170,7 +141,10 @@ const CrmSidebar = () => {
                       asChild 
                       isActive={location.pathname === "/database/tasks"}
                     >
-                      <Link to="/database/tasks">Tasks</Link>
+                      <Link to="/database/tasks">
+                        <CheckSquare className="h-4 w-4 mr-2" />
+                        ✅ Tasks
+                      </Link>
                     </SidebarMenuSubButton>
                   </SidebarMenuSubItem>
                 </SidebarMenuSub>
