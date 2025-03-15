@@ -171,7 +171,7 @@ const PageLayout = ({
       </Helmet>
       
       <Navbar />
-      <main className="flex-grow pt-20">
+      <main className="flex-grow">
         {pageTitle && (
           <div className="bg-sportbnk-navy text-white py-16 mt-6">
             <div className="container mx-auto px-4 md:px-6">
