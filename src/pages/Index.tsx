@@ -12,7 +12,7 @@ import CTA from "@/components/CTA";
 
 const Index = () => {
   return (
-    <PageLayout pageTitle="Home">
+    <PageLayout>
       <Helmet>
         <title>SportBnk - B2B Sports Intelligence Platform</title>
         <meta name="description" content="The sports industry is to be an estimated $760 Billion market by 2026. SportBnk provides an intelligence platform for sports organizations to discover, boost, and recruit." />
