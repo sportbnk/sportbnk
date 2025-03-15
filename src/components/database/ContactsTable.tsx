@@ -8,12 +8,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { Eye, ArrowDown, ArrowUp, Download, ExternalLink } from "lucide-react";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { ArrowDown, ArrowUp, ExternalLink } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { toast } from "sonner";
 import TeamProfile from "./TeamProfile";
 
 interface Contact {
@@ -84,10 +81,6 @@ const ContactsTable = ({ data, useCredits }: ContactsTableProps) => {
     return `$${revenue}`;
   };
 
-  const handleViewContacts = (team: TeamData) => {
-    setSelectedTeam(team);
-  };
-
   const handleViewProfile = (team: TeamData) => {
     setSelectedTeam(team);
     setProfileOpen(true);
@@ -104,8 +97,6 @@ const ContactsTable = ({ data, useCredits }: ContactsTableProps) => {
       ...revealedEmails,
       [email]: true
     });
-    
-    toast.success("Email revealed! 2 credits used.");
   };
   
   const revealPhone = (phone: string) => {
@@ -119,13 +110,6 @@ const ContactsTable = ({ data, useCredits }: ContactsTableProps) => {
       ...revealedPhones,
       [phone]: true
     });
-    
-    toast.success("Phone number revealed! 3 credits used.");
-  };
-
-  const exportCSV = () => {
-    toast.success("Contact data exported! 5 credits used.");
-    useCredits(5);
   };
 
   return (
@@ -190,13 +174,12 @@ const ContactsTable = ({ data, useCredits }: ContactsTableProps) => {
                   )}
                 </div>
               </TableHead>
-              <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {sortedData.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={8} className="text-center py-10 text-muted-foreground">
+                <TableCell colSpan={7} className="text-center py-10 text-muted-foreground">
                   No results found. Try adjusting your filters.
                 </TableCell>
               </TableRow>
@@ -218,66 +201,6 @@ const ContactsTable = ({ data, useCredits }: ContactsTableProps) => {
                   <TableCell>{team.country}</TableCell>
                   <TableCell className="hidden md:table-cell">{formatRevenue(team.revenue)}</TableCell>
                   <TableCell className="hidden md:table-cell">{team.employees}</TableCell>
-                  <TableCell>
-                    <div className="flex space-x-2">
-                      <Button 
-                        variant="ghost" 
-                        size="sm"
-                        onClick={() => handleViewProfile(team)}
-                      >
-                        <ExternalLink className="h-4 w-4" />
-                      </Button>
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button 
-                            variant="ghost" 
-                            size="sm" 
-                            onClick={() => handleViewContacts(team)}
-                          >
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent className="sm:max-w-md">
-                          <DialogHeader>
-                            <DialogTitle>Contacts at {team.team}</DialogTitle>
-                            <DialogDescription>
-                              Key decision makers and contacts
-                            </DialogDescription>
-                          </DialogHeader>
-                          <div className="space-y-4 py-4">
-                            {team.contacts.map((contact, index) => (
-                              <div key={index} className="border rounded-md p-4">
-                                <h4 className="font-semibold">{contact.name}</h4>
-                                <p className="text-sm text-muted-foreground mb-2">{contact.position}</p>
-                                {revealedEmails[contact.email] ? (
-                                  <p className="text-sm font-mono bg-muted p-1 rounded">{contact.email.replace(/\*/g, (match, offset) => contact.email.split('@')[0][offset])}</p>
-                                ) : (
-                                  <div className="flex items-center justify-between">
-                                    <p className="text-sm font-mono bg-muted p-1 rounded">{contact.email}</p>
-                                    <Button 
-                                      size="sm" 
-                                      variant="outline"
-                                      onClick={() => revealEmail(contact.email)}
-                                    >
-                                      Reveal (2 credits)
-                                    </Button>
-                                  </div>
-                                )}
-                              </div>
-                            ))}
-                            <Button 
-                              className="w-full mt-2" 
-                              variant="default"
-                              onClick={exportCSV}
-                            >
-                              <Download className="h-4 w-4 mr-2" />
-                              Export to CSV (5 credits)
-                            </Button>
-                          </div>
-                        </DialogContent>
-                      </Dialog>
-                    </div>
-                  </TableCell>
                 </TableRow>
               ))
             )}

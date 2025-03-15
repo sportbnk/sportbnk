@@ -8,11 +8,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { Eye, ArrowDown, ArrowUp, Mail, Phone, Linkedin } from "lucide-react";
+import { Mail, Phone, Linkedin, ArrowDown, ArrowUp } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 
 interface Contact {
   id: number;
@@ -103,13 +102,12 @@ const ContactsView = ({
               <TableHead>Email</TableHead>
               <TableHead className="hidden md:table-cell">Phone</TableHead>
               <TableHead className="hidden md:table-cell">LinkedIn</TableHead>
-              <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {sortedData.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={8} className="text-center py-10 text-muted-foreground">
+                <TableCell colSpan={7} className="text-center py-10 text-muted-foreground">
                   No results found. Try adjusting your filters.
                 </TableCell>
               </TableRow>
@@ -181,15 +179,6 @@ const ContactsView = ({
                     ) : (
                       <span className="text-muted-foreground">Not available</span>
                     )}
-                  </TableCell>
-                  <TableCell>
-                    <Button 
-                      variant="ghost" 
-                      size="sm"
-                      onClick={() => onViewTeam(contact.teamId)}
-                    >
-                      <Eye className="h-4 w-4" />
-                    </Button>
                   </TableCell>
                 </TableRow>
               ))
