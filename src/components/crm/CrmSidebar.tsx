@@ -12,6 +12,9 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { 
@@ -23,7 +26,11 @@ import {
   PhoneCall, 
   CreditCard, 
   Plus, 
-  SearchIcon 
+  SearchIcon,
+  UserPlus,
+  MessageSquare,
+  DollarSign,
+  User
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import AccountBadge from "./AccountBadge";
@@ -32,15 +39,6 @@ import { Button } from "@/components/ui/button";
 const CrmSidebar = () => {
   const location = useLocation();
   
-  const menuItems = [
-    { title: "Teams & Contacts", icon: Users, path: "/database" },
-    { title: "Lists", icon: List, path: "/database/lists" },
-    { title: "Emails", icon: Mail, path: "/database/emails" },
-    { title: "Meetings", icon: Calendar, path: "/database/meetings" },
-    { title: "Tasks", icon: CheckSquare, path: "/database/tasks" },
-    { title: "Calls", icon: PhoneCall, path: "/database/calls" },
-  ];
-
   return (
     <Sidebar>
       <SidebarRail />
@@ -62,20 +60,121 @@ const CrmSidebar = () => {
           <SidebarGroupLabel>Navigation</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {menuItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton 
-                    asChild 
-                    isActive={location.pathname === item.path}
-                    tooltip={item.title}
-                  >
-                    <Link to={item.path}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {/* Prospects menu item */}
+              <SidebarMenuItem>
+                <SidebarMenuButton 
+                  asChild 
+                  isActive={location.pathname === "/database"}
+                  tooltip="Prospects"
+                >
+                  <Link to="/database">
+                    <UserPlus />
+                    <span>Prospects</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              
+              {/* Teams submenu */}
+              <SidebarMenuItem>
+                <SidebarMenuButton>
+                  <Users />
+                  <span>Teams</span>
+                </SidebarMenuButton>
+                <SidebarMenuSub>
+                  <SidebarMenuSubItem>
+                    <SidebarMenuSubButton 
+                      asChild 
+                      isActive={location.pathname === "/database/teams"}
+                    >
+                      <Link to="/database/teams">All Teams</Link>
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
+                </SidebarMenuSub>
+              </SidebarMenuItem>
+              
+              {/* Contacts submenu */}
+              <SidebarMenuItem>
+                <SidebarMenuButton>
+                  <User />
+                  <span>Contacts</span>
+                </SidebarMenuButton>
+                <SidebarMenuSub>
+                  <SidebarMenuSubItem>
+                    <SidebarMenuSubButton 
+                      asChild 
+                      isActive={location.pathname === "/database/contacts"}
+                    >
+                      <Link to="/database/contacts">All Contacts</Link>
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
+                </SidebarMenuSub>
+              </SidebarMenuItem>
+              
+              {/* Lists submenu */}
+              <SidebarMenuItem>
+                <SidebarMenuButton 
+                  asChild 
+                  isActive={location.pathname === "/database/lists"}
+                  tooltip="Lists"
+                >
+                  <Link to="/database/lists">
+                    <List />
+                    <span>Lists</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              
+              {/* Engage menu with submenu items */}
+              <SidebarMenuItem>
+                <SidebarMenuButton>
+                  <MessageSquare />
+                  <span>Engage</span>
+                </SidebarMenuButton>
+                <SidebarMenuSub>
+                  <SidebarMenuSubItem>
+                    <SidebarMenuSubButton 
+                      asChild 
+                      isActive={location.pathname === "/database/emails"}
+                    >
+                      <Link to="/database/emails">Emails</Link>
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
+                  <SidebarMenuSubItem>
+                    <SidebarMenuSubButton 
+                      asChild 
+                      isActive={location.pathname === "/database/calls"}
+                    >
+                      <Link to="/database/calls">Calls</Link>
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
+                </SidebarMenuSub>
+              </SidebarMenuItem>
+              
+              {/* Deals menu with submenu items */}
+              <SidebarMenuItem>
+                <SidebarMenuButton>
+                  <DollarSign />
+                  <span>Deals</span>
+                </SidebarMenuButton>
+                <SidebarMenuSub>
+                  <SidebarMenuSubItem>
+                    <SidebarMenuSubButton 
+                      asChild 
+                      isActive={location.pathname === "/database/meetings"}
+                    >
+                      <Link to="/database/meetings">Meetings</Link>
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
+                  <SidebarMenuSubItem>
+                    <SidebarMenuSubButton 
+                      asChild 
+                      isActive={location.pathname === "/database/tasks"}
+                    >
+                      <Link to="/database/tasks">Tasks</Link>
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
+                </SidebarMenuSub>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
