@@ -1,44 +1,29 @@
 
-import { useState } from 'react';
 import PageLayout from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Check } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const PricingCard = ({ 
-  name, 
-  price, 
-  description, 
   features,
-  isPopular = false,
-  buttonText = "Get Started"
+  buttonText = "Get Started",
+  buttonLink = "/book-demo"
 }: { 
-  name: string; 
-  price: string; 
-  description: string; 
   features: string[];
-  isPopular?: boolean;
   buttonText?: string;
+  buttonLink?: string;
 }) => (
-  <Card className={`border ${isPopular ? 'border-sportbnk-green shadow-lg' : 'border-gray-200'} h-full flex flex-col`}>
-    <CardHeader className="pb-4">
-      {isPopular && (
-        <Badge className="w-fit mb-2 bg-sportbnk-green text-white hover:bg-sportbnk-green/90">
-          Most Popular
-        </Badge>
-      )}
-      <CardTitle className="text-2xl font-bold text-sportbnk-navy">{name}</CardTitle>
-      <div className="mt-2">
-        <span className="text-3xl font-bold text-sportbnk-navy">{price}</span>
-        {price !== "Custom" && (
-          <span className="text-gray-500 ml-2">/ month</span>
-        )}
+  <Card className="border border-sportbnk-green shadow-lg max-w-md mx-auto">
+    <CardHeader className="pb-4 text-center">
+      <CardTitle className="text-2xl font-bold text-sportbnk-navy">Standard Plan</CardTitle>
+      <div className="mt-4">
+        <span className="text-4xl font-bold text-sportbnk-navy">$49</span>
+        <span className="text-gray-500 ml-2">/ month</span>
       </div>
-      <p className="text-gray-600 mt-2">{description}</p>
+      <p className="text-gray-600 mt-4">All the features you need to grow your business in the sports industry</p>
     </CardHeader>
-    <CardContent className="flex-grow">
+    <CardContent>
       <ul className="space-y-3">
         {features.map((feature, index) => (
           <li key={index} className="flex items-start">
@@ -50,20 +35,28 @@ const PricingCard = ({
         ))}
       </ul>
     </CardContent>
-    <CardFooter>
+    <CardFooter className="pb-6">
       <Button 
-        className={`w-full ${isPopular 
-          ? 'bg-sportbnk-green hover:bg-sportbnk-green/90 text-white' 
-          : 'bg-sportbnk-navy hover:bg-sportbnk-navy/90 text-white'}`}
+        className="w-full bg-sportbnk-green hover:bg-sportbnk-green/90 text-white"
+        asChild
       >
-        {buttonText}
+        <Link to={buttonLink}>{buttonText}</Link>
       </Button>
     </CardFooter>
   </Card>
 );
 
 const Pricing = () => {
-  const [isAnnual, setIsAnnual] = useState(true);
+  const features = [
+    "Access to Discover tool with all filters",
+    "Access to Boost for data enrichment",
+    "Unlimited searches",
+    "Export up to 1,000 contacts per month",
+    "CRM integration (HubSpot, Salesforce)",
+    "Email and chat support",
+    "7-day free trial",
+    "Cancel anytime"
+  ];
   
   return (
     <PageLayout pageTitle="Pricing">
@@ -73,77 +66,15 @@ const Pricing = () => {
             <h2 className="text-3xl font-bold text-sportbnk-navy mb-4">
               Simple, Transparent Pricing
             </h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Choose the plan that fits your business needs, with no hidden fees or long-term commitments.
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Just one plan with everything you need at a flat rate of $49/month.
             </p>
-            
-            <div className="flex items-center justify-center mt-8 space-x-2">
-              <span className={`text-sm ${!isAnnual ? 'font-medium text-sportbnk-navy' : 'text-gray-500'}`}>
-                Monthly
-              </span>
-              <button
-                onClick={() => setIsAnnual(!isAnnual)}
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
-                  isAnnual ? 'bg-sportbnk-green' : 'bg-gray-200'
-                }`}
-              >
-                <span
-                  className={`inline-block h-4 w-4 rounded-full bg-white transition-transform ${
-                    isAnnual ? 'translate-x-6' : 'translate-x-1'
-                  }`}
-                />
-              </button>
-              <span className={`text-sm ${isAnnual ? 'font-medium text-sportbnk-navy' : 'text-gray-500'}`}>
-                Annual <span className="text-sportbnk-green">(20% off)</span>
-              </span>
-            </div>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="max-w-md mx-auto">
             <PricingCard 
-              name="Free Trial" 
-              price="$0"
-              description="Try out our platform for 7 days with limited features."
-              features={[
-                "Access to Discover tool with basic filters",
-                "Limited number of searches",
-                "Export up to 50 contacts",
-                "Email support"
-              ]}
-              buttonText="Start Free Trial"
-            />
-            
-            <PricingCard 
-              name="Professional" 
-              price={isAnnual ? "$99" : "$129"}
-              description="Full access to all tools and data, ideal for medium-sized enterprises."
-              features={[
-                "Full access to Discover with advanced filters",
-                "Access to Boost for data enrichment",
-                "Unlimited searches",
-                "Export up to 1,000 contacts per month",
-                "CRM integration (HubSpot, Salesforce)",
-                "Priority email & chat support"
-              ]}
-              isPopular={true}
+              features={features}
               buttonText="Start 7-Day Free Trial"
-            />
-            
-            <PricingCard 
-              name="Enterprise" 
-              price="Custom"
-              description="Customized solutions with API access and premium support for large organizations."
-              features={[
-                "Everything in Professional",
-                "Access to Recruit tool",
-                "Custom data enrichment options",
-                "Unlimited exports",
-                "Advanced API access",
-                "Dedicated account manager",
-                "Custom integration support",
-                "24/7 priority support"
-              ]}
-              buttonText="Contact Sales"
             />
           </div>
         </div>
@@ -157,13 +88,13 @@ const Pricing = () => {
             </h2>
           </div>
           
-          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             <div className="bg-white p-6 rounded-lg shadow-sm">
               <h3 className="text-lg font-bold text-sportbnk-navy mb-2">
                 How does the 7-day free trial work?
               </h3>
               <p className="text-gray-600">
-                Our 7-day free trial gives you access to limited features of our platform. No credit card is required to start, and you can upgrade to a paid plan at any time.
+                Our 7-day free trial gives you full access to all features. No credit card is required to start, and you can upgrade to the paid plan at any time.
               </p>
             </div>
             
@@ -181,16 +112,16 @@ const Pricing = () => {
                 What payment methods do you accept?
               </h3>
               <p className="text-gray-600">
-                We accept all major credit cards, including Visa, Mastercard, and American Express. For Enterprise plans, we also offer invoice payments.
+                We accept all major credit cards, including Visa, Mastercard, and American Express.
               </p>
             </div>
             
             <div className="bg-white p-6 rounded-lg shadow-sm">
               <h3 className="text-lg font-bold text-sportbnk-navy mb-2">
-                Do you offer discounts for non-profits or educational institutions?
+                Do you offer discounts for annual billing?
               </h3>
               <p className="text-gray-600">
-                Yes, we offer special pricing for non-profits and educational institutions. Please contact our sales team for more information.
+                We keep it simple with just one monthly plan at $49. Contact our sales team if you need custom options for your organization.
               </p>
             </div>
           </div>
@@ -201,10 +132,10 @@ const Pricing = () => {
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center max-w-3xl mx-auto">
             <h2 className="text-3xl font-bold mb-6">
-              Not sure which plan is right for you?
+              Have questions about our pricing?
             </h2>
             <p className="text-lg mb-8 opacity-90">
-              Our team is here to help you find the perfect solution for your business needs.
+              Our team is here to help you determine if our solution is right for your business.
             </p>
             <Button 
               className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white px-8 py-6 text-lg"
