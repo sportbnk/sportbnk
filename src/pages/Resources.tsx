@@ -3,19 +3,22 @@ import PageLayout from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, BookOpen, Video, Mic, FileText, Star } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const ResourceCard = ({ 
   title, 
   description, 
   image, 
   category,
-  icon
+  icon,
+  link
 }: { 
   title: string; 
   description: string; 
   image: string;
   category: string;
   icon: React.ReactNode;
+  link: string;
 }) => (
   <Card className="overflow-hidden transition-all duration-300 hover:shadow-lg border-gray-200">
     <div className="aspect-video w-full overflow-hidden">
@@ -36,9 +39,11 @@ const ResourceCard = ({
       <p className="text-gray-600">{description}</p>
     </CardContent>
     <CardFooter>
-      <Button variant="outline" className="w-full border-sportbnk-green text-sportbnk-green hover:bg-sportbnk-green hover:text-white">
-        Read More
-      </Button>
+      <Link to={link} className="w-full">
+        <Button variant="outline" className="w-full border-sportbnk-green text-sportbnk-green hover:bg-sportbnk-green hover:text-white">
+          Read More
+        </Button>
+      </Link>
     </CardFooter>
   </Card>
 );
@@ -46,13 +51,15 @@ const ResourceCard = ({
 const ResourceSection = ({
   title,
   description,
-  children
+  children,
+  id
 }: {
   title: string;
   description: string;
   children: React.ReactNode;
+  id?: string;
 }) => (
-  <section className="py-16">
+  <section className="py-16" id={id}>
     <div className="container mx-auto px-4 md:px-6">
       <div className="text-center mb-12">
         <h2 className="text-3xl font-bold text-sportbnk-navy mb-4">{title}</h2>
@@ -69,6 +76,7 @@ const Resources = () => {
       <ResourceSection
         title="SportsBnk for Startups"
         description="Special resources and programs designed to help startups in the sports industry leverage data for rapid growth."
+        id="sportbnk-startups"
       >
         <div className="bg-sportbnk-lightGrey rounded-xl p-8 md:p-12">
           <div className="grid md:grid-cols-2 gap-8 items-center">
@@ -78,9 +86,11 @@ const Resources = () => {
                 Our startup program provides emerging sports businesses with affordable access to premium data intelligence tools,
                 helping you make informed decisions from day one.
               </p>
-              <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white">
-                Join Startup Program
-              </Button>
+              <Link to="/resources/startups">
+                <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white">
+                  Join Startup Program
+                </Button>
+              </Link>
             </div>
             <div className="relative">
               <img 
@@ -96,12 +106,15 @@ const Resources = () => {
       <ResourceSection
         title="Community"
         description="Join our community of sports industry professionals to network, share insights, and stay updated on the latest trends."
+        id="community"
       >
         <div className="text-center mb-8">
-          <Button className="bg-sportbnk-navy hover:bg-sportbnk-navy/90 text-white px-8">
-            <Users className="mr-2 h-4 w-4" />
-            Join Our Community
-          </Button>
+          <Link to="/resources/community">
+            <Button className="bg-sportbnk-navy hover:bg-sportbnk-navy/90 text-white px-8">
+              <Users className="mr-2 h-4 w-4" />
+              Join Our Community
+            </Button>
+          </Link>
         </div>
         
         <div className="grid md:grid-cols-3 gap-6">
@@ -137,7 +150,7 @@ const Resources = () => {
         </div>
       </ResourceSection>
       
-      <section className="py-16 bg-sportbnk-lightGrey">
+      <section className="py-16 bg-sportbnk-lightGrey" id="latest-resources">
         <div className="container mx-auto px-4 md:px-6">
           <h2 className="text-3xl font-bold text-sportbnk-navy mb-12 text-center">Latest Resources</h2>
           
@@ -148,6 +161,7 @@ const Resources = () => {
               image="/lovable-uploads/d09f910d-17b2-4f81-bc3b-66badacf3de2.png"
               category="Article"
               icon={<FileText size={16} />}
+              link="/resources/articles"
             />
             
             <ResourceCard 
@@ -156,6 +170,7 @@ const Resources = () => {
               image="/lovable-uploads/c5351de4-d54d-424f-99a5-b07ddc3fcc40.png"
               category="Webinar"
               icon={<Video size={16} />}
+              link="/resources/webinars"
             />
             
             <ResourceCard 
@@ -164,18 +179,38 @@ const Resources = () => {
               image="/lovable-uploads/1d95a70d-8230-4647-9c16-d5c94a124864.png"
               category="Podcast"
               icon={<Mic size={16} />}
+              link="/resources/podcasts"
             />
           </div>
           
           <div className="text-center mt-12">
-            <Button className="bg-sportbnk-navy hover:bg-sportbnk-navy/90 text-white">
-              View All Resources
-            </Button>
+            <div className="flex flex-wrap justify-center gap-4">
+              <Link to="/resources/articles">
+                <Button variant="outline" className="border-sportbnk-navy text-sportbnk-navy hover:bg-sportbnk-navy hover:text-white">
+                  Articles
+                </Button>
+              </Link>
+              <Link to="/resources/webinars">
+                <Button variant="outline" className="border-sportbnk-navy text-sportbnk-navy hover:bg-sportbnk-navy hover:text-white">
+                  Webinars
+                </Button>
+              </Link>
+              <Link to="/resources/podcasts">
+                <Button variant="outline" className="border-sportbnk-navy text-sportbnk-navy hover:bg-sportbnk-navy hover:text-white">
+                  Podcasts
+                </Button>
+              </Link>
+              <Link to="/resources/case-studies">
+                <Button variant="outline" className="border-sportbnk-navy text-sportbnk-navy hover:bg-sportbnk-navy hover:text-white">
+                  Case Studies
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </section>
       
-      <section className="py-16">
+      <section className="py-16" id="help-center">
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-sportbnk-navy mb-4">Help Center</h2>
@@ -201,9 +236,11 @@ const Resources = () => {
             </div>
             
             <div className="mt-8 text-center">
-              <Button variant="outline" className="border-sportbnk-navy text-sportbnk-navy hover:bg-sportbnk-navy hover:text-white">
-                Visit Help Center
-              </Button>
+              <Link to="/resources/help-center">
+                <Button variant="outline" className="border-sportbnk-navy text-sportbnk-navy hover:bg-sportbnk-navy hover:text-white">
+                  Visit Help Center
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
