@@ -1,7 +1,6 @@
 
 import { useEffect, useRef } from 'react';
 import { ArrowRight, Database, LineChart, Shield, Globe } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 
 const Solutions = () => {
@@ -87,17 +86,6 @@ const Solutions = () => {
               Learn more <ArrowRight className="ml-2 w-4 h-4" />
             </Link>
           </div>
-        </div>
-        
-        <div className="text-center mt-16">
-          <Button 
-            className="bg-sportbnk-navy hover:bg-sportbnk-navy/90 text-white py-6 px-8 rounded-md text-lg"
-            asChild
-          >
-            <Link to="/products">
-              Explore All Solutions
-            </Link>
-          </Button>
         </div>
       </div>
     </section>
