@@ -88,7 +88,7 @@ const ContactsView = ({
                     )}
                   </div>
                 </TableHead>
-                <TableHead className="cursor-pointer text-white w-[17%]" onClick={() => handleSort("position")}>
+                <TableHead className="cursor-pointer text-white w-[19%]" onClick={() => handleSort("position")}>
                   <div className="flex items-center gap-1">
                     Position
                     {sortField === "position" && (
@@ -114,7 +114,7 @@ const ContactsView = ({
                 </TableHead>
                 <TableHead className="text-white w-[16%]">Email</TableHead>
                 <TableHead className="hidden md:table-cell text-white w-[15%]">Phone</TableHead>
-                <TableHead className="hidden md:table-cell text-white w-[9%]">LinkedIn</TableHead>
+                <TableHead className="hidden md:table-cell text-white w-[7%]">LinkedIn</TableHead>
                 <TableHead className="text-white w-[6%]">
                   {isSavedList ? "Remove" : "Add"}
                 </TableHead>
