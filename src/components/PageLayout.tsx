@@ -34,6 +34,16 @@ const PageLayout = ({
         <meta name="keywords" content={metaKeywords} />
         <link rel="canonical" href={canonicalUrl || defaultCanonicalUrl} />
         <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+        <meta property="og:title" content={fullTitle} />
+        <meta property="og:description" content={metaDescription} />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={canonicalUrl || defaultCanonicalUrl} />
+        <meta property="og:image" content="/lovable-uploads/5de360aa-8105-490e-bf75-94ff7ac0832d.png" />
+        <meta property="og:site_name" content="SportsBnk" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={fullTitle} />
+        <meta name="twitter:description" content={metaDescription} />
+        <meta name="twitter:image" content="/lovable-uploads/5de360aa-8105-490e-bf75-94ff7ac0832d.png" />
       </Helmet>
       
       <Navbar />
