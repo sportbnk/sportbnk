@@ -28,7 +28,9 @@ import {
   CheckSquare,
   Plus,
   SearchIcon,
-  CreditCard
+  CreditCard,
+  Users,
+  User
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import AccountBadge from "./AccountBadge";
@@ -58,18 +60,39 @@ const CrmSidebar = () => {
           <SidebarGroupLabel>Navigation</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {/* Prospects menu item */}
+              {/* Prospects menu item with submenu */}
               <SidebarMenuItem>
                 <SidebarMenuButton 
-                  asChild 
                   isActive={location.pathname === "/database"}
                   tooltip="Prospects"
                 >
-                  <Link to="/database">
-                    <UserPlus />
-                    <span>🔍 Prospects</span>
-                  </Link>
+                  <UserPlus />
+                  <span>Prospects</span>
                 </SidebarMenuButton>
+                <SidebarMenuSub>
+                  <SidebarMenuSubItem>
+                    <SidebarMenuSubButton 
+                      asChild 
+                      isActive={location.pathname === "/database/teams"}
+                    >
+                      <Link to="/database/teams">
+                        <Users className="h-4 w-4 mr-2" />
+                        Teams
+                      </Link>
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
+                  <SidebarMenuSubItem>
+                    <SidebarMenuSubButton 
+                      asChild 
+                      isActive={location.pathname === "/database/people"}
+                    >
+                      <Link to="/database/people">
+                        <User className="h-4 w-4 mr-2" />
+                        People
+                      </Link>
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
+                </SidebarMenuSub>
               </SidebarMenuItem>
               
               {/* Lists menu item */}
@@ -90,7 +113,7 @@ const CrmSidebar = () => {
               <SidebarMenuItem>
                 <SidebarMenuButton>
                   <MessageSquare />
-                  <span>💬 Engage</span>
+                  <span>Engage</span>
                 </SidebarMenuButton>
                 <SidebarMenuSub>
                   <SidebarMenuSubItem>
@@ -122,7 +145,7 @@ const CrmSidebar = () => {
               <SidebarMenuItem>
                 <SidebarMenuButton>
                   <DollarSign />
-                  <span>💰 Deals</span>
+                  <span>Deals</span>
                 </SidebarMenuButton>
                 <SidebarMenuSub>
                   <SidebarMenuSubItem>
