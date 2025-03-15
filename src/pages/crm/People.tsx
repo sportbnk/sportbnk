@@ -147,78 +147,76 @@ const People = () => {
   };
   
   return (
-    <CrmLayout>
-      <div className="container mx-auto px-4 py-6">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold text-sportbnk-navy">People Database</h1>
-          <div className="flex gap-2">
-            <Button variant="outline" className="flex items-center gap-1">
-              <Download className="h-4 w-4" /> Export
-            </Button>
-            <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 flex items-center gap-1">
-              <Plus className="h-4 w-4" /> Add Person
-            </Button>
-          </div>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <div className="md:col-span-1">
-            <ContactsFilters onFilterChange={handleFilterChange} />
-            <Card className="mt-4">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <Users className="h-4 w-4" />
-                  Saved List ({savedList.length})
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-0">
-                {savedList.length > 0 ? (
-                  <ContactsView
-                    data={savedList}
-                    revealedEmails={revealedEmails}
-                    revealedPhones={revealedPhones}
-                    onRevealEmail={revealEmail}
-                    onRevealPhone={revealPhone}
-                    onViewTeam={viewTeam}
-                    onRemoveFromList={removeFromList}
-                    isSavedList={true}
-                  />
-                ) : (
-                  <div className="py-6 px-4 text-center text-muted-foreground">
-                    <p>No contacts added to your list yet.</p>
-                    <p className="text-sm mt-1">Add contacts to create your export list.</p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-            <Card className="mt-4">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-lg">Credits</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-2xl font-bold text-sportbnk-green">{credits}</p>
-                <p className="text-sm text-muted-foreground">Credits remaining</p>
-                <Button className="w-full mt-4 bg-sportbnk-navy hover:bg-sportbnk-navy/90">
-                  Buy More Credits
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
-          
-          <div className="md:col-span-3">
-            <ContactsView 
-              data={contactsData}
-              revealedEmails={revealedEmails}
-              revealedPhones={revealedPhones}
-              onRevealEmail={revealEmail}
-              onRevealPhone={revealPhone}
-              onViewTeam={viewTeam}
-              onAddToList={addToList}
-            />
-          </div>
+    <div className="container mx-auto px-4 py-6">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold text-sportbnk-navy">People Database</h1>
+        <div className="flex gap-2">
+          <Button variant="outline" className="flex items-center gap-1">
+            <Download className="h-4 w-4" /> Export
+          </Button>
+          <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 flex items-center gap-1">
+            <Plus className="h-4 w-4" /> Add Person
+          </Button>
         </div>
       </div>
-    </CrmLayout>
+      
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="md:col-span-1">
+          <ContactsFilters onFilterChange={handleFilterChange} />
+          <Card className="mt-4">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg flex items-center gap-2">
+                <Users className="h-4 w-4" />
+                Saved List ({savedList.length})
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-0">
+              {savedList.length > 0 ? (
+                <ContactsView
+                  data={savedList}
+                  revealedEmails={revealedEmails}
+                  revealedPhones={revealedPhones}
+                  onRevealEmail={revealEmail}
+                  onRevealPhone={revealPhone}
+                  onViewTeam={viewTeam}
+                  onRemoveFromList={removeFromList}
+                  isSavedList={true}
+                />
+              ) : (
+                <div className="py-6 px-4 text-center text-muted-foreground">
+                  <p>No contacts added to your list yet.</p>
+                  <p className="text-sm mt-1">Add contacts to create your export list.</p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+          <Card className="mt-4">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg">Credits</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-2xl font-bold text-sportbnk-green">{credits}</p>
+              <p className="text-sm text-muted-foreground">Credits remaining</p>
+              <Button className="w-full mt-4 bg-sportbnk-navy hover:bg-sportbnk-navy/90">
+                Buy More Credits
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+        
+        <div className="md:col-span-3">
+          <ContactsView 
+            data={contactsData}
+            revealedEmails={revealedEmails}
+            revealedPhones={revealedPhones}
+            onRevealEmail={revealEmail}
+            onRevealPhone={revealPhone}
+            onViewTeam={viewTeam}
+            onAddToList={addToList}
+          />
+        </div>
+      </div>
+    </div>
   );
 };
 

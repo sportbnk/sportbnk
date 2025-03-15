@@ -1,11 +1,10 @@
 
 import React, { useState } from "react";
-import CrmLayout from "@/components/crm/CrmLayout";
-import ContactsTable from "@/components/database/ContactsTable";
-import ContactsFilters from "@/components/database/ContactsFilters";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Download, Plus } from "lucide-react";
+import ContactsFilters from "@/components/database/ContactsFilters";
+import ContactsTable from "@/components/database/ContactsTable";
 
 // Dummy data for teams
 const teamData = [
@@ -166,46 +165,44 @@ const Teams = () => {
   };
   
   return (
-    <CrmLayout>
-      <div className="container mx-auto px-4 py-6">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold text-sportbnk-navy">Teams Database</h1>
-          <div className="flex gap-2">
-            <Button variant="outline" className="flex items-center gap-1">
-              <Download className="h-4 w-4" /> Export
-            </Button>
-            <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 flex items-center gap-1">
-              <Plus className="h-4 w-4" /> Add Team
-            </Button>
-          </div>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <div className="md:col-span-1">
-            <ContactsFilters onFilterChange={handleFilterChange} />
-            <Card className="mt-4">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-lg">Credits</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-2xl font-bold text-sportbnk-green">{credits}</p>
-                <p className="text-sm text-muted-foreground">Credits remaining</p>
-                <Button className="w-full mt-4 bg-sportbnk-navy hover:bg-sportbnk-navy/90">
-                  Buy More Credits
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
-          
-          <div className="md:col-span-3">
-            <ContactsTable 
-              data={teamData}
-              useCredits={useCredits}
-            />
-          </div>
+    <div className="container mx-auto px-4 py-6">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold text-sportbnk-navy">Teams Database</h1>
+        <div className="flex gap-2">
+          <Button variant="outline" className="flex items-center gap-1">
+            <Download className="h-4 w-4" /> Export
+          </Button>
+          <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 flex items-center gap-1">
+            <Plus className="h-4 w-4" /> Add Team
+          </Button>
         </div>
       </div>
-    </CrmLayout>
+      
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="md:col-span-1">
+          <ContactsFilters onFilterChange={handleFilterChange} />
+          <Card className="mt-4">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg">Credits</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-2xl font-bold text-sportbnk-green">{credits}</p>
+              <p className="text-sm text-muted-foreground">Credits remaining</p>
+              <Button className="w-full mt-4 bg-sportbnk-navy hover:bg-sportbnk-navy/90">
+                Buy More Credits
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+        
+        <div className="md:col-span-3">
+          <ContactsTable 
+            data={teamData}
+            useCredits={useCredits}
+          />
+        </div>
+      </div>
+    </div>
   );
 };
 

@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -23,6 +22,8 @@ import Emails from "./pages/crm/Emails";
 import Meetings from "./pages/crm/Meetings";
 import Tasks from "./pages/crm/Tasks";
 import Calls from "./pages/crm/Calls";
+import Teams from "./pages/crm/Teams";
+import People from "./pages/crm/People";
 
 // Product pages
 import Discover from "./pages/products/Discover";
@@ -81,6 +82,8 @@ const App = () => (
               <Route path="/database/meetings" element={<Meetings />} />
               <Route path="/database/tasks" element={<Tasks />} />
               <Route path="/database/calls" element={<Calls />} />
+              <Route path="/crm/teams" element={<Teams />} />
+              <Route path="/crm/people" element={<People />} />
             </Route>
             
             {/* Product sub-pages */}
