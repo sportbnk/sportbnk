@@ -32,23 +32,28 @@ const Clients = () => {
         
         <div 
           ref={sectionRef}
-          className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center animate-when-visible"
+          className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center animate-when-visible"
         >
           <div className="bg-white/10 backdrop-blur-sm p-6 rounded-lg flex items-center justify-center h-24">
-            <span className="text-white font-bold text-xl">CRICKET+JOBS</span>
-          </div>
-          <div className="bg-white/10 backdrop-blur-sm p-6 rounded-lg flex items-center justify-center h-24">
             <img 
-              src="/lovable-uploads/c506ab85-1e88-47f8-941f-cb182443bf55.png" 
-              alt="GRIZZLY logo" 
+              src="/lovable-uploads/53b73771-1565-4d14-87c2-860d6dabe35d.png" 
+              alt="PLAY logo" 
               className="h-16 object-contain"
             />
           </div>
           <div className="bg-white/10 backdrop-blur-sm p-6 rounded-lg flex items-center justify-center h-24">
-            <span className="text-white font-bold text-xl">Ludimos</span>
+            <img 
+              src="/lovable-uploads/b727ac17-df3d-4270-a031-139c82129d27.png" 
+              alt="Ludimos logo" 
+              className="h-16 object-contain"
+            />
           </div>
           <div className="bg-white/10 backdrop-blur-sm p-6 rounded-lg flex items-center justify-center h-24">
-            <span className="text-white font-bold text-xl">FillSports</span>
+            <img 
+              src="/lovable-uploads/1eb7dc35-8f3d-4a53-8727-249a31db0275.png" 
+              alt="CRICKET.JOBS logo" 
+              className="h-16 object-contain"
+            />
           </div>
         </div>
       </div>
