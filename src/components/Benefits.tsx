@@ -14,7 +14,7 @@ const Benefits = () => {
             We're on a mission to transform how sports organizations leverage data for strategic advantage.
           </p>
           <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white font-medium rounded-md px-8 py-6 text-lg" asChild>
-            <Link to="/book-demo">Sign up today</Link>
+            <Link to="/book-demo">Book a demo</Link>
           </Button>
         </div>
       </div>
