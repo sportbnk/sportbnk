@@ -30,7 +30,8 @@ import {
   CreditCard,
   Users,
   User,
-  ArrowUpCircle
+  ArrowUpCircle,
+  LogOut
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import AccountBadge from "./AccountBadge";
@@ -63,12 +64,23 @@ const CrmSidebar = () => {
               {/* Prospects menu item with submenu */}
               <SidebarMenuItem>
                 <SidebarMenuButton 
-                  isActive={location.pathname === "/database"}
+                  isActive={location.pathname.includes("/database") || location.pathname.includes("/crm/database")}
                   tooltip="Prospects"
                 >
                   <span>Prospects</span>
                 </SidebarMenuButton>
                 <SidebarMenuSub>
+                  <SidebarMenuSubItem>
+                    <SidebarMenuSubButton 
+                      asChild 
+                      isActive={location.pathname === "/crm/database"}
+                    >
+                      <Link to="/crm/database">
+                        <Users className="h-4 w-4 mr-2" />
+                        Database
+                      </Link>
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
                   <SidebarMenuSubItem>
                     <SidebarMenuSubButton 
                       asChild 
