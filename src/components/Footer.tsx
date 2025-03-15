@@ -1,3 +1,4 @@
+
 import { Facebook, Twitter, Instagram, Linkedin, FileText, Cookie } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -62,14 +63,6 @@ const Footer = () => {
             </form>
             
             <div className="mt-4">
-              <h4 className="font-semibold text-sportbnk-navy mb-2">Legal</h4>
-              <ul className="space-y-1 mb-4">
-                <li><Link to="/legal/terms" className="text-gray-600 hover:text-sportbnk-green transition-colors text-sm">Terms & Conditions</Link></li>
-                <li><Link to="/legal/privacy" className="text-gray-600 hover:text-sportbnk-green transition-colors text-sm">Privacy Policy</Link></li>
-              </ul>
-            </div>
-            
-            <div className="mt-4">
               <h4 className="font-semibold text-sportbnk-navy mb-2">Social</h4>
               <div className="flex space-x-4">
                 <a href="#" className="text-gray-600 hover:text-sportbnk-green transition-colors">
@@ -90,22 +83,22 @@ const Footer = () => {
         </div>
         
         <div className="border-t pt-6 flex flex-col md:flex-row justify-between items-center text-gray-500 text-sm">
-          <div>
+          <div className="flex flex-wrap items-center gap-2">
             &copy; {new Date().getFullYear()} Sportbnk. All rights reserved.
-          </div>
-          <div className="flex items-center space-x-4 mt-3 md:mt-0">
-            <Link to="/legal/terms" className="flex items-center hover:text-sportbnk-green transition-colors">
-              <FileText size={16} className="mr-1" />
-              <span>Terms</span>
-            </Link>
-            <Link to="/legal/privacy" className="flex items-center hover:text-sportbnk-green transition-colors">
-              <FileText size={16} className="mr-1" />
-              <span>Privacy</span>
-            </Link>
-            <Link to="/legal/cookies" className="flex items-center hover:text-sportbnk-green transition-colors">
-              <Cookie size={16} className="mr-1" />
-              <span>Cookies</span>
-            </Link>
+            <div className="flex items-center space-x-4">
+              <Link to="/legal/terms" className="flex items-center hover:text-sportbnk-green transition-colors">
+                <FileText size={16} className="mr-1" />
+                <span>Terms</span>
+              </Link>
+              <Link to="/legal/privacy" className="flex items-center hover:text-sportbnk-green transition-colors">
+                <FileText size={16} className="mr-1" />
+                <span>Privacy</span>
+              </Link>
+              <Link to="/legal/cookies" className="flex items-center hover:text-sportbnk-green transition-colors">
+                <Cookie size={16} className="mr-1" />
+                <span>Cookies</span>
+              </Link>
+            </div>
           </div>
         </div>
       </div>
