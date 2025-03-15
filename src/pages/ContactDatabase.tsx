@@ -762,6 +762,342 @@ const dummyData = [
       { name: "Benjamin Adams", position: "Business Operations", email: "b*****@yankees.com", phone: "+1-212-555-1234", linkedin: "https://www.linkedin.com/in/benjamin-adams-yankees" },
       { name: "Victoria Scott", position: "Merchandise Director", email: "v*****@yankees.com", phone: "+1-212-555-5678" }
     ]
+  },
+  {
+    id: 16,
+    team: "Aberavon Rugby",
+    sport: "Rugby",
+    level: "Amateur",
+    city: "Port Talbot",
+    country: "United Kingdom",
+    revenue: 25413000,
+    employees: 19,
+    logo: "https://upload.wikimedia.org/wikipedia/en/8/87/Aberavon_RFC_logo.png",
+    founded: 1876,
+    website: "http://www.aberavonrugby.co.uk",
+    description: "Aberavon Rugby is a Welsh rugby union team based in Port Talbot, Wales.",
+    social: {
+      facebook: "https://www.facebook.com/aberavonrugby",
+      twitter: "https://twitter.com/AberavonRFC",
+      linkedin: "http://www.linkedin.com/company/aberavon-rugby"
+    },
+    contacts: [
+      { name: "Club Secretary", position: "Administration", email: "s******@aberavonrugby.co.uk", phone: "+44-1639-123456" },
+      { name: "Head Coach", position: "Coaching Staff", email: "c****@aberavonrugby.co.uk", phone: "+44-1639-654321" }
+    ]
+  },
+  {
+    id: 17,
+    team: "Forest Green Rovers FC",
+    sport: "Football",
+    level: "Amateur",
+    city: "Stroud",
+    country: "United Kingdom",
+    revenue: 2900000,
+    employees: 130,
+    logo: "https://upload.wikimedia.org/wikipedia/en/7/7f/Forest_Green_Rovers_logo.svg",
+    founded: 1889,
+    website: "http://www.fgr.co.uk",
+    description: "Forest Green Rovers Football Club is an English football club based in Stroud, Gloucestershire.",
+    social: {
+      facebook: "https://www.facebook.com/fgrfc/",
+      twitter: "https://twitter.com/fgrfc_official",
+      linkedin: "http://www.linkedin.com/company/forest-green-rovers-football-club"
+    },
+    contacts: [
+      { name: "Club Manager", position: "Management", email: "m******@fgr.co.uk", phone: "+44-1453-123456" },
+      { name: "Marketing Director", position: "Marketing", email: "m******@fgr.co.uk", phone: "+44-1453-654321" }
+    ]
+  },
+  {
+    id: 18,
+    team: "ZAG SKIS",
+    sport: "Ski",
+    level: "Amateur",
+    city: "Chamonix",
+    country: "France",
+    revenue: 5000000,
+    employees: 30,
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Ski_trail_rating_symbol-blue_square.svg/240px-Ski_trail_rating_symbol-blue_square.svg.png",
+    founded: 2002,
+    website: "http://www.zagskis.com",
+    description: "ZAG SKIS is a premium ski equipment manufacturer based in Chamonix, France.",
+    social: {
+      facebook: "https://www.facebook.com/zagskischamonix/",
+      twitter: "https://twitter.com/zagskis",
+      linkedin: "http://www.linkedin.com/company/zag-skis"
+    },
+    contacts: [
+      { name: "Product Manager", position: "Product Development", email: "p******@zagskis.com", phone: "+33-450-123456" }
+    ]
+  },
+  {
+    id: 19,
+    team: "Cymru Football Foundation",
+    sport: "Football",
+    level: "Amateur",
+    city: "Newport",
+    country: "United Kingdom",
+    revenue: 1500000,
+    employees: 56,
+    logo: "https://upload.wikimedia.org/wikipedia/en/5/5b/Wales_football_team_logo.svg",
+    founded: 2022,
+    website: "https://faw.cymru/cff/",
+    description: "Cymru Football Foundation is an organization dedicated to promoting football in Wales.",
+    social: {
+      linkedin: "http://www.linkedin.com/company/cymru-football-foundation"
+    },
+    contacts: [
+      { name: "Foundation Director", position: "Management", email: "d******@cymruff.org", phone: "+44-1633-123456" }
+    ]
+  },
+  {
+    id: 20,
+    team: "Guildford City FC",
+    sport: "Football",
+    level: "Amateur",
+    city: "Guildford",
+    country: "United Kingdom",
+    revenue: 500000,
+    employees: 9,
+    logo: "https://upload.wikimedia.org/wikipedia/en/e/e5/Guildford_City_F.C._logo.png",
+    founded: 1996,
+    website: "http://www.guildfordcityfc.co.uk",
+    description: "Guildford City Football Club is a football club based in Guildford, Surrey, England.",
+    social: {
+      facebook: "https://www.facebook.com/guildfordcity",
+      twitter: "https://twitter.com/guildfordcity",
+      linkedin: "http://www.linkedin.com/company/guildford-city-football-club"
+    },
+    contacts: [
+      { name: "Club Secretary", position: "Administration", email: "s******@guildfordcityfc.co.uk", phone: "+44-1483-123456" }
+    ]
+  },
+  {
+    id: 21,
+    team: "Kingston Grammar School",
+    sport: "School Sports",
+    level: "Amateur",
+    city: "Kingston upon Thames",
+    country: "United Kingdom",
+    revenue: 10000000,
+    employees: 160,
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Mortarboard_icon.svg/240px-Mortarboard_icon.svg.png",
+    founded: 1561,
+    website: "http://www.kgs.org.uk",
+    description: "Kingston Grammar School is an independent co-educational school in Kingston upon Thames, London with a strong focus on sports.",
+    social: {
+      linkedin: "http://www.linkedin.com/school/kingston-grammar-school"
+    },
+    contacts: [
+      { name: "Sports Director", position: "Sports Department", email: "s******@kgs.org.uk", phone: "+44-20-8546-5875" }
+    ]
+  },
+  {
+    id: 22,
+    team: "Simply Golf Ltd",
+    sport: "Golf",
+    level: "Amateur",
+    city: "Dublin",
+    country: "Ireland",
+    revenue: 387000,
+    employees: 3,
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Golf_flag.svg/240px-Golf_flag.svg.png",
+    founded: 2014,
+    website: "http://www.simplygolf.com",
+    description: "Simply Golf Ltd is a golf services company based in Dublin, Ireland.",
+    social: {
+      facebook: "https://www.facebook.com/simplygolf1",
+      twitter: "https://twitter.com/simplygolf1",
+      linkedin: "http://www.linkedin.com/company/simply-golf-ltd"
+    },
+    contacts: [
+      { name: "Company Director", position: "Management", email: "d******@simplygolf.com", phone: "+353-1-123-4567" }
+    ]
+  },
+  {
+    id: 23,
+    team: "Gilbert Rugby",
+    sport: "Rugby",
+    level: "Professional",
+    city: "Robertsbridge",
+    country: "United Kingdom",
+    revenue: 52588000,
+    employees: 59,
+    logo: "https://upload.wikimedia.org/wikipedia/en/thumb/5/58/Gilbert_Rugby_logo.svg/240px-Gilbert_Rugby_logo.svg.png",
+    founded: 1823,
+    website: "http://www.gilbertrugby.com",
+    description: "Gilbert is a manufacturer of rugby balls and equipment, and the official ball supplier for many international tournaments.",
+    social: {
+      facebook: "https://www.facebook.com/GILBERTRUGBY/",
+      twitter: "https://twitter.com/GILBERT_RUGBY",
+      linkedin: "http://www.linkedin.com/company/gilbert-rugby"
+    },
+    contacts: [
+      { name: "Marketing Director", position: "Marketing", email: "m******@gilbertrugby.com", phone: "+44-1580-880357" },
+      { name: "Sales Manager", position: "Sales", email: "s******@gilbertrugby.com", phone: "+44-1580-880358" }
+    ]
+  },
+  {
+    id: 24,
+    team: "Cisalfa Sport",
+    sport: "Multiple",
+    level: "Professional",
+    city: "Curno",
+    country: "Italy",
+    revenue: 645000000,
+    employees: 1600,
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Shopping_cart_icon.svg/240px-Shopping_cart_icon.svg.png",
+    founded: 1988,
+    website: "http://www.cisalfasport.it",
+    description: "Cisalfa Sport is one of Italy's largest sports retail chains, offering a wide range of sportswear and equipment.",
+    social: {
+      facebook: "https://www.facebook.com/CisalfaSport",
+      twitter: "https://twitter.com/CisalfaSport",
+      linkedin: "http://www.linkedin.com/company/cisalfa-sport"
+    },
+    contacts: [
+      { name: "Commercial Director", position: "Management", email: "c******@cisalfasport.it", phone: "+39-035-611747" },
+      { name: "Marketing Manager", position: "Marketing", email: "m******@cisalfasport.it", phone: "+39-035-611748" }
+    ]
+  },
+  {
+    id: 25,
+    team: "Stoke Park",
+    sport: "Golf",
+    level: "Professional",
+    city: "Stoke Poges",
+    country: "United Kingdom",
+    revenue: 19482000,
+    employees: 130,
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Golf_flag.svg/240px-Golf_flag.svg.png",
+    founded: 1908,
+    website: "http://www.stokepark.com",
+    description: "Stoke Park is a luxury hotel, spa and golf course in Buckinghamshire, England.",
+    social: {
+      facebook: "https://www.facebook.com/stokepark",
+      twitter: "https://twitter.com/StokePark",
+      linkedin: "http://www.linkedin.com/company/stoke-park"
+    },
+    contacts: [
+      { name: "Golf Director", position: "Golf Operations", email: "g******@stokepark.com", phone: "+44-1753-717171" },
+      { name: "Events Manager", position: "Events", email: "e******@stokepark.com", phone: "+44-1753-717172" }
+    ]
+  },
+  {
+    id: 26,
+    team: "Edenmore Golf & Country Club",
+    sport: "Golf",
+    level: "Professional",
+    city: "Craigavon",
+    country: "United Kingdom",
+    revenue: 19962000,
+    employees: 17,
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Golf_flag.svg/240px-Golf_flag.svg.png",
+    founded: 1992,
+    website: "http://www.edenmore.com",
+    description: "Edenmore Golf & Country Club is a premier golf destination in Northern Ireland.",
+    social: {
+      facebook: "https://www.facebook.com/edenmorecountryclubandrestaurant/",
+      twitter: "https://twitter.com/edenmore_club",
+      linkedin: "http://www.linkedin.com/company/edenmore-golf-&-country-club"
+    },
+    contacts: [
+      { name: "Club Manager", position: "Management", email: "m******@edenmore.com", phone: "+44-28-9261-9241" },
+      { name: "Golf Pro", position: "Golf Operations", email: "g******@edenmore.com", phone: "+44-28-9261-9242" }
+    ]
+  },
+  {
+    id: 27,
+    team: "ZOGGS",
+    sport: "Swimming",
+    level: "Professional",
+    city: "Camberley",
+    country: "United Kingdom",
+    revenue: 3574000,
+    employees: 88,
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Swimming_pictogram.svg/240px-Swimming_pictogram.svg.png",
+    founded: 1992,
+    website: "http://www.zoggs.com",
+    description: "ZOGGS is a leading swimming equipment and swimwear brand.",
+    social: {
+      facebook: "https://facebook.com/ZoggsUK",
+      twitter: "https://twitter.com/zoggsuk",
+      linkedin: "http://www.linkedin.com/company/zoggs"
+    },
+    contacts: [
+      { name: "Brand Manager", position: "Marketing", email: "b******@zoggs.com", phone: "+44-1276-489089" },
+      { name: "Sales Director", position: "Sales", email: "s******@zoggs.com", phone: "+44-1276-489090" }
+    ]
+  },
+  {
+    id: 28,
+    team: "Gill Marine",
+    sport: "Sailing",
+    level: "Professional",
+    city: "Nottingham",
+    country: "United Kingdom",
+    revenue: 25380000,
+    employees: 50,
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Sailing_pictogram.svg/240px-Sailing_pictogram.svg.png",
+    founded: 1975,
+    website: "http://www.gillmarine.com",
+    description: "Gill Marine is a leading manufacturer of technical sailing clothing and accessories.",
+    social: {
+      facebook: "https://www.facebook.com/GillMarine/",
+      twitter: "https://twitter.com/gillmarine",
+      linkedin: "http://www.linkedin.com/company/douglas-gill-international-ltd"
+    },
+    contacts: [
+      { name: "Product Director", position: "Product Development", email: "p******@gillmarine.com", phone: "+44-115-946-3000" },
+      { name: "Marketing Manager", position: "Marketing", email: "m******@gillmarine.com", phone: "+44-115-946-3001" }
+    ]
+  },
+  {
+    id: 29,
+    team: "Rudding Park",
+    sport: "Golf",
+    level: "Professional",
+    city: "Follifoot",
+    country: "United Kingdom",
+    revenue: 447000,
+    employees: 250,
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Golf_flag.svg/240px-Golf_flag.svg.png",
+    founded: 1972,
+    website: "http://www.ruddingpark.co.uk",
+    description: "Rudding Park is a luxury hotel, spa and golf resort in North Yorkshire, England.",
+    social: {
+      facebook: "https://facebook.com/ruddingparkhotel",
+      twitter: "https://twitter.com/ruddingpark",
+      linkedin: "http://www.linkedin.com/company/rudding-park"
+    },
+    contacts: [
+      { name: "Golf Manager", position: "Golf Operations", email: "g******@ruddingpark.co.uk", phone: "+44-1423-871350" },
+      { name: "Events Director", position: "Events", email: "e******@ruddingpark.co.uk", phone: "+44-1423-871351" }
+    ]
+  },
+  {
+    id: 30,
+    team: "Old Thorns Hotel & Resort",
+    sport: "Golf",
+    level: "Professional",
+    city: "Liphook",
+    country: "United Kingdom",
+    revenue: 27580000,
+    employees: 110,
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Golf_flag.svg/240px-Golf_flag.svg.png",
+    founded: 1980,
+    website: "http://www.oldthorns.com",
+    description: "Old Thorns is a luxury golf hotel and spa in Hampshire, England.",
+    social: {
+      facebook: "https://www.facebook.com/OldThornsHotel",
+      twitter: "https://twitter.com/oldthornshotel",
+      linkedin: "http://www.linkedin.com/company/old-thorns-hotel-resort"
+    },
+    contacts: [
+      { name: "General Manager", position: "Management", email: "g******@oldthorns.com", phone: "+44-1428-724555" },
+      { name: "Golf Director", position: "Golf Operations", email: "g******@oldthorns.com", phone: "+44-1428-724556" }
+    ]
   }
 ];
 
