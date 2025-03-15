@@ -80,7 +80,7 @@ const ContactsView = ({
           <Table className="w-full table-fixed">
             <TableHeader className="bg-sportbnk-navy">
               <TableRow>
-                <TableHead className="cursor-pointer text-white w-[9%]" onClick={() => handleSort("name")}>
+                <TableHead className="cursor-pointer text-white w-[12%]" onClick={() => handleSort("name")}>
                   <div className="flex items-center gap-1">
                     Contact
                     {sortField === "name" && (
@@ -112,7 +112,7 @@ const ContactsView = ({
                     )}
                   </div>
                 </TableHead>
-                <TableHead className="text-white w-[19%]">Email</TableHead>
+                <TableHead className="text-white w-[16%]">Email</TableHead>
                 <TableHead className="hidden md:table-cell text-white w-[15%]">Phone</TableHead>
                 <TableHead className="hidden md:table-cell text-white w-[9%]">LinkedIn</TableHead>
                 <TableHead className="text-white w-[6%]">
@@ -120,6 +120,7 @@ const ContactsView = ({
                 </TableHead>
               </TableRow>
             </TableHeader>
+            
             <TableBody>
               {sortedData.length === 0 ? (
                 <TableRow>
