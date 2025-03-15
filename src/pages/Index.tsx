@@ -63,7 +63,7 @@ const Index = () => {
   
   return (
     <div className="min-h-screen bg-white">
-      <title>SportsBnk - Sports Industry Data Solutions</title>
+      <title>SportsBnk - B2B Sports Intelligence Platform</title>
       <Navbar />
       <Hero />
       <AboutUs />

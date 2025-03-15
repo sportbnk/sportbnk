@@ -21,7 +21,7 @@ const FaviconUpdater = ({ iconUrl }: { iconUrl?: string }) => {
       }
       
       // Also update the document title element to match the icon
-      document.title = "SportsBnk";
+      document.title = "SportsBnk - B2B Sports Intelligence Platform";
     }
   }, [iconUrl]);
 
