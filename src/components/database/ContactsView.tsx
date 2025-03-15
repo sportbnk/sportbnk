@@ -112,9 +112,9 @@ const ContactsView = ({
                     )}
                   </div>
                 </TableHead>
-                <TableHead className="text-white w-[25%]">Email</TableHead>
-                <TableHead className="hidden md:table-cell text-white w-[15%]">Phone</TableHead>
-                <TableHead className="hidden md:table-cell text-white w-[5%]">LinkedIn</TableHead>
+                <TableHead className="text-white w-[20%]">Email</TableHead>
+                <TableHead className="hidden md:table-cell text-white w-[19%]">Phone</TableHead>
+                <TableHead className="hidden md:table-cell text-white w-[6%]">LinkedIn</TableHead>
                 <TableHead className="text-white w-[6%]">
                   {isSavedList ? "Remove" : "Add"}
                 </TableHead>
