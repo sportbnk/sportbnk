@@ -1,6 +1,5 @@
 
 import React, { useState } from "react";
-import CrmLayout from "@/components/crm/CrmLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Download, Plus, Users } from "lucide-react";
@@ -147,7 +146,7 @@ const People = () => {
   };
   
   return (
-    <div className="container mx-auto px-4 py-6">
+    <div className="container mx-auto px-2 py-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-sportbnk-navy">People Database</h1>
         <div className="flex gap-2">
@@ -160,10 +159,18 @@ const People = () => {
         </div>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
         <div className="md:col-span-1">
-          <ContactsFilters onFilterChange={handleFilterChange} />
-          <Card className="mt-4">
+          <Card className="shadow-md mb-4">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg">Filters</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ContactsFilters onFilterChange={handleFilterChange} />
+            </CardContent>
+          </Card>
+          
+          <Card className="shadow-md mb-4">
             <CardHeader className="pb-3">
               <CardTitle className="text-lg flex items-center gap-2">
                 <Users className="h-4 w-4" />
@@ -190,7 +197,8 @@ const People = () => {
               )}
             </CardContent>
           </Card>
-          <Card className="mt-4">
+          
+          <Card className="shadow-md">
             <CardHeader className="pb-3">
               <CardTitle className="text-lg">Credits</CardTitle>
             </CardHeader>
@@ -204,16 +212,23 @@ const People = () => {
           </Card>
         </div>
         
-        <div className="md:col-span-3">
-          <ContactsView 
-            data={contactsData}
-            revealedEmails={revealedEmails}
-            revealedPhones={revealedPhones}
-            onRevealEmail={revealEmail}
-            onRevealPhone={revealPhone}
-            onViewTeam={viewTeam}
-            onAddToList={addToList}
-          />
+        <div className="md:col-span-4">
+          <Card className="shadow-md h-full">
+            <CardHeader className="pb-3 border-b">
+              <CardTitle className="text-lg">People List</CardTitle>
+            </CardHeader>
+            <CardContent className="p-0">
+              <ContactsView 
+                data={contactsData}
+                revealedEmails={revealedEmails}
+                revealedPhones={revealedPhones}
+                onRevealEmail={revealEmail}
+                onRevealPhone={revealPhone}
+                onViewTeam={viewTeam}
+                onAddToList={addToList}
+              />
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>

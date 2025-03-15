@@ -165,33 +165,33 @@ const Teams = () => {
   };
   
   return (
-    <div className="container mx-auto p-6 lg:p-8">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-sportbnk-navy">Teams Database</h1>
-        <div className="flex gap-3">
-          <Button variant="outline" className="flex items-center gap-2">
+    <div className="container mx-auto px-2 py-6">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold text-sportbnk-navy">Teams Database</h1>
+        <div className="flex gap-2">
+          <Button variant="outline" className="flex items-center gap-1">
             <Download className="h-4 w-4" /> Export
           </Button>
-          <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 flex items-center gap-2">
+          <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 flex items-center gap-1">
             <Plus className="h-4 w-4" /> Add Team
           </Button>
         </div>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
         <div className="md:col-span-1">
-          <Card className="shadow-md">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-xl text-sportbnk-navy">Filters</CardTitle>
+          <Card className="shadow-md mb-4">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg">Filters</CardTitle>
             </CardHeader>
             <CardContent>
               <ContactsFilters onFilterChange={handleFilterChange} />
             </CardContent>
           </Card>
           
-          <Card className="mt-6 shadow-md border-t-2 border-t-sportbnk-green">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-xl text-sportbnk-navy">Credits</CardTitle>
+          <Card className="shadow-md border-t-2 border-t-sportbnk-green">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg">Credits</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-2xl font-bold text-sportbnk-green">{credits}</p>
@@ -203,10 +203,10 @@ const Teams = () => {
           </Card>
         </div>
         
-        <div className="md:col-span-3">
+        <div className="md:col-span-4">
           <Card className="shadow-md h-full">
-            <CardHeader className="pb-2 border-b">
-              <CardTitle className="text-xl text-sportbnk-navy">Teams List</CardTitle>
+            <CardHeader className="pb-3 border-b">
+              <CardTitle className="text-lg">Teams List</CardTitle>
             </CardHeader>
             <CardContent className="p-0">
               <ContactsTable 
