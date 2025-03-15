@@ -41,6 +41,7 @@ import HelpCenter from "./pages/resources/HelpCenter";
 // Legal pages
 import Privacy from "./pages/legal/Privacy";
 import Terms from "./pages/legal/Terms";
+import Cookies from "./pages/legal/Cookies";
 
 const queryClient = new QueryClient();
 
@@ -89,6 +90,7 @@ const App = () => (
             {/* Legal pages */}
             <Route path="/legal/privacy" element={<Privacy />} />
             <Route path="/legal/terms" element={<Terms />} />
+            <Route path="/legal/cookies" element={<Cookies />} />
             
             {/* Redirect to root from any sportbnk.com URLs that should go to home */}
             <Route path="/index" element={<Navigate replace to="/" />} />
