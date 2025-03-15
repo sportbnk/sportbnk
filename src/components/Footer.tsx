@@ -83,22 +83,20 @@ const Footer = () => {
         </div>
         
         <div className="border-t pt-6 flex flex-col md:flex-row justify-between items-center text-gray-500 text-sm">
-          <div className="flex flex-wrap items-center gap-2">
+          <div>
             &copy; {new Date().getFullYear()} Sportbnk. All rights reserved.
-            <div className="flex items-center space-x-4">
-              <Link to="/legal/terms" className="flex items-center hover:text-sportbnk-green transition-colors">
-                <FileText size={16} className="mr-1" />
-                <span>Terms</span>
-              </Link>
-              <Link to="/legal/privacy" className="flex items-center hover:text-sportbnk-green transition-colors">
-                <FileText size={16} className="mr-1" />
-                <span>Privacy</span>
-              </Link>
-              <Link to="/legal/cookies" className="flex items-center hover:text-sportbnk-green transition-colors">
-                <Cookie size={16} className="mr-1" />
-                <span>Cookies</span>
-              </Link>
-            </div>
+          </div>
+          <div className="flex items-center space-x-4 mt-3 md:mt-0">
+            <Link to="/legal/terms" className="flex items-center hover:text-sportbnk-green transition-colors">
+              <span>Terms & Conditions</span>
+            </Link>
+            <Link to="/legal/privacy" className="flex items-center hover:text-sportbnk-green transition-colors">
+              <span>Privacy Policy</span>
+            </Link>
+            <Link to="/legal/cookies" className="flex items-center hover:text-sportbnk-green transition-colors">
+              <Cookie size={16} className="mr-1" />
+              <span>Cookies</span>
+            </Link>
           </div>
         </div>
       </div>
