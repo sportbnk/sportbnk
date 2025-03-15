@@ -1,13 +1,16 @@
 
+import { useState } from "react";
 import PageLayout from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Check, Star } from "lucide-react";
 import { Link } from "react-router-dom";
+import { PricingToggle } from "@/components/PricingToggle";
 
 const PricingCard = ({ 
   title,
   price,
+  annualPrice,
   period = "/ month",
   description,
   features,
@@ -15,10 +18,12 @@ const PricingCard = ({
   buttonLink = "/book-demo",
   highlighted = false,
   isFree = false,
-  isEnterprise = false
+  isEnterprise = false,
+  isAnnual = false
 }: { 
   title: string;
   price: string;
+  annualPrice?: string;
   period?: string;
   description: string;
   features: string[];
@@ -27,6 +32,7 @@ const PricingCard = ({
   highlighted?: boolean;
   isFree?: boolean;
   isEnterprise?: boolean;
+  isAnnual?: boolean;
 }) => (
   <Card className={`border ${highlighted ? 'border-sportbnk-green border-2' : 'border-gray-200'} shadow-lg max-w-md mx-auto`}>
     {highlighted && (
@@ -37,8 +43,14 @@ const PricingCard = ({
     <CardHeader className="pb-4 text-center">
       <CardTitle className="text-2xl font-bold text-sportbnk-navy">{title}</CardTitle>
       <div className="mt-4">
-        <span className="text-4xl font-bold text-sportbnk-navy">{price}</span>
-        {!isEnterprise && <span className="text-gray-500 ml-2">{period}</span>}
+        <span className="text-4xl font-bold text-sportbnk-navy">
+          {isFree ? price : isEnterprise ? price : isAnnual && annualPrice ? annualPrice : price}
+        </span>
+        {!isEnterprise && (
+          <span className="text-gray-500 ml-2">
+            {isAnnual && !isFree ? "/ year" : period}
+          </span>
+        )}
       </div>
       <p className="text-gray-600 mt-4">{description}</p>
     </CardHeader>
@@ -71,6 +83,8 @@ const PricingCard = ({
 );
 
 const Pricing = () => {
+  const [isAnnual, setIsAnnual] = useState(false);
+
   const freeTrialFeatures = [
     "Access to basic Discover tool filters",
     "Limited data enrichment with Boost",
@@ -123,9 +137,11 @@ const Pricing = () => {
             <h2 className="text-3xl font-bold text-sportbnk-navy mb-4">
               Simple, Transparent Pricing
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
               Choose the plan that works best for your business needs.
             </p>
+            
+            <PricingToggle isAnnual={isAnnual} onToggle={setIsAnnual} />
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
@@ -136,23 +152,28 @@ const Pricing = () => {
               features={freeTrialFeatures}
               buttonText="Start Free Trial"
               isFree={true}
+              isAnnual={isAnnual}
             />
             
             <PricingCard 
               title="Standard Plan"
               price="$49"
+              annualPrice="$470"
               description="All the features you need to grow your business in the sports industry"
               features={standardFeatures}
               buttonText="Start 7-Day Free Trial"
+              isAnnual={isAnnual}
             />
             
             <PricingCard 
               title="Pro Plan"
               price="$99"
+              annualPrice="$950"
               description="Enhanced features and support for growing teams and enterprises"
               features={proFeatures}
               buttonText="Start 7-Day Free Trial"
               highlighted={true}
+              isAnnual={isAnnual}
             />
 
             <PricingCard 
@@ -163,6 +184,7 @@ const Pricing = () => {
               features={enterpriseFeatures}
               buttonText="Contact Sales"
               isEnterprise={true}
+              isAnnual={isAnnual}
             />
           </div>
         </div>
