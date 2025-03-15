@@ -77,7 +77,7 @@ const App = () => (
             
             {/* CRM System with sidebar layout */}
             <Route element={<CrmLayout />}>
-              <Route path="/database" element={<ContactDatabase />} />
+              <Route index path="/database" element={<ContactDatabase />} />
               <Route path="/crm/database" element={<ContactDatabase />} />
               <Route path="/database/lists" element={<Lists />} />
               <Route path="/database/emails" element={<Emails />} />

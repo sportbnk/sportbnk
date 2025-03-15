@@ -3,6 +3,9 @@ import React, { useState } from "react";
 import ContactsView from "@/components/database/ContactsView";
 import ContactsFilters from "@/components/database/ContactsFilters";
 import { toast } from "sonner";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Download, PlusCircle } from "lucide-react";
 
 // Mock data for testing
 const dummyData = [
@@ -61,24 +64,31 @@ const ContactDatabase = () => {
   
   // State for showing/hiding filters on mobile
   const [showFilters, setShowFilters] = useState(false);
+  
+  // State for credits
+  const [credits, setCredits] = useState(250);
 
   // Handler for revealing emails
   const handleRevealEmail = (email: string) => {
-    // In a real app, this would make an API call to spend credits
-    // and reveal the email address
+    if (revealedEmails[email]) return;
+    
     setRevealedEmails({
       ...revealedEmails,
       [email]: true
     });
+    setCredits(prev => prev - 2);
     toast.success("Email revealed! 2 credits used.");
   };
 
   // Handler for revealing phone numbers
   const handleRevealPhone = (phone: string) => {
+    if (revealedPhones[phone]) return;
+    
     setRevealedPhones({
       ...revealedPhones,
       [phone]: true
     });
+    setCredits(prev => prev - 3);
     toast.success("Phone revealed! 3 credits used.");
   };
 
@@ -111,11 +121,8 @@ const ContactDatabase = () => {
     setActiveFilters(filters);
   };
 
-  // Ensure dummyData is an array before passing it
-  const contactsData = Array.isArray(dummyData) ? dummyData : [];
-
   // Apply filters to the data
-  const filteredData = contactsData.filter(contact => {
+  const filteredData = dummyData.filter(contact => {
     // Filter by position
     if (activeFilters.position !== "all" && contact.position !== activeFilters.position) {
       return false;
@@ -136,35 +143,62 @@ const ContactDatabase = () => {
   });
 
   return (
-    <div className="space-y-4">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Teams & Contacts</h1>
-        <button 
-          onClick={() => setShowFilters(!showFilters)}
-          className="md:hidden px-3 py-1 text-sm bg-primary text-primary-foreground rounded-md"
-        >
-          {showFilters ? "Hide Filters" : "Show Filters"}
-        </button>
+    <div className="container max-w-full px-2">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">Teams & Contacts Database</h1>
+        <div className="flex gap-2">
+          <Button variant="outline" className="flex items-center gap-1">
+            <Download className="h-4 w-4" /> Export
+          </Button>
+          <Button className="flex items-center gap-1">
+            <PlusCircle className="h-4 w-4" /> Add Contact
+          </Button>
+        </div>
       </div>
       
-      <div className="flex flex-col md:flex-row gap-4">
-        {/* Filters sidebar - hidden on mobile by default */}
-        <div className={`${showFilters ? 'block' : 'hidden'} md:block md:w-72`}>
-          <ContactsFilters onFilterChange={handleFilterChange} />
+      <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
+        <div className="md:col-span-1">
+          <Card className="shadow-md mb-4">
+            <CardHeader className="pb-2 pt-4 px-4">
+              <CardTitle className="text-base font-semibold">Filters</CardTitle>
+            </CardHeader>
+            <CardContent className="p-3">
+              <ContactsFilters onFilterChange={handleFilterChange} />
+            </CardContent>
+          </Card>
+          
+          <Card className="shadow-md">
+            <CardHeader className="pb-2 pt-4 px-4">
+              <CardTitle className="text-base font-semibold">Credits</CardTitle>
+            </CardHeader>
+            <CardContent className="px-4 py-3">
+              <p className="text-2xl font-bold text-green-600">{credits}</p>
+              <p className="text-sm text-muted-foreground">Credits remaining</p>
+              <Button className="w-full mt-4 bg-blue-800 hover:bg-blue-900 text-base">
+                Upgrade
+              </Button>
+            </CardContent>
+          </Card>
         </div>
         
-        {/* Main content */}
-        <div className="flex-1">
-          <ContactsView 
-            data={filteredData}
-            revealedEmails={revealedEmails}
-            revealedPhones={revealedPhones}
-            onRevealEmail={handleRevealEmail}
-            onRevealPhone={handleRevealPhone}
-            onViewTeam={handleViewTeam}
-            onAddToList={handleAddToList}
-            onRemoveFromList={handleRemoveFromList}
-          />
+        <div className="md:col-span-5">
+          <Card className="shadow-md">
+            <CardHeader className="pb-3 border-b pt-4 px-4">
+              <CardTitle className="text-lg font-semibold">Contact List</CardTitle>
+            </CardHeader>
+            <CardContent className="p-0">
+              <ContactsView 
+                data={filteredData}
+                revealedEmails={revealedEmails}
+                revealedPhones={revealedPhones}
+                onRevealEmail={handleRevealEmail}
+                onRevealPhone={handleRevealPhone}
+                onViewTeam={handleViewTeam}
+                onAddToList={handleAddToList}
+                onRemoveFromList={handleRemoveFromList}
+              />
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>

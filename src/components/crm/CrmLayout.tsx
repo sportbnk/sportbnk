@@ -21,7 +21,7 @@ const CrmLayout = () => {
     <SidebarProvider>
       <div className="flex min-h-screen w-full bg-muted/20">
         <CrmSidebar />
-        <div className="flex-1 overflow-auto">
+        <div className="flex-1 overflow-auto p-4 md:p-6">
           <Outlet />
         </div>
       </div>
