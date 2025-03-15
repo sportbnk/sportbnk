@@ -30,15 +30,6 @@ const Hero = () => {
 
   return (
     <section ref={heroRef} className="relative pt-28 pb-24 md:pt-36 md:pb-32 overflow-hidden bg-white text-sportbnk-navy">
-      {/* Abstract background elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-full bg-pattern-hexagon opacity-5"></div>
-        <div className="absolute -top-10 -right-10 w-64 h-64 bg-sportbnk-green/10 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-40 -left-20 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/4 right-1/4 w-4 h-4 rounded-full bg-sportbnk-green/30"></div>
-        <div className="absolute bottom-1/3 left-1/3 w-6 h-6 rounded-full bg-sportbnk-green/20"></div>
-      </div>
-      
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         <div className="grid lg:grid-cols-12 gap-12 items-center">
           <div className="flex flex-col space-y-8 lg:col-span-6">
