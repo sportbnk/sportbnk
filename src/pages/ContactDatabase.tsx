@@ -1,36 +1,127 @@
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import PageLayout from "@/components/PageLayout";
 import DatabaseFilters from "@/components/database/DatabaseFilters";
+import ContactsFilters from "@/components/database/ContactsFilters";
 import ContactsTable from "@/components/database/ContactsTable";
+import ContactsView from "@/components/database/ContactsView";
 import CreditDisplay from "@/components/database/CreditDisplay";
 import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
+import { Search, DatabaseIcon, Users } from "lucide-react";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import TeamProfile from "@/components/database/TeamProfile";
+import { toast } from "sonner";
+
+interface Contact {
+  id: number;
+  name: string;
+  position: string;
+  team: string;
+  teamId: number;
+  sport: string;
+  email: string;
+  phone?: string;
+  linkedin?: string;
+  teamLogo: string;
+}
 
 const ContactDatabase = () => {
-  const [filteredData, setFilteredData] = useState(dummyData);
+  const [activeTab, setActiveTab] = useState("teams");
+  const [filteredTeamData, setFilteredTeamData] = useState(dummyData);
+  const [filteredContactData, setFilteredContactData] = useState<Contact[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [credits, setCredits] = useState(100);
+  const [selectedTeam, setSelectedTeam] = useState<typeof dummyData[0] | null>(null);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const [revealedEmails, setRevealedEmails] = useState<Record<string, boolean>>({});
+  const [revealedPhones, setRevealedPhones] = useState<Record<string, boolean>>({});
+
+  useEffect(() => {
+    const contacts: Contact[] = [];
+    dummyData.forEach(team => {
+      team.contacts.forEach((contact, index) => {
+        contacts.push({
+          id: team.id * 100 + index,
+          name: contact.name,
+          position: contact.position,
+          team: team.team,
+          teamId: team.id,
+          sport: team.sport,
+          email: contact.email,
+          phone: contact.phone,
+          linkedin: contact.linkedin,
+          teamLogo: team.logo
+        });
+      });
+    });
+    setFilteredContactData(contacts);
+  }, []);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
     if (e.target.value === "") {
-      setFilteredData(dummyData);
+      setFilteredTeamData(dummyData);
+      
+      const allContacts: Contact[] = [];
+      dummyData.forEach(team => {
+        team.contacts.forEach((contact, index) => {
+          allContacts.push({
+            id: team.id * 100 + index,
+            name: contact.name,
+            position: contact.position,
+            team: team.team,
+            teamId: team.id,
+            sport: team.sport,
+            email: contact.email,
+            phone: contact.phone,
+            linkedin: contact.linkedin,
+            teamLogo: team.logo
+          });
+        });
+      });
+      setFilteredContactData(allContacts);
       return;
     }
     
-    const filtered = dummyData.filter(
+    const searchTermLower = e.target.value.toLowerCase();
+    
+    const filteredTeams = dummyData.filter(
       (item) =>
-        item.team.toLowerCase().includes(e.target.value.toLowerCase()) ||
-        item.sport.toLowerCase().includes(e.target.value.toLowerCase()) ||
-        item.city.toLowerCase().includes(e.target.value.toLowerCase()) ||
-        item.country.toLowerCase().includes(e.target.value.toLowerCase())
+        item.team.toLowerCase().includes(searchTermLower) ||
+        item.sport.toLowerCase().includes(searchTermLower) ||
+        item.city.toLowerCase().includes(searchTermLower) ||
+        item.country.toLowerCase().includes(searchTermLower)
     );
-    setFilteredData(filtered);
+    setFilteredTeamData(filteredTeams);
+    
+    const filteredContacts: Contact[] = [];
+    dummyData.forEach(team => {
+      team.contacts.forEach((contact, index) => {
+        if (
+          contact.name.toLowerCase().includes(searchTermLower) ||
+          contact.position.toLowerCase().includes(searchTermLower) ||
+          team.team.toLowerCase().includes(searchTermLower) ||
+          team.sport.toLowerCase().includes(searchTermLower)
+        ) {
+          filteredContacts.push({
+            id: team.id * 100 + index,
+            name: contact.name,
+            position: contact.position,
+            team: team.team,
+            teamId: team.id,
+            sport: team.sport,
+            email: contact.email,
+            phone: contact.phone,
+            linkedin: contact.linkedin,
+            teamLogo: team.logo
+          });
+        }
+      });
+    });
+    setFilteredContactData(filteredContacts);
   };
 
-  const handleFilterChange = (filters: any) => {
+  const handleTeamFilterChange = (filters: any) => {
     let results = [...dummyData];
     
     if (filters.sport && filters.sport !== "all") {
@@ -69,11 +160,90 @@ const ContactDatabase = () => {
       }
     }
     
-    setFilteredData(results);
+    setFilteredTeamData(results);
+  };
+
+  const handleContactFilterChange = (filters: any) => {
+    const allContacts: Contact[] = [];
+    dummyData.forEach(team => {
+      team.contacts.forEach((contact, index) => {
+        allContacts.push({
+          id: team.id * 100 + index,
+          name: contact.name,
+          position: contact.position,
+          team: team.team,
+          teamId: team.id,
+          sport: team.sport,
+          email: contact.email,
+          phone: contact.phone,
+          linkedin: contact.linkedin,
+          teamLogo: team.logo
+        });
+      });
+    });
+    
+    let results = [...allContacts];
+    
+    if (filters.position && filters.position !== "all") {
+      results = results.filter(item => item.position === filters.position);
+    }
+    
+    if (filters.team && filters.team !== "all") {
+      results = results.filter(item => item.team === filters.team);
+    }
+    
+    if (filters.sport && filters.sport !== "all") {
+      results = results.filter(item => item.sport === filters.sport);
+    }
+    
+    if (filters.country && filters.country !== "all") {
+      results = results.filter(item => {
+        const teamData = dummyData.find(team => team.id === item.teamId);
+        return teamData && teamData.country === filters.country;
+      });
+    }
+    
+    setFilteredContactData(results);
   };
 
   const useCredits = (amount: number) => {
     setCredits(prevCredits => Math.max(0, prevCredits - amount));
+  };
+  
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+  };
+
+  const handleViewTeam = (teamId: number) => {
+    const team = dummyData.find(t => t.id === teamId) || null;
+    setSelectedTeam(team);
+    setProfileOpen(true);
+  };
+
+  const revealEmail = (email: string) => {
+    if (revealedEmails[email]) return;
+    
+    useCredits(2);
+    
+    setRevealedEmails({
+      ...revealedEmails,
+      [email]: true
+    });
+    
+    toast.success("Email revealed! 2 credits used.");
+  };
+
+  const revealPhone = (phone: string) => {
+    if (revealedPhones[phone]) return;
+    
+    useCredits(3);
+    
+    setRevealedPhones({
+      ...revealedPhones,
+      [phone]: true
+    });
+    
+    toast.success("Phone number revealed! 3 credits used.");
   };
 
   return (
@@ -93,28 +263,65 @@ const ContactDatabase = () => {
           <div className="relative">
             <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
             <Input
-              placeholder="Search teams, sports, locations..."
+              placeholder="Search teams, contacts, sports, locations..."
               className="pl-10 h-12"
               value={searchTerm}
               onChange={handleSearch}
             />
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-            <div className="lg:col-span-1">
-              <DatabaseFilters onFilterChange={handleFilterChange} />
+          <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
+            <TabsList className="grid w-full grid-cols-2 mb-6">
+              <TabsTrigger value="teams" className="flex items-center gap-2">
+                <DatabaseIcon className="h-5 w-5" />
+                Teams
+              </TabsTrigger>
+              <TabsTrigger value="contacts" className="flex items-center gap-2">
+                <Users className="h-5 w-5" />
+                Contacts
+              </TabsTrigger>
+            </TabsList>
+
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+              <div className="lg:col-span-1">
+                {activeTab === "teams" ? (
+                  <DatabaseFilters onFilterChange={handleTeamFilterChange} />
+                ) : (
+                  <ContactsFilters onFilterChange={handleContactFilterChange} />
+                )}
+              </div>
+              <div className="lg:col-span-3">
+                {activeTab === "teams" ? (
+                  <ContactsTable data={filteredTeamData} useCredits={useCredits} />
+                ) : (
+                  <ContactsView 
+                    data={filteredContactData} 
+                    revealedEmails={revealedEmails}
+                    revealedPhones={revealedPhones}
+                    onRevealEmail={revealEmail}
+                    onRevealPhone={revealPhone}
+                    onViewTeam={handleViewTeam}
+                  />
+                )}
+              </div>
             </div>
-            <div className="lg:col-span-3">
-              <ContactsTable data={filteredData} useCredits={useCredits} />
-            </div>
-          </div>
+          </Tabs>
         </div>
       </div>
+
+      <TeamProfile 
+        team={selectedTeam} 
+        open={profileOpen} 
+        onOpenChange={setProfileOpen} 
+        revealedEmails={revealedEmails}
+        revealedPhones={revealedPhones}
+        onRevealEmail={revealEmail}
+        onRevealPhone={revealPhone}
+      />
     </PageLayout>
   );
 };
 
-// Dummy data for development
 const dummyData = [
   {
     id: 1,
@@ -136,9 +343,9 @@ const dummyData = [
       linkedin: "https://www.linkedin.com/company/manchester-united"
     },
     contacts: [
-      { name: "John Smith", position: "Marketing Director", email: "j********@manutd.com" },
-      { name: "Sarah Johnson", position: "Head of Operations", email: "s*******@manutd.com" },
-      { name: "Mark Wilson", position: "Sponsorship Manager", email: "m******@manutd.com" }
+      { name: "John Smith", position: "Marketing Director", email: "j********@manutd.com", phone: "+44-123-456-7890", linkedin: "https://www.linkedin.com/in/john-smith-manutd" },
+      { name: "Sarah Johnson", position: "Head of Operations", email: "s*******@manutd.com", phone: "+44-123-456-7891", linkedin: "https://www.linkedin.com/in/sarah-johnson-manutd" },
+      { name: "Mark Wilson", position: "Sponsorship Manager", email: "m******@manutd.com", phone: "+44-123-456-7892" }
     ]
   },
   {
@@ -160,8 +367,8 @@ const dummyData = [
       instagram: "https://www.instagram.com/lakers"
     },
     contacts: [
-      { name: "Michael Brown", position: "Team Manager", email: "m*****@lakers.com" },
-      { name: "Jessica Davis", position: "PR Director", email: "j*****@lakers.com" }
+      { name: "Michael Brown", position: "Team Manager", email: "m*****@lakers.com", phone: "+1-323-456-7890", linkedin: "https://www.linkedin.com/in/michael-brown-lakers" },
+      { name: "Jessica Davis", position: "PR Director", email: "j*****@lakers.com", phone: "+1-323-456-7891" }
     ]
   },
   {
@@ -183,8 +390,8 @@ const dummyData = [
       instagram: "https://www.instagram.com/redsox"
     },
     contacts: [
-      { name: "Robert Wilson", position: "Operations Director", email: "r******@redsox.com" },
-      { name: "Emma Garcia", position: "Fan Relations Manager", email: "e*****@redsox.com" }
+      { name: "Robert Wilson", position: "Operations Director", email: "r******@redsox.com", phone: "+1-617-555-1234", linkedin: "https://www.linkedin.com/in/robert-wilson-redsox" },
+      { name: "Emma Garcia", position: "Fan Relations Manager", email: "e*****@redsox.com", phone: "+1-617-555-5678" }
     ]
   },
   {
@@ -205,7 +412,7 @@ const dummyData = [
       twitter: "https://twitter.com/WaspsRugby"
     },
     contacts: [
-      { name: "James Thompson", position: "Commercial Director", email: "j*******@wasps.co.uk" }
+      { name: "James Thompson", position: "Commercial Director", email: "j*******@wasps.co.uk", phone: "+44-207-123-4567", linkedin: "https://www.linkedin.com/in/james-thompson-wasps" }
     ]
   },
   {
@@ -226,8 +433,8 @@ const dummyData = [
       instagram: "https://www.instagram.com/sydneyswans"
     },
     contacts: [
-      { name: "David Miller", position: "Sponsorship Director", email: "d*****@swans.com.au" },
-      { name: "Olivia Brown", position: "Community Engagement", email: "o*****@swans.com.au" }
+      { name: "David Miller", position: "Sponsorship Director", email: "d*****@swans.com.au", phone: "+61-2-9212-3456", linkedin: "https://www.linkedin.com/in/david-miller-swans" },
+      { name: "Olivia Brown", position: "Community Engagement", email: "o*****@swans.com.au", phone: "+61-2-9212-7890" }
     ]
   },
   {
@@ -249,7 +456,7 @@ const dummyData = [
       instagram: "https://www.instagram.com/chicagobulls"
     },
     contacts: [
-      { name: "Thomas Anderson", position: "Marketing VP", email: "t********@bulls.com" }
+      { name: "Thomas Anderson", position: "Marketing VP", email: "t********@bulls.com", phone: "+1-312-555-1234", linkedin: "https://www.linkedin.com/in/thomas-anderson-bulls" }
     ]
   },
   {
@@ -271,8 +478,8 @@ const dummyData = [
       instagram: "https://www.instagram.com/realmadrid"
     },
     contacts: [
-      { name: "Carlos Rodriguez", position: "International Relations", email: "c********@realmadrid.com" },
-      { name: "Isabella Martinez", position: "Digital Strategy Director", email: "i********@realmadrid.com" }
+      { name: "Carlos Rodriguez", position: "International Relations", email: "c********@realmadrid.com", phone: "+34-91-234-5678", linkedin: "https://www.linkedin.com/in/carlos-rodriguez-realmadrid" },
+      { name: "Isabella Martinez", position: "Digital Strategy Director", email: "i********@realmadrid.com", phone: "+34-91-234-5679" }
     ]
   },
   {
@@ -293,7 +500,7 @@ const dummyData = [
       twitter: "https://twitter.com/OURFC_Tweet"
     },
     contacts: [
-      { name: "William Barnes", position: "Club Secretary", email: "w*****@ourfc.org" }
+      { name: "William Barnes", position: "Club Secretary", email: "w*****@ourfc.org", phone: "+44-020-7123-4567", linkedin: "https://www.linkedin.com/in/william-barnes-ourfc" }
     ]
   },
   {
@@ -308,14 +515,14 @@ const dummyData = [
     logo: "https://upload.wikimedia.org/wikipedia/en/3/36/Toronto_Raptors_logo.svg",
     founded: 1995,
     website: "https://www.nba.com/raptors",
-    description: "The Toronto Raptors are a Canadian professional basketball team based in Toronto. The Raptors compete in the National Basketball Association as a member of the league's Eastern Conference Atlantic Division.",
+    description: "The Toronto Raptors are a Canadian professional basketball team based in Toronto. The Raptors compete in the National Basketball Association as a member of the Eastern Conference Atlantic Division.",
     social: {
       facebook: "https://www.facebook.com/torontoraptors",
       twitter: "https://twitter.com/Raptors",
       instagram: "https://www.instagram.com/raptors"
     },
     contacts: [
-      { name: "Alexander Lee", position: "Operations Manager", email: "a***@raptors.com" }
+      { name: "Alexander Lee", position: "Operations Manager", email: "a***@raptors.com", phone: "+1-416-555-1234", linkedin: "https://www.linkedin.com/in/alexander-lee-raptors" }
     ]
   },
   {
@@ -337,8 +544,8 @@ const dummyData = [
       instagram: "https://www.instagram.com/liverpoolfc"
     },
     contacts: [
-      { name: "Daniel Wright", position: "Commercial Director", email: "d*****@liverpoolfc.com" },
-      { name: "Sophie Turner", position: "Fan Engagement Lead", email: "s*****@liverpoolfc.com" }
+      { name: "Daniel Wright", position: "Commercial Director", email: "d*****@liverpoolfc.com", phone: "+44-151-555-1234", linkedin: "https://www.linkedin.com/in/daniel-wright-liverpool" },
+      { name: "Sophie Turner", position: "Fan Engagement Lead", email: "s*****@liverpoolfc.com", phone: "+44-151-555-5678" }
     ]
   },
   {
@@ -360,7 +567,7 @@ const dummyData = [
       instagram: "https://www.instagram.com/brooklynnets"
     },
     contacts: [
-      { name: "Christopher Johnson", position: "Business Development", email: "c*******@nets.com" }
+      { name: "Christopher Johnson", position: "Business Development", email: "c*******@nets.com", phone: "+1-718-555-1234", linkedin: "https://www.linkedin.com/in/christopher-johnson-nets" }
     ]
   },
   {
@@ -382,7 +589,7 @@ const dummyData = [
       instagram: "https://www.instagram.com/mancity"
     },
     contacts: [
-      { name: "Elizabeth Parker", position: "Partnerships Director", email: "e*******@mancity.com" }
+      { name: "Elizabeth Parker", position: "Partnerships Director", email: "e*******@mancity.com", phone: "+44-020-7123-4567", linkedin: "https://www.linkedin.com/in/elizabeth-parker-mancity" }
     ]
   },
   {
@@ -404,8 +611,8 @@ const dummyData = [
       instagram: "https://www.instagram.com/texaslonghorns"
     },
     contacts: [
-      { name: "Richard Martinez", position: "Athletic Director", email: "r********@utexas.edu" },
-      { name: "Amanda Wilson", position: "Alumni Relations", email: "a******@utexas.edu" }
+      { name: "Richard Martinez", position: "Athletic Director", email: "r********@utexas.edu", phone: "+1-512-555-1234", linkedin: "https://www.linkedin.com/in/richard-martinez-utexas" },
+      { name: "Amanda Wilson", position: "Alumni Relations", email: "a******@utexas.edu", phone: "+1-512-555-5678" }
     ]
   },
   {
@@ -427,7 +634,7 @@ const dummyData = [
       instagram: "https://www.instagram.com/fcbayern"
     },
     contacts: [
-      { name: "Hans Mueller", position: "International Marketing", email: "h******@fcbayern.com" }
+      { name: "Hans Mueller", position: "International Marketing", email: "h******@fcbayern.com", phone: "+49-89-123-4567", linkedin: "https://www.linkedin.com/in/hans-mueller-fcb" }
     ]
   },
   {
@@ -449,8 +656,8 @@ const dummyData = [
       instagram: "https://www.instagram.com/yankees"
     },
     contacts: [
-      { name: "Benjamin Adams", position: "Business Operations", email: "b*****@yankees.com" },
-      { name: "Victoria Scott", position: "Merchandise Director", email: "v*****@yankees.com" }
+      { name: "Benjamin Adams", position: "Business Operations", email: "b*****@yankees.com", phone: "+1-212-555-1234", linkedin: "https://www.linkedin.com/in/benjamin-adams-yankees" },
+      { name: "Victoria Scott", position: "Merchandise Director", email: "v*****@yankees.com", phone: "+1-212-555-5678" }
     ]
   }
 ];

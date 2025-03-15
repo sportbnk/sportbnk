@@ -4,12 +4,15 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription } from "@/components/ui/card";
-import { Globe, Users, DollarSign, MapPin, Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
+import { Globe, Users, DollarSign, MapPin, Facebook, Twitter, Instagram, Linkedin, Mail, Phone } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface Contact {
   name: string;
   position: string;
   email: string;
+  phone?: string;
+  linkedin?: string;
 }
 
 interface TeamData {
@@ -38,9 +41,21 @@ interface TeamProfileProps {
   team: TeamData | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  revealedEmails: Record<string, boolean>;
+  revealedPhones: Record<string, boolean>;
+  onRevealEmail: (email: string) => void;
+  onRevealPhone: (phone: string) => void;
 }
 
-const TeamProfile = ({ team, open, onOpenChange }: TeamProfileProps) => {
+const TeamProfile = ({ 
+  team, 
+  open, 
+  onOpenChange, 
+  revealedEmails, 
+  revealedPhones, 
+  onRevealEmail, 
+  onRevealPhone 
+}: TeamProfileProps) => {
   if (!team) return null;
 
   const formatRevenue = (revenue: number) => {
@@ -70,9 +85,10 @@ const TeamProfile = ({ team, open, onOpenChange }: TeamProfileProps) => {
         </DialogHeader>
 
         <Tabs defaultValue="overview" className="mt-2">
-          <TabsList className="grid w-full grid-cols-2">
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="social">Social Media</TabsTrigger>
+            <TabsTrigger value="contacts">Key Contacts</TabsTrigger>
           </TabsList>
           
           <TabsContent value="overview" className="space-y-4 pt-4">
@@ -199,6 +215,81 @@ const TeamProfile = ({ team, open, onOpenChange }: TeamProfileProps) => {
                 )}
               </div>
             )}
+          </TabsContent>
+
+          <TabsContent value="contacts" className="space-y-4 pt-4">
+            <div className="space-y-4">
+              {team.contacts.length === 0 ? (
+                <p className="text-center text-muted-foreground py-8">No contact information available</p>
+              ) : (
+                team.contacts.map((contact, index) => (
+                  <Card key={index}>
+                    <CardContent className="pt-6">
+                      <h3 className="font-semibold text-base">{contact.name}</h3>
+                      <p className="text-sm text-muted-foreground mb-3">{contact.position}</p>
+                      
+                      <div className="space-y-3">
+                        <div className="flex justify-between items-center">
+                          <div className="flex items-center gap-2">
+                            <Mail className="h-4 w-4 text-muted-foreground" />
+                            {revealedEmails[contact.email] ? (
+                              <span className="text-sm font-mono">{contact.email.replace(/\*/g, (match, offset) => contact.email.split('@')[0][offset])}</span>
+                            ) : (
+                              <span className="text-sm font-mono">{contact.email}</span>
+                            )}
+                          </div>
+                          {!revealedEmails[contact.email] && (
+                            <Button 
+                              size="sm" 
+                              variant="outline"
+                              onClick={() => onRevealEmail(contact.email)}
+                            >
+                              Reveal (2 credits)
+                            </Button>
+                          )}
+                        </div>
+                        
+                        {contact.phone && (
+                          <div className="flex justify-between items-center">
+                            <div className="flex items-center gap-2">
+                              <Phone className="h-4 w-4 text-muted-foreground" />
+                              {revealedPhones[contact.phone] ? (
+                                <span className="text-sm font-mono">{contact.phone}</span>
+                              ) : (
+                                <span className="text-sm font-mono">+*-***-***-****</span>
+                              )}
+                            </div>
+                            {!revealedPhones[contact.phone] && (
+                              <Button 
+                                size="sm" 
+                                variant="outline"
+                                onClick={() => onRevealPhone(contact.phone!)}
+                              >
+                                Reveal (3 credits)
+                              </Button>
+                            )}
+                          </div>
+                        )}
+                        
+                        {contact.linkedin && (
+                          <div className="flex items-center gap-2">
+                            <Linkedin className="h-4 w-4 text-blue-700" />
+                            <a 
+                              href={contact.linkedin} 
+                              target="_blank" 
+                              rel="noopener noreferrer" 
+                              className="text-sm text-blue-700 hover:underline"
+                            >
+                              LinkedIn Profile
+                            </a>
+                          </div>
+                        )}
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))
+              )}
+            </div>
           </TabsContent>
         </Tabs>
       </DialogContent>
