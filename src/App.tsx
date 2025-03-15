@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { HelmetProvider } from 'react-helmet-async';
 import FaviconUpdater from "./components/FaviconUpdater";
 import Index from "./pages/Index";
@@ -89,6 +89,11 @@ const App = () => (
             {/* Legal pages */}
             <Route path="/legal/privacy" element={<Privacy />} />
             <Route path="/legal/terms" element={<Terms />} />
+            
+            {/* Redirect to root from any sportbnk.com URLs that should go to home */}
+            <Route path="/index" element={<Navigate replace to="/" />} />
+            <Route path="/index.html" element={<Navigate replace to="/" />} />
+            <Route path="/home" element={<Navigate replace to="/" />} />
             
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

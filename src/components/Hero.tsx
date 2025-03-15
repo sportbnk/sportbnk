@@ -43,9 +43,9 @@ const Hero = () => {
             <div className="pt-4 animate-slideUp delay-200">
               <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white rounded-md px-8 py-6 text-lg relative" asChild>
                 <Link to="/book-demo">Book A Demo</Link>
-                {/* Small octagon near the button */}
-                <span className="absolute -right-6 -bottom-4 w-4 h-4 octagon-light"></span>
               </Button>
+              {/* Small octagon near the button */}
+              <span className="absolute -right-6 -bottom-4 w-4 h-4 octagon-light"></span>
             </div>
           </div>
           

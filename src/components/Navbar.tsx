@@ -1,9 +1,8 @@
-
 import { useState, useEffect } from 'react';
 import { Menu, X, ChevronDown, Package, BarChart3, Building, BookOpen, DollarSign, Calendar, Users, Rocket, Shield, Briefcase, Newspaper, Phone, BookmarkPlus, Users2, FileText, Video, Headphones, Clipboard, MessageSquare, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { SignInDialog } from '@/components/SignInDialog';
 import {
   NavigationMenu,
@@ -24,6 +23,7 @@ import {
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -37,6 +37,10 @@ const Navbar = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [location.pathname]);
 
   return (
     <header className={cn(
@@ -265,9 +269,9 @@ const Navbar = () => {
               
               <Button 
                 className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white rounded-md items-center"
-                onClick={() => window.location.href = '/book-demo'}
+                asChild
               >
-                Book A Demo
+                <Link to="/book-demo">Book A Demo</Link>
               </Button>
             </div>
 
@@ -290,17 +294,17 @@ const Navbar = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-full">
                 <DropdownMenuItem>
-                  <Link to="/products" className="w-full flex items-center">
+                  <Link to="/products/discover" className="w-full flex items-center">
                     <Package className="h-4 w-4 mr-2" />Discover
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link to="/products#boost" className="w-full flex items-center">
+                  <Link to="/products/boost" className="w-full flex items-center">
                     <Rocket className="h-4 w-4 mr-2" />Boost
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link to="/products#recruit" className="w-full flex items-center">
+                  <Link to="/products/recruit" className="w-full flex items-center">
                     <Users className="h-4 w-4 mr-2" />Recruit
                   </Link>
                 </DropdownMenuItem>
@@ -319,22 +323,22 @@ const Navbar = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-full">
                 <DropdownMenuItem>
-                  <Link to="/company#about" className="w-full flex items-center">
+                  <Link to="/company/about" className="w-full flex items-center">
                     <Building className="h-4 w-4 mr-2" />About
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link to="/company#careers" className="w-full flex items-center">
+                  <Link to="/company/careers" className="w-full flex items-center">
                     <Briefcase className="h-4 w-4 mr-2" />Careers
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link to="/company#partner-program" className="w-full flex items-center">
+                  <Link to="/company/partner-program" className="w-full flex items-center">
                     <Shield className="h-4 w-4 mr-2" />Partner Program
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link to="/company#latest-news" className="w-full flex items-center">
+                  <Link to="/company/latest-news" className="w-full flex items-center">
                     <Newspaper className="h-4 w-4 mr-2" />Latest News
                   </Link>
                 </DropdownMenuItem>
@@ -400,12 +404,9 @@ const Navbar = () => {
               
               <Button 
                 className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white rounded-md w-full flex items-center justify-center"
-                onClick={() => {
-                  window.location.href = '/book-demo';
-                  setIsMobileMenuOpen(false);
-                }}
+                asChild
               >
-                Book A Demo
+                <Link to="/book-demo">Book A Demo</Link>
               </Button>
             </div>
           </div>
