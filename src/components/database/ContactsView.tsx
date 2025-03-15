@@ -8,10 +8,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Mail, Phone, Linkedin, ArrowDown, ArrowUp, Plus, Trash } from "lucide-react";
+import { Mail, Phone, Linkedin, ArrowDown, ArrowUp, Plus, Trash, ShieldCheck, Flame } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface Contact {
   id: number;
@@ -24,6 +25,8 @@ interface Contact {
   phone?: string;
   linkedin?: string;
   teamLogo: string;
+  verified?: boolean;
+  activeReplier?: boolean;
 }
 
 interface ContactsViewProps {
@@ -124,7 +127,21 @@ const ContactsView = ({
               sortedData.map((contact) => (
                 <TableRow key={contact.id}>
                   <TableCell>
-                    <div className="font-medium">{contact.name}</div>
+                    <div className="font-medium flex items-center gap-1">
+                      {contact.name}
+                      {contact.activeReplier && (
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger>
+                              <Flame className="h-4 w-4 text-orange-500" />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p className="text-xs">Active replier - high response rate</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      )}
+                    </div>
                   </TableCell>
                   <TableCell>{contact.position}</TableCell>
                   <TableCell>
@@ -139,7 +156,21 @@ const ContactsView = ({
                   <TableCell className="hidden md:table-cell">{contact.sport}</TableCell>
                   <TableCell>
                     {revealedEmails[contact.email] ? (
-                      <span className="text-sm font-mono">{contact.email.replace(/\*/g, (match, offset) => contact.email.split('@')[0][offset])}</span>
+                      <div className="flex items-center gap-1">
+                        <span className="text-sm font-mono">{contact.email.replace(/\*/g, (match, offset) => contact.email.split('@')[0][offset])}</span>
+                        {contact.verified && (
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger>
+                                <ShieldCheck className="h-4 w-4 text-green-500" />
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p className="text-xs">Verified email address</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        )}
+                      </div>
                     ) : (
                       <div className="flex items-center gap-2">
                         <Mail className="h-4 w-4 text-muted-foreground" />
@@ -151,6 +182,18 @@ const ContactsView = ({
                         >
                           Reveal (2 credits)
                         </Button>
+                        {contact.verified && (
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger>
+                                <ShieldCheck className="h-4 w-4 text-green-500" />
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p className="text-xs">Verified email address</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        )}
                       </div>
                     )}
                   </TableCell>

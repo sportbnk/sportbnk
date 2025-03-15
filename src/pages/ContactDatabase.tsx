@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import PageLayout from "@/components/PageLayout";
@@ -12,6 +13,8 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import TeamProfile from "@/components/database/TeamProfile";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 
 interface Contact {
   id: number;
@@ -24,6 +27,8 @@ interface Contact {
   phone?: string;
   linkedin?: string;
   teamLogo: string;
+  verified?: boolean;
+  activeReplier?: boolean;
 }
 
 const ContactDatabase = () => {
@@ -38,11 +43,17 @@ const ContactDatabase = () => {
   const [revealedPhones, setRevealedPhones] = useState<Record<string, boolean>>({});
   const [savedList, setSavedList] = useState<Contact[]>([]);
   const [showSavedList, setShowSavedList] = useState(false);
+  const [showVerifiedOnly, setShowVerifiedOnly] = useState(false);
+  const [showActiveRepliersOnly, setShowActiveRepliersOnly] = useState(false);
 
   useEffect(() => {
     const contacts: Contact[] = [];
     dummyData.forEach(team => {
       team.contacts.forEach((contact, index) => {
+        // Randomly assign verified and activeReplier status for demo purposes
+        const isVerified = Math.random() > 0.5;
+        const isActiveReplier = Math.random() > 0.7;
+        
         contacts.push({
           id: team.id * 100 + index,
           name: contact.name,
@@ -53,7 +64,9 @@ const ContactDatabase = () => {
           email: contact.email,
           phone: contact.phone,
           linkedin: contact.linkedin,
-          teamLogo: team.logo
+          teamLogo: team.logo,
+          verified: isVerified,
+          activeReplier: isActiveReplier
         });
       });
     });
@@ -68,6 +81,10 @@ const ContactDatabase = () => {
       const allContacts: Contact[] = [];
       dummyData.forEach(team => {
         team.contacts.forEach((contact, index) => {
+          // Maintain verified and activeReplier status
+          const isVerified = Math.random() > 0.5;
+          const isActiveReplier = Math.random() > 0.7;
+          
           allContacts.push({
             id: team.id * 100 + index,
             name: contact.name,
@@ -78,7 +95,9 @@ const ContactDatabase = () => {
             email: contact.email,
             phone: contact.phone,
             linkedin: contact.linkedin,
-            teamLogo: team.logo
+            teamLogo: team.logo,
+            verified: isVerified,
+            activeReplier: isActiveReplier
           });
         });
       });
@@ -106,6 +125,10 @@ const ContactDatabase = () => {
           team.team.toLowerCase().includes(searchTermLower) ||
           team.sport.toLowerCase().includes(searchTermLower)
         ) {
+          // Maintain verified and activeReplier status
+          const isVerified = Math.random() > 0.5;
+          const isActiveReplier = Math.random() > 0.7;
+          
           filteredContacts.push({
             id: team.id * 100 + index,
             name: contact.name,
@@ -116,7 +139,9 @@ const ContactDatabase = () => {
             email: contact.email,
             phone: contact.phone,
             linkedin: contact.linkedin,
-            teamLogo: team.logo
+            teamLogo: team.logo,
+            verified: isVerified,
+            activeReplier: isActiveReplier
           });
         }
       });
@@ -137,6 +162,10 @@ const ContactDatabase = () => {
     
     if (filters.country && filters.country !== "all") {
       results = results.filter(item => item.country === filters.country);
+    }
+    
+    if (filters.city && filters.city !== "all") {
+      results = results.filter(item => item.city === filters.city);
     }
     
     if (filters.revenue) {
@@ -170,6 +199,10 @@ const ContactDatabase = () => {
     const allContacts: Contact[] = [];
     dummyData.forEach(team => {
       team.contacts.forEach((contact, index) => {
+        // Maintain verified and activeReplier status
+        const isVerified = Math.random() > 0.5;
+        const isActiveReplier = Math.random() > 0.7;
+        
         allContacts.push({
           id: team.id * 100 + index,
           name: contact.name,
@@ -180,7 +213,9 @@ const ContactDatabase = () => {
           email: contact.email,
           phone: contact.phone,
           linkedin: contact.linkedin,
-          teamLogo: team.logo
+          teamLogo: team.logo,
+          verified: isVerified,
+          activeReplier: isActiveReplier
         });
       });
     });
@@ -205,8 +240,30 @@ const ContactDatabase = () => {
         return teamData && teamData.country === filters.country;
       });
     }
+
+    // Filter by verified emails if the toggle is on
+    if (showVerifiedOnly) {
+      results = results.filter(item => item.verified);
+    }
+    
+    // Filter by active repliers if the toggle is on
+    if (showActiveRepliersOnly) {
+      results = results.filter(item => item.activeReplier);
+    }
     
     setFilteredContactData(results);
+  };
+
+  const toggleVerifiedFilter = () => {
+    setShowVerifiedOnly(!showVerifiedOnly);
+    // Re-apply filters with the new verified setting
+    handleContactFilterChange({});
+  };
+
+  const toggleActiveRepliersFilter = () => {
+    setShowActiveRepliersOnly(!showActiveRepliersOnly);
+    // Re-apply filters with the new active repliers setting
+    handleContactFilterChange({});
   };
 
   const useCredits = (amount: number) => {
@@ -383,7 +440,32 @@ const ContactDatabase = () => {
                   {activeTab === "teams" ? (
                     <DatabaseFilters onFilterChange={handleTeamFilterChange} />
                   ) : (
-                    <ContactsFilters onFilterChange={handleContactFilterChange} />
+                    <>
+                      <ContactsFilters onFilterChange={handleContactFilterChange} />
+                      <div className="mt-4 space-y-4 bg-white p-4 rounded-lg border">
+                        <h3 className="font-medium text-sm text-gray-700">Additional Filters</h3>
+                        <div className="flex items-center space-x-2">
+                          <Checkbox 
+                            id="verified-only" 
+                            checked={showVerifiedOnly}
+                            onCheckedChange={toggleVerifiedFilter}
+                          />
+                          <Label htmlFor="verified-only" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                            Verified emails only
+                          </Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Checkbox 
+                            id="active-repliers" 
+                            checked={showActiveRepliersOnly}
+                            onCheckedChange={toggleActiveRepliersFilter}
+                          />
+                          <Label htmlFor="active-repliers" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                            Active repliers only
+                          </Label>
+                        </div>
+                      </div>
+                    </>
                   )}
                 </div>
                 <div className="col-span-4">

@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Filter, X } from "lucide-react";
+import { Filter, X, MapPin } from "lucide-react";
 
 interface DatabaseFiltersProps {
   onFilterChange: (filters: any) => void;
@@ -15,6 +15,7 @@ const DatabaseFilters = ({ onFilterChange }: DatabaseFiltersProps) => {
     sport: "all",
     level: "all",
     country: "all",
+    city: "all",
     revenue: "",
     employees: ""
   });
@@ -30,6 +31,7 @@ const DatabaseFilters = ({ onFilterChange }: DatabaseFiltersProps) => {
       sport: "all",
       level: "all",
       country: "all",
+      city: "all",
       revenue: "",
       employees: ""
     };
@@ -74,6 +76,10 @@ const DatabaseFilters = ({ onFilterChange }: DatabaseFiltersProps) => {
               <SelectItem value="Rugby">Rugby</SelectItem>
               <SelectItem value="Australian Football">Australian Football</SelectItem>
               <SelectItem value="Multiple">Multiple</SelectItem>
+              <SelectItem value="Golf">Golf</SelectItem>
+              <SelectItem value="Ski">Ski</SelectItem>
+              <SelectItem value="Swimming">Swimming</SelectItem>
+              <SelectItem value="Sailing">Sailing</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -112,6 +118,38 @@ const DatabaseFilters = ({ onFilterChange }: DatabaseFiltersProps) => {
               <SelectItem value="Spain">Spain</SelectItem>
               <SelectItem value="Germany">Germany</SelectItem>
               <SelectItem value="Canada">Canada</SelectItem>
+              <SelectItem value="France">France</SelectItem>
+              <SelectItem value="Italy">Italy</SelectItem>
+              <SelectItem value="Ireland">Ireland</SelectItem>
+              <SelectItem value="Netherlands">Netherlands</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="city" className="flex items-center gap-1">
+            <MapPin className="h-4 w-4" /> City
+          </Label>
+          <Select 
+            value={filters.city} 
+            onValueChange={(value) => handleFilterChange("city", value)}
+          >
+            <SelectTrigger id="city">
+              <SelectValue placeholder="All cities" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All cities</SelectItem>
+              <SelectItem value="London">London</SelectItem>
+              <SelectItem value="Manchester">Manchester</SelectItem>
+              <SelectItem value="New York">New York</SelectItem>
+              <SelectItem value="Los Angeles">Los Angeles</SelectItem>
+              <SelectItem value="Boston">Boston</SelectItem>
+              <SelectItem value="Sydney">Sydney</SelectItem>
+              <SelectItem value="Madrid">Madrid</SelectItem>
+              <SelectItem value="Munich">Munich</SelectItem>
+              <SelectItem value="Nottingham">Nottingham</SelectItem>
+              <SelectItem value="Dublin">Dublin</SelectItem>
+              <SelectItem value="Amsterdam">Amsterdam</SelectItem>
             </SelectContent>
           </Select>
         </div>
