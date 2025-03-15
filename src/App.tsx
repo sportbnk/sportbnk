@@ -17,6 +17,12 @@ import BookDemo from "./pages/BookDemo";
 import ContactUs from "./pages/ContactUs";
 import FreeTrial from "./pages/FreeTrial";
 import ContactDatabase from "./pages/ContactDatabase";
+import CrmLayout from "./components/crm/CrmLayout";
+import Lists from "./pages/crm/Lists";
+import Emails from "./pages/crm/Emails";
+import Meetings from "./pages/crm/Meetings";
+import Tasks from "./pages/crm/Tasks";
+import Calls from "./pages/crm/Calls";
 
 // Product pages
 import Discover from "./pages/products/Discover";
@@ -66,7 +72,16 @@ const App = () => (
             <Route path="/book-demo" element={<BookDemo />} />
             <Route path="/contact" element={<ContactUs />} />
             <Route path="/free-trial" element={<FreeTrial />} />
-            <Route path="/database" element={<ContactDatabase />} />
+            
+            {/* CRM System with sidebar layout */}
+            <Route element={<CrmLayout />}>
+              <Route path="/database" element={<ContactDatabase />} />
+              <Route path="/database/lists" element={<Lists />} />
+              <Route path="/database/emails" element={<Emails />} />
+              <Route path="/database/meetings" element={<Meetings />} />
+              <Route path="/database/tasks" element={<Tasks />} />
+              <Route path="/database/calls" element={<Calls />} />
+            </Route>
             
             {/* Product sub-pages */}
             <Route path="/products/discover" element={<Discover />} />
