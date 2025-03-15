@@ -94,11 +94,14 @@ const ContactDatabase = () => {
     toast.info("Contact removed from your list.");
   };
 
+  // Ensure dummyData is an array before passing it
+  const contactsData = Array.isArray(dummyData) ? dummyData : [];
+
   return (
     <div className="space-y-4">
       <h1 className="text-2xl font-bold">Teams & Contacts</h1>
       <ContactsView 
-        data={dummyData}
+        data={contactsData}
         revealedEmails={revealedEmails}
         revealedPhones={revealedPhones}
         onRevealEmail={handleRevealEmail}

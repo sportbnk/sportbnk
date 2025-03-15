@@ -42,9 +42,9 @@ interface ContactsViewProps {
 }
 
 const ContactsView = ({ 
-  data, 
-  revealedEmails, 
-  revealedPhones, 
+  data = [], // Provide default empty array
+  revealedEmails = {}, 
+  revealedPhones = {}, 
   onRevealEmail, 
   onRevealPhone, 
   onViewTeam,
@@ -64,11 +64,14 @@ const ContactsView = ({
     }
   };
 
-  const sortedData = [...data].sort((a, b) => {
-    if (a[sortField] < b[sortField]) return sortDirection === "asc" ? -1 : 1;
-    if (a[sortField] > b[sortField]) return sortDirection === "asc" ? 1 : -1;
-    return 0;
-  });
+  // Add a safety check to ensure data is an array
+  const sortedData = Array.isArray(data) 
+    ? [...data].sort((a, b) => {
+        if (a[sortField] < b[sortField]) return sortDirection === "asc" ? -1 : 1;
+        if (a[sortField] > b[sortField]) return sortDirection === "asc" ? 1 : -1;
+        return 0;
+      })
+    : [];
 
   return (
     <Card>
