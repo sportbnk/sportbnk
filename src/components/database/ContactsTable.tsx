@@ -9,10 +9,12 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Eye, ArrowDown, ArrowUp, Download } from "lucide-react";
+import { Eye, ArrowDown, ArrowUp, Download, ExternalLink } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { toast } from "sonner";
+import TeamProfile from "./TeamProfile";
 
 interface Contact {
   name: string;
@@ -30,6 +32,16 @@ interface TeamData {
   revenue: number;
   employees: number;
   contacts: Contact[];
+  logo: string;
+  description: string;
+  founded: number;
+  website: string;
+  social: {
+    facebook?: string;
+    twitter?: string;
+    instagram?: string;
+    linkedin?: string;
+  };
 }
 
 interface ContactsTableProps {
@@ -42,6 +54,7 @@ const ContactsTable = ({ data, useCredits }: ContactsTableProps) => {
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
   const [selectedTeam, setSelectedTeam] = useState<TeamData | null>(null);
   const [revealedEmails, setRevealedEmails] = useState<Record<string, boolean>>({});
+  const [profileOpen, setProfileOpen] = useState(false);
 
   const handleSort = (field: keyof TeamData) => {
     if (field === sortField) {
@@ -70,6 +83,11 @@ const ContactsTable = ({ data, useCredits }: ContactsTableProps) => {
 
   const handleViewContacts = (team: TeamData) => {
     setSelectedTeam(team);
+  };
+
+  const handleViewProfile = (team: TeamData) => {
+    setSelectedTeam(team);
+    setProfileOpen(true);
   };
 
   const revealEmail = (email: string) => {
@@ -177,7 +195,15 @@ const ContactsTable = ({ data, useCredits }: ContactsTableProps) => {
                 ) : (
                   sortedData.map((team) => (
                     <TableRow key={team.id}>
-                      <TableCell className="font-medium">{team.team}</TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-2 cursor-pointer" onClick={() => handleViewProfile(team)}>
+                          <Avatar className="h-8 w-8">
+                            <AvatarImage src={team.logo} alt={team.team} />
+                            <AvatarFallback>{team.team.substring(0, 2)}</AvatarFallback>
+                          </Avatar>
+                          <span className="font-medium text-blue-600 hover:underline">{team.team}</span>
+                        </div>
+                      </TableCell>
                       <TableCell>{team.sport}</TableCell>
                       <TableCell>{team.level}</TableCell>
                       <TableCell className="hidden md:table-cell">{team.city}</TableCell>
@@ -185,56 +211,64 @@ const ContactsTable = ({ data, useCredits }: ContactsTableProps) => {
                       <TableCell className="hidden md:table-cell">{formatRevenue(team.revenue)}</TableCell>
                       <TableCell className="hidden md:table-cell">{team.employees}</TableCell>
                       <TableCell>
-                        <Dialog>
-                          <DialogTrigger asChild>
-                            <Button 
-                              variant="ghost" 
-                              size="sm" 
-                              onClick={() => handleViewContacts(team)}
-                            >
-                              <Eye className="h-4 w-4 mr-1" />
-                              View
-                            </Button>
-                          </DialogTrigger>
-                          <DialogContent className="sm:max-w-md">
-                            <DialogHeader>
-                              <DialogTitle>Contacts at {team.team}</DialogTitle>
-                              <DialogDescription>
-                                Key decision makers and contacts
-                              </DialogDescription>
-                            </DialogHeader>
-                            <div className="space-y-4 py-4">
-                              {team.contacts.map((contact, index) => (
-                                <div key={index} className="border rounded-md p-4">
-                                  <h4 className="font-semibold">{contact.name}</h4>
-                                  <p className="text-sm text-muted-foreground mb-2">{contact.position}</p>
-                                  {revealedEmails[contact.email] ? (
-                                    <p className="text-sm font-mono bg-muted p-1 rounded">{contact.email.replace(/\*/g, (match, offset) => contact.email.split('@')[0][offset])}</p>
-                                  ) : (
-                                    <div className="flex items-center justify-between">
-                                      <p className="text-sm font-mono bg-muted p-1 rounded">{contact.email}</p>
-                                      <Button 
-                                        size="sm" 
-                                        variant="outline"
-                                        onClick={() => revealEmail(contact.email)}
-                                      >
-                                        Reveal (2 credits)
-                                      </Button>
-                                    </div>
-                                  )}
-                                </div>
-                              ))}
+                        <div className="flex space-x-2">
+                          <Button 
+                            variant="ghost" 
+                            size="sm"
+                            onClick={() => handleViewProfile(team)}
+                          >
+                            <ExternalLink className="h-4 w-4" />
+                          </Button>
+                          <Dialog>
+                            <DialogTrigger asChild>
                               <Button 
-                                className="w-full mt-2" 
-                                variant="default"
-                                onClick={exportCSV}
+                                variant="ghost" 
+                                size="sm" 
+                                onClick={() => handleViewContacts(team)}
                               >
-                                <Download className="h-4 w-4 mr-2" />
-                                Export to CSV (5 credits)
+                                <Eye className="h-4 w-4" />
                               </Button>
-                            </div>
-                          </DialogContent>
-                        </Dialog>
+                            </DialogTrigger>
+                            <DialogContent className="sm:max-w-md">
+                              <DialogHeader>
+                                <DialogTitle>Contacts at {team.team}</DialogTitle>
+                                <DialogDescription>
+                                  Key decision makers and contacts
+                                </DialogDescription>
+                              </DialogHeader>
+                              <div className="space-y-4 py-4">
+                                {team.contacts.map((contact, index) => (
+                                  <div key={index} className="border rounded-md p-4">
+                                    <h4 className="font-semibold">{contact.name}</h4>
+                                    <p className="text-sm text-muted-foreground mb-2">{contact.position}</p>
+                                    {revealedEmails[contact.email] ? (
+                                      <p className="text-sm font-mono bg-muted p-1 rounded">{contact.email.replace(/\*/g, (match, offset) => contact.email.split('@')[0][offset])}</p>
+                                    ) : (
+                                      <div className="flex items-center justify-between">
+                                        <p className="text-sm font-mono bg-muted p-1 rounded">{contact.email}</p>
+                                        <Button 
+                                          size="sm" 
+                                          variant="outline"
+                                          onClick={() => revealEmail(contact.email)}
+                                        >
+                                          Reveal (2 credits)
+                                        </Button>
+                                      </div>
+                                    )}
+                                  </div>
+                                ))}
+                                <Button 
+                                  className="w-full mt-2" 
+                                  variant="default"
+                                  onClick={exportCSV}
+                                >
+                                  <Download className="h-4 w-4 mr-2" />
+                                  Export to CSV (5 credits)
+                                </Button>
+                              </div>
+                            </DialogContent>
+                          </Dialog>
+                        </div>
                       </TableCell>
                     </TableRow>
                   ))
@@ -244,6 +278,12 @@ const ContactsTable = ({ data, useCredits }: ContactsTableProps) => {
           </div>
         </CardContent>
       </Card>
+
+      <TeamProfile 
+        team={selectedTeam} 
+        open={profileOpen} 
+        onOpenChange={setProfileOpen} 
+      />
     </>
   );
 };
