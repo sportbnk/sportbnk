@@ -103,6 +103,54 @@ const contactsData = [
     teamLogo: "/lovable-uploads/5de360aa-8105-490e-bf75-94ff7ac0832d.png",
     verified: true,
     activeReplier: true
+  },
+  {
+    id: 9,
+    name: "Rachel Green",
+    position: "Community Relations Manager",
+    team: "Chicago Bulls",
+    teamId: 4,
+    sport: "Basketball",
+    email: "r.g****@bulls.com",
+    phone: "+1 31*-***-****",
+    teamLogo: "/lovable-uploads/b0f94fb5-f923-4243-b466-86aa2a7738d0.png",
+    verified: true
+  },
+  {
+    id: 10,
+    name: "Daniel Lee",
+    position: "Data Analytics Director",
+    team: "Boston Red Sox",
+    teamId: 5,
+    sport: "Baseball",
+    email: "d.l**@redsox.com",
+    linkedin: "https://linkedin.com/in/daniellee",
+    teamLogo: "/lovable-uploads/53b73771-1565-4d14-87c2-860d6dabe35d.png",
+    activeReplier: true
+  },
+  {
+    id: 11,
+    name: "Olivia Parker",
+    position: "Ticket Sales Manager",
+    team: "Manchester United",
+    teamId: 1,
+    sport: "Football",
+    email: "o.p*****@manutd.com",
+    phone: "+44 78** *** ***",
+    teamLogo: "/lovable-uploads/1eb7dc35-8f3d-4a53-8727-249a31db0275.png"
+  },
+  {
+    id: 12,
+    name: "Kevin Zhang",
+    position: "International Development Director",
+    team: "LA Lakers",
+    teamId: 2,
+    sport: "Basketball",
+    email: "k.z****@lakers.com",
+    linkedin: "https://linkedin.com/in/kevinzhang",
+    teamLogo: "/lovable-uploads/b95abe05-7dc8-449e-91a1-c17046b01f5e.png",
+    verified: true,
+    activeReplier: true
   }
 ];
 
@@ -145,7 +193,7 @@ const People = () => {
   };
   
   return (
-    <div className="container max-w-full px-2 py-6">
+    <div className="container max-w-full px-2">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-sportbnk-navy">People Database</h1>
         <div className="flex gap-2">
@@ -206,3 +254,4 @@ const People = () => {
 };
 
 export default People;
+

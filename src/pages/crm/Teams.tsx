@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -148,6 +149,89 @@ const teamData = [
       twitter: "https://twitter.com/redsox",
       instagram: "https://instagram.com/redsox"
     }
+  },
+  {
+    id: 6,
+    team: "FC Barcelona",
+    sport: "Football",
+    level: "Professional",
+    city: "Barcelona",
+    country: "Spain",
+    revenue: 790000000,
+    employees: 980,
+    contacts: [
+      {
+        name: "Maria Garcia",
+        position: "Commercial Director",
+        email: "m.garcia@fcbarcelona.es",
+        phone: "+34 612 345 678",
+        linkedin: "https://linkedin.com/in/mariagarcia"
+      }
+    ],
+    logo: "/lovable-uploads/1eb7dc35-8f3d-4a53-8727-249a31db0275.png",
+    description: "One of the world's most iconic football clubs with a distinct style of play.",
+    founded: 1899,
+    website: "https://www.fcbarcelona.com",
+    social: {
+      facebook: "https://facebook.com/fcbarcelona",
+      twitter: "https://twitter.com/FCBarcelona",
+      instagram: "https://instagram.com/fcbarcelona"
+    }
+  },
+  {
+    id: 7,
+    team: "New York Yankees",
+    sport: "Baseball",
+    level: "Professional",
+    city: "New York",
+    country: "USA",
+    revenue: 680000000,
+    employees: 760,
+    contacts: [
+      {
+        name: "Robert Chen",
+        position: "Operations Manager",
+        email: "r.chen@yankees.com",
+        linkedin: "https://linkedin.com/in/robertchen"
+      }
+    ],
+    logo: "/lovable-uploads/53b73771-1565-4d14-87c2-860d6dabe35d.png",
+    description: "The most successful franchise in MLB history with a global brand.",
+    founded: 1901,
+    website: "https://www.mlb.com/yankees",
+    social: {
+      facebook: "https://facebook.com/yankees",
+      twitter: "https://twitter.com/Yankees",
+      instagram: "https://instagram.com/yankees"
+    }
+  },
+  {
+    id: 8,
+    team: "Golden State Warriors",
+    sport: "Basketball",
+    level: "Professional",
+    city: "San Francisco",
+    country: "USA",
+    revenue: 740000000,
+    employees: 810,
+    contacts: [
+      {
+        name: "Lisa Wong",
+        position: "Digital Marketing Manager",
+        email: "l.wong@warriors.com",
+        phone: "+1 415-555-7890",
+        linkedin: "https://linkedin.com/in/lisawong"
+      }
+    ],
+    logo: "/lovable-uploads/b95abe05-7dc8-449e-91a1-c17046b01f5e.png",
+    description: "Modern NBA dynasty known for revolutionizing basketball with their style of play.",
+    founded: 1946,
+    website: "https://www.nba.com/warriors",
+    social: {
+      facebook: "https://facebook.com/warriors",
+      twitter: "https://twitter.com/warriors",
+      instagram: "https://instagram.com/warriors"
+    }
   }
 ];
 
@@ -164,7 +248,7 @@ const Teams = () => {
   };
   
   return (
-    <div className="container mx-auto px-0 py-6">
+    <div className="container mx-auto px-0">
       <div className="flex justify-between items-center mb-6 px-2">
         <h1 className="text-2xl font-bold text-sportbnk-navy">Teams Database</h1>
         <div className="flex gap-2">
