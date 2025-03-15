@@ -165,8 +165,8 @@ const Teams = () => {
   };
   
   return (
-    <div className="container mx-auto px-2 py-6">
-      <div className="flex justify-between items-center mb-6">
+    <div className="container mx-auto px-0 py-6">
+      <div className="flex justify-between items-center mb-6 px-2">
         <h1 className="text-2xl font-bold text-sportbnk-navy">Teams Database</h1>
         <div className="flex gap-2">
           <Button variant="outline" className="flex items-center gap-1">
@@ -178,32 +178,43 @@ const Teams = () => {
         </div>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-6 gap-3">
         <div className="md:col-span-1">
           <Card className="shadow-md mb-4">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-lg">Filters</CardTitle>
+            <CardHeader className="pb-2 pt-3 px-3">
+              <CardTitle className="text-base">Filters</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-2">
               <ContactsFilters onFilterChange={handleFilterChange} />
             </CardContent>
           </Card>
           
-          <Card className="shadow-md border-t-2 border-t-sportbnk-green">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-lg">Credits</CardTitle>
+          <Card className="shadow-md mb-4">
+            <CardHeader className="pb-2 pt-3 px-3">
+              <CardTitle className="text-base">Upgrade</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="px-3 py-2">
+              <Button className="w-full bg-sportbnk-navy hover:bg-sportbnk-navy/90 text-sm">
+                Get Pro Plan
+              </Button>
+            </CardContent>
+          </Card>
+          
+          <Card className="shadow-md">
+            <CardHeader className="pb-2 pt-3 px-3">
+              <CardTitle className="text-base">Credits</CardTitle>
+            </CardHeader>
+            <CardContent className="px-3 py-2">
               <p className="text-2xl font-bold text-sportbnk-green">{credits}</p>
-              <p className="text-sm text-muted-foreground mb-4">Credits remaining</p>
-              <Button className="w-full bg-sportbnk-navy hover:bg-sportbnk-navy/90">
+              <p className="text-xs text-muted-foreground">Credits remaining</p>
+              <Button className="w-full mt-3 bg-sportbnk-navy hover:bg-sportbnk-navy/90 text-sm">
                 Buy More Credits
               </Button>
             </CardContent>
           </Card>
         </div>
         
-        <div className="md:col-span-4">
+        <div className="md:col-span-5">
           <Card className="shadow-md h-full">
             <CardHeader className="pb-3 border-b">
               <CardTitle className="text-lg">Teams List</CardTitle>
