@@ -1,5 +1,6 @@
 
 import { Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
@@ -7,13 +8,13 @@ const Footer = () => {
       <div className="container mx-auto px-4 md:px-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           <div>
-            <a href="/" className="flex items-center mb-4">
+            <Link to="/" className="flex items-center mb-4">
               <img 
                 src="/lovable-uploads/fe95d116-e43a-4e1e-9439-b2fee1207d72.png" 
                 alt="Sportbnk Logo" 
                 className="h-12" 
               />
-            </a>
+            </Link>
             <p className="text-gray-600 text-sm">
               Sports intelligence platform for businesses, connecting data from 750k+ teams and 360k+ competitions.
             </p>
@@ -22,22 +23,26 @@ const Footer = () => {
           <div>
             <h3 className="font-semibold text-sportbnk-navy mb-4">Links</h3>
             <ul className="space-y-2">
-              <li><a href="/" className="text-gray-600 hover:text-sportbnk-green transition-colors">Home</a></li>
-              <li><a href="/products" className="text-gray-600 hover:text-sportbnk-green transition-colors">Product</a></li>
-              <li><a href="/data" className="text-gray-600 hover:text-sportbnk-green transition-colors">Data</a></li>
-              <li><a href="/company" className="text-gray-600 hover:text-sportbnk-green transition-colors">Company</a></li>
-              <li><a href="/resources" className="text-gray-600 hover:text-sportbnk-green transition-colors">Resources</a></li>
-              <li><a href="/pricing" className="text-gray-600 hover:text-sportbnk-green transition-colors">Pricing</a></li>
+              <li><Link to="/" className="text-gray-600 hover:text-sportbnk-green transition-colors">Home</Link></li>
+              <li><Link to="/products" className="text-gray-600 hover:text-sportbnk-green transition-colors">Product</Link></li>
+              <li><Link to="/data" className="text-gray-600 hover:text-sportbnk-green transition-colors">Data</Link></li>
+              <li><Link to="/company" className="text-gray-600 hover:text-sportbnk-green transition-colors">Company</Link></li>
+              <li><Link to="/resources" className="text-gray-600 hover:text-sportbnk-green transition-colors">Resources</Link></li>
+              <li><Link to="/pricing" className="text-gray-600 hover:text-sportbnk-green transition-colors">Pricing</Link></li>
             </ul>
           </div>
           
           <div>
-            <h3 className="font-semibold text-sportbnk-navy mb-4">Legal</h3>
+            <h3 className="font-semibold text-sportbnk-navy mb-4">Resources</h3>
             <ul className="space-y-2">
-              <li><a href="#" className="text-gray-600 hover:text-sportbnk-green transition-colors">Terms</a></li>
-              <li><a href="#" className="text-gray-600 hover:text-sportbnk-green transition-colors">Privacy</a></li>
-              <li><a href="#" className="text-gray-600 hover:text-sportbnk-green transition-colors">Cookies</a></li>
-              <li><a href="/contact" className="text-gray-600 hover:text-sportbnk-green transition-colors">Contact</a></li>
+              <li><Link to="/resources/startups" className="text-gray-600 hover:text-sportbnk-green transition-colors">Sportbnk for Startups</Link></li>
+              <li><Link to="/resources/community" className="text-gray-600 hover:text-sportbnk-green transition-colors">Community</Link></li>
+              <li><Link to="/resources/articles" className="text-gray-600 hover:text-sportbnk-green transition-colors">Articles</Link></li>
+              <li><Link to="/resources/webinars" className="text-gray-600 hover:text-sportbnk-green transition-colors">Webinars</Link></li>
+              <li><Link to="/resources/podcasts" className="text-gray-600 hover:text-sportbnk-green transition-colors">Podcasts</Link></li>
+              <li><Link to="/resources/case-studies" className="text-gray-600 hover:text-sportbnk-green transition-colors">Case Studies</Link></li>
+              <li><Link to="/resources/reviews" className="text-gray-600 hover:text-sportbnk-green transition-colors">Reviews</Link></li>
+              <li><Link to="/resources/help-center" className="text-gray-600 hover:text-sportbnk-green transition-colors">Help Center</Link></li>
             </ul>
           </div>
           
