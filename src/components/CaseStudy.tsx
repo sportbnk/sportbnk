@@ -1,6 +1,7 @@
 
 import { useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
 
 type CaseStudyProps = {
   title: string;
@@ -52,8 +53,8 @@ const CaseStudy = ({ title, description, image, isReversed = false, color }: Cas
               <div className="mb-2 text-sm font-medium uppercase tracking-wider">CASE STUDY</div>
               <h3 className="text-2xl md:text-3xl font-bold mb-4">{title}</h3>
               <p className="mb-6 leading-relaxed">{description}</p>
-              <Button variant={buttonVariant === "outline" ? "outline" : "default"} className={`rounded-md ${buttonClass}`}>
-                Read More
+              <Button variant={buttonVariant === "outline" ? "outline" : "default"} className={`rounded-md ${buttonClass}`} asChild>
+                <Link to="/resources/case-studies">Read More</Link>
               </Button>
             </div>
             <div className={`${isReversed ? 'order-1' : 'order-2'}`}>

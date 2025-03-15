@@ -2,6 +2,7 @@
 import PageLayout from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
 import { Rocket } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Boost = () => {
   return (
@@ -37,8 +38,8 @@ const Boost = () => {
                   <p>Enhance records with sports-specific details</p>
                 </div>
               </div>
-              <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white">
-                Try Boost Now
+              <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white" asChild>
+                <Link to="/free-trial">Try Boost Now</Link>
               </Button>
             </div>
             <div>

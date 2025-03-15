@@ -1,8 +1,8 @@
-
 import PageLayout from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Shield, ArrowRight, Check } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const PartnerTier = ({ 
   title, 
@@ -34,8 +34,8 @@ const PartnerTier = ({
         ))}
       </div>
       
-      <Button className={`w-full ${featured ? 'bg-sportbnk-green hover:bg-sportbnk-green/90 text-white' : 'bg-white border border-sportbnk-green text-sportbnk-green hover:bg-sportbnk-green hover:text-white'}`}>
-        Apply Now
+      <Button className={`w-full ${featured ? 'bg-sportbnk-green hover:bg-sportbnk-green/90 text-white' : 'bg-white border border-sportbnk-green text-sportbnk-green hover:bg-sportbnk-green hover:text-white'}`} asChild>
+        <Link to="/contact">Apply Now</Link>
       </Button>
     </CardContent>
   </Card>
@@ -141,8 +141,10 @@ const PartnerProgram = () => {
           </div>
           
           <div className="text-center mt-12">
-            <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white group">
-              Apply to Become a Partner <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+            <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white group" asChild>
+              <Link to="/contact">
+                Apply to Become a Partner <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
             </Button>
           </div>
         </div>

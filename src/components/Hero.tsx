@@ -1,6 +1,7 @@
 
 import { useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
 
 const Hero = () => {
   const imageRef = useRef<HTMLImageElement>(null);
@@ -40,8 +41,8 @@ const Hero = () => {
               The sports industry is to be an estimated $760 Billion market by 2026.
             </p>
             <div className="pt-4 animate-slideUp delay-200">
-              <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white rounded-md px-8 py-6 text-lg relative">
-                Book A Demo
+              <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white rounded-md px-8 py-6 text-lg relative" asChild>
+                <Link to="/book-demo">Book A Demo</Link>
                 {/* Small octagon near the button */}
                 <span className="absolute -right-6 -bottom-4 w-4 h-4 octagon-light"></span>
               </Button>

@@ -3,6 +3,7 @@ import PageLayout from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Briefcase } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const JobCard = ({ 
   title, 
@@ -31,8 +32,8 @@ const JobCard = ({
       </p>
     </CardContent>
     <CardFooter className="p-6 pt-0">
-      <Button variant="outline" className="w-full border-sportbnk-green text-sportbnk-green hover:bg-sportbnk-green hover:text-white">
-        View Details
+      <Button variant="outline" className="w-full border-sportbnk-green text-sportbnk-green hover:bg-sportbnk-green hover:text-white" asChild>
+        <Link to="/company/careers">View Details</Link>
       </Button>
     </CardFooter>
   </Card>

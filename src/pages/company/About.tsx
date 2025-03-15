@@ -3,6 +3,7 @@ import PageLayout from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
 import { Building, Phone } from "lucide-react";
 import { TeamMember } from "@/components/MeetTheTeam";
+import { Link } from "react-router-dom";
 
 const About = () => {
   return (
@@ -106,8 +107,8 @@ const About = () => {
                   <span>info@sportbnk.com</span>
                 </div>
               </div>
-              <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white px-8 py-6 text-lg">
-                Get In Touch
+              <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white px-8 py-6 text-lg" asChild>
+                <Link to="/contact">Get In Touch</Link>
               </Button>
             </div>
           </div>

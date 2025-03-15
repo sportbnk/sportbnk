@@ -2,6 +2,7 @@
 import PageLayout from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
 import { Users } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Recruit = () => {
   return (
@@ -37,8 +38,8 @@ const Recruit = () => {
                   <p>Transparent hiring process</p>
                 </div>
               </div>
-              <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white">
-                Start Recruiting
+              <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white" asChild>
+                <Link to="/free-trial">Start Recruiting</Link>
               </Button>
             </div>
             <div>

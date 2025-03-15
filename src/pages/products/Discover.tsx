@@ -2,6 +2,7 @@
 import PageLayout from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Discover = () => {
   return (
@@ -37,8 +38,8 @@ const Discover = () => {
                   <p>Easily exportable lists in multiple formats</p>
                 </div>
               </div>
-              <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white">
-                Try Discover Now
+              <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white" asChild>
+                <Link to="/free-trial">Try Discover Now</Link>
               </Button>
             </div>
             <div>

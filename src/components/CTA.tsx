@@ -1,5 +1,6 @@
 
 import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
 
 const CTA = () => {
   return (
@@ -8,8 +9,8 @@ const CTA = () => {
         <h2 className="text-3xl font-bold mb-6 text-sportbnk-navy">
           Looking to Upscale Your Business?
         </h2>
-        <Button className="bg-sportbnk-navy hover:bg-sportbnk-navy/90 text-white px-8 py-6 rounded-md">
-          Book A Demo
+        <Button className="bg-sportbnk-navy hover:bg-sportbnk-navy/90 text-white px-8 py-6 rounded-md" asChild>
+          <Link to="/book-demo">Book A Demo</Link>
         </Button>
         <p className="text-sportbnk-navy mt-4 opacity-80 text-sm">
           www.sportbnk.com | info@sportbnk.com
