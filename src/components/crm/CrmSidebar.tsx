@@ -26,11 +26,11 @@ import {
   PhoneCall,
   Calendar,
   CheckSquare,
-  Plus,
   SearchIcon,
   CreditCard,
   Users,
-  User
+  User,
+  ArrowUpCircle
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import AccountBadge from "./AccountBadge";
@@ -44,7 +44,7 @@ const CrmSidebar = () => {
       <SidebarRail />
       <SidebarHeader className="p-3">
         <div className="flex justify-between items-center mb-2">
-          <h2 className="text-xl font-bold text-sportbnk-green">SportBnk CRM</h2>
+          <h2 className="text-xl font-bold text-sportbnk-green">Welcome Jared</h2>
         </div>
         <div className="relative">
           <SearchIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -66,7 +66,6 @@ const CrmSidebar = () => {
                   isActive={location.pathname === "/database"}
                   tooltip="Prospects"
                 >
-                  <UserPlus />
                   <span>Prospects</span>
                 </SidebarMenuButton>
                 <SidebarMenuSub>
@@ -109,7 +108,6 @@ const CrmSidebar = () => {
               {/* Engage menu with submenu items */}
               <SidebarMenuItem>
                 <SidebarMenuButton>
-                  <MessageSquare />
                   <span>Engage</span>
                 </SidebarMenuButton>
                 <SidebarMenuSub>
@@ -141,7 +139,6 @@ const CrmSidebar = () => {
               {/* Deals menu with submenu items */}
               <SidebarMenuItem>
                 <SidebarMenuButton>
-                  <DollarSign />
                   <span>Deals</span>
                 </SidebarMenuButton>
                 <SidebarMenuSub>
@@ -172,21 +169,14 @@ const CrmSidebar = () => {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
-        
-        <SidebarGroup>
-          <SidebarGroupLabel>Actions</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <Button className="w-full bg-sportbnk-green hover:bg-sportbnk-green/90">
-              <Plus className="h-4 w-4 mr-1" />
-              Add New Contact
-            </Button>
-          </SidebarGroupContent>
-        </SidebarGroup>
       </SidebarContent>
       
       <SidebarFooter>
         <SidebarGroup>
           <SidebarGroupContent>
+            <Button className="w-full mb-4 bg-sportbnk-navy hover:bg-sportbnk-navy/90 flex items-center justify-center">
+              <ArrowUpCircle className="h-4 w-4 mr-2" /> Upgrade
+            </Button>
             <div className="mb-2">
               <CreditCard className="h-4 w-4 text-sportbnk-green inline-block mr-1" />
               <span className="text-sm">456 Credits Left</span>

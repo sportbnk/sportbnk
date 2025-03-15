@@ -165,30 +165,38 @@ const Teams = () => {
   };
   
   return (
-    <div className="container mx-auto px-4 py-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-sportbnk-navy">Teams Database</h1>
-        <div className="flex gap-2">
-          <Button variant="outline" className="flex items-center gap-1">
+    <div className="container mx-auto p-6 lg:p-8">
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold text-sportbnk-navy">Teams Database</h1>
+        <div className="flex gap-3">
+          <Button variant="outline" className="flex items-center gap-2">
             <Download className="h-4 w-4" /> Export
           </Button>
-          <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 flex items-center gap-1">
+          <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 flex items-center gap-2">
             <Plus className="h-4 w-4" /> Add Team
           </Button>
         </div>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
         <div className="md:col-span-1">
-          <ContactsFilters onFilterChange={handleFilterChange} />
-          <Card className="mt-4">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-lg">Credits</CardTitle>
+          <Card className="shadow-md">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-xl text-sportbnk-navy">Filters</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ContactsFilters onFilterChange={handleFilterChange} />
+            </CardContent>
+          </Card>
+          
+          <Card className="mt-6 shadow-md border-t-2 border-t-sportbnk-green">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-xl text-sportbnk-navy">Credits</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-2xl font-bold text-sportbnk-green">{credits}</p>
-              <p className="text-sm text-muted-foreground">Credits remaining</p>
-              <Button className="w-full mt-4 bg-sportbnk-navy hover:bg-sportbnk-navy/90">
+              <p className="text-sm text-muted-foreground mb-4">Credits remaining</p>
+              <Button className="w-full bg-sportbnk-navy hover:bg-sportbnk-navy/90">
                 Buy More Credits
               </Button>
             </CardContent>
@@ -196,10 +204,17 @@ const Teams = () => {
         </div>
         
         <div className="md:col-span-3">
-          <ContactsTable 
-            data={teamData}
-            useCredits={useCredits}
-          />
+          <Card className="shadow-md h-full">
+            <CardHeader className="pb-2 border-b">
+              <CardTitle className="text-xl text-sportbnk-navy">Teams List</CardTitle>
+            </CardHeader>
+            <CardContent className="p-0">
+              <ContactsTable 
+                data={teamData}
+                useCredits={useCredits}
+              />
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>
