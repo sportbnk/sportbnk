@@ -1,3 +1,4 @@
+
 import PageLayout from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
 import { Building, Phone } from "lucide-react";
@@ -64,23 +65,23 @@ const About = () => {
           
           <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-6">
             <TeamMember 
-              name="Alex Johnson" 
+              name="Jared Wilson" 
               role="CEO & Founder" 
               image="/lovable-uploads/5a649dfb-5709-4042-bda2-aec41e85a32d.png"
             />
             <TeamMember 
-              name="Sarah Williams" 
+              name="Chris Watts" 
               role="CTO" 
               image="/lovable-uploads/c5351de4-d54d-424f-99a5-b07ddc3fcc40.png"
             />
             <TeamMember 
-              name="David Chen" 
-              role="Head of Data" 
+              name="Matthew Price" 
+              role="Chief of Sales" 
               image="/lovable-uploads/b727ac17-df3d-4270-a031-139c82129d27.png"
             />
             <TeamMember 
-              name="Emma Roberts" 
-              role="Chief Marketing Officer" 
+              name="Greg Thomas" 
+              role="Director" 
               image="/lovable-uploads/d09f910d-17b2-4f81-bc3b-66badacf3de2.png"
             />
           </div>
