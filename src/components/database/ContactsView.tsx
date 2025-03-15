@@ -80,7 +80,7 @@ const ContactsView = ({
           <Table className="w-full table-fixed">
             <TableHeader className="bg-sportbnk-navy">
               <TableRow>
-                <TableHead className="cursor-pointer text-white w-[10%]" onClick={() => handleSort("name")}>
+                <TableHead className="cursor-pointer text-white w-[9%]" onClick={() => handleSort("name")}>
                   <div className="flex items-center gap-1">
                     Contact
                     {sortField === "name" && (
@@ -88,7 +88,7 @@ const ContactsView = ({
                     )}
                   </div>
                 </TableHead>
-                <TableHead className="cursor-pointer text-white w-[18%]" onClick={() => handleSort("position")}>
+                <TableHead className="cursor-pointer text-white w-[16%]" onClick={() => handleSort("position")}>
                   <div className="flex items-center gap-1">
                     Position
                     {sortField === "position" && (
@@ -96,7 +96,7 @@ const ContactsView = ({
                     )}
                   </div>
                 </TableHead>
-                <TableHead className="cursor-pointer text-white w-[13%]" onClick={() => handleSort("team")}>
+                <TableHead className="cursor-pointer text-white w-[14%]" onClick={() => handleSort("team")}>
                   <div className="flex items-center gap-1">
                     Team
                     {sortField === "team" && (
@@ -104,7 +104,7 @@ const ContactsView = ({
                     )}
                   </div>
                 </TableHead>
-                <TableHead className="cursor-pointer hidden md:table-cell text-white w-[9%]" onClick={() => handleSort("sport")}>
+                <TableHead className="cursor-pointer hidden md:table-cell text-white w-[10%]" onClick={() => handleSort("sport")}>
                   <div className="flex items-center gap-1">
                     Sport
                     {sortField === "sport" && (
@@ -112,9 +112,9 @@ const ContactsView = ({
                     )}
                   </div>
                 </TableHead>
-                <TableHead className="text-white w-[19%]">Email</TableHead>
-                <TableHead className="hidden md:table-cell text-white w-[17%]">Phone</TableHead>
-                <TableHead className="hidden md:table-cell text-white w-[8%]">LinkedIn</TableHead>
+                <TableHead className="text-white w-[18%]">Email</TableHead>
+                <TableHead className="hidden md:table-cell text-white w-[18%]">Phone</TableHead>
+                <TableHead className="hidden md:table-cell text-white w-[9%]">LinkedIn</TableHead>
                 <TableHead className="text-white w-[6%]">
                   {isSavedList ? "Remove" : "Add"}
                 </TableHead>
