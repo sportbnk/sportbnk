@@ -33,6 +33,7 @@ const PageLayout = ({
         <meta name="description" content={metaDescription} />
         <meta name="keywords" content={metaKeywords} />
         <link rel="canonical" href={canonicalUrl || defaultCanonicalUrl} />
+        <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
       </Helmet>
       
       <Navbar />
