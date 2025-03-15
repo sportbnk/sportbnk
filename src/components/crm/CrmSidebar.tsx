@@ -92,21 +92,18 @@ const CrmSidebar = () => {
                       </Link>
                     </SidebarMenuSubButton>
                   </SidebarMenuSubItem>
+                  <SidebarMenuSubItem>
+                    <SidebarMenuSubButton 
+                      asChild 
+                      isActive={location.pathname === "/database/lists"}
+                    >
+                      <Link to="/database/lists">
+                        <List className="h-4 w-4 mr-2" />
+                        Lists
+                      </Link>
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
                 </SidebarMenuSub>
-              </SidebarMenuItem>
-              
-              {/* Lists menu item */}
-              <SidebarMenuItem>
-                <SidebarMenuButton 
-                  asChild 
-                  isActive={location.pathname === "/database/lists"}
-                  tooltip="Lists"
-                >
-                  <Link to="/database/lists">
-                    <List />
-                    <span>📋 Lists</span>
-                  </Link>
-                </SidebarMenuButton>
               </SidebarMenuItem>
               
               {/* Engage menu with submenu items */}
@@ -123,7 +120,7 @@ const CrmSidebar = () => {
                     >
                       <Link to="/database/emails">
                         <Mail className="h-4 w-4 mr-2" />
-                        📧 Emails
+                        Emails
                       </Link>
                     </SidebarMenuSubButton>
                   </SidebarMenuSubItem>
@@ -134,7 +131,7 @@ const CrmSidebar = () => {
                     >
                       <Link to="/database/calls">
                         <PhoneCall className="h-4 w-4 mr-2" />
-                        📞 Calls
+                        Calls
                       </Link>
                     </SidebarMenuSubButton>
                   </SidebarMenuSubItem>
@@ -155,7 +152,7 @@ const CrmSidebar = () => {
                     >
                       <Link to="/database/meetings">
                         <Calendar className="h-4 w-4 mr-2" />
-                        📅 Meetings
+                        Meetings
                       </Link>
                     </SidebarMenuSubButton>
                   </SidebarMenuSubItem>
@@ -166,7 +163,7 @@ const CrmSidebar = () => {
                     >
                       <Link to="/database/tasks">
                         <CheckSquare className="h-4 w-4 mr-2" />
-                        ✅ Tasks
+                        Tasks
                       </Link>
                     </SidebarMenuSubButton>
                   </SidebarMenuSubItem>
