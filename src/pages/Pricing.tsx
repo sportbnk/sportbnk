@@ -2,26 +2,41 @@
 import PageLayout from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Check } from "lucide-react";
+import { Check, Star } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const PricingCard = ({ 
+  title,
+  price,
+  period = "/ month",
+  description,
   features,
   buttonText = "Get Started",
-  buttonLink = "/book-demo"
+  buttonLink = "/book-demo",
+  highlighted = false
 }: { 
+  title: string;
+  price: string;
+  period?: string;
+  description: string;
   features: string[];
   buttonText?: string;
   buttonLink?: string;
+  highlighted?: boolean;
 }) => (
-  <Card className="border border-sportbnk-green shadow-lg max-w-md mx-auto">
-    <CardHeader className="pb-4 text-center">
-      <CardTitle className="text-2xl font-bold text-sportbnk-navy">Standard Plan</CardTitle>
-      <div className="mt-4">
-        <span className="text-4xl font-bold text-sportbnk-navy">$49</span>
-        <span className="text-gray-500 ml-2">/ month</span>
+  <Card className={`border ${highlighted ? 'border-sportbnk-green border-2' : 'border-gray-200'} shadow-lg max-w-md mx-auto`}>
+    {highlighted && (
+      <div className="bg-sportbnk-green text-white text-center py-1 text-sm font-medium">
+        Most Popular
       </div>
-      <p className="text-gray-600 mt-4">All the features you need to grow your business in the sports industry</p>
+    )}
+    <CardHeader className="pb-4 text-center">
+      <CardTitle className="text-2xl font-bold text-sportbnk-navy">{title}</CardTitle>
+      <div className="mt-4">
+        <span className="text-4xl font-bold text-sportbnk-navy">{price}</span>
+        <span className="text-gray-500 ml-2">{period}</span>
+      </div>
+      <p className="text-gray-600 mt-4">{description}</p>
     </CardHeader>
     <CardContent>
       <ul className="space-y-3">
@@ -37,7 +52,7 @@ const PricingCard = ({
     </CardContent>
     <CardFooter className="pb-6">
       <Button 
-        className="w-full bg-sportbnk-green hover:bg-sportbnk-green/90 text-white"
+        className={`w-full ${highlighted ? 'bg-sportbnk-green hover:bg-sportbnk-green/90' : 'bg-sportbnk-navy hover:bg-sportbnk-navy/90'} text-white`}
         asChild
       >
         <Link to={buttonLink}>{buttonText}</Link>
@@ -47,7 +62,7 @@ const PricingCard = ({
 );
 
 const Pricing = () => {
-  const features = [
+  const standardFeatures = [
     "Access to Discover tool with all filters",
     "Access to Boost for data enrichment",
     "Unlimited searches",
@@ -56,6 +71,17 @@ const Pricing = () => {
     "Email and chat support",
     "7-day free trial",
     "Cancel anytime"
+  ];
+  
+  const proFeatures = [
+    "All Standard features",
+    "Export up to 5,000 contacts per month",
+    "Advanced data analytics dashboard",
+    "API access for custom integrations",
+    "Dedicated account manager",
+    "Priority support response",
+    "Custom training sessions",
+    "Team collaboration tools"
   ];
   
   return (
@@ -67,14 +93,26 @@ const Pricing = () => {
               Simple, Transparent Pricing
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Just one plan with everything you need at a flat rate of $49/month.
+              Choose the plan that works best for your business needs.
             </p>
           </div>
           
-          <div className="max-w-md mx-auto">
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             <PricingCard 
-              features={features}
+              title="Standard Plan"
+              price="$49"
+              description="All the features you need to grow your business in the sports industry"
+              features={standardFeatures}
               buttonText="Start 7-Day Free Trial"
+            />
+            
+            <PricingCard 
+              title="Pro Plan"
+              price="$99"
+              description="Enhanced features and support for growing teams and enterprises"
+              features={proFeatures}
+              buttonText="Start 7-Day Free Trial"
+              highlighted={true}
             />
           </div>
         </div>
@@ -121,7 +159,7 @@ const Pricing = () => {
                 Do you offer discounts for annual billing?
               </h3>
               <p className="text-gray-600">
-                We keep it simple with just one monthly plan at $49. Contact our sales team if you need custom options for your organization.
+                Yes, we offer a 20% discount when you choose annual billing for either plan. Contact our sales team for more details.
               </p>
             </div>
           </div>
