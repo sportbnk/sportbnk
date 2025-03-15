@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -170,45 +169,6 @@ const People = () => {
             </CardContent>
           </Card>
           
-          <Card className="shadow-md mb-4">
-            <CardHeader className="pb-2 pt-4 px-4">
-              <CardTitle className="text-base font-semibold flex items-center gap-2">
-                <Users className="h-4 w-4" />
-                Saved List ({savedList.length})
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-0">
-              {savedList.length > 0 ? (
-                <ContactsView
-                  data={savedList}
-                  revealedEmails={revealedEmails}
-                  revealedPhones={revealedPhones}
-                  onRevealEmail={revealEmail}
-                  onRevealPhone={revealPhone}
-                  onViewTeam={viewTeam}
-                  onRemoveFromList={removeFromList}
-                  isSavedList={true}
-                />
-              ) : (
-                <div className="py-5 px-4 text-center text-muted-foreground">
-                  <p>No contacts added to your list yet.</p>
-                  <p className="text-sm mt-2">Add contacts to create your export list.</p>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-          
-          <Card className="shadow-md mb-4">
-            <CardHeader className="pb-2 pt-4 px-4">
-              <CardTitle className="text-base font-semibold">Upgrade</CardTitle>
-            </CardHeader>
-            <CardContent className="px-4 py-3">
-              <Button className="w-full bg-sportbnk-navy hover:bg-sportbnk-navy/90 text-base">
-                Get Pro Plan
-              </Button>
-            </CardContent>
-          </Card>
-          
           <Card className="shadow-md">
             <CardHeader className="pb-2 pt-4 px-4">
               <CardTitle className="text-base font-semibold">Credits</CardTitle>
@@ -217,7 +177,7 @@ const People = () => {
               <p className="text-2xl font-bold text-sportbnk-green">{credits}</p>
               <p className="text-sm text-muted-foreground">Credits remaining</p>
               <Button className="w-full mt-4 bg-sportbnk-navy hover:bg-sportbnk-navy/90 text-base">
-                Buy More Credits
+                Upgrade
               </Button>
             </CardContent>
           </Card>

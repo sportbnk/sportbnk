@@ -22,7 +22,7 @@ const CreditDisplay = ({ credits }: CreditDisplayProps) => {
             Usage History
           </Button>
           <Button size="sm" className="h-9 bg-sportbnk-green hover:bg-sportbnk-green/90">
-            Buy More
+            Upgrade
           </Button>
         </div>
       </CardContent>
