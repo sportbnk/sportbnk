@@ -1,4 +1,3 @@
-
 import PageLayout from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
 import { Building, Phone } from "lucide-react";
@@ -67,22 +66,22 @@ const About = () => {
             <TeamMember 
               name="Jared Wilson" 
               role="CEO & Founder" 
-              image="/lovable-uploads/5a649dfb-5709-4042-bda2-aec41e85a32d.png"
+              image="/lovable-uploads/fe95d116-e43a-4e1e-9439-b2fee1207d72.png"
             />
             <TeamMember 
               name="Chris Watts" 
               role="CTO" 
-              image="/lovable-uploads/c5351de4-d54d-424f-99a5-b07ddc3fcc40.png"
+              image="/lovable-uploads/fe95d116-e43a-4e1e-9439-b2fee1207d72.png"
             />
             <TeamMember 
               name="Matthew Price" 
               role="Chief of Sales" 
-              image="/lovable-uploads/b727ac17-df3d-4270-a031-139c82129d27.png"
+              image="/lovable-uploads/fe95d116-e43a-4e1e-9439-b2fee1207d72.png"
             />
             <TeamMember 
               name="Greg Thomas" 
               role="Director" 
-              image="/lovable-uploads/d09f910d-17b2-4f81-bc3b-66badacf3de2.png"
+              image="/lovable-uploads/fe95d116-e43a-4e1e-9439-b2fee1207d72.png"
             />
           </div>
         </div>

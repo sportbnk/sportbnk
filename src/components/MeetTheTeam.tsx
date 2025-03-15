@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -14,7 +13,7 @@ export const TeamMember: React.FC<TeamMemberProps> = ({ name, role, image }) => 
   <Card className="border-0 shadow-sm overflow-hidden">
     <div className="aspect-square overflow-hidden bg-gray-100">
       <img 
-        src={image} 
+        src="/lovable-uploads/fe95d116-e43a-4e1e-9439-b2fee1207d72.png" 
         alt={name} 
         className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
       />
@@ -43,22 +42,22 @@ const MeetTheTeam = () => {
           <TeamMember 
             name="Jared Wilson" 
             role="CEO & Founder" 
-            image="/lovable-uploads/5a649dfb-5709-4042-bda2-aec41e85a32d.png"
+            image="/lovable-uploads/fe95d116-e43a-4e1e-9439-b2fee1207d72.png"
           />
           <TeamMember 
             name="Chris Watts" 
             role="CTO" 
-            image="/lovable-uploads/c5351de4-d54d-424f-99a5-b07ddc3fcc40.png"
+            image="/lovable-uploads/fe95d116-e43a-4e1e-9439-b2fee1207d72.png"
           />
           <TeamMember 
             name="Matthew Price" 
             role="Chief of Sales" 
-            image="/lovable-uploads/b727ac17-df3d-4270-a031-139c82129d27.png"
+            image="/lovable-uploads/fe95d116-e43a-4e1e-9439-b2fee1207d72.png"
           />
           <TeamMember 
             name="Greg Thomas" 
             role="Director" 
-            image="/lovable-uploads/d09f910d-17b2-4f81-bc3b-66badacf3de2.png"
+            image="/lovable-uploads/fe95d116-e43a-4e1e-9439-b2fee1207d72.png"
           />
         </div>
 
