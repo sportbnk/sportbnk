@@ -1,91 +1,133 @@
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
+import { ArrowRight, BarChart2, Briefcase, LineChart, Users } from 'lucide-react';
 
 const Hero = () => {
-  const imageRef = useRef<HTMLImageElement>(null);
+  const heroRef = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && imageRef.current) {
-          imageRef.current.classList.add('is-visible');
+        if (entry.isIntersecting) {
+          setIsVisible(true);
           observer.unobserve(entry.target);
         }
       },
       { threshold: 0.1 }
     );
 
-    if (imageRef.current) {
-      observer.observe(imageRef.current);
+    if (heroRef.current) {
+      observer.observe(heroRef.current);
     }
 
     return () => {
-      if (imageRef.current) observer.unobserve(imageRef.current);
+      if (heroRef.current) observer.unobserve(heroRef.current);
     };
   }, []);
 
   return (
-    <section className="relative pt-24 pb-16 md:pt-32 md:pb-24 overflow-hidden bg-white octagon-pattern">
+    <section ref={heroRef} className="relative pt-28 pb-24 md:pt-36 md:pb-32 overflow-hidden bg-gradient-to-br from-sportbnk-navy via-sportbnk-navy/95 to-sportbnk-navy/90 text-white">
+      {/* Abstract background elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-full bg-pattern-hexagon opacity-5"></div>
+        <div className="absolute -top-10 -right-10 w-64 h-64 bg-sportbnk-green/20 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-40 -left-20 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/4 right-1/4 w-4 h-4 rounded-full bg-sportbnk-green/50"></div>
+        <div className="absolute bottom-1/3 left-1/3 w-6 h-6 rounded-full bg-sportbnk-green/30"></div>
+      </div>
+      
       <div className="container mx-auto px-4 md:px-6 relative z-10">
-        <div className="grid md:grid-cols-2 gap-8 items-center">
-          <div className="flex flex-col space-y-6 max-w-xl relative">
-            {/* Small decorative octagon in the top left */}
-            <div className="absolute -top-12 -left-8 w-8 h-8 octagon-light"></div>
+        <div className="grid lg:grid-cols-12 gap-12 items-center">
+          <div className="flex flex-col space-y-8 lg:col-span-6">
+            {/* Animated badge */}
+            <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-sm font-medium transform transition-all duration-700 ${isVisible ? 'opacity-100' : 'opacity-0 translate-y-4'}`}>
+              <span className="flex h-2 w-2 rounded-full bg-sportbnk-green"></span>
+              <span>The sports industry is forecasted to reach <b>$760 Billion</b> by 2026</span>
+            </div>
             
-            <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-sportbnk-navy animate-slideUp relative octagon-float">
-              B2B Sports<br />Intelligence Platform
+            <h1 className={`text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-tight transition-all duration-700 delay-100 ${isVisible ? 'opacity-100' : 'opacity-0 translate-y-8'}`}>
+              Turn Sports Data Into 
+              <span className="bg-gradient-to-r from-sportbnk-green to-teal-300 bg-clip-text text-transparent"> Strategic Advantage</span>
             </h1>
-            <p className="text-lg text-gray-600 animate-slideUp delay-100">
-              The sports industry is to be an estimated $760 Billion market by 2026.
+            
+            <p className={`text-xl text-gray-300 leading-relaxed max-w-xl transition-all duration-700 delay-200 ${isVisible ? 'opacity-100' : 'opacity-0 translate-y-8'}`}>
+              SportBnk provides a complete intelligence platform for sports organizations to discover opportunities, boost engagement, and recruit top talent.
             </p>
-            <div className="pt-4 animate-slideUp delay-200">
-              <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white rounded-md px-8 py-6 text-lg relative" asChild>
+            
+            <div className={`flex flex-col sm:flex-row gap-4 transition-all duration-700 delay-300 ${isVisible ? 'opacity-100' : 'opacity-0 translate-y-8'}`}>
+              <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-sportbnk-navy font-medium rounded-md px-8 py-6 text-lg" asChild>
                 <Link to="/book-demo">Book A Demo</Link>
               </Button>
-              {/* Small octagon near the button */}
-              <span className="absolute -right-6 -bottom-4 w-4 h-4 octagon-light"></span>
+              <Button className="bg-transparent hover:bg-white/10 border border-white/30 text-white font-medium rounded-md px-8 py-6 text-lg" asChild>
+                <Link to="/products" className="flex items-center gap-2">
+                  Explore Solutions <ArrowRight className="w-5 h-5" />
+                </Link>
+              </Button>
+            </div>
+            
+            {/* Trust indicators */}
+            <div className={`mt-8 transition-all duration-700 delay-400 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
+              <p className="text-sm text-gray-400 mb-4">Trusted by 500+ sports organizations worldwide</p>
+              <div className="flex flex-wrap gap-6 items-center">
+                <img src="/lovable-uploads/1d95a70d-8230-4647-9c16-d5c94a124864.png" alt="Client Logo" className="h-10 object-contain opacity-80 hover:opacity-100 transition-opacity" />
+                <img src="/lovable-uploads/c5351de4-d54d-424f-99a5-b07ddc3fcc40.png" alt="Client Logo" className="h-10 object-contain opacity-80 hover:opacity-100 transition-opacity" />
+                <img src="/lovable-uploads/c506ab85-1e88-47f8-941f-cb182443bf55.png" alt="Client Logo" className="h-10 object-contain opacity-80 hover:opacity-100 transition-opacity" />
+              </div>
             </div>
           </div>
           
-          <div 
-            ref={imageRef} 
-            className="animate-when-visible relative octagon-cluster"
-          >
-            <div className="relative w-[90%] mx-auto">
-              <div className="absolute -top-10 -left-10 w-40 h-40 bg-sportbnk-green/20 rounded-full blur-2xl"></div>
-              <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-sportbnk-navy/20 rounded-full blur-2xl"></div>
-              
-              {/* Main UI screenshot - Teams table */}
-              <div className="relative z-10 mb-4 w-[80%] mx-auto">
-                <img 
-                  src="/lovable-uploads/08f9a58b-fe6c-4ee9-9058-d4d13a5cf79e.png" 
-                  alt="Sportbnk Teams Table" 
-                  className="w-full rounded-lg shadow-xl border border-gray-200" 
-                />
-              </div>
-              
-              {/* Contacts table */}
-              <div className="relative z-20 -mt-16 ml-auto mr-2 w-[60%]">
-                <img 
-                  src="/lovable-uploads/645d8320-b99d-4282-97d7-2639fc82c060.png" 
-                  alt="Sportbnk Contacts Table" 
-                  className="w-full rounded-lg shadow-xl border border-gray-200 transform rotate-3" 
-                />
-              </div>
-              
-              {/* Team profile - centered and aligned with heading */}
-              <div className="relative z-30 -mt-24 mx-auto ml-4 w-[65%]">
-                <img 
-                  src="/lovable-uploads/b0f94fb5-f923-4243-b466-86aa2a7738d0.png" 
-                  alt="Cricket Ireland Team Profile" 
-                  className="w-full rounded-lg shadow-xl border border-gray-200 transform -rotate-2" 
-                />
+          <div className={`lg:col-span-6 transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'}`}>
+            <div className="relative">
+              {/* 3D effect container */}
+              <div className="relative perspective-1000">
+                {/* Floating elements */}
+                <div className="absolute -top-12 -left-12 w-20 h-20 bg-sportbnk-green/5 backdrop-blur-md border border-white/10 rounded-lg shadow-xl flex items-center justify-center transform rotate-6 animate-float">
+                  <Users className="w-10 h-10 text-sportbnk-green" />
+                </div>
+                <div className="absolute -bottom-8 -right-8 w-24 h-24 bg-blue-500/5 backdrop-blur-md border border-white/10 rounded-lg shadow-xl flex items-center justify-center transform -rotate-12 animate-float" style={{ animationDelay: '1.5s' }}>
+                  <BarChart2 className="w-12 h-12 text-blue-400" />
+                </div>
+                <div className="absolute top-1/2 -left-10 transform -translate-y-1/2 w-16 h-16 bg-purple-500/5 backdrop-blur-md border border-white/10 rounded-lg shadow-xl flex items-center justify-center rotate-12 animate-float" style={{ animationDelay: '1s' }}>
+                  <Briefcase className="w-8 h-8 text-purple-400" />
+                </div>
+                
+                {/* Main dashboard */}
+                <div className="relative z-10 transform transition-transform hover:rotate-y-3 hover:rotate-x-2">
+                  <div className="p-2 bg-white/5 backdrop-blur-md border border-white/20 rounded-xl shadow-2xl">
+                    <img 
+                      src="/lovable-uploads/08f9a58b-fe6c-4ee9-9058-d4d13a5cf79e.png" 
+                      alt="SportBnk Dashboard" 
+                      className="w-full rounded-lg transform transition-all hover:scale-[1.01]" 
+                    />
+                  </div>
+                </div>
+                
+                {/* Floating stats card */}
+                <div className="absolute -bottom-16 -right-12 max-w-[280px] bg-white/10 backdrop-blur-lg border border-white/20 p-4 rounded-lg shadow-2xl transform rotate-2 animate-float" style={{ animationDelay: '2s' }}>
+                  <div className="flex gap-4 items-center">
+                    <div className="p-3 bg-sportbnk-green/20 rounded-lg">
+                      <LineChart className="w-8 h-8 text-sportbnk-green" />
+                    </div>
+                    <div>
+                      <p className="text-white/70 text-sm">Growth Metrics</p>
+                      <p className="text-white font-semibold text-lg">+27.4%</p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
+      
+      {/* Wave divider */}
+      <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none">
+        <svg className="relative block w-full h-8 sm:h-16" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+          <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" className="fill-white"></path>
+        </svg>
       </div>
     </section>
   );
