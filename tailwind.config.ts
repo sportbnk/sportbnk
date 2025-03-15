@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -13,8 +12,16 @@ export default {
 	theme: {
 		container: {
 			center: true,
-			padding: '2rem',
+			padding: {
+				DEFAULT: '1rem',
+				sm: '1.5rem',
+				md: '2rem',
+			},
 			screens: {
+				'sm': '640px',
+				'md': '768px',
+				'lg': '1024px',
+				'xl': '1280px',
 				'2xl': '1400px'
 			}
 		},
@@ -129,6 +136,24 @@ export default {
 			},
 			backgroundImage: {
 				'pattern-hexagon': "url('/lovable-uploads/9347a39c-a8e7-4351-8636-1a08454618b6.png')"
+			},
+			screens: {
+				'xs': '480px',
+				'3xl': '1600px',
+				'4xl': '1920px',
+				'tall': { 'raw': '(min-height: 800px)' },
+				'tablet': { 'raw': '(min-width: 768px) and (max-width: 1023px)' },
+				'landscape': { 'raw': '(orientation: landscape)' },
+				'portrait': { 'raw': '(orientation: portrait)' },
+			},
+			maxWidth: {
+				'8xl': '88rem',
+				'9xl': '96rem',
+			},
+			minWidth: {
+				'table-sm': '640px',
+				'table-md': '768px',
+				'table-lg': '1024px',
 			}
 		}
 	},
