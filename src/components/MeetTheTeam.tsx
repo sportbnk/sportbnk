@@ -10,7 +10,7 @@ type TeamMemberProps = {
   image: string;
 };
 
-const TeamMember: React.FC<TeamMemberProps> = ({ name, role, image }) => (
+export const TeamMember: React.FC<TeamMemberProps> = ({ name, role, image }) => (
   <Card className="border-0 shadow-sm overflow-hidden">
     <div className="aspect-square overflow-hidden bg-gray-100">
       <img 

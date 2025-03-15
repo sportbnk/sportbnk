@@ -1,7 +1,8 @@
 
 import PageLayout from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
-import { Building } from "lucide-react";
+import { Building, Phone } from "lucide-react";
+import { TeamMember } from "@/components/MeetTheTeam";
 
 const About = () => {
   return (
@@ -100,7 +101,7 @@ const About = () => {
                   Have questions or want to learn more about how Sportsbnk can help your business?
                 </p>
                 <div className="flex items-center mb-2">
-                  <phone size={18} className="mr-2" />
+                  <Phone size={18} className="mr-2" />
                   <span>+44 (0) 123 456 7890</span>
                 </div>
                 <div className="flex items-center">
