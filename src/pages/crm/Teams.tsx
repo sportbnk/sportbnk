@@ -237,6 +237,14 @@ const teamData = [
 
 const Teams = () => {
   const [credits, setCredits] = useState(456);
+  const [activeFilters, setActiveFilters] = useState({
+    sport: "all",
+    level: "all",
+    country: "all",
+    city: "all",
+    revenue: "all",
+    employees: "all"
+  });
   
   const useCredits = (amount: number) => {
     setCredits(prev => Math.max(0, prev - amount));
@@ -244,8 +252,49 @@ const Teams = () => {
   
   const handleFilterChange = (filters: any) => {
     console.log("Filters changed:", filters);
-    // In a real application, you would filter the data based on the selected filters
+    setActiveFilters(filters);
   };
+
+  // Apply filters to the data
+  const filteredData = [...teamData].filter(team => {
+    // Filter by sport
+    if (activeFilters.sport !== "all" && team.sport !== activeFilters.sport) {
+      return false;
+    }
+    
+    // Filter by level
+    if (activeFilters.level !== "all" && team.level !== activeFilters.level) {
+      return false;
+    }
+    
+    // Filter by country
+    if (activeFilters.country !== "all" && team.country !== activeFilters.country) {
+      return false;
+    }
+    
+    // Filter by city
+    if (activeFilters.city !== "all" && team.city !== activeFilters.city) {
+      return false;
+    }
+    
+    // Filter by revenue
+    if (activeFilters.revenue !== "all") {
+      if (activeFilters.revenue === "less1m" && team.revenue >= 1000000) return false;
+      if (activeFilters.revenue === "1m-10m" && (team.revenue < 1000000 || team.revenue > 10000000)) return false;
+      if (activeFilters.revenue === "10m-50m" && (team.revenue < 10000000 || team.revenue > 50000000)) return false;
+      if (activeFilters.revenue === "more50m" && team.revenue <= 50000000) return false;
+    }
+    
+    // Filter by employees
+    if (activeFilters.employees !== "all") {
+      if (activeFilters.employees === "less50" && team.employees >= 50) return false;
+      if (activeFilters.employees === "50-200" && (team.employees < 50 || team.employees > 200)) return false;
+      if (activeFilters.employees === "200-1000" && (team.employees < 200 || team.employees > 1000)) return false;
+      if (activeFilters.employees === "more1000" && team.employees <= 1000) return false;
+    }
+    
+    return true;
+  });
   
   return (
     <div className="container mx-auto px-0">
@@ -265,7 +314,7 @@ const Teams = () => {
               <CardTitle className="text-base">Filters</CardTitle>
             </CardHeader>
             <CardContent className="p-2">
-              <ContactsFilters onFilterChange={handleFilterChange} />
+              <ContactsFilters onFilterChange={handleFilterChange} showTeamFilters={true} />
             </CardContent>
           </Card>
           
@@ -290,7 +339,7 @@ const Teams = () => {
             </CardHeader>
             <CardContent className="p-0">
               <ContactsTable 
-                data={teamData}
+                data={filteredData}
                 useCredits={useCredits}
               />
             </CardContent>

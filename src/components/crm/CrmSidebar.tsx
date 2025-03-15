@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
@@ -69,17 +70,6 @@ const CrmSidebar = () => {
                   <span>Prospects</span>
                 </SidebarMenuButton>
                 <SidebarMenuSub>
-                  <SidebarMenuSubItem>
-                    <SidebarMenuSubButton 
-                      asChild 
-                      isActive={location.pathname === "/database" || location.pathname === "/crm/database"}
-                    >
-                      <Link to="/database">
-                        <Users className="h-4 w-4 mr-2" />
-                        Database
-                      </Link>
-                    </SidebarMenuSubButton>
-                  </SidebarMenuSubItem>
                   <SidebarMenuSubItem>
                     <SidebarMenuSubButton 
                       asChild 

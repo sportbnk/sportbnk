@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -159,10 +160,15 @@ const People = () => {
   const [revealedEmails, setRevealedEmails] = useState<Record<string, boolean>>({});
   const [revealedPhones, setRevealedPhones] = useState<Record<string, boolean>>({});
   const [savedList, setSavedList] = useState<any[]>([]);
+  const [activeFilters, setActiveFilters] = useState({
+    position: "all",
+    team: "all",
+    sport: "all",
+  });
   
   const handleFilterChange = (filters: any) => {
     console.log("Filters changed:", filters);
-    // In a real application, you would filter the data based on the selected filters
+    setActiveFilters(filters);
   };
   
   const revealEmail = (email: string) => {
@@ -191,6 +197,26 @@ const People = () => {
   const removeFromList = (contactId: number) => {
     setSavedList(prev => prev.filter(contact => contact.id !== contactId));
   };
+
+  // Apply filters to the data
+  const filteredData = [...contactsData].filter(contact => {
+    // Filter by position
+    if (activeFilters.position !== "all" && contact.position !== activeFilters.position) {
+      return false;
+    }
+    
+    // Filter by team
+    if (activeFilters.team !== "all" && contact.team !== activeFilters.team) {
+      return false;
+    }
+    
+    // Filter by sport
+    if (activeFilters.sport !== "all" && contact.sport !== activeFilters.sport) {
+      return false;
+    }
+    
+    return true;
+  });
   
   return (
     <div className="container max-w-full px-2">
@@ -210,7 +236,7 @@ const People = () => {
               <CardTitle className="text-base font-semibold">Filters</CardTitle>
             </CardHeader>
             <CardContent className="p-3">
-              <ContactsFilters onFilterChange={handleFilterChange} />
+              <ContactsFilters onFilterChange={handleFilterChange} showTeamFilters={false} />
             </CardContent>
           </Card>
           
@@ -236,13 +262,14 @@ const People = () => {
             <CardContent className="p-0">
               <div className="overflow-x-auto">
                 <ContactsView 
-                  data={contactsData}
+                  data={filteredData}
                   revealedEmails={revealedEmails}
                   revealedPhones={revealedPhones}
                   onRevealEmail={revealEmail}
                   onRevealPhone={revealPhone}
                   onViewTeam={viewTeam}
                   onAddToList={addToList}
+                  onRemoveFromList={removeFromList}
                 />
               </div>
             </CardContent>
@@ -254,4 +281,3 @@ const People = () => {
 };
 
 export default People;
-
