@@ -73,9 +73,9 @@ const CrmSidebar = () => {
                   <SidebarMenuSubItem>
                     <SidebarMenuSubButton 
                       asChild 
-                      isActive={location.pathname === "/database/teams"}
+                      isActive={location.pathname === "/crm/teams"}
                     >
-                      <Link to="/database/teams">
+                      <Link to="/crm/teams">
                         <Users className="h-4 w-4 mr-2" />
                         Teams
                       </Link>
@@ -84,9 +84,9 @@ const CrmSidebar = () => {
                   <SidebarMenuSubItem>
                     <SidebarMenuSubButton 
                       asChild 
-                      isActive={location.pathname === "/database/people"}
+                      isActive={location.pathname === "/crm/people"}
                     >
-                      <Link to="/database/people">
+                      <Link to="/crm/people">
                         <User className="h-4 w-4 mr-2" />
                         People
                       </Link>
