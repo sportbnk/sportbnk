@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
@@ -73,9 +72,9 @@ const CrmSidebar = () => {
                   <SidebarMenuSubItem>
                     <SidebarMenuSubButton 
                       asChild 
-                      isActive={location.pathname === "/crm/database"}
+                      isActive={location.pathname === "/database" || location.pathname === "/crm/database"}
                     >
-                      <Link to="/crm/database">
+                      <Link to="/database">
                         <Users className="h-4 w-4 mr-2" />
                         Database
                       </Link>

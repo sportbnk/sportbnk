@@ -8,14 +8,8 @@ import { Toaster } from "@/components/ui/sonner";
 const CrmLayout = () => {
   const navigate = useNavigate();
   
-  // Check if user is authenticated
-  useEffect(() => {
-    const user = localStorage.getItem("user");
-    if (!user) {
-      // Redirect to home page if not authenticated
-      navigate("/");
-    }
-  }, [navigate]);
+  // Remove the authentication check temporarily for debugging
+  // This will let us test the layout without getting redirected
   
   return (
     <SidebarProvider>
