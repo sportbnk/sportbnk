@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -20,6 +21,26 @@ import FreeTrial from "./pages/FreeTrial";
 import Discover from "./pages/products/Discover";
 import Boost from "./pages/products/Boost";
 import Recruit from "./pages/products/Recruit";
+
+// Company sub-pages
+import About from "./pages/company/About";
+import Careers from "./pages/company/Careers";
+import PartnerProgram from "./pages/company/PartnerProgram";
+import LatestNews from "./pages/company/LatestNews";
+
+// Resources sub-pages
+import Startups from "./pages/resources/Startups";
+import Articles from "./pages/resources/Articles";
+import Community from "./pages/resources/Community";
+import Webinars from "./pages/resources/Webinars";
+import Podcasts from "./pages/resources/Podcasts";
+import CaseStudies from "./pages/resources/CaseStudies";
+import Reviews from "./pages/resources/Reviews";
+import HelpCenter from "./pages/resources/HelpCenter";
+
+// Legal pages
+import Privacy from "./pages/legal/Privacy";
+import Terms from "./pages/legal/Terms";
 
 const queryClient = new QueryClient();
 
