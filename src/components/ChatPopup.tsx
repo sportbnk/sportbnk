@@ -1,12 +1,13 @@
 
 import { useState, useEffect } from 'react';
-import { MessageCircle, X, Send } from 'lucide-react';
+import { MessageCircle, X, Send, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { Input } from '@/components/ui/input';
+import { Link } from 'react-router-dom';
 
 const ChatPopup = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -57,7 +58,7 @@ const ChatPopup = () => {
                     alt="SportBnk Logo" 
                     className="h-6 w-auto" 
                   />
-                  <span className="font-semibold text-sm">Jared from SportBnk</span>
+                  <span className="font-semibold text-base">Jared from SportBnk</span>
                 </div>
                 <div className="flex gap-2">
                   <Button variant="ghost" size="icon" className="h-6 w-6" onClick={handleCloseInitialPopup}>
@@ -71,9 +72,15 @@ const ChatPopup = () => {
                   Would love to chat about how we can help your organization!
                 </p>
               </CardContent>
-              <CardFooter className="p-3 pt-0">
-                <Button size="sm" className="w-full bg-sportbnk-green hover:bg-sportbnk-green/90" onClick={handleOpenChat}>
+              <CardFooter className="p-3 pt-0 flex gap-2">
+                <Button size="sm" className="flex-1 bg-sportbnk-green hover:bg-sportbnk-green/90" onClick={handleOpenChat}>
                   Get in touch
+                </Button>
+                <Button size="sm" className="flex-1 bg-sportbnk-navy hover:bg-sportbnk-navy/90" asChild>
+                  <Link to="/book-demo" className="flex items-center justify-center gap-1">
+                    <Calendar className="h-4 w-4" />
+                    <span>Book a meeting</span>
+                  </Link>
                 </Button>
               </CardFooter>
             </Card>
@@ -145,7 +152,7 @@ const ChatPopup = () => {
                   alt="SportBnk Logo" 
                   className="h-6 w-auto" 
                 />
-                <span className="font-semibold text-sm">Jared from SportBnk</span>
+                <span className="font-semibold text-base">Jared from SportBnk</span>
               </div>
               <Button variant="ghost" size="icon" className="h-6 w-6" onClick={handleCloseInitialPopup}>
                 <X className="h-4 w-4" />
@@ -157,9 +164,15 @@ const ChatPopup = () => {
                 Would love to chat about how we can help your organization!
               </p>
             </CardContent>
-            <CardFooter className="p-3 pt-0">
+            <CardFooter className="p-3 pt-0 flex flex-col gap-2">
               <Button size="sm" className="w-full bg-sportbnk-green hover:bg-sportbnk-green/90" onClick={handleOpenChat}>
                 Get in touch
+              </Button>
+              <Button size="sm" className="w-full bg-sportbnk-navy hover:bg-sportbnk-navy/90" asChild>
+                <Link to="/book-demo" className="flex items-center justify-center gap-1">
+                  <Calendar className="h-4 w-4" />
+                  <span>Book a meeting</span>
+                </Link>
               </Button>
             </CardFooter>
           </Card>
