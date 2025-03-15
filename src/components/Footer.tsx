@@ -6,7 +6,7 @@ const Footer = () => {
   return (
     <footer className="bg-white py-12 border-t">
       <div className="container mx-auto px-4 md:px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
           <div>
             <Link to="/" className="flex items-center mb-4">
               <img 
@@ -62,7 +62,15 @@ const Footer = () => {
               </button>
             </form>
             
-            <div className="mt-6">
+            <div className="mt-4">
+              <h4 className="font-semibold text-sportbnk-navy mb-2">Legal</h4>
+              <ul className="space-y-1 mb-4">
+                <li><Link to="/legal/terms" className="text-gray-600 hover:text-sportbnk-green transition-colors text-sm">Terms & Conditions</Link></li>
+                <li><Link to="/legal/privacy" className="text-gray-600 hover:text-sportbnk-green transition-colors text-sm">Privacy Policy</Link></li>
+              </ul>
+            </div>
+            
+            <div className="mt-4">
               <h4 className="font-semibold text-sportbnk-navy mb-2">Social</h4>
               <div className="flex space-x-4">
                 <a href="#" className="text-gray-600 hover:text-sportbnk-green transition-colors">
