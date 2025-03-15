@@ -2,8 +2,8 @@
 import { Helmet } from 'react-helmet-async';
 import PageLayout from "@/components/PageLayout";
 import Hero from "@/components/Hero";
-import Features from "@/components/Features";
 import Solutions from "@/components/Solutions";
+import Benefits from "@/components/Benefits";
 import TechnologyStack from "@/components/TechnologyStack";
 import Reviews from "@/components/Reviews";
 import EnhancedCTA from "@/components/EnhancedCTA";
@@ -18,7 +18,7 @@ const Index = () => {
       </Helmet>
       <Hero />
       <Solutions />
-      <Features />
+      <Benefits />
       <TechnologyStack />
       <Reviews />
       <EnhancedCTA />
