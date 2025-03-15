@@ -13,7 +13,9 @@ const PricingCard = ({
   features,
   buttonText = "Get Started",
   buttonLink = "/book-demo",
-  highlighted = false
+  highlighted = false,
+  isFree = false,
+  isEnterprise = false
 }: { 
   title: string;
   price: string;
@@ -23,6 +25,8 @@ const PricingCard = ({
   buttonText?: string;
   buttonLink?: string;
   highlighted?: boolean;
+  isFree?: boolean;
+  isEnterprise?: boolean;
 }) => (
   <Card className={`border ${highlighted ? 'border-sportbnk-green border-2' : 'border-gray-200'} shadow-lg max-w-md mx-auto`}>
     {highlighted && (
@@ -34,7 +38,7 @@ const PricingCard = ({
       <CardTitle className="text-2xl font-bold text-sportbnk-navy">{title}</CardTitle>
       <div className="mt-4">
         <span className="text-4xl font-bold text-sportbnk-navy">{price}</span>
-        <span className="text-gray-500 ml-2">{period}</span>
+        {!isEnterprise && <span className="text-gray-500 ml-2">{period}</span>}
       </div>
       <p className="text-gray-600 mt-4">{description}</p>
     </CardHeader>
@@ -52,7 +56,12 @@ const PricingCard = ({
     </CardContent>
     <CardFooter className="pb-6">
       <Button 
-        className={`w-full ${highlighted ? 'bg-sportbnk-green hover:bg-sportbnk-green/90' : 'bg-sportbnk-navy hover:bg-sportbnk-navy/90'} text-white`}
+        className={`w-full ${
+          highlighted ? 'bg-sportbnk-green hover:bg-sportbnk-green/90' : 
+          isFree ? 'bg-sportbnk-navy hover:bg-sportbnk-navy/90' :
+          isEnterprise ? 'bg-sportbnk-darkBlue hover:bg-sportbnk-darkBlue/90' :
+          'bg-sportbnk-navy hover:bg-sportbnk-navy/90'
+        } text-white`}
         asChild
       >
         <Link to={buttonLink}>{buttonText}</Link>
@@ -62,6 +71,16 @@ const PricingCard = ({
 );
 
 const Pricing = () => {
+  const freeTrialFeatures = [
+    "Access to basic Discover tool filters",
+    "Limited data enrichment with Boost",
+    "5 searches per day",
+    "Export up to 50 contacts per month",
+    "Email support",
+    "No credit card required",
+    "14-day access",
+  ];
+
   const standardFeatures = [
     "Access to Discover tool with all filters",
     "Access to Boost for data enrichment",
@@ -83,6 +102,18 @@ const Pricing = () => {
     "Custom training sessions",
     "Team collaboration tools"
   ];
+
+  const enterpriseFeatures = [
+    "All Pro features",
+    "Unlimited data exports",
+    "Custom data models and integrations",
+    "Advanced security features",
+    "Dedicated support team",
+    "SLA guarantees",
+    "Customized training program",
+    "White-labeling options",
+    "Priority feature development"
+  ];
   
   return (
     <PageLayout pageTitle="Pricing">
@@ -97,7 +128,16 @@ const Pricing = () => {
             </p>
           </div>
           
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
+            <PricingCard 
+              title="Free Trial"
+              price="$0"
+              description="Try our platform with limited features at no cost"
+              features={freeTrialFeatures}
+              buttonText="Start Free Trial"
+              isFree={true}
+            />
+            
             <PricingCard 
               title="Standard Plan"
               price="$49"
@@ -113,6 +153,16 @@ const Pricing = () => {
               features={proFeatures}
               buttonText="Start 7-Day Free Trial"
               highlighted={true}
+            />
+
+            <PricingCard 
+              title="Enterprise"
+              price="Custom"
+              period=""
+              description="Tailored solutions for large organizations with custom requirements"
+              features={enterpriseFeatures}
+              buttonText="Contact Sales"
+              isEnterprise={true}
             />
           </div>
         </div>
