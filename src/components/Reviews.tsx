@@ -1,4 +1,3 @@
-
 import { useEffect, useState, useRef } from 'react';
 import { ChevronLeft, ChevronRight, Quote } from 'lucide-react';
 
@@ -22,10 +21,10 @@ const reviews: Review[] = [
   },
   {
     id: 2,
-    name: "Robert Williams",
-    position: "Head of Digital Strategy",
-    content: "The AI-powered predictions have been incredibly accurate, giving us a competitive edge in the market. Would highly recommend SportBNK to any sports business looking to level up.",
-    rating: 4,
+    name: "Matthew Price",
+    position: "Founder of Filtr Sports",
+    content: "SportBNK is the best app I have used with trying to grow my company and access direct links to clubs I am looking to target.",
+    rating: 5,
     image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=150&h=150&q=80",
   },
   {
@@ -110,7 +109,6 @@ const Reviews = () => {
     );
   };
 
-  // Get visible reviews based on current index
   const visibleReviews = reviews.slice(currentIndex, currentIndex + maxVisibleReviews);
 
   return (
