@@ -1,6 +1,7 @@
 
 import React, { useState } from "react";
 import ContactsView from "@/components/database/ContactsView";
+import ContactsFilters from "@/components/database/ContactsFilters";
 import { toast } from "sonner";
 
 // Mock data for testing
@@ -49,6 +50,17 @@ const ContactDatabase = () => {
   const [revealedEmails, setRevealedEmails] = useState<Record<string, boolean>>({});
   const [revealedPhones, setRevealedPhones] = useState<Record<string, boolean>>({});
   const [savedList, setSavedList] = useState<Array<typeof dummyData[0]>>([]);
+  
+  // State for filters
+  const [activeFilters, setActiveFilters] = useState({
+    position: "all",
+    team: "all",
+    sport: "all",
+    country: "all",
+  });
+  
+  // State for showing/hiding filters on mobile
+  const [showFilters, setShowFilters] = useState(false);
 
   // Handler for revealing emails
   const handleRevealEmail = (email: string) => {
@@ -94,22 +106,67 @@ const ContactDatabase = () => {
     toast.info("Contact removed from your list.");
   };
 
+  // Handler for filter changes
+  const handleFilterChange = (filters: any) => {
+    setActiveFilters(filters);
+  };
+
   // Ensure dummyData is an array before passing it
   const contactsData = Array.isArray(dummyData) ? dummyData : [];
 
+  // Apply filters to the data
+  const filteredData = contactsData.filter(contact => {
+    // Filter by position
+    if (activeFilters.position !== "all" && contact.position !== activeFilters.position) {
+      return false;
+    }
+    
+    // Filter by team
+    if (activeFilters.team !== "all" && contact.team !== activeFilters.team) {
+      return false;
+    }
+    
+    // Filter by sport
+    if (activeFilters.sport !== "all" && contact.sport !== activeFilters.sport) {
+      return false;
+    }
+    
+    // If all filters passed, include this contact
+    return true;
+  });
+
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-bold">Teams & Contacts</h1>
-      <ContactsView 
-        data={contactsData}
-        revealedEmails={revealedEmails}
-        revealedPhones={revealedPhones}
-        onRevealEmail={handleRevealEmail}
-        onRevealPhone={handleRevealPhone}
-        onViewTeam={handleViewTeam}
-        onAddToList={handleAddToList}
-        onRemoveFromList={handleRemoveFromList}
-      />
+      <div className="flex justify-between items-center">
+        <h1 className="text-2xl font-bold">Teams & Contacts</h1>
+        <button 
+          onClick={() => setShowFilters(!showFilters)}
+          className="md:hidden px-3 py-1 text-sm bg-primary text-primary-foreground rounded-md"
+        >
+          {showFilters ? "Hide Filters" : "Show Filters"}
+        </button>
+      </div>
+      
+      <div className="flex flex-col md:flex-row gap-4">
+        {/* Filters sidebar - hidden on mobile by default */}
+        <div className={`${showFilters ? 'block' : 'hidden'} md:block md:w-72`}>
+          <ContactsFilters onFilterChange={handleFilterChange} />
+        </div>
+        
+        {/* Main content */}
+        <div className="flex-1">
+          <ContactsView 
+            data={filteredData}
+            revealedEmails={revealedEmails}
+            revealedPhones={revealedPhones}
+            onRevealEmail={handleRevealEmail}
+            onRevealPhone={handleRevealPhone}
+            onViewTeam={handleViewTeam}
+            onAddToList={handleAddToList}
+            onRemoveFromList={handleRemoveFromList}
+          />
+        </div>
+      </div>
     </div>
   );
 };
