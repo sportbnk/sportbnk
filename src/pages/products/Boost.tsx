@@ -5,7 +5,11 @@ import { Rocket } from "lucide-react";
 
 const Boost = () => {
   return (
-    <PageLayout pageTitle="Boost">
+    <PageLayout 
+      pageTitle="Boost Sports Data"
+      metaDescription="Enhance your existing customer databases with SportsBnk Boost. Update outdated information and fill gaps in your sports contact data for improved outreach success."
+      metaKeywords="enhance sports data, update sports contacts, sports data enrichment, complete customer profiles, sports database enhancement, data appending service, sports industry database"
+    >
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4 md:px-6">
           <div className="grid md:grid-cols-2 gap-12 items-center">

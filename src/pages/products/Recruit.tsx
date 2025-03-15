@@ -5,7 +5,11 @@ import { Users } from "lucide-react";
 
 const Recruit = () => {
   return (
-    <PageLayout pageTitle="Recruit">
+    <PageLayout 
+      pageTitle="Recruit Sports Industry Talent"
+      metaDescription="Find top talent in the sports industry with SportsBnk Recruit. Our specialized hiring platform connects sports organizations with qualified candidates who understand your industry needs."
+      metaKeywords="sports recruiting platform, sports industry hiring, sports talent acquisition, sports job board, hire sports professionals, sports careers, sports recruitment solution"
+    >
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4 md:px-6">
           <div className="grid md:grid-cols-2 gap-12 items-center">

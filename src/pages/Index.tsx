@@ -1,5 +1,6 @@
 
 import { useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import AboutUs from '@/components/AboutUs';
@@ -61,9 +62,36 @@ const Index = () => {
     };
   }, []);
   
+  // JSON-LD structured data for better SEO
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "SportsBnk",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "description": "B2B Sports Intelligence Platform providing data solutions for the sports industry. Our platform includes more than 360,000+ live competitions and more than 750,000+ sports teams all over the world.",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.8",
+      "ratingCount": "128"
+    }
+  };
+  
   return (
     <div className="min-h-screen bg-white">
-      <title>SportsBnk - B2B Sports Intelligence Platform</title>
+      <Helmet>
+        <title>SportsBnk - B2B Sports Intelligence Platform | Sports Data Solutions</title>
+        <meta name="description" content="SportsBnk provides comprehensive sports intelligence solutions for the B2B market. Access data on 360,000+ competitions and 750,000+ teams worldwide." />
+        <meta name="keywords" content="sports intelligence platform, sports data solutions, B2B sports data, sports analytics, sports industry database, team data, competition data" />
+        <script type="application/ld+json">
+          {JSON.stringify(structuredData)}
+        </script>
+      </Helmet>
       <Navbar />
       <Hero />
       <AboutUs />

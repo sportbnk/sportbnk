@@ -5,7 +5,11 @@ import { Search } from "lucide-react";
 
 const Discover = () => {
   return (
-    <PageLayout pageTitle="Discover">
+    <PageLayout 
+      pageTitle="Discover Sports Contacts"
+      metaDescription="Build targeted lists of sports organizations, teams and professionals with SportsBnk Discover. Find the right decision-makers quickly with our powerful sports database."
+      metaKeywords="sports contacts database, find sports decision makers, sports organizations list, sports contact search, sport industry contacts, sports data discovery, sports professional database"
+    >
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4 md:px-6">
           <div className="grid md:grid-cols-2 gap-12 items-center">

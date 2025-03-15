@@ -4,7 +4,11 @@ import { Shield } from "lucide-react";
 
 const Privacy = () => {
   return (
-    <PageLayout pageTitle="Privacy Policy">
+    <PageLayout 
+      pageTitle="Privacy Policy"
+      metaDescription="SportsBnk's Privacy Policy outlines how we collect, use, and protect your data. Learn about our commitment to data security and privacy in the sports intelligence platform."
+      metaKeywords="sports data privacy, GDPR compliance, CCPA compliance, sports data security, data protection policy, sports intelligence privacy"
+    >
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4 md:px-6">
           <div className="max-w-3xl mx-auto mb-16">
