@@ -16,6 +16,7 @@ import Pricing from "./pages/Pricing";
 import BookDemo from "./pages/BookDemo";
 import ContactUs from "./pages/ContactUs";
 import FreeTrial from "./pages/FreeTrial";
+import ContactDatabase from "./pages/ContactDatabase";
 
 // Product pages
 import Discover from "./pages/products/Discover";
@@ -65,6 +66,7 @@ const App = () => (
             <Route path="/book-demo" element={<BookDemo />} />
             <Route path="/contact" element={<ContactUs />} />
             <Route path="/free-trial" element={<FreeTrial />} />
+            <Route path="/database" element={<ContactDatabase />} />
             
             {/* Product sub-pages */}
             <Route path="/products/discover" element={<Discover />} />
