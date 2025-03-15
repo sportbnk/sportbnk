@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Filter, X } from "lucide-react";
@@ -13,9 +12,9 @@ interface DatabaseFiltersProps {
 
 const DatabaseFilters = ({ onFilterChange }: DatabaseFiltersProps) => {
   const [filters, setFilters] = useState({
-    sport: "",
-    level: "",
-    country: "",
+    sport: "all",
+    level: "all",
+    country: "all",
     revenue: "",
     employees: ""
   });
@@ -28,9 +27,9 @@ const DatabaseFilters = ({ onFilterChange }: DatabaseFiltersProps) => {
 
   const clearFilters = () => {
     const resetFilters = {
-      sport: "",
-      level: "",
-      country: "",
+      sport: "all",
+      level: "all",
+      country: "all",
       revenue: "",
       employees: ""
     };
@@ -68,7 +67,7 @@ const DatabaseFilters = ({ onFilterChange }: DatabaseFiltersProps) => {
               <SelectValue placeholder="All sports" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All sports</SelectItem>
+              <SelectItem value="all">All sports</SelectItem>
               <SelectItem value="Football">Football</SelectItem>
               <SelectItem value="Basketball">Basketball</SelectItem>
               <SelectItem value="Baseball">Baseball</SelectItem>
@@ -89,7 +88,7 @@ const DatabaseFilters = ({ onFilterChange }: DatabaseFiltersProps) => {
               <SelectValue placeholder="All levels" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All levels</SelectItem>
+              <SelectItem value="all">All levels</SelectItem>
               <SelectItem value="Professional">Professional</SelectItem>
               <SelectItem value="Amateur">Amateur</SelectItem>
             </SelectContent>
@@ -106,7 +105,7 @@ const DatabaseFilters = ({ onFilterChange }: DatabaseFiltersProps) => {
               <SelectValue placeholder="All countries" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All countries</SelectItem>
+              <SelectItem value="all">All countries</SelectItem>
               <SelectItem value="United Kingdom">United Kingdom</SelectItem>
               <SelectItem value="USA">USA</SelectItem>
               <SelectItem value="Australia">Australia</SelectItem>
@@ -127,7 +126,7 @@ const DatabaseFilters = ({ onFilterChange }: DatabaseFiltersProps) => {
               <SelectValue placeholder="All revenues" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All revenues</SelectItem>
+              <SelectItem value="all">All revenues</SelectItem>
               <SelectItem value="less1m">Less than $1M</SelectItem>
               <SelectItem value="1m-10m">$1M - $10M</SelectItem>
               <SelectItem value="10m-50m">$10M - $50M</SelectItem>
@@ -146,7 +145,7 @@ const DatabaseFilters = ({ onFilterChange }: DatabaseFiltersProps) => {
               <SelectValue placeholder="All sizes" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All sizes</SelectItem>
+              <SelectItem value="all">All sizes</SelectItem>
               <SelectItem value="less50">Less than 50</SelectItem>
               <SelectItem value="50-200">50 - 200</SelectItem>
               <SelectItem value="200-1000">200 - 1000</SelectItem>
