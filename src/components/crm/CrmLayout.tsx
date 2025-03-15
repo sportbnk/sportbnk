@@ -1,11 +1,22 @@
 
-import React from "react";
-import { Outlet } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import CrmSidebar from "./CrmSidebar";
 import { Toaster } from "@/components/ui/sonner";
 
 const CrmLayout = () => {
+  const navigate = useNavigate();
+  
+  // Check if user is authenticated
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    if (!user) {
+      // Redirect to home page if not authenticated
+      navigate("/");
+    }
+  }, [navigate]);
+  
   return (
     <SidebarProvider>
       <div className="flex min-h-screen w-full bg-muted/20">

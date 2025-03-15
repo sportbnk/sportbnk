@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { 
   DropdownMenu, 
@@ -14,17 +14,40 @@ import { LogOut, Settings, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 interface AccountBadgeProps {
-  name: string;
-  email: string;
+  name?: string;
+  email?: string;
   avatarUrl?: string;
 }
 
-const AccountBadge = ({ name, email, avatarUrl }: AccountBadgeProps) => {
+const AccountBadge = ({ name: propName, email: propEmail, avatarUrl }: AccountBadgeProps) => {
   const navigate = useNavigate();
+  const [userData, setUserData] = useState<{name: string, email: string} | null>(null);
   
-  // For demo purposes, let's simulate a logout
+  useEffect(() => {
+    // Get user data from localStorage
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        setUserData({
+          name: parsedUser.name || "User",
+          email: parsedUser.email || "user@example.com"
+        });
+      } catch (e) {
+        console.error("Failed to parse user data", e);
+      }
+    }
+  }, []);
+  
+  // Use props if provided, otherwise use data from localStorage
+  const name = propName || userData?.name || "User";
+  const email = propEmail || userData?.email || "user@example.com";
+  
+  // Handle logout
   const handleLogout = () => {
-    // In a real app, this would handle proper logout
+    // Clear user data from localStorage
+    localStorage.removeItem("user");
+    // Redirect to home page
     navigate("/");
   };
   

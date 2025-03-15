@@ -4,7 +4,7 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Lock, Mail, LogIn } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address" }),
@@ -41,6 +42,7 @@ interface SignInDialogProps {
 export function SignInDialog({ className, triggerClassName }: SignInDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -56,11 +58,25 @@ export function SignInDialog({ className, triggerClassName }: SignInDialogProps)
     // This would connect to your AWS backend in the future
     console.log("Sign in attempt with:", values);
     
-    // Simulate API call
+    // Simulate API call - Demo login for free trial access
     setTimeout(() => {
+      // Store demo user data in localStorage
+      localStorage.setItem("user", JSON.stringify({
+        name: "Demo User",
+        email: values.email,
+        isAuthenticated: true,
+        isFreeTrial: true,
+      }));
+      
       setIsLoading(false);
-      // We'll just close the dialog for now since we're not actually authenticating
       setIsOpen(false);
+      
+      toast.success("Successfully signed in", {
+        description: "Welcome back to SportsBnk!",
+      });
+      
+      // Redirect to CRM dashboard
+      navigate("/crm/people");
     }, 1500);
   }
 

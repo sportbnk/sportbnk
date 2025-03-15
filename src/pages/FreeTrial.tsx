@@ -4,7 +4,7 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Mail, Lock, User, ArrowRight } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import PageLayout from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,7 +18,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 
 // Form schema for validation
 const formSchema = z.object({
@@ -29,7 +29,7 @@ const formSchema = z.object({
 
 const FreeTrial = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const { toast } = useToast();
+  const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -43,19 +43,28 @@ const FreeTrial = () => {
   function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     
-    // This will connect to AWS Cognito/Amplify in the future
+    // This would connect to AWS Cognito/Amplify in the future
     console.log("Free trial signup:", values);
     
-    // Simulate API call to AWS
+    // Simulate API call to backend
     setTimeout(() => {
       setIsLoading(false);
-      toast({
-        title: "Free trial activated",
+      
+      // Store user data in localStorage for demo purposes
+      localStorage.setItem("user", JSON.stringify({
+        name: values.fullName,
+        email: values.email,
+        isAuthenticated: true,
+        isFreeTrial: true,
+      }));
+      
+      toast.success("Free trial activated", {
         description: "Your 14-day free trial has been activated. Welcome to SportsBnk!",
         duration: 5000,
       });
       
-      // In the future, this would redirect to the app dashboard
+      // Redirect to the CRM dashboard
+      navigate("/crm/people");
     }, 1500);
   }
 
