@@ -59,13 +59,15 @@ const Hero = () => {
               </Button>
             </div>
             
-            {/* Trust indicators */}
+            {/* Trust indicators - replaced with just Ludimos logo */}
             <div className={`mt-8 transition-all duration-700 delay-400 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
               <p className="text-sm text-gray-500 mb-4">Trusted by 500+ sports organizations worldwide</p>
-              <div className="flex flex-wrap gap-6 items-center">
-                <img src="/lovable-uploads/1d95a70d-8230-4647-9c16-d5c94a124864.png" alt="Client Logo" className="h-10 object-contain opacity-80 hover:opacity-100 transition-opacity" />
-                <img src="/lovable-uploads/c5351de4-d54d-424f-99a5-b07ddc3fcc40.png" alt="Client Logo" className="h-10 object-contain opacity-80 hover:opacity-100 transition-opacity" />
-                <img src="/lovable-uploads/c506ab85-1e88-47f8-941f-cb182443bf55.png" alt="Client Logo" className="h-10 object-contain opacity-80 hover:opacity-100 transition-opacity" />
+              <div className="flex items-center">
+                <img 
+                  src="/lovable-uploads/80c86358-6bad-4ced-a0dd-9c22a354c69c.png" 
+                  alt="Ludimos Logo" 
+                  className="h-12 object-contain hover:opacity-90 transition-opacity" 
+                />
               </div>
             </div>
           </div>
