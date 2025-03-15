@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Download, Plus, Users } from "lucide-react";
+import { Download } from "lucide-react";
 import ContactsFilters from "@/components/database/ContactsFilters";
 import ContactsView from "@/components/database/ContactsView";
 
@@ -151,16 +151,6 @@ const People = () => {
         <div className="flex gap-2">
           <Button variant="outline" className="flex items-center gap-1">
             <Download className="h-4 w-4" /> Export
-          </Button>
-          <Button 
-            className="bg-sportbnk-green hover:bg-sportbnk-green/90 flex items-center gap-1"
-          >
-            <Users className="h-4 w-4" /> Team
-          </Button>
-          <Button 
-            className="bg-sportbnk-navy hover:bg-sportbnk-navy/90 flex items-center gap-1"
-          >
-            <Plus className="h-4 w-4" /> Add Person
           </Button>
         </div>
       </div>

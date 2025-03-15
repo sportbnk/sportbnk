@@ -1,8 +1,7 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Download, Plus } from "lucide-react";
+import { Download } from "lucide-react";
 import ContactsFilters from "@/components/database/ContactsFilters";
 import ContactsTable from "@/components/database/ContactsTable";
 
@@ -172,9 +171,6 @@ const Teams = () => {
           <Button variant="outline" className="flex items-center gap-1">
             <Download className="h-4 w-4" /> Export
           </Button>
-          <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 flex items-center gap-1">
-            <Plus className="h-4 w-4" /> Add Team
-          </Button>
         </div>
       </div>
       
@@ -189,17 +185,6 @@ const Teams = () => {
             </CardContent>
           </Card>
           
-          <Card className="shadow-md mb-4">
-            <CardHeader className="pb-2 pt-3 px-3">
-              <CardTitle className="text-base">Upgrade</CardTitle>
-            </CardHeader>
-            <CardContent className="px-3 py-2">
-              <Button className="w-full bg-sportbnk-navy hover:bg-sportbnk-navy/90 text-sm">
-                Get Pro Plan
-              </Button>
-            </CardContent>
-          </Card>
-          
           <Card className="shadow-md">
             <CardHeader className="pb-2 pt-3 px-3">
               <CardTitle className="text-base">Credits</CardTitle>
@@ -208,7 +193,7 @@ const Teams = () => {
               <p className="text-2xl font-bold text-sportbnk-green">{credits}</p>
               <p className="text-xs text-muted-foreground">Credits remaining</p>
               <Button className="w-full mt-3 bg-sportbnk-navy hover:bg-sportbnk-navy/90 text-sm">
-                Buy More Credits
+                Upgrade
               </Button>
             </CardContent>
           </Card>
