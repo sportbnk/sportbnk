@@ -1,11 +1,25 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import { toast } from "@/hooks/use-toast";
 
 const NewsletterBanner = () => {
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
   const [email, setEmail] = useState('');
+
+  useEffect(() => {
+    // Check if banner has been closed or subscribed before
+    const isClosed = localStorage.getItem('newsletterBannerClosed') === 'true';
+    const isSubscribed = localStorage.getItem('newsletterBannerSubscribed') === 'true';
+    
+    if (!isClosed && !isSubscribed) {
+      // Small delay to ensure navbar is fully loaded
+      const timer = setTimeout(() => {
+        setIsVisible(true);
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, []);
 
   const handleClose = () => {
     setIsVisible(false);
@@ -39,7 +53,7 @@ const NewsletterBanner = () => {
   if (!isVisible) return null;
 
   return (
-    <div className="bg-sportbnk-green text-white py-3 relative">
+    <div className="bg-sportbnk-green text-white py-3 relative mt-16">
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex flex-col md:flex-row items-center justify-between">
           <div className="mb-3 md:mb-0 text-center md:text-left">
