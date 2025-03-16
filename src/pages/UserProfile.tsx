@@ -203,7 +203,7 @@ const UserProfile = () => {
   if (loading) {
     return (
       <PageLayout>
-        <div className="container mx-auto py-8 max-w-5xl">
+        <div className="container mx-auto py-8 pt-32 max-w-5xl">
           <div className="flex justify-center items-center h-64">
             <p>Loading profile...</p>
           </div>
@@ -215,7 +215,7 @@ const UserProfile = () => {
   if (!userData) {
     return (
       <PageLayout>
-        <div className="container mx-auto py-8 max-w-5xl">
+        <div className="container mx-auto py-8 pt-32 max-w-5xl">
           <div className="flex justify-center items-center h-64">
             <p>Unable to load profile. Please sign in.</p>
           </div>
@@ -229,7 +229,7 @@ const UserProfile = () => {
       <Helmet>
         <title>User Profile | SportsBnk</title>
       </Helmet>
-      <div className="container mx-auto py-8 max-w-5xl">
+      <div className="container mx-auto py-8 pt-32 max-w-5xl">
         <ProfileHeader 
           name={userData.name} 
           email={userData.email} 

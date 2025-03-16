@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 
 const Emails = () => {
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 pt-6">
       <h1 className="text-2xl font-bold">Email Tracking</h1>
       <Card>
         <CardHeader className="pb-2">

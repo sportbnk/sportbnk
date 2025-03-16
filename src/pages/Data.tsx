@@ -30,7 +30,7 @@ const Data = () => {
       metaDescription="Access comprehensive sports industry data with SportsBnk. Our database includes 750,000+ teams and 360,000+ competitions worldwide with verified and GDPR compliant information."
       metaKeywords="sports industry data, sports database, sports teams database, sports competitions data, GDPR compliant sports data, sports data verification, global sports coverage"
     >
-      <section className="py-16 md:py-24">
+      <section className="py-16 md:py-24 pt-8">
         <div className="container mx-auto px-4 md:px-6">
           <div className="max-w-4xl mx-auto mb-16">
             <h2 className="text-3xl font-bold text-sportbnk-navy mb-6 text-center">

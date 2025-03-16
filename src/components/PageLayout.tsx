@@ -173,7 +173,7 @@ const PageLayout = ({
       <Navbar />
       <main className="flex-grow">
         {pageTitle && (
-          <div className="bg-sportbnk-navy text-white py-16 mt-6">
+          <div className="bg-sportbnk-navy text-white py-16 pt-32 mt-6">
             <div className="container mx-auto px-4 md:px-6">
               <h1 className="text-4xl md:text-5xl font-bold">{pageTitle}</h1>
             </div>

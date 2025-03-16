@@ -10,7 +10,7 @@ const Cookies = () => {
         <meta name="description" content="Learn about how Sportbnk uses cookies and similar technologies." />
       </Helmet>
 
-      <div className="container mx-auto px-4 py-16 max-w-4xl">
+      <div className="container mx-auto px-4 py-16 pt-32 max-w-4xl">
         <h1 className="text-3xl font-bold text-sportbnk-navy mb-8">Cookies Policy</h1>
         
         <div className="prose prose-lg max-w-none">
