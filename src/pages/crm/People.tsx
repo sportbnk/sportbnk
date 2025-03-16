@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -186,14 +187,15 @@ const People = () => {
   
   const viewTeam = (teamId: number) => {
     console.log("View team:", teamId);
-    // In a real application, you would navigate to the team detail page
+    navigate(`/crm/teams/${teamId}`);
   };
   
-  const addToList = (contact: any) => {
+  const addToList = (contact: any, listId: number, listName: string) => {
     if (!savedList.some(item => item.id === contact.id)) {
       setSavedList(prev => [...prev, contact]);
-      navigate("/database/lists");
-      toast.success(`${contact.name} added to your list! Redirecting to Lists page.`);
+      toast.success(`${contact.name} added to ${listName}`);
+    } else {
+      toast.info(`${contact.name} is already in a list`);
     }
   };
   

@@ -14,6 +14,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Link } from "react-router-dom";
+import ListSelectionPopover from "./ListSelectionPopover";
 
 interface Contact {
   id: number;
@@ -37,7 +38,7 @@ interface ContactsViewProps {
   onRevealEmail: (email: string) => void;
   onRevealPhone: (phone: string) => void;
   onViewTeam: (teamId: number) => void;
-  onAddToList?: (contact: Contact) => void;
+  onAddToList?: (contact: Contact, listId: number, listName: string) => void;
   onRemoveFromList?: (contactId: number) => void;
   isSavedList?: boolean;
 }
@@ -249,21 +250,22 @@ const ContactsView = ({
                           <Trash className="h-4 w-4" />
                         </Button>
                       ) : (
-                        <Button 
-                          asChild={!onAddToList}
-                          size="sm" 
-                          variant="ghost" 
-                          onClick={() => onAddToList && onAddToList(contact)}
-                          className="text-sportbnk-green hover:text-sportbnk-green/90 p-0 h-auto"
-                        >
-                          {onAddToList ? (
-                            <Plus className="h-4 w-4" />
-                          ) : (
-                            <Link to="/database/lists" className="flex items-center">
+                        onAddToList ? (
+                          <ListSelectionPopover 
+                            contact={contact}
+                            onAddToList={onAddToList}
+                          />
+                        ) : (
+                          <Link to="/crm/lists">
+                            <Button 
+                              size="sm" 
+                              variant="ghost" 
+                              className="text-sportbnk-green hover:text-sportbnk-green/90 p-0 h-auto"
+                            >
                               <Plus className="h-4 w-4" />
-                            </Link>
-                          )}
-                        </Button>
+                            </Button>
+                          </Link>
+                        )
                       )}
                     </TableCell>
                   </TableRow>

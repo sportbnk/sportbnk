@@ -1,8 +1,6 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Download } from "lucide-react";
 import ContactsFilters from "@/components/database/ContactsFilters";
 import ContactsTable from "@/components/database/ContactsTable";
 import { useResponsiveContainer } from "@/hooks/use-responsive-container";
@@ -798,11 +796,6 @@ const Teams = () => {
     <div className="container mx-auto px-0">
       <div className="flex justify-between items-center mb-6 px-2">
         <h1 className="text-2xl font-bold text-sportbnk-navy">Teams Database</h1>
-        <div className="flex gap-2">
-          <Button variant="outline" className="flex items-center gap-1">
-            <Download className="h-4 w-4" /> Export
-          </Button>
-        </div>
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-6 gap-3">
