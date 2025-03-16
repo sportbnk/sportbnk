@@ -244,7 +244,17 @@ const UserProfile = () => {
           )}
           
           {activeTab === "company" && (
-            <CompanyInfo companyData={userData.company || {}} onUpdate={handleCompanyUpdate} />
+            <CompanyInfo 
+              companyData={userData.company || {
+                name: "",
+                position: "",
+                website: "",
+                size: "",
+                industry: "",
+                address: ""
+              }} 
+              onUpdate={handleCompanyUpdate} 
+            />
           )}
           
           {activeTab === "billing" && (
