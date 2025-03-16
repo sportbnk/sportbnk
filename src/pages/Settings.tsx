@@ -20,7 +20,7 @@ const Settings = () => {
       <Helmet>
         <title>Settings | SportsBnk</title>
       </Helmet>
-      <div className="container mx-auto px-4 py-12 max-w-5xl">
+      <div className="container mx-auto px-4 py-12 pt-24 max-w-5xl">
         <div className="mb-8">
           <h1 className="text-3xl font-bold">Settings</h1>
           <p className="text-muted-foreground mt-2">
