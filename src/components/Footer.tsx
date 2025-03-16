@@ -1,8 +1,29 @@
 
 import { Facebook, Twitter, Instagram, Linkedin, Cookie } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { toast } from "@/hooks/use-toast";
 
 const Footer = () => {
+  const [email, setEmail] = useState("");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (email) {
+      // Here you would normally send the email to your backend
+      // For now, we just show a toast notification
+      toast({
+        title: "Subscription Successful!",
+        description: "Thank you for subscribing to our newsletter.",
+        duration: 3000,
+      });
+      
+      // Reset the form
+      setEmail("");
+    }
+  };
+
   return (
     <footer className="bg-white py-12 border-t">
       <div className="container mx-auto px-4 md:px-6">
@@ -48,11 +69,14 @@ const Footer = () => {
           
           <div>
             <h3 className="font-semibold text-sportbnk-navy mb-4">Subscribe to Us</h3>
-            <form className="flex">
+            <form className="flex" onSubmit={handleSubmit}>
               <input 
                 type="email" 
                 placeholder="Your email" 
                 className="flex-1 px-4 py-2 rounded-l-md border border-gray-300 focus:outline-none focus:border-sportbnk-green"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
               />
               <button 
                 type="submit" 
