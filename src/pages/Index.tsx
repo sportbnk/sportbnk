@@ -1,6 +1,7 @@
 
 import { Helmet } from 'react-helmet-async';
 import PageLayout from "@/components/PageLayout";
+import NewsletterBanner from "@/components/NewsletterBanner";
 import Hero from "@/components/Hero";
 import Solutions from "@/components/Solutions";
 import Benefits from "@/components/Benefits";
@@ -16,6 +17,7 @@ const Index = () => {
         <title>SportBnk - B2B Sports Intelligence Platform</title>
         <meta name="description" content="The sports industry is to be an estimated $760 Billion market by 2026. SportBnk provides an intelligence platform for sports organizations to discover, boost, and recruit." />
       </Helmet>
+      <NewsletterBanner />
       <Hero />
       <Solutions />
       <Benefits />
