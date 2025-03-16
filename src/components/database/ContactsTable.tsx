@@ -200,9 +200,8 @@ const ContactsTable = ({ data, useCredits, onTeamSelect }: ContactsTableProps) =
                         <AvatarImage src={team.logo} alt={team.team} />
                         <AvatarFallback>{team.team.substring(0, 2)}</AvatarFallback>
                       </Avatar>
-                      <span className="font-medium text-blue-600 hover:underline flex items-center">
+                      <span className="font-medium text-blue-600 hover:underline">
                         {team.team}
-                        <span className="ml-1 text-xs text-blue-400">(view details)</span>
                       </span>
                     </div>
                   </TableCell>
