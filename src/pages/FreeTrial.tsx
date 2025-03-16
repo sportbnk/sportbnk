@@ -56,6 +56,31 @@ const FreeTrial = () => {
         email: values.email,
         isAuthenticated: true,
         isFreeTrial: true,
+        role: "Free Trial User",
+        company: {
+          name: "",
+          position: "",
+          website: "",
+          size: "",
+          industry: "",
+          address: ""
+        },
+        billing: {
+          plan: "Free Trial",
+          price: "$0/month",
+          nextBillingDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toLocaleDateString(),
+          paymentMethod: "None",
+          invoices: []
+        },
+        subscription: {
+          plan: "Free Trial",
+          status: "Active",
+          startDate: new Date().toLocaleDateString(),
+          nextRenewalDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toLocaleDateString(),
+          features: ["5 searches per day", "Limited data enrichment", "Basic filters", "Export up to 50 contacts"],
+          creditUsage: 0,
+          creditTotal: 50
+        }
       }));
       
       toast.success("Free trial activated", {

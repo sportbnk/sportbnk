@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import PageLayout from "@/components/PageLayout";
 import ProfileHeader from "@/components/profile/ProfileHeader";
@@ -8,69 +8,233 @@ import PersonalInfo from "@/components/profile/PersonalInfo";
 import CompanyInfo from "@/components/profile/CompanyInfo";
 import BillingInfo from "@/components/profile/BillingInfo";
 import SubscriptionPlan from "@/components/profile/SubscriptionPlan";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 type TabType = "personal" | "company" | "billing" | "subscription";
 
+interface UserData {
+  name: string;
+  email: string;
+  phone?: string;
+  role?: string;
+  avatarUrl?: string;
+  company?: {
+    name: string;
+    position?: string;
+    website?: string;
+    size?: string;
+    industry?: string;
+    address?: string;
+  };
+  billing?: {
+    plan: string;
+    price: string;
+    nextBillingDate: string;
+    paymentMethod: string;
+    invoices: Array<{
+      id: string;
+      date: string;
+      amount: string;
+      status: string;
+    }>;
+  };
+  subscription?: {
+    plan: string;
+    status: string;
+    startDate: string;
+    nextRenewalDate: string;
+    features: string[];
+    creditUsage: number;
+    creditTotal: number;
+  };
+}
+
 const UserProfile = () => {
   const [activeTab, setActiveTab] = useState<TabType>("personal");
-
-  // Mock user data - in a real app, this would come from an API or context
-  const userData = {
-    name: "Jared Wilson",
-    email: "jared.wilson@example.com",
-    phone: "+1 (555) 123-4567",
-    role: "Sales Manager",
-    avatarUrl: "",
-    company: {
-      name: "TechSales Corp",
-      position: "Head of Sales",
-      website: "www.techsalescorp.com",
-      size: "50-100",
-      industry: "Software",
-      address: "123 Business Ave, San Francisco, CA 94107"
-    },
-    billing: {
-      plan: "Premium",
-      price: "$99/month",
-      nextBillingDate: "April 15, 2025",
-      paymentMethod: "Visa ending in 4242",
-      invoices: [
-        { id: "INV-2025-001", date: "Mar 15, 2025", amount: "$99.00", status: "Paid" },
-        { id: "INV-2025-002", date: "Feb 15, 2025", amount: "$99.00", status: "Paid" },
-        { id: "INV-2025-003", date: "Jan 15, 2025", amount: "$99.00", status: "Paid" }
-      ]
-    },
-    subscription: {
-      plan: "Premium",
-      status: "Active",
-      startDate: "Jan 15, 2025",
-      nextRenewalDate: "Apr 15, 2025",
-      features: ["1,000 Credits", "10,000 Contacts", "Unlimited Teams", "Email Integration", "Priority Support"],
-      creditUsage: 456,
-      creditTotal: 1000
+  const [userData, setUserData] = useState<UserData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    // Get user data from localStorage
+    const storedUser = localStorage.getItem("user");
+    
+    if (!storedUser) {
+      // If no user is logged in, redirect to login
+      navigate("/");
+      return;
     }
-  };
+    
+    try {
+      const parsedUser = JSON.parse(storedUser);
+      
+      // Create a full user object with default values for missing fields
+      const fullUserData: UserData = {
+        name: parsedUser.name || "User",
+        email: parsedUser.email || "user@example.com",
+        phone: parsedUser.phone || "",
+        role: parsedUser.role || "Free Trial User",
+        avatarUrl: parsedUser.avatarUrl || "",
+        company: parsedUser.company || {
+          name: "",
+          position: "",
+          website: "",
+          size: "",
+          industry: "",
+          address: ""
+        },
+        billing: parsedUser.billing || {
+          plan: parsedUser.isFreeTrial ? "Free Trial" : "Basic",
+          price: parsedUser.isFreeTrial ? "$0/month" : "$49/month",
+          nextBillingDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toLocaleDateString(),
+          paymentMethod: "None",
+          invoices: []
+        },
+        subscription: parsedUser.subscription || {
+          plan: parsedUser.isFreeTrial ? "Free Trial" : "Basic",
+          status: "Active",
+          startDate: new Date().toLocaleDateString(),
+          nextRenewalDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toLocaleDateString(),
+          features: parsedUser.isFreeTrial ? 
+            ["5 searches per day", "Limited data enrichment", "Basic filters", "Export up to 50 contacts"] : 
+            ["100 searches per day", "Standard data enrichment", "Advanced filters", "Export up to 1000 contacts"],
+          creditUsage: 0,
+          creditTotal: parsedUser.isFreeTrial ? 50 : 1000
+        }
+      };
+      
+      setUserData(fullUserData);
+    } catch (e) {
+      console.error("Failed to parse user data", e);
+      // Create a default user object if parsing fails
+      setUserData({
+        name: "User",
+        email: "user@example.com",
+        role: "Free Trial User",
+        company: {
+          name: "",
+          position: "",
+          website: "",
+          size: "",
+          industry: "",
+          address: ""
+        },
+        billing: {
+          plan: "Free Trial",
+          price: "$0/month",
+          nextBillingDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toLocaleDateString(),
+          paymentMethod: "None",
+          invoices: []
+        },
+        subscription: {
+          plan: "Free Trial",
+          status: "Active",
+          startDate: new Date().toLocaleDateString(),
+          nextRenewalDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toLocaleDateString(),
+          features: ["5 searches per day", "Limited data enrichment", "Basic filters", "Export up to 50 contacts"],
+          creditUsage: 0,
+          creditTotal: 50
+        }
+      });
+    } finally {
+      setLoading(false);
+    }
+  }, [navigate]);
 
   const handleTabChange = (tab: TabType) => {
     setActiveTab(tab);
   };
 
   const handleProfileUpdate = (data: any) => {
-    console.log("Profile updated:", data);
-    toast({
-      title: "Profile updated",
+    if (!userData) return;
+    
+    // Update the user data in state
+    const updatedUserData = { ...userData, ...data };
+    setUserData(updatedUserData);
+    
+    // Update the user data in localStorage
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        const updatedStoredUser = { ...parsedUser, ...data };
+        localStorage.setItem("user", JSON.stringify(updatedStoredUser));
+      } catch (e) {
+        console.error("Failed to update user data", e);
+      }
+    }
+    
+    toast.success("Profile updated", {
       description: "Your profile information has been updated successfully."
     });
   };
 
+  const handleCompanyUpdate = (data: any) => {
+    if (!userData) return;
+    
+    // Update the company data in state
+    const updatedUserData = { 
+      ...userData, 
+      company: { ...userData.company, ...data } 
+    };
+    setUserData(updatedUserData);
+    
+    // Update the company data in localStorage
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        const updatedStoredUser = { 
+          ...parsedUser, 
+          company: { ...parsedUser.company, ...data } 
+        };
+        localStorage.setItem("user", JSON.stringify(updatedStoredUser));
+      } catch (e) {
+        console.error("Failed to update company data", e);
+      }
+    }
+    
+    toast.success("Company information updated", {
+      description: "Your company information has been updated successfully."
+    });
+  };
+
+  if (loading) {
+    return (
+      <PageLayout>
+        <div className="container mx-auto py-8 max-w-5xl">
+          <div className="flex justify-center items-center h-64">
+            <p>Loading profile...</p>
+          </div>
+        </div>
+      </PageLayout>
+    );
+  }
+
+  if (!userData) {
+    return (
+      <PageLayout>
+        <div className="container mx-auto py-8 max-w-5xl">
+          <div className="flex justify-center items-center h-64">
+            <p>Unable to load profile. Please sign in.</p>
+          </div>
+        </div>
+      </PageLayout>
+    );
+  }
+
   return (
     <PageLayout>
       <Helmet>
-        <title>User Profile | SportBNK</title>
+        <title>User Profile | SportsBnk</title>
       </Helmet>
       <div className="container mx-auto py-8 max-w-5xl">
-        <ProfileHeader name={userData.name} email={userData.email} role={userData.role} />
+        <ProfileHeader 
+          name={userData.name} 
+          email={userData.email} 
+          role={userData.role || ""} 
+        />
         
         <ProfileTabs activeTab={activeTab} onTabChange={handleTabChange} />
         
@@ -80,15 +244,29 @@ const UserProfile = () => {
           )}
           
           {activeTab === "company" && (
-            <CompanyInfo companyData={userData.company} onUpdate={handleProfileUpdate} />
+            <CompanyInfo companyData={userData.company || {}} onUpdate={handleCompanyUpdate} />
           )}
           
           {activeTab === "billing" && (
-            <BillingInfo billingData={userData.billing} />
+            <BillingInfo billingData={userData.billing || {
+              plan: "Free Trial",
+              price: "$0/month",
+              nextBillingDate: "",
+              paymentMethod: "None",
+              invoices: []
+            }} />
           )}
           
           {activeTab === "subscription" && (
-            <SubscriptionPlan subscriptionData={userData.subscription} />
+            <SubscriptionPlan subscriptionData={userData.subscription || {
+              plan: "Free Trial",
+              status: "Active",
+              startDate: "",
+              nextRenewalDate: "",
+              features: [],
+              creditUsage: 0,
+              creditTotal: 0
+            }} />
           )}
         </div>
       </div>

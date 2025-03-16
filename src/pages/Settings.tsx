@@ -16,7 +16,7 @@ const Settings = () => {
   const [activeTab, setActiveTab] = useState<SettingsTabType>("general");
 
   return (
-    <PageLayout showNavbar showFooter>
+    <PageLayout>
       <Helmet>
         <title>Settings | SportsBnk</title>
       </Helmet>
