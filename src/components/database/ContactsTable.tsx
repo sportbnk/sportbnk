@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ArrowDown, ArrowUp, ExternalLink } from "lucide-react";
+import { ArrowDown, ArrowUp } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import TeamProfile from "./TeamProfile";
@@ -232,3 +232,4 @@ const ContactsTable = ({ data, useCredits, onTeamSelect }: ContactsTableProps) =
 };
 
 export default ContactsTable;
+
