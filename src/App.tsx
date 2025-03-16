@@ -27,6 +27,7 @@ import Teams from "./pages/crm/Teams";
 import People from "./pages/crm/People";
 import TeamDetails from "./pages/crm/TeamDetails";
 import UserProfile from "./pages/UserProfile";
+import Settings from "./pages/Settings";
 
 // Product pages
 import Discover from "./pages/products/Discover";
@@ -77,6 +78,7 @@ const App = () => (
             <Route path="/contact" element={<ContactUs />} />
             <Route path="/free-trial" element={<FreeTrial />} />
             <Route path="/profile" element={<UserProfile />} />
+            <Route path="/settings" element={<Settings />} />
             
             {/* CRM System with sidebar layout */}
             <Route element={<CrmLayout />}>
