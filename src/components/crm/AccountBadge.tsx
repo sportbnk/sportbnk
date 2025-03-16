@@ -50,6 +50,11 @@ const AccountBadge = ({ name: propName, email: propEmail, avatarUrl }: AccountBa
     // Redirect to home page
     navigate("/");
   };
+
+  // Handle profile navigation
+  const handleProfileClick = () => {
+    navigate("/profile");
+  };
   
   return (
     <DropdownMenu>
@@ -68,7 +73,7 @@ const AccountBadge = ({ name: propName, email: propEmail, avatarUrl }: AccountBa
       <DropdownMenuContent align="end">
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={handleProfileClick}>
           <User className="mr-2 h-4 w-4" />
           <span>Profile</span>
         </DropdownMenuItem>

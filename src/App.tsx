@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -25,6 +26,7 @@ import Calls from "./pages/crm/Calls";
 import Teams from "./pages/crm/Teams";
 import People from "./pages/crm/People";
 import TeamDetails from "./pages/crm/TeamDetails";
+import UserProfile from "./pages/UserProfile";
 
 // Product pages
 import Discover from "./pages/products/Discover";
@@ -74,6 +76,7 @@ const App = () => (
             <Route path="/book-demo" element={<BookDemo />} />
             <Route path="/contact" element={<ContactUs />} />
             <Route path="/free-trial" element={<FreeTrial />} />
+            <Route path="/profile" element={<UserProfile />} />
             
             {/* CRM System with sidebar layout */}
             <Route element={<CrmLayout />}>
