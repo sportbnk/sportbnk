@@ -9,10 +9,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ArrowDown, ArrowUp } from "lucide-react";
+import { ArrowDown, ArrowUp, ListPlus } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import TeamProfile from "./TeamProfile";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 interface Contact {
   name: string;
@@ -92,6 +94,14 @@ const ContactsTable = ({ data, useCredits, onTeamSelect }: ContactsTableProps) =
   const handleTeamClick = (team: TeamData) => {
     // Navigate to team details page instead of showing modal or employees on same page
     navigate(`/crm/teams/${team.id}`);
+  };
+
+  const handleAddToList = (team: TeamData) => {
+    // Navigate to Lists page
+    toast.success(`${team.team} added to your list`, {
+      description: "You can view and manage all your lists"
+    });
+    navigate("/database/lists");
   };
 
   const revealEmail = (email: string) => {
@@ -182,12 +192,15 @@ const ContactsTable = ({ data, useCredits, onTeamSelect }: ContactsTableProps) =
                   )}
                 </div>
               </TableHead>
+              <TableHead className="text-right">
+                Actions
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {sortedData.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={7} className="text-center py-10 text-muted-foreground">
+                <TableCell colSpan={8} className="text-center py-10 text-muted-foreground">
                   No results found. Try adjusting your filters.
                 </TableCell>
               </TableRow>
@@ -211,6 +224,17 @@ const ContactsTable = ({ data, useCredits, onTeamSelect }: ContactsTableProps) =
                   <TableCell>{team.country}</TableCell>
                   <TableCell className="hidden md:table-cell">{formatRevenue(team.revenue)}</TableCell>
                   <TableCell className="hidden md:table-cell">{team.employees}</TableCell>
+                  <TableCell className="text-right">
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="text-blue-600" 
+                      onClick={() => handleAddToList(team)}
+                    >
+                      <ListPlus className="h-4 w-4 mr-1" />
+                      <span className="hidden sm:inline">Add to List</span>
+                    </Button>
+                  </TableCell>
                 </TableRow>
               ))
             )}
@@ -232,4 +256,3 @@ const ContactsTable = ({ data, useCredits, onTeamSelect }: ContactsTableProps) =
 };
 
 export default ContactsTable;
-

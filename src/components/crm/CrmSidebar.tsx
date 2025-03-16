@@ -45,7 +45,7 @@ const CrmSidebar = () => {
       <SidebarRail />
       <SidebarHeader className="p-3">
         <div className="flex justify-between items-center mb-2">
-          <h2 className="text-xl font-bold text-sportbnk-green">Welcome Jared</h2>
+          <h2 className="text-xl font-bold text-sportbnk-green">Welcome Back!</h2>
         </div>
         <div className="relative">
           <SearchIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
