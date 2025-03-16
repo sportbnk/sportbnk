@@ -13,6 +13,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Link } from "react-router-dom";
 
 interface Contact {
   id: number;
@@ -116,7 +117,7 @@ const ContactsView = ({
                 <TableHead className="hidden md:table-cell text-white w-[15%]">Phone</TableHead>
                 <TableHead className="hidden md:table-cell text-white w-[7%]">LinkedIn</TableHead>
                 <TableHead className="text-white w-[6%]">
-                  {isSavedList ? "Remove" : "Add"}
+                  {isSavedList ? "Remove" : "Add to List"}
                 </TableHead>
               </TableRow>
             </TableHeader>
@@ -249,12 +250,19 @@ const ContactsView = ({
                         </Button>
                       ) : (
                         <Button 
+                          asChild={!onAddToList}
                           size="sm" 
                           variant="ghost" 
                           onClick={() => onAddToList && onAddToList(contact)}
                           className="text-sportbnk-green hover:text-sportbnk-green/90 p-0 h-auto"
                         >
-                          <Plus className="h-4 w-4" />
+                          {onAddToList ? (
+                            <Plus className="h-4 w-4" />
+                          ) : (
+                            <Link to="/database/lists" className="flex items-center">
+                              <Plus className="h-4 w-4" />
+                            </Link>
+                          )}
                         </Button>
                       )}
                     </TableCell>

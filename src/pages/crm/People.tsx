@@ -1,10 +1,10 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Download } from "lucide-react";
 import ContactsFilters from "@/components/database/ContactsFilters";
 import ContactsView from "@/components/database/ContactsView";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 // Dummy data for contacts
 const contactsData = [
@@ -156,6 +156,7 @@ const contactsData = [
 ];
 
 const People = () => {
+  const navigate = useNavigate();
   const [credits, setCredits] = useState(456);
   const [revealedEmails, setRevealedEmails] = useState<Record<string, boolean>>({});
   const [revealedPhones, setRevealedPhones] = useState<Record<string, boolean>>({});
@@ -191,6 +192,8 @@ const People = () => {
   const addToList = (contact: any) => {
     if (!savedList.some(item => item.id === contact.id)) {
       setSavedList(prev => [...prev, contact]);
+      navigate("/database/lists");
+      toast.success(`${contact.name} added to your list! Redirecting to Lists page.`);
     }
   };
   
@@ -222,11 +225,6 @@ const People = () => {
     <div className="container max-w-full px-2">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-sportbnk-navy">People Database</h1>
-        <div className="flex gap-2">
-          <Button variant="outline" className="flex items-center gap-1">
-            <Download className="h-4 w-4" /> Export
-          </Button>
-        </div>
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-6 gap-4">

@@ -1,7 +1,7 @@
 
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { List, Plus, Trash2, Edit, ArrowRight } from "lucide-react";
+import { List, Plus, Trash2, Edit, ArrowRight, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Form, FormField, FormItem, FormLabel, FormControl, FormDescription } from "@/components/ui/form";
@@ -43,11 +43,11 @@ const Lists = () => {
     defaultValues: {
       name: "",
       description: "",
-      type: "Teams" as const,
+      type: "Teams" as "Teams" | "Contacts" | "Mixed",
     }
   });
 
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: { name: string; description: string; type: "Teams" | "Contacts" | "Mixed" }) => {
     if (isEditMode && currentListId) {
       // Edit existing list
       setLists(prev => 
@@ -70,7 +70,7 @@ const Lists = () => {
         teamCount: 0,
         contactCount: 0,
         createdDate: new Date().toISOString().split('T')[0],
-        type: data.type as "Teams" | "Contacts" | "Mixed",
+        type: data.type,
       };
       
       setLists(prev => [...prev, newList]);
@@ -108,6 +108,38 @@ const Lists = () => {
       default:
         return "bg-green-100 text-green-700";
     }
+  };
+
+  const exportToCSV = (listId: string) => {
+    // Find the selected list
+    const selectedList = lists.find(list => list.id === listId);
+    
+    if (!selectedList) {
+      toast.error("List not found");
+      return;
+    }
+    
+    // Create CSV header and mock data for demonstration
+    const csvHeader = "Name,Position,Team,Sport,Email,Phone,LinkedIn\n";
+    const csvData = [
+      "John Smith,Marketing Director,Manchester United,Football,john.smith@manutd.com,+441234567890,https://linkedin.com/in/johnsmith",
+      "Sarah Jones,Fan Relations Manager,Manchester United,Football,sarah.jones@manutd.com,,",
+      "Michael Johnson,Operations Director,LA Lakers,Basketball,michael.johnson@lakers.com,+13101234567,https://linkedin.com/in/michaeljohnson"
+    ].join("\n");
+    
+    const csvContent = csvHeader + csvData;
+    
+    // Create a blob and download link
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", `${selectedList.name.replace(/\s+/g, "_")}_contacts.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    toast.success(`Exported ${selectedList.name} to CSV`);
   };
 
   return (
@@ -190,12 +222,23 @@ const Lists = () => {
                           Delete
                         </Button>
                       </div>
-                      <Button asChild variant="ghost" size="sm" className="text-blue-600">
-                        <Link to={`/crm/teams`}>
-                          View 
-                          <ArrowRight className="h-3.5 w-3.5 ml-1" />
-                        </Link>
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          className="text-green-600 border-green-200 hover:bg-green-50 hover:text-green-700"
+                          onClick={() => exportToCSV(list.id)}
+                        >
+                          <Download className="h-3.5 w-3.5 mr-1" />
+                          Export CSV
+                        </Button>
+                        <Button asChild variant="ghost" size="sm" className="text-blue-600">
+                          <Link to={`/crm/teams`}>
+                            View 
+                            <ArrowRight className="h-3.5 w-3.5 ml-1" />
+                          </Link>
+                        </Button>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>

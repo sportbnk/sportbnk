@@ -1,11 +1,10 @@
-
 import React, { useState } from "react";
 import ContactsView from "@/components/database/ContactsView";
 import ContactsFilters from "@/components/database/ContactsFilters";
 import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Download, PlusCircle } from "lucide-react";
+import { PlusCircle } from "lucide-react";
 
 // Mock data for testing
 const dummyData = [
@@ -147,9 +146,6 @@ const ContactDatabase = () => {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Teams & Contacts Database</h1>
         <div className="flex gap-2">
-          <Button variant="outline" className="flex items-center gap-1">
-            <Download className="h-4 w-4" /> Export
-          </Button>
           <Button className="flex items-center gap-1">
             <PlusCircle className="h-4 w-4" /> Add Contact
           </Button>
