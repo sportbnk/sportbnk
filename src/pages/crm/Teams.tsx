@@ -1,11 +1,9 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
 import ContactsFilters from "@/components/database/ContactsFilters";
 import ContactsTable from "@/components/database/ContactsTable";
-import TeamEmployees from "@/components/database/TeamEmployees";
 import { useResponsiveContainer } from "@/hooks/use-responsive-container";
 
 // Dummy data for teams
@@ -237,142 +235,6 @@ const teamData = [
   }
 ];
 
-// Employee data mapped to teams
-const employeesByTeam = [
-  {
-    id: 1,
-    team: "Manchester United",
-    teamLogo: "/lovable-uploads/1eb7dc35-8f3d-4a53-8727-249a31db0275.png",
-    employees: [
-      {
-        id: 1,
-        name: "John Smith",
-        position: "Marketing Director",
-        email: "j.s******@manutd.com",
-        phone: "+44 77** *** ***",
-        linkedin: "https://linkedin.com/in/johnsmith",
-        verified: true,
-        activeReplier: true
-      },
-      {
-        id: 2,
-        name: "Sarah Jones",
-        position: "Fan Relations Manager",
-        email: "s.j****@manutd.com",
-        verified: true
-      },
-      {
-        id: 11,
-        name: "Olivia Parker",
-        position: "Ticket Sales Manager",
-        email: "o.p*****@manutd.com",
-        phone: "+44 78** *** ***"
-      }
-    ]
-  },
-  {
-    id: 2,
-    team: "LA Lakers",
-    teamLogo: "/lovable-uploads/b95abe05-7dc8-449e-91a1-c17046b01f5e.png",
-    employees: [
-      {
-        id: 3,
-        name: "Michael Johnson",
-        position: "Operations Director",
-        email: "m.j******@lakers.com",
-        phone: "+1 31*-***-****",
-        linkedin: "https://linkedin.com/in/michaeljohnson",
-        verified: true
-      },
-      {
-        id: 7,
-        name: "Emma Wilson",
-        position: "Digital Strategy Director",
-        email: "e.w****@lakers.com",
-        phone: "+1 32*-***-****"
-      },
-      {
-        id: 12,
-        name: "Kevin Zhang",
-        position: "International Development Director",
-        email: "k.z****@lakers.com",
-        linkedin: "https://linkedin.com/in/kevinzhang",
-        verified: true,
-        activeReplier: true
-      }
-    ]
-  },
-  {
-    id: 3,
-    team: "Real Madrid",
-    teamLogo: "/lovable-uploads/5de360aa-8105-490e-bf75-94ff7ac0832d.png",
-    employees: [
-      {
-        id: 4,
-        name: "Carlos Rodriguez",
-        position: "Commercial Director",
-        email: "c.r********@realmadrid.es",
-        linkedin: "https://linkedin.com/in/carlosrodriguez"
-      },
-      {
-        id: 8,
-        name: "James Miller",
-        position: "Sponsorship Director",
-        email: "j.m*****@realmadrid.es",
-        linkedin: "https://linkedin.com/in/jamesmiller",
-        verified: true,
-        activeReplier: true
-      }
-    ]
-  },
-  {
-    id: 4,
-    team: "Chicago Bulls",
-    teamLogo: "/lovable-uploads/b0f94fb5-f923-4243-b466-86aa2a7738d0.png",
-    employees: [
-      {
-        id: 5,
-        name: "Jennifer Williams",
-        position: "PR Director",
-        email: "j.w******@bulls.com",
-        phone: "+1 31*-***-****",
-        linkedin: "https://linkedin.com/in/jenniferwilliams",
-        activeReplier: true
-      },
-      {
-        id: 9,
-        name: "Rachel Green",
-        position: "Community Relations Manager",
-        email: "r.g****@bulls.com",
-        phone: "+1 31*-***-****",
-        verified: true
-      }
-    ]
-  },
-  {
-    id: 5,
-    team: "Boston Red Sox",
-    teamLogo: "/lovable-uploads/53b73771-1565-4d14-87c2-860d6dabe35d.png",
-    employees: [
-      {
-        id: 6,
-        name: "David Thompson",
-        position: "Marketing Director",
-        email: "d.t******@redsox.com",
-        verified: true
-      },
-      {
-        id: 10,
-        name: "Daniel Lee",
-        position: "Data Analytics Director",
-        email: "d.l**@redsox.com",
-        linkedin: "https://linkedin.com/in/daniellee",
-        activeReplier: true
-      }
-    ]
-  }
-];
-
 const Teams = () => {
   const [credits, setCredits] = useState(456);
   const [activeFilters, setActiveFilters] = useState({
@@ -383,9 +245,6 @@ const Teams = () => {
     revenue: "all",
     employees: "all"
   });
-  const [selectedTeamEmployees, setSelectedTeamEmployees] = useState<typeof employeesByTeam[0] | null>(null);
-  const [revealedEmails, setRevealedEmails] = useState<Record<string, boolean>>({});
-  const [revealedPhones, setRevealedPhones] = useState<Record<string, boolean>>({});
   
   const { containerProps, hasHorizontalScroll } = useResponsiveContainer({
     enableScroll: true,
@@ -401,28 +260,6 @@ const Teams = () => {
     setActiveFilters(filters);
   };
 
-  const handleTeamSelect = (teamId: number) => {
-    const team = employeesByTeam.find(t => t.id === teamId);
-    setSelectedTeamEmployees(team || null);
-  };
-
-  const handleCloseEmployees = () => {
-    setSelectedTeamEmployees(null);
-  };
-
-  const revealEmail = (email: string) => {
-    if (revealedEmails[email]) return;
-    setCredits(prev => Math.max(0, prev - 2));
-    setRevealedEmails(prev => ({ ...prev, [email]: true }));
-  };
-  
-  const revealPhone = (phone: string) => {
-    if (revealedPhones[phone]) return;
-    setCredits(prev => Math.max(0, prev - 3));
-    setRevealedPhones(prev => ({ ...prev, [phone]: true }));
-  };
-
-  // Apply filters to the data
   const filteredData = [...teamData].filter(team => {
     // Filter by sport
     if (activeFilters.sport !== "all" && team.sport !== activeFilters.sport) {
@@ -509,21 +346,9 @@ const Teams = () => {
                 <ContactsTable 
                   data={filteredData}
                   useCredits={useCredits}
-                  onTeamSelect={handleTeamSelect}
                 />
               </CardContent>
             </Card>
-            
-            {selectedTeamEmployees && (
-              <TeamEmployees
-                selectedTeam={selectedTeamEmployees}
-                revealedEmails={revealedEmails}
-                revealedPhones={revealedPhones}
-                onRevealEmail={revealEmail}
-                onRevealPhone={revealPhone}
-                onCloseEmployees={handleCloseEmployees}
-              />
-            )}
           </div>
         </div>
       </div>

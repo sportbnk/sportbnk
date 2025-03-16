@@ -1,5 +1,6 @@
 
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Table,
   TableBody,
@@ -50,6 +51,7 @@ interface ContactsTableProps {
 }
 
 const ContactsTable = ({ data, useCredits, onTeamSelect }: ContactsTableProps) => {
+  const navigate = useNavigate();
   const [sortField, setSortField] = useState<keyof TeamData>("team");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
   const [selectedTeam, setSelectedTeam] = useState<TeamData | null>(null);
@@ -88,11 +90,8 @@ const ContactsTable = ({ data, useCredits, onTeamSelect }: ContactsTableProps) =
   };
   
   const handleTeamClick = (team: TeamData) => {
-    if (onTeamSelect) {
-      onTeamSelect(team.id);
-    } else {
-      handleViewProfile(team);
-    }
+    // Navigate to team details page instead of showing modal or employees on same page
+    navigate(`/crm/teams/${team.id}`);
   };
 
   const revealEmail = (email: string) => {
@@ -203,9 +202,7 @@ const ContactsTable = ({ data, useCredits, onTeamSelect }: ContactsTableProps) =
                       </Avatar>
                       <span className="font-medium text-blue-600 hover:underline flex items-center">
                         {team.team}
-                        {onTeamSelect && (
-                          <span className="ml-1 text-xs text-blue-400">(view employees)</span>
-                        )}
+                        <span className="ml-1 text-xs text-blue-400">(view details)</span>
                       </span>
                     </div>
                   </TableCell>

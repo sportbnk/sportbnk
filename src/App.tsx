@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -25,6 +24,7 @@ import Tasks from "./pages/crm/Tasks";
 import Calls from "./pages/crm/Calls";
 import Teams from "./pages/crm/Teams";
 import People from "./pages/crm/People";
+import TeamDetails from "./pages/crm/TeamDetails";
 
 // Product pages
 import Discover from "./pages/products/Discover";
@@ -85,6 +85,7 @@ const App = () => (
               <Route path="/database/tasks" element={<Tasks />} />
               <Route path="/database/calls" element={<Calls />} />
               <Route path="/crm/teams" element={<Teams />} />
+              <Route path="/crm/teams/:teamId" element={<TeamDetails />} />
               <Route path="/crm/people" element={<People />} />
             </Route>
             

@@ -37,7 +37,7 @@ interface TeamEmployeesProps {
   revealedPhones: Record<string, boolean>;
   onRevealEmail: (email: string) => void;
   onRevealPhone: (phone: string) => void;
-  onCloseEmployees: () => void;
+  onCloseEmployees?: () => void;
 }
 
 const TeamEmployees = ({
@@ -51,15 +51,17 @@ const TeamEmployees = ({
   if (!selectedTeam) return null;
 
   return (
-    <Card className="mt-4 shadow-md">
-      <CardHeader className="pb-3 border-b flex flex-row justify-between items-center">
-        <CardTitle className="text-lg">
-          {selectedTeam.team} Employees
-        </CardTitle>
-        <Button variant="ghost" size="sm" onClick={onCloseEmployees}>
-          Close
-        </Button>
-      </CardHeader>
+    <Card className={onCloseEmployees ? "mt-4 shadow-md" : ""}>
+      {onCloseEmployees && (
+        <CardHeader className="pb-3 border-b flex flex-row justify-between items-center">
+          <CardTitle className="text-lg">
+            {selectedTeam.team} Employees
+          </CardTitle>
+          <Button variant="ghost" size="sm" onClick={onCloseEmployees}>
+            Close
+          </Button>
+        </CardHeader>
+      )}
       <CardContent className="p-0">
         <div className="overflow-x-auto">
           <Table>
