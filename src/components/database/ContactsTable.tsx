@@ -46,9 +46,10 @@ interface TeamData {
 interface ContactsTableProps {
   data: TeamData[];
   useCredits: (amount: number) => void;
+  onTeamSelect?: (teamId: number) => void;
 }
 
-const ContactsTable = ({ data, useCredits }: ContactsTableProps) => {
+const ContactsTable = ({ data, useCredits, onTeamSelect }: ContactsTableProps) => {
   const [sortField, setSortField] = useState<keyof TeamData>("team");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
   const [selectedTeam, setSelectedTeam] = useState<TeamData | null>(null);
@@ -84,6 +85,14 @@ const ContactsTable = ({ data, useCredits }: ContactsTableProps) => {
   const handleViewProfile = (team: TeamData) => {
     setSelectedTeam(team);
     setProfileOpen(true);
+  };
+  
+  const handleTeamClick = (team: TeamData) => {
+    if (onTeamSelect) {
+      onTeamSelect(team.id);
+    } else {
+      handleViewProfile(team);
+    }
   };
 
   const revealEmail = (email: string) => {
@@ -187,12 +196,17 @@ const ContactsTable = ({ data, useCredits }: ContactsTableProps) => {
               sortedData.map((team) => (
                 <TableRow key={team.id}>
                   <TableCell>
-                    <div className="flex items-center gap-2 cursor-pointer" onClick={() => handleViewProfile(team)}>
+                    <div className="flex items-center gap-2 cursor-pointer" onClick={() => handleTeamClick(team)}>
                       <Avatar className="h-8 w-8">
                         <AvatarImage src={team.logo} alt={team.team} />
                         <AvatarFallback>{team.team.substring(0, 2)}</AvatarFallback>
                       </Avatar>
-                      <span className="font-medium text-blue-600 hover:underline">{team.team}</span>
+                      <span className="font-medium text-blue-600 hover:underline flex items-center">
+                        {team.team}
+                        {onTeamSelect && (
+                          <span className="ml-1 text-xs text-blue-400">(view employees)</span>
+                        )}
+                      </span>
                     </div>
                   </TableCell>
                   <TableCell>{team.sport}</TableCell>
