@@ -61,13 +61,13 @@ const CrmSidebar = () => {
           <SidebarGroupLabel>Navigation</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {/* Prospects menu item with submenu */}
+              {/* Changed Prospects to Discover */}
               <SidebarMenuItem>
                 <SidebarMenuButton 
                   isActive={location.pathname.includes("/database") || location.pathname.includes("/crm/database")}
-                  tooltip="Prospects"
+                  tooltip="Discover"
                 >
-                  <span>Prospects</span>
+                  <span>Discover</span>
                 </SidebarMenuButton>
                 <SidebarMenuSub>
                   <SidebarMenuSubItem>
