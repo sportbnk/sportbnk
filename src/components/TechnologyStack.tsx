@@ -1,6 +1,6 @@
 
 import { useEffect, useRef } from 'react';
-import { Code, Database, Server, Cpu, Cloud, Lock } from 'lucide-react';
+import { Api, Mail, Database, ListChecks, Clock, Briefcase } from 'lucide-react';
 
 const TechnologyStack = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -43,11 +43,31 @@ const TechnologyStack = () => {
         >
           <div className="bg-white/5 backdrop-blur-sm rounded-xl p-8 border border-white/10">
             <div className="mb-4">
-              <Code className="text-sportbnk-green w-10 h-10" />
+              <Briefcase className="text-sportbnk-green w-10 h-10" />
             </div>
-            <h3 className="text-xl font-semibold mb-3">Modern Architecture</h3>
+            <h3 className="text-xl font-semibold mb-3">CRM Integration</h3>
             <p className="text-gray-300">
-              Built with microservices architecture for maximum flexibility and scalability.
+              Seamlessly integrate with popular CRM platforms like Salesforce, HubSpot, and Pipedrive to enhance your sales process.
+            </p>
+          </div>
+          
+          <div className="bg-white/5 backdrop-blur-sm rounded-xl p-8 border border-white/10">
+            <div className="mb-4">
+              <Mail className="text-sportbnk-green w-10 h-10" />
+            </div>
+            <h3 className="text-xl font-semibold mb-3">Email Integration</h3>
+            <p className="text-gray-300">
+              Connect with leading email marketing platforms to nurture leads and build targeted campaigns for sports industry professionals.
+            </p>
+          </div>
+          
+          <div className="bg-white/5 backdrop-blur-sm rounded-xl p-8 border border-white/10">
+            <div className="mb-4">
+              <ListChecks className="text-sportbnk-green w-10 h-10" />
+            </div>
+            <h3 className="text-xl font-semibold mb-3">List Building</h3>
+            <p className="text-gray-300">
+              Create highly targeted lists of sports organizations and professionals using our advanced filtering and segmentation tools.
             </p>
           </div>
           
@@ -55,49 +75,29 @@ const TechnologyStack = () => {
             <div className="mb-4">
               <Database className="text-sportbnk-green w-10 h-10" />
             </div>
-            <h3 className="text-xl font-semibold mb-3">Distributed Data Storage</h3>
+            <h3 className="text-xl font-semibold mb-3">Accurate & Compliant Data</h3>
             <p className="text-gray-300">
-              Geo-distributed database system for fast data access anywhere in the world.
+              Access verified, up-to-date sports industry contact information that meets global compliance standards including GDPR and CCPA.
             </p>
           </div>
           
           <div className="bg-white/5 backdrop-blur-sm rounded-xl p-8 border border-white/10">
             <div className="mb-4">
-              <Cloud className="text-sportbnk-green w-10 h-10" />
+              <Clock className="text-sportbnk-green w-10 h-10" />
             </div>
-            <h3 className="text-xl font-semibold mb-3">Cloud Infrastructure</h3>
+            <h3 className="text-xl font-semibold mb-3">Job Changes Update</h3>
             <p className="text-gray-300">
-              Hosted on enterprise-grade cloud infrastructure for maximum uptime and reliability.
+              Stay informed about personnel movements within the sports industry with automated notifications about relevant job changes.
             </p>
           </div>
           
           <div className="bg-white/5 backdrop-blur-sm rounded-xl p-8 border border-white/10">
             <div className="mb-4">
-              <Cpu className="text-sportbnk-green w-10 h-10" />
-            </div>
-            <h3 className="text-xl font-semibold mb-3">AI & Machine Learning</h3>
-            <p className="text-gray-300">
-              Advanced AI algorithms for sports data analytics and predictive insights.
-            </p>
-          </div>
-          
-          <div className="bg-white/5 backdrop-blur-sm rounded-xl p-8 border border-white/10">
-            <div className="mb-4">
-              <Server className="text-sportbnk-green w-10 h-10" />
+              <Api className="text-sportbnk-green w-10 h-10" />
             </div>
             <h3 className="text-xl font-semibold mb-3">API Ecosystem</h3>
             <p className="text-gray-300">
-              Comprehensive API ecosystem for seamless integration with your existing systems.
-            </p>
-          </div>
-          
-          <div className="bg-white/5 backdrop-blur-sm rounded-xl p-8 border border-white/10">
-            <div className="mb-4">
-              <Lock className="text-sportbnk-green w-10 h-10" />
-            </div>
-            <h3 className="text-xl font-semibold mb-3">Enterprise Security</h3>
-            <p className="text-gray-300">
-              Bank-grade security protocols and compliance with international data standards.
+              Leverage our comprehensive API ecosystem for seamless integration with your existing systems and customized data workflows.
             </p>
           </div>
         </div>
