@@ -41,7 +41,7 @@ const Hero = () => {
             
             <h1 className={`text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-tight transition-all duration-700 delay-100 text-sportbnk-navy ${isVisible ? 'opacity-100' : 'opacity-0 translate-y-8'}`}>
               We give you 
-              <span className="bg-gradient-to-r from-sportbnk-green to-teal-400 bg-clip-text text-transparent"> emails and phone numbers to who you want to do business with in the sports industry</span>
+              <span className="bg-gradient-to-r from-sportbnk-green to-teal-400 bg-clip-text text-transparent"> leads to who you want to do business with in the sports industry</span>
             </h1>
             
             {/* Removed subheading */}
