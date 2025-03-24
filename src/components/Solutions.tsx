@@ -1,6 +1,6 @@
 
 import { useEffect, useRef } from 'react';
-import { ArrowRight, Briefcase, LineChart, TrendingUp } from 'lucide-react';
+import { ArrowRight, Briefcase, LineChart, TrendingUp, Users } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Solutions = () => {
