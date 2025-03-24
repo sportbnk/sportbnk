@@ -40,13 +40,11 @@ const Hero = () => {
             </div>
             
             <h1 className={`text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-tight transition-all duration-700 delay-100 text-sportbnk-navy ${isVisible ? 'opacity-100' : 'opacity-0 translate-y-8'}`}>
-              Turn Sports Data Into 
-              <span className="bg-gradient-to-r from-sportbnk-green to-teal-400 bg-clip-text text-transparent"> Strategic Advantage</span>
+              We give you 
+              <span className="bg-gradient-to-r from-sportbnk-green to-teal-400 bg-clip-text text-transparent"> emails and phone numbers to who you want to do business with in the sports industry</span>
             </h1>
             
-            <p className={`text-xl text-gray-600 leading-relaxed max-w-xl transition-all duration-700 delay-200 ${isVisible ? 'opacity-100' : 'opacity-0 translate-y-8'}`}>
-              SportBnk provides a complete intelligence platform for sports organizations to discover opportunities, boost engagement, and recruit top talent.
-            </p>
+            {/* Removed subheading */}
             
             <div className={`flex flex-col sm:flex-row gap-4 transition-all duration-700 delay-300 ${isVisible ? 'opacity-100' : 'opacity-0 translate-y-8'}`}>
               <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white font-medium rounded-md px-8 py-6 text-lg" asChild>
