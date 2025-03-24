@@ -115,7 +115,7 @@ const Reviews = () => {
     <section className="py-16 md:py-24">
       <div className="container mx-auto px-4 md:px-6">
         <h2 className="text-3xl font-bold mb-16 text-center text-sportbnk-navy">
-          Reviews
+          Ready to transform your sales strategy with accurate data within sports industry
         </h2>
         
         <div 
@@ -136,17 +136,6 @@ const Reviews = () => {
             >
               <ChevronLeft size={20} />
             </button>
-            
-            {reviews.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentIndex(index)}
-                className={`w-2 h-2 rounded-full transition-colors ${
-                  index === currentIndex ? 'bg-sportbnk-green' : 'bg-gray-300'
-                }`}
-                aria-label={`Go to review ${index + 1}`}
-              />
-            ))}
             
             <button 
               onClick={nextSlide}
