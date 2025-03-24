@@ -1,6 +1,6 @@
 
 import { useEffect, useRef } from 'react';
-import { ArrowRight, Database, LineChart, Shield, Globe } from 'lucide-react';
+import { ArrowRight, Briefcase, LineChart, TrendingUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Solutions = () => {
@@ -41,14 +41,14 @@ const Solutions = () => {
         
         <div 
           ref={sectionRef}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 animate-when-visible"
+          className="grid grid-cols-1 md:grid-cols-3 gap-8 animate-when-visible"
         >
           <div className="bg-white rounded-xl shadow-md p-8 transition-all duration-300 hover:shadow-lg hover:translate-y-[-5px]">
             <div className="bg-sportbnk-green/10 p-4 rounded-full w-16 h-16 flex items-center justify-center mb-6">
-              <Database className="text-sportbnk-green w-8 h-8" />
+              <Briefcase className="text-sportbnk-green w-8 h-8" />
             </div>
-            <h3 className="text-xl font-semibold mb-3 text-sportbnk-navy">Global Data Coverage</h3>
-            <p className="text-gray-600 mb-6">Access to 360,000+ live competitions and 750,000+ sports teams worldwide.</p>
+            <h3 className="text-xl font-semibold mb-3 text-sportbnk-navy">Sales</h3>
+            <p className="text-gray-600 mb-6">Find qualified leads and decision-makers within sports organizations to expand your customer base and drive revenue growth.</p>
             <Link to="/products/discover" className="inline-flex items-center text-sportbnk-green font-medium hover:underline">
               Learn more <ArrowRight className="ml-2 w-4 h-4" />
             </Link>
@@ -56,10 +56,10 @@ const Solutions = () => {
           
           <div className="bg-white rounded-xl shadow-md p-8 transition-all duration-300 hover:shadow-lg hover:translate-y-[-5px]">
             <div className="bg-sportbnk-green/10 p-4 rounded-full w-16 h-16 flex items-center justify-center mb-6">
-              <LineChart className="text-sportbnk-green w-8 h-8" />
+              <TrendingUp className="text-sportbnk-green w-8 h-8" />
             </div>
-            <h3 className="text-xl font-semibold mb-3 text-sportbnk-navy">Real-Time Analytics</h3>
-            <p className="text-gray-600 mb-6">Process and analyze sports data in real-time for immediate actionable insights.</p>
+            <h3 className="text-xl font-semibold mb-3 text-sportbnk-navy">Marketing</h3>
+            <p className="text-gray-600 mb-6">Target and engage with the right audience in the sports industry to build brand awareness and enhance marketing campaigns.</p>
             <Link to="/products/boost" className="inline-flex items-center text-sportbnk-green font-medium hover:underline">
               Learn more <ArrowRight className="ml-2 w-4 h-4" />
             </Link>
@@ -67,21 +67,10 @@ const Solutions = () => {
           
           <div className="bg-white rounded-xl shadow-md p-8 transition-all duration-300 hover:shadow-lg hover:translate-y-[-5px]">
             <div className="bg-sportbnk-green/10 p-4 rounded-full w-16 h-16 flex items-center justify-center mb-6">
-              <Shield className="text-sportbnk-green w-8 h-8" />
+              <Users className="text-sportbnk-green w-8 h-8" />
             </div>
-            <h3 className="text-xl font-semibold mb-3 text-sportbnk-navy">Enterprise Security</h3>
-            <p className="text-gray-600 mb-6">Advanced security protocols and compliance with industry data standards.</p>
-            <Link to="/company/about" className="inline-flex items-center text-sportbnk-green font-medium hover:underline">
-              Learn more <ArrowRight className="ml-2 w-4 h-4" />
-            </Link>
-          </div>
-          
-          <div className="bg-white rounded-xl shadow-md p-8 transition-all duration-300 hover:shadow-lg hover:translate-y-[-5px]">
-            <div className="bg-sportbnk-green/10 p-4 rounded-full w-16 h-16 flex items-center justify-center mb-6">
-              <Globe className="text-sportbnk-green w-8 h-8" />
-            </div>
-            <h3 className="text-xl font-semibold mb-3 text-sportbnk-navy">Global Connectivity</h3>
-            <p className="text-gray-600 mb-6">Connect with sports organizations and professionals across continents.</p>
+            <h3 className="text-xl font-semibold mb-3 text-sportbnk-navy">Hiring</h3>
+            <p className="text-gray-600 mb-6">Connect with top talent in the sports industry to build high-performing teams with specialized knowledge and experience.</p>
             <Link to="/products/recruit" className="inline-flex items-center text-sportbnk-green font-medium hover:underline">
               Learn more <ArrowRight className="ml-2 w-4 h-4" />
             </Link>
