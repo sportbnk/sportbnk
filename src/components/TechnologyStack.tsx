@@ -1,6 +1,6 @@
 
 import { useEffect, useRef } from 'react';
-import { Api, Mail, Database, ListChecks, Clock, Briefcase } from 'lucide-react';
+import { Database, Mail, ListChecks, Clock, Briefcase, Link } from 'lucide-react';
 
 const TechnologyStack = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -93,7 +93,7 @@ const TechnologyStack = () => {
           
           <div className="bg-white/5 backdrop-blur-sm rounded-xl p-8 border border-white/10">
             <div className="mb-4">
-              <Api className="text-sportbnk-green w-10 h-10" />
+              <Link className="text-sportbnk-green w-10 h-10" />
             </div>
             <h3 className="text-xl font-semibold mb-3">API Ecosystem</h3>
             <p className="text-gray-300">
