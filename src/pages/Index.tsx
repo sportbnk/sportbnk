@@ -9,6 +9,7 @@ import TechnologyStack from "@/components/TechnologyStack";
 import Reviews from "@/components/Reviews";
 import EnhancedCTA from "@/components/EnhancedCTA";
 import ChatPopup from "@/components/ChatPopup";
+import TrustedSection from "@/components/TrustedSection";
 
 const Index = () => {
   return (
@@ -20,6 +21,7 @@ const Index = () => {
       <NewsletterBanner />
       <Hero />
       <Solutions />
+      <TrustedSection />
       <Benefits />
       <TechnologyStack />
       <Reviews />
