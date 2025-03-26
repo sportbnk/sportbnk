@@ -221,44 +221,52 @@ const Lists = () => {
       return;
     }
 
-    // Create CSV content
-    const headers = ["Name", "Email", "Company"];
-    const rows = activeList.contacts.map(contact => [
-      contact.name, 
-      contact.email, 
-      contact.company
-    ]);
-    
-    // Combine headers and rows
-    const csvContent = [
-      headers.join(","),
-      ...rows.map(row => row.join(","))
-    ].join("\n");
-    
-    // Create a Blob with the CSV content
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    
-    // Create a URL for the Blob
-    const url = URL.createObjectURL(blob);
-    
-    // Create a temporary link element
-    const link = document.createElement("a");
-    link.href = url;
-    link.setAttribute("download", `${activeList.name.replace(/\s+/g, '_')}_contacts.csv`);
-    
-    // Append the link to the document
-    document.body.appendChild(link);
-    
-    // Click the link to trigger the download
-    link.click();
-    
-    // Remove the link from the document
-    document.body.removeChild(link);
-    
-    // Show a success toast
-    toast.success("Export completed", {
-      description: `${activeList.contacts.length} contacts exported to CSV.`
-    });
+    try {
+      // Create CSV content
+      const headers = ["Name", "Email", "Company"];
+      const rows = activeList.contacts.map(contact => [
+        `"${contact.name.replace(/"/g, '""')}"`, 
+        `"${contact.email.replace(/"/g, '""')}"`, 
+        `"${contact.company.replace(/"/g, '""')}"`
+      ]);
+      
+      // Combine headers and rows
+      const csvContent = [
+        headers.join(","),
+        ...rows.map(row => row.join(","))
+      ].join("\n");
+      
+      // Create a Blob with the CSV content
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      
+      // Create a URL for the Blob
+      const url = URL.createObjectURL(blob);
+      
+      // Create a temporary link element
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `${activeList.name.replace(/\s+/g, '_')}_contacts.csv`);
+      
+      // Append the link to the document
+      document.body.appendChild(link);
+      
+      // Click the link to trigger the download
+      link.click();
+      
+      // Clean up
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      
+      // Show a success toast
+      toast.success("Export completed", {
+        description: `${activeList.contacts.length} contacts exported to CSV.`
+      });
+    } catch (error) {
+      console.error("Error exporting CSV:", error);
+      toast.error("Export failed", {
+        description: "There was an error exporting your contacts. Please try again."
+      });
+    }
   }, [activeList]);
 
   // Filter contacts based on search term
