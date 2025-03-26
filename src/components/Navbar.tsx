@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Menu, X, ChevronDown, Package, BarChart3, Building, BookOpen, DollarSign, Calendar, Users, Rocket, Shield, Briefcase, Newspaper, Phone, BookmarkPlus, Users2, FileText, Video, Headphones, Clipboard, MessageSquare, HelpCircle, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -35,10 +36,14 @@ const Navbar = () => {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchTerm.trim()) {
-      // In a real app, you would navigate to search results page
-      // For now, we'll just show a toast and log to console
+      // Log the search term
       console.log('Searching for:', searchTerm);
+      
+      // Show a toast with the search term
       toast.info(`Searching for "${searchTerm}"`);
+      
+      // Navigate to search results page with the search term as a query parameter
+      navigate(`/search?q=${encodeURIComponent(searchTerm.trim())}`);
       
       // Clear the search term after submission
       setSearchTerm('');
@@ -439,4 +444,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-

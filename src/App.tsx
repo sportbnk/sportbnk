@@ -28,6 +28,7 @@ import People from "./pages/crm/People";
 import TeamDetails from "./pages/crm/TeamDetails";
 import UserProfile from "./pages/UserProfile";
 import Settings from "./pages/Settings";
+import SearchResults from "./pages/SearchResults";
 
 // Product pages
 import Discover from "./pages/products/Discover";
@@ -79,6 +80,7 @@ const App = () => (
             <Route path="/free-trial" element={<FreeTrial />} />
             <Route path="/profile" element={<UserProfile />} />
             <Route path="/settings" element={<Settings />} />
+            <Route path="/search" element={<SearchResults />} />
             
             {/* CRM System with sidebar layout */}
             <Route element={<CrmLayout />}>
