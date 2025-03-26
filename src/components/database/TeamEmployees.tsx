@@ -8,10 +8,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Mail, Phone, Linkedin, ShieldCheck, Flame } from "lucide-react";
+import { Mail, Phone, Linkedin, ShieldCheck, Flame, UserPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import ListSelectionPopover from "./ListSelectionPopover";
+import { toast } from "sonner";
 
 interface Employee {
   id: number;
@@ -50,6 +52,12 @@ const TeamEmployees = ({
 }: TeamEmployeesProps) => {
   if (!selectedTeam) return null;
 
+  const handleAddToList = (employee: Employee, listId: number, listName: string) => {
+    toast.success(`Added ${employee.name} to ${listName}`, {
+      description: "You can manage all your lists in the Lists section"
+    });
+  };
+
   return (
     <Card className={onCloseEmployees ? "mt-4 shadow-md" : ""}>
       {onCloseEmployees && (
@@ -72,12 +80,13 @@ const TeamEmployees = ({
                 <TableHead>Email</TableHead>
                 <TableHead className="hidden md:table-cell">Phone</TableHead>
                 <TableHead className="hidden md:table-cell">LinkedIn</TableHead>
+                <TableHead className="w-16 text-right">Action</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {selectedTeam.employees.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={5} className="text-center py-10 text-muted-foreground">
+                  <TableCell colSpan={6} className="text-center py-10 text-muted-foreground">
                     No employee data available for this team.
                   </TableCell>
                 </TableRow>
@@ -179,6 +188,12 @@ const TeamEmployees = ({
                       ) : (
                         <span className="text-xs text-muted-foreground">N/A</span>
                       )}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <ListSelectionPopover
+                        onAddToList={(_, listId, listName) => handleAddToList(employee, listId, listName)}
+                        contact={employee}
+                      />
                     </TableCell>
                   </TableRow>
                 ))
