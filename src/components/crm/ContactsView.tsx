@@ -47,7 +47,7 @@ export const ContactsView: React.FC<ContactsViewProps> = ({
         <div className="flex items-center gap-2">
           <Checkbox
             checked={allSelected}
-            indeterminate={someSelected}
+            // Removed indeterminate prop as it's not supported by our Checkbox component
             onClick={() => (allSelected ? onDeselectAll() : onSelectAll())}
           />
           <span className="text-sm text-gray-600">
