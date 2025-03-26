@@ -22,7 +22,7 @@ interface ContactsViewProps {
   onRevealPhone: (phone: string) => void;
   onViewTeam: (teamId: number) => void;
   onAddToList: (contact: any, listId: number, listName: string) => void;
-  onRemoveFromList: (contactId: number) => void;
+  onRemoveFromList?: (contactId: number) => void;
   isSavedList?: boolean;
 }
 
@@ -34,7 +34,7 @@ const ContactsView = ({
   onRevealPhone,
   onViewTeam,
   onAddToList,
-  onRemoveFromList,
+  onRemoveFromList = () => {},
   isSavedList = false
 }: ContactsViewProps) => {
   return (
