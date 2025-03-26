@@ -1,4 +1,3 @@
-
 import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
@@ -44,7 +43,10 @@ const Hero = () => {
               <span className="bg-gradient-to-r from-sportbnk-green to-teal-400 bg-clip-text text-transparent"> the right people to grow your business in sports</span>
             </h1>
             
-            {/* Removed subheading */}
+            {/* Subheading */}
+            <p className={`text-xl text-gray-600 transition-all duration-700 delay-200 ${isVisible ? 'opacity-100' : 'opacity-0 translate-y-8'}`}>
+              Want to see how sportbnk is helping businesses build stronger pipelines?
+            </p>
             
             <div className={`flex flex-col sm:flex-row gap-4 transition-all duration-700 delay-300 ${isVisible ? 'opacity-100' : 'opacity-0 translate-y-8'}`}>
               <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white font-medium rounded-md px-8 py-6 text-lg" asChild>
