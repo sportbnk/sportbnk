@@ -46,7 +46,7 @@ const Hero = () => {
             
             {/* Subheading - Updated */}
             <p className={`text-xl text-gray-600 transition-all duration-700 delay-200 ${isVisible ? 'opacity-100' : 'opacity-0 translate-y-8'}`}>
-              Expand your business with Sportbank today:
+              Expand your business with Sportbnk today:
             </p>
             
             <div className={`flex flex-col sm:flex-row gap-4 transition-all duration-700 delay-300 ${isVisible ? 'opacity-100' : 'opacity-0 translate-y-8'}`}>
