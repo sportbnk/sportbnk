@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { Plus, Search, ChevronsUpDown, Copy, Edit, Trash2, Download } from 'lucide-react';
+import { Plus, Search, ChevronsUpDown, Copy, Edit, Trash2, Download, UserPlus } from 'lucide-react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -128,8 +128,9 @@ const Lists = () => {
   const onSubmit = useCallback(async (values: z.infer<typeof formSchema>) => {
     // Create a new list
     const newList = { 
-      ...values, 
       id: Date.now().toString(),
+      name: values.listName, // Set the name property explicitly
+      description: values.description,
       contacts: []
     };
     
