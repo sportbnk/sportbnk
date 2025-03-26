@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { Plus, Search, ChevronsUpDown, Copy, Edit, Trash2, Download } from 'lucide-react';
 import {
@@ -86,6 +87,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer"
+import { toast } from "sonner";
 
 // Define the schema for the form
 const formSchema = z.object({
@@ -105,9 +107,13 @@ const Lists = () => {
   const [selectedContacts, setSelectedContacts] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [isSavedList, setIsSavedList] = useState(true);
+  const [lists, setLists] = useState<{id: string, name: string, description?: string, contacts: any[]}[]>([
+    { id: '1', name: 'My Contacts', description: 'Default contact list', contacts: [] }
+  ]);
+  const [activeList, setActiveList] = useState(lists[0]);
 
   const queryClient = useQueryClient();
-  const { toast } = useToast()
+  const { toast: uiToast } = useToast();
 
   // Form logic
   const form = useForm<z.infer<typeof formSchema>>({
@@ -116,27 +122,31 @@ const Lists = () => {
       listName: "",
       description: "",
     },
-  })
+  });
 
   // Function to handle form submission
   const onSubmit = useCallback(async (values: z.infer<typeof formSchema>) => {
-    // Here, you would typically make an API call to save the list
-    console.log("Form values:", values);
-
-    // Optimistically update the cache
-    queryClient.setQueryData(['lists'], (old: any) => {
-      return [...(old || []), { ...values, id: Date.now().toString() }]
-    })
-
+    // Create a new list
+    const newList = { 
+      ...values, 
+      id: Date.now().toString(),
+      contacts: []
+    };
+    
+    setLists(prev => [...prev, newList]);
+    setActiveList(newList);
+    
     // Show a success toast
-    toast({
-      title: "List created.",
-      description: "Your list has been successfully created.",
-    })
+    toast.success("List created successfully", {
+      description: `Your new list "${values.listName}" has been created.`
+    });
 
     // Close the dialog
     setIsCreateListOpen(false);
-  }, [queryClient, toast]);
+    
+    // Reset the form
+    form.reset();
+  }, [form]);
 
   // Function to handle contact selection
   const handleSelectContact = (contactId: string) => {
@@ -155,6 +165,100 @@ const Lists = () => {
   const handleDeselectAll = () => {
     setSelectedContacts([]);
   };
+
+  // Function to add selected contacts to the active list
+  const handleAddToList = useCallback(() => {
+    if (selectedContacts.length === 0) {
+      toast.error("No contacts selected", {
+        description: "Please select contacts to add to your list."
+      });
+      return;
+    }
+
+    // Find the selected contacts
+    const contactsToAdd = contacts.filter(contact => 
+      selectedContacts.includes(contact.id) && 
+      !activeList.contacts.some(c => c.id === contact.id)
+    );
+
+    if (contactsToAdd.length === 0) {
+      toast.info("Contacts already in list", {
+        description: "All selected contacts are already in your list."
+      });
+      return;
+    }
+
+    // Update the active list with the new contacts
+    const updatedList = {
+      ...activeList,
+      contacts: [...activeList.contacts, ...contactsToAdd]
+    };
+
+    // Update the lists array
+    setLists(prev => prev.map(list => 
+      list.id === activeList.id ? updatedList : list
+    ));
+    
+    // Update the active list
+    setActiveList(updatedList);
+
+    // Show a success toast
+    toast.success(`${contactsToAdd.length} contacts added to list`, {
+      description: `Added to "${activeList.name}"`
+    });
+
+    // Clear the selection
+    setSelectedContacts([]);
+  }, [activeList, contacts, selectedContacts]);
+
+  // Function to handle export to CSV
+  const handleExportToCsv = useCallback(() => {
+    if (!activeList || activeList.contacts.length === 0) {
+      toast.error("No contacts to export", {
+        description: "Your list is empty. Add contacts to export."
+      });
+      return;
+    }
+
+    // Create CSV content
+    const headers = ["Name", "Email", "Company"];
+    const rows = activeList.contacts.map(contact => [
+      contact.name, 
+      contact.email, 
+      contact.company
+    ]);
+    
+    // Combine headers and rows
+    const csvContent = [
+      headers.join(","),
+      ...rows.map(row => row.join(","))
+    ].join("\n");
+    
+    // Create a Blob with the CSV content
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    
+    // Create a URL for the Blob
+    const url = URL.createObjectURL(blob);
+    
+    // Create a temporary link element
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", `${activeList.name.replace(/\s+/g, '_')}_contacts.csv`);
+    
+    // Append the link to the document
+    document.body.appendChild(link);
+    
+    // Click the link to trigger the download
+    link.click();
+    
+    // Remove the link from the document
+    document.body.removeChild(link);
+    
+    // Show a success toast
+    toast.success("Export completed", {
+      description: `${activeList.contacts.length} contacts exported to CSV.`
+    });
+  }, [activeList]);
 
   // Filter contacts based on search term
   const filteredContacts = contacts.filter(contact =>
@@ -237,6 +341,52 @@ const Lists = () => {
           </div>
         </div>
 
+        <div className="mb-6 flex flex-wrap justify-between items-center gap-2">
+          <div className="flex items-center gap-2">
+            <Select
+              defaultValue={activeList.id}
+              onValueChange={(value) => {
+                const selected = lists.find(list => list.id === value);
+                if (selected) setActiveList(selected);
+              }}
+            >
+              <SelectTrigger className="w-[220px]">
+                <SelectValue placeholder="Select a list" />
+              </SelectTrigger>
+              <SelectContent>
+                {lists.map(list => (
+                  <SelectItem key={list.id} value={list.id}>
+                    {list.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <span className="text-sm text-muted-foreground">
+              {activeList?.contacts?.length || 0} contacts
+            </span>
+          </div>
+          
+          <div className="flex gap-2">
+            <Button 
+              variant="outline" 
+              onClick={handleAddToList}
+              disabled={selectedContacts.length === 0}
+            >
+              <UserPlus className="h-4 w-4 mr-2" /> 
+              Add Selected to List
+            </Button>
+            
+            <Button
+              variant="outline"
+              onClick={handleExportToCsv}
+              disabled={!activeList || activeList.contacts.length === 0}
+            >
+              <Download className="h-4 w-4 mr-2" />
+              Export CSV
+            </Button>
+          </div>
+        </div>
+
         {/* Contacts View */}
         <ContactsView
           data={filteredContacts}
@@ -244,7 +394,7 @@ const Lists = () => {
           selectedContacts={selectedContacts}
           onSelectAll={handleSelectAll}
           onDeselectAll={handleDeselectAll}
-          onAddToList={() => {}} // Add the missing prop with an empty function
+          onAddToList={handleAddToList}
           isSavedList={true}
         />
       </div>

@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Plus, Check } from "lucide-react";
@@ -23,6 +23,21 @@ const ListSelectionPopover = ({ onAddToList, contact }: ListSelectionPopoverProp
   const [newListName, setNewListName] = useState("");
   const [isOpen, setIsOpen] = useState(false);
 
+  // Load lists from local storage on component mount
+  useEffect(() => {
+    const storedLists = localStorage.getItem('contactLists');
+    if (storedLists) {
+      try {
+        const parsedLists = JSON.parse(storedLists);
+        if (Array.isArray(parsedLists) && parsedLists.length > 0) {
+          setLists(parsedLists);
+        }
+      } catch (error) {
+        console.error('Error parsing lists from localStorage:', error);
+      }
+    }
+  }, []);
+
   const handleAddToList = (listId: number, listName: string) => {
     onAddToList(contact, listId, listName);
     setIsOpen(false);
@@ -36,11 +51,20 @@ const ListSelectionPopover = ({ onAddToList, contact }: ListSelectionPopoverProp
     }
     
     const newList = {
-      id: lists.length + 1,
+      id: Date.now(),
       name: newListName.trim()
     };
     
-    setLists([...lists, newList]);
+    const updatedLists = [...lists, newList];
+    setLists(updatedLists);
+    
+    // Save to local storage
+    try {
+      localStorage.setItem('contactLists', JSON.stringify(updatedLists));
+    } catch (error) {
+      console.error('Error saving lists to localStorage:', error);
+    }
+    
     setNewListName("");
     handleAddToList(newList.id, newList.name);
   };
