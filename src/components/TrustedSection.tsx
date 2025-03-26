@@ -31,7 +31,7 @@ const TrustedSection = () => {
     <section className="py-16 md:py-24 bg-sportbnk-lightGrey">
       <div className="container mx-auto px-4 md:px-6">
         <h2 className="text-3xl font-bold mb-16 text-center text-sportbnk-navy">
-          Most Trusted Sports B2B
+          Most Trusted B2B Sports Data
         </h2>
         
         <div className="grid md:grid-cols-2 gap-8 items-center">
