@@ -1,6 +1,6 @@
 
-import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   Sidebar,
   SidebarContent,
@@ -36,9 +36,40 @@ import {
 import { Input } from "@/components/ui/input";
 import AccountBadge from "./AccountBadge";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 const CrmSidebar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState('');
+  
+  // Handler for search submissions
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      // Log the search term
+      console.log('Searching for:', searchTerm);
+      
+      // Determine search context based on current page
+      let searchContext = '';
+      if (location.pathname.includes('/teams')) {
+        searchContext = 'teams';
+      } else if (location.pathname.includes('/people')) {
+        searchContext = 'people';
+      } else {
+        searchContext = 'all';
+      }
+      
+      // Show a toast with the search term
+      toast.info(`Searching for "${searchTerm}" in ${searchContext}`);
+      
+      // Navigate to search results page with search term and context
+      navigate(`/crm/search?q=${encodeURIComponent(searchTerm.trim())}&context=${searchContext}`);
+      
+      // Clear the search term after submission
+      setSearchTerm('');
+    }
+  };
   
   return (
     <Sidebar>
@@ -47,13 +78,15 @@ const CrmSidebar = () => {
         <div className="flex justify-between items-center mb-2">
           <h2 className="text-xl font-bold text-sportbnk-green">Welcome Back!</h2>
         </div>
-        <div className="relative">
+        <form onSubmit={handleSearch} className="relative">
           <SearchIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input 
-            placeholder="Search..." 
+            placeholder="Search teams or people..." 
             className="pl-8 h-9 bg-background focus-visible:ring-sportbnk-green" 
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
-        </div>
+        </form>
       </SidebarHeader>
       
       <SidebarContent>

@@ -1,6 +1,5 @@
-
 import { useState, useEffect } from 'react';
-import { Menu, X, ChevronDown, Package, BarChart3, Building, BookOpen, DollarSign, Calendar, Users, Rocket, Shield, Briefcase, Newspaper, Phone, BookmarkPlus, Users2, FileText, Video, Headphones, Clipboard, MessageSquare, HelpCircle, Search } from 'lucide-react';
+import { Menu, X, ChevronDown, Package, BarChart3, Building, BookOpen, DollarSign, Calendar, Users, Rocket, Shield, Briefcase, Newspaper, Phone, BookmarkPlus, Users2, FileText, Video, Headphones, Clipboard, MessageSquare, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -20,35 +19,15 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Input } from '@/components/ui/input';
-import { toast } from 'sonner';
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [location.pathname]);
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchTerm.trim()) {
-      // Log the search term
-      console.log('Searching for:', searchTerm);
-      
-      // Show a toast with the search term
-      toast.info(`Searching for "${searchTerm}"`);
-      
-      // Navigate to search results page with the search term as a query parameter
-      navigate(`/search?q=${encodeURIComponent(searchTerm.trim())}`);
-      
-      // Clear the search term after submission
-      setSearchTerm('');
-    }
-  };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-md py-3">
@@ -61,18 +40,6 @@ const Navbar = () => {
               className="h-10"
             />
           </Link>
-
-          <div className="hidden md:flex mx-auto max-w-md w-full px-4">
-            <form onSubmit={handleSearch} className="relative w-full">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input 
-                placeholder="Search..." 
-                className="w-full pl-9 focus-visible:ring-sportbnk-green"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </form>
-          </div>
 
           <div className="flex items-center space-x-4">
             <NavigationMenu className="hidden md:flex">
@@ -305,15 +272,6 @@ const Navbar = () => {
       {isMobileMenuOpen && (
         <div className="md:hidden bg-white shadow-lg absolute top-full left-0 right-0 animate-slideUp">
           <div className="container mx-auto px-4 py-4 flex flex-col space-y-2">
-            <form onSubmit={handleSearch} className="relative mb-3">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input 
-                placeholder="Search..." 
-                className="w-full pl-9 focus-visible:ring-sportbnk-green"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </form>
             
             <DropdownMenu>
               <DropdownMenuTrigger className="flex items-center justify-between w-full py-2 text-left text-sportbnk-navy">
