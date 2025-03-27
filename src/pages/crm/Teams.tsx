@@ -1,9 +1,11 @@
+
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import ContactsFilters from "@/components/database/ContactsFilters";
 import ContactsTable from "@/components/database/ContactsTable";
 import { useResponsiveContainer } from "@/hooks/use-responsive-container";
+import { Plus } from "lucide-react";
 
 // Dummy data for teams with expanded country and sport coverage
 const teamData = [
@@ -796,6 +798,9 @@ const Teams = () => {
     <div className="container mx-auto px-0">
       <div className="flex justify-between items-center mb-6 px-2">
         <h1 className="text-2xl font-bold text-sportbnk-navy">Teams Database</h1>
+        <Button size="icon" className="rounded-full bg-sportbnk-green hover:bg-sportbnk-green/90">
+          <Plus className="h-4 w-4" />
+        </Button>
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-6 gap-3">
@@ -844,4 +849,3 @@ const Teams = () => {
 };
 
 export default Teams;
-
