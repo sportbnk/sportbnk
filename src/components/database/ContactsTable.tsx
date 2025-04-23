@@ -126,11 +126,6 @@ const ContactsTable = ({ data, useCredits, onTeamSelect }: ContactsTableProps) =
   return (
     <Card>
       <CardContent className="p-0">
-        <div className="p-4 border-b">
-          <p className="text-sm text-muted-foreground">
-            Found {sortedData.length} organisation{sortedData.length !== 1 ? 's' : ''} matching your filters
-          </p>
-        </div>
         <Table>
           <TableHeader>
             <TableRow>
