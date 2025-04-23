@@ -49,13 +49,21 @@ export default function AddTeamForm() {
     try {
       // Convert string values to numbers where needed
       const teamData = {
-        ...data,
+        team: data.team,
+        sport: data.sport,
+        level: data.level,
+        city: data.city,
+        country: data.country,
         revenue: data.revenue ? parseInt(data.revenue) : null,
         employees: data.employees ? parseInt(data.employees) : null,
         founded: data.founded ? parseInt(data.founded) : null,
+        website: data.website || null,
+        email: data.email || null,
+        phone: data.phone || null,
+        description: data.description || null,
       };
 
-      const { error } = await supabase.from("teams").insert([teamData]);
+      const { error } = await supabase.from("teams").insert(teamData);
 
       if (error) throw error;
 

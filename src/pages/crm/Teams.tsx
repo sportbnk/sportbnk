@@ -8,6 +8,38 @@ import AddTeamDialog from "@/components/teams/AddTeamDialog";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 
+// Define the TeamData interface that matches ContactsTable expectations
+interface TeamData {
+  id: number;
+  team: string;
+  sport: string;
+  level: string;
+  city: string;
+  country: string;
+  revenue: number;
+  employees: number;
+  logo?: string;
+  description?: string;
+  founded?: number;
+  website?: string;
+  email?: string;
+  phone?: string;
+  // Adding these expected properties for ContactsTable
+  contacts: {
+    name: string;
+    position: string;
+    email: string;
+    phone?: string;
+    linkedin?: string;
+  }[];
+  social: {
+    facebook?: string;
+    twitter?: string;
+    instagram?: string;
+    linkedin?: string;
+  };
+}
+
 export default function Teams() {
   const [filters, setFilters] = useState({
     sport: "all",
@@ -20,7 +52,7 @@ export default function Teams() {
 
   const [credits, setCredits] = useState(250);
 
-  const { data: teams, isLoading } = useQuery({
+  const { data: teamsData, isLoading } = useQuery({
     queryKey: ['teams', filters],
     queryFn: async () => {
       let query = supabase
@@ -51,7 +83,47 @@ export default function Teams() {
         throw error;
       }
       
-      return data || [];
+      // Transform the data to match the TeamData interface
+      const transformedData: TeamData[] = (data || []).map(team => {
+        // Extract social links into the format expected by ContactsTable
+        const socialLinks = (team.team_social_links || []).reduce((acc: any, link: any) => {
+          if (link.platform === 'facebook') acc.facebook = link.url;
+          if (link.platform === 'twitter') acc.twitter = link.url;
+          if (link.platform === 'instagram') acc.instagram = link.url;
+          if (link.platform === 'linkedin') acc.linkedin = link.url;
+          return acc;
+        }, {});
+
+        // Transform contacts to match expected format
+        const contacts = (team.team_contacts || []).map((contact: any) => ({
+          name: contact.name,
+          position: contact.position || '',
+          email: contact.email || '',
+          phone: contact.phone || '',
+          linkedin: contact.linkedin || ''
+        }));
+        
+        return {
+          id: team.id,
+          team: team.team,
+          sport: team.sport,
+          level: team.level,
+          city: team.city,
+          country: team.country,
+          revenue: team.revenue || 0,
+          employees: team.employees || 0,
+          logo: team.logo || '',
+          description: team.description || '',
+          founded: team.founded,
+          website: team.website,
+          email: team.email,
+          phone: team.phone,
+          contacts: contacts,
+          social: socialLinks
+        };
+      });
+      
+      return transformedData;
     }
   });
 
@@ -80,7 +152,7 @@ export default function Teams() {
               <ContactsFilters 
                 onFilterChange={handleFilterChange} 
                 showTeamFilters={true}
-                totalResults={teams?.length || 0}
+                totalResults={teamsData?.length || 0}
               />
             </CardContent>
           </Card>
@@ -101,7 +173,7 @@ export default function Teams() {
         
         <div className="md:col-span-5">
           <ContactsTable 
-            data={teams || []} 
+            data={teamsData || []} 
             useCredits={handleUseCredits}
           />
         </div>
