@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -7,40 +6,7 @@ import ContactsTable from "@/components/database/ContactsTable";
 import AddTeamDialog from "@/components/teams/AddTeamDialog";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
-
-interface Contact {
-  name: string;
-  position: string;
-  email: string;
-  phone?: string;
-  linkedin?: string;
-}
-
-interface SocialLinks {
-  facebook?: string;
-  twitter?: string;
-  instagram?: string;
-  linkedin?: string;
-}
-
-interface TeamData {
-  id: number;
-  team: string;
-  sport: string;
-  level: string;
-  city: string;
-  country: string;
-  revenue: number;
-  employees: number;
-  logo: string;
-  description: string;
-  founded?: number;
-  website?: string;
-  email?: string;
-  phone?: string;
-  contacts: Contact[];
-  social: SocialLinks;
-}
+import { TeamData } from "@/types/teams";
 
 export default function Teams() {
   const [filters, setFilters] = useState({
@@ -106,7 +72,7 @@ export default function Teams() {
           phone: contact.phone || '',
           linkedin: contact.linkedin || ''
         })),
-        social: (team.team_social_links || []).reduce((acc: SocialLinks, link: any) => {
+        social: (team.team_social_links || []).reduce((acc: any, link: any) => {
           if (link.platform === 'facebook') acc.facebook = link.url;
           if (link.platform === 'twitter') acc.twitter = link.url;
           if (link.platform === 'instagram') acc.instagram = link.url;

@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -15,38 +14,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import TeamProfile from "./TeamProfile";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-
-interface Contact {
-  name: string;
-  position: string;
-  email: string;
-  phone?: string;
-  linkedin?: string;
-}
-
-interface TeamData {
-  id: number;
-  team: string;
-  sport: string;
-  level: string;
-  city: string;
-  country: string;
-  revenue: number;
-  employees: number;
-  contacts: Contact[];
-  logo: string;
-  description: string;
-  founded?: number;  // Make founded optional to match the Teams.tsx interface
-  website?: string;
-  email?: string;
-  phone?: string;
-  social: {
-    facebook?: string;
-    twitter?: string;
-    instagram?: string;
-    linkedin?: string;
-  };
-}
+import { TeamData } from "@/types/teams";
 
 interface ContactsTableProps {
   data: TeamData[];

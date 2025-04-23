@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -6,6 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription } from "@/components/ui/card";
 import { Globe, Users, DollarSign, MapPin, Facebook, Twitter, Instagram, Linkedin, Mail, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { TeamData } from "@/types/teams";
 
 interface Contact {
   name: string;
@@ -13,28 +13,6 @@ interface Contact {
   email: string;
   phone?: string;
   linkedin?: string;
-}
-
-interface TeamData {
-  id: number;
-  team: string;
-  sport: string;
-  level: string;
-  city: string;
-  country: string;
-  revenue: number;
-  employees: number;
-  contacts: Contact[];
-  logo: string;
-  description: string;
-  founded: number;
-  website: string;
-  social: {
-    facebook?: string;
-    twitter?: string;
-    instagram?: string;
-    linkedin?: string;
-  };
 }
 
 interface TeamProfileProps {
@@ -47,7 +25,7 @@ interface TeamProfileProps {
   onRevealPhone: (phone: string) => void;
 }
 
-const TeamProfile = ({ 
+const TeamProfile: React.FC<TeamProfileProps> = ({ 
   team, 
   open, 
   onOpenChange, 
