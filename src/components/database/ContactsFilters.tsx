@@ -1,8 +1,9 @@
+
 import React, { useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Filter, X, MapPin, Flag, Football, Award, DollarSign, Users } from "lucide-react";
+import { Filter, X, MapPin, Flag, Dumbbell, Award, DollarSign, Users } from "lucide-react";
 
 interface ContactsFiltersProps {
   onFilterChange: (filters: any) => void;
@@ -109,7 +110,7 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false }: ContactsFi
 
           <div className="space-y-1">
             <Label htmlFor="sport" className="text-xs flex items-center gap-1">
-              <Football className="h-4 w-4" /> Sport
+              <Dumbbell className="h-4 w-4" /> Sport
             </Label>
             <Select 
               value={filters.sport} 
