@@ -1,5 +1,4 @@
-
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import ContactsFilters from "@/components/database/ContactsFilters";
@@ -8,7 +7,21 @@ import AddTeamDialog from "@/components/teams/AddTeamDialog";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 
-// Define the local TeamData interface that matches ContactsTable expectations
+interface Contact {
+  name: string;
+  position: string;
+  email: string;
+  phone?: string;
+  linkedin?: string;
+}
+
+interface SocialLinks {
+  facebook?: string;
+  twitter?: string;
+  instagram?: string;
+  linkedin?: string;
+}
+
 interface TeamData {
   id: number;
   team: string;
@@ -24,19 +37,8 @@ interface TeamData {
   website?: string;
   email?: string;
   phone?: string;
-  contacts: {
-    name: string;
-    position: string;
-    email: string;
-    phone?: string;
-    linkedin?: string;
-  }[];
-  social: {
-    facebook?: string;
-    twitter?: string;
-    instagram?: string;
-    linkedin?: string;
-  };
+  contacts: Contact[];
+  social: SocialLinks;
 }
 
 export default function Teams() {
@@ -62,7 +64,6 @@ export default function Teams() {
           team_social_links (*)
         `);
 
-      // Apply filters
       if (filters.sport !== "all") {
         query = query.eq('sport', filters.sport);
       }
@@ -82,47 +83,38 @@ export default function Teams() {
         throw error;
       }
       
-      // Transform the data to match the TeamData interface
-      const transformedData = (data || []).map(team => {
-        // Extract social links into the format expected by ContactsTable
-        const socialLinks = (team.team_social_links || []).reduce((acc: any, link: any) => {
-          if (link.platform === 'facebook') acc.facebook = link.url;
-          if (link.platform === 'twitter') acc.twitter = link.url;
-          if (link.platform === 'instagram') acc.instagram = link.url;
-          if (link.platform === 'linkedin') acc.linkedin = link.url;
-          return acc;
-        }, {});
-
-        // Transform contacts to match expected format
-        const contacts = (team.team_contacts || []).map((contact: any) => ({
+      const transformedData: TeamData[] = (data || []).map(team => ({
+        id: team.id,
+        team: team.team,
+        sport: team.sport,
+        level: team.level,
+        city: team.city,
+        country: team.country,
+        revenue: team.revenue || 0,
+        employees: team.employees || 0,
+        logo: team.logo || '',
+        description: team.description || '',
+        founded: team.founded,
+        website: team.website,
+        email: team.email,
+        phone: team.phone,
+        contacts: (team.team_contacts || []).map((contact: any) => ({
           name: contact.name,
           position: contact.position || '',
           email: contact.email || '',
           phone: contact.phone || '',
           linkedin: contact.linkedin || ''
-        }));
-        
-        return {
-          id: team.id,
-          team: team.team,
-          sport: team.sport,
-          level: team.level,
-          city: team.city,
-          country: team.country,
-          revenue: team.revenue || 0,
-          employees: team.employees || 0,
-          logo: team.logo || '',
-          description: team.description || '',
-          founded: team.founded,
-          website: team.website,
-          email: team.email,
-          phone: team.phone,
-          contacts: contacts,
-          social: socialLinks
-        };
-      });
+        })),
+        social: (team.team_social_links || []).reduce((acc: SocialLinks, link: any) => {
+          if (link.platform === 'facebook') acc.facebook = link.url;
+          if (link.platform === 'twitter') acc.twitter = link.url;
+          if (link.platform === 'instagram') acc.instagram = link.url;
+          if (link.platform === 'linkedin') acc.linkedin = link.url;
+          return acc;
+        }, {})
+      }));
       
-      return transformedData as TeamData[];
+      return transformedData;
     }
   });
 
