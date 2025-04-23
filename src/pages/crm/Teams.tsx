@@ -8,7 +8,7 @@ import AddTeamDialog from "@/components/teams/AddTeamDialog";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 
-// Define the TeamData interface that matches ContactsTable expectations
+// Define the local TeamData interface that matches ContactsTable expectations
 interface TeamData {
   id: number;
   team: string;
@@ -18,13 +18,12 @@ interface TeamData {
   country: string;
   revenue: number;
   employees: number;
-  logo?: string;
-  description?: string;
+  logo: string;
+  description: string;
   founded?: number;
   website?: string;
   email?: string;
   phone?: string;
-  // Adding these expected properties for ContactsTable
   contacts: {
     name: string;
     position: string;
@@ -84,7 +83,7 @@ export default function Teams() {
       }
       
       // Transform the data to match the TeamData interface
-      const transformedData: TeamData[] = (data || []).map(team => {
+      const transformedData = (data || []).map(team => {
         // Extract social links into the format expected by ContactsTable
         const socialLinks = (team.team_social_links || []).reduce((acc: any, link: any) => {
           if (link.platform === 'facebook') acc.facebook = link.url;
@@ -123,7 +122,7 @@ export default function Teams() {
         };
       });
       
-      return transformedData;
+      return transformedData as TeamData[];
     }
   });
 
