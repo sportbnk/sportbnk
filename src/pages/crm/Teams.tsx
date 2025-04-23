@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -797,7 +796,7 @@ const Teams = () => {
   return (
     <div className="container mx-auto px-0">
       <div className="flex justify-between items-center mb-6 px-2">
-        <h1 className="text-2xl font-bold text-sportbnk-navy">Teams Database</h1>
+        <h1 className="text-2xl font-bold text-sportbnk-navy">Sportbnk Database</h1>
         <Button size="icon" className="rounded-full bg-sportbnk-green hover:bg-sportbnk-green/90">
           <Plus className="h-4 w-4" />
         </Button>
@@ -832,7 +831,7 @@ const Teams = () => {
           <div {...containerProps}>
             <Card className="shadow-md h-full">
               <CardHeader className="pb-3 border-b">
-                <CardTitle className="text-lg">Teams List</CardTitle>
+                <CardTitle className="text-lg">Organisations List</CardTitle>
               </CardHeader>
               <CardContent className="p-0">
                 <ContactsTable 
