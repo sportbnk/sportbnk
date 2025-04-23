@@ -1,4 +1,3 @@
-
 import PageLayout from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -71,6 +70,15 @@ const Articles = () => {
           </div>
           
           <div className="space-y-8">
+            <ArticleCard 
+              title="SportBnk vs SportBank: Understanding Our Brand" 
+              description="Discover why we chose SportBnk as our brand name, how it relates to SportBank, and what makes our sports intelligence platform unique in the industry. Learn about our mission to revolutionize sports data management."
+              date="April 23, 2025" 
+              readTime="5 min read" 
+              image="/lovable-uploads/53090dbd-8563-439e-951d-47c7b07d47e4.png" 
+              category="Company"
+            />
+            
             <ArticleCard 
               title="How Data Intelligence is Transforming Sports Marketing" 
               description="Learn how leading sports organizations are leveraging data to enhance their marketing strategies and create more personalized fan experiences."
