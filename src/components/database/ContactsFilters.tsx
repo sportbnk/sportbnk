@@ -7,9 +7,10 @@ import { Filter, X } from "lucide-react";
 interface ContactsFiltersProps {
   onFilterChange: (filters: any) => void;
   showTeamFilters?: boolean;
+  totalResults?: number;
 }
 
-const ContactsFilters = ({ onFilterChange, showTeamFilters = false }: ContactsFiltersProps) => {
+const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults = 0 }: ContactsFiltersProps) => {
   const [filters, setFilters] = useState({
     position: "all",
     team: "all",
@@ -58,6 +59,10 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false }: ContactsFi
           <X className="h-3 w-3 mr-1" />
           Clear
         </Button>
+      </div>
+
+      <div className="text-sm text-muted-foreground mb-4">
+        {totalResults} result{totalResults !== 1 ? 's' : ''} found
       </div>
 
       {showTeamFilters && (
