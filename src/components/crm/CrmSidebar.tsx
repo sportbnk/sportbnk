@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
@@ -43,14 +42,11 @@ const CrmSidebar = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   
-  // Handler for search submissions
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchTerm.trim()) {
-      // Log the search term
       console.log('Searching for:', searchTerm);
       
-      // Determine search context based on current page
       let searchContext = '';
       if (location.pathname.includes('/teams')) {
         searchContext = 'teams';
@@ -60,13 +56,10 @@ const CrmSidebar = () => {
         searchContext = 'all';
       }
       
-      // Show a toast with the search term
       toast.info(`Searching for "${searchTerm}" in ${searchContext}`);
       
-      // Navigate to search results page with search term and context
       navigate(`/crm/search?q=${encodeURIComponent(searchTerm.trim())}&context=${searchContext}`);
       
-      // Clear the search term after submission
       setSearchTerm('');
     }
   };
@@ -94,7 +87,6 @@ const CrmSidebar = () => {
           <SidebarGroupLabel>Navigation</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {/* Changed Prospects to Discover */}
               <SidebarMenuItem>
                 <SidebarMenuButton 
                   isActive={location.pathname.includes("/database") || location.pathname.includes("/crm/database")}
@@ -110,7 +102,7 @@ const CrmSidebar = () => {
                     >
                       <Link to="/crm/teams">
                         <Users className="h-4 w-4 mr-2" />
-                        Teams
+                        Organisations
                       </Link>
                     </SidebarMenuSubButton>
                   </SidebarMenuSubItem>
@@ -139,7 +131,6 @@ const CrmSidebar = () => {
                 </SidebarMenuSub>
               </SidebarMenuItem>
               
-              {/* Engage menu with submenu items */}
               <SidebarMenuItem>
                 <SidebarMenuButton>
                   <span>Engage</span>
@@ -170,7 +161,6 @@ const CrmSidebar = () => {
                 </SidebarMenuSub>
               </SidebarMenuItem>
               
-              {/* Deals menu with submenu items */}
               <SidebarMenuItem>
                 <SidebarMenuButton>
                   <span>Deals</span>
