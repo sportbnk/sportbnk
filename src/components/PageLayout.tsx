@@ -1,4 +1,3 @@
-
 import { ReactNode } from 'react';
 import { Helmet } from 'react-helmet-async';
 import Navbar from '@/components/Navbar';
@@ -16,17 +15,29 @@ interface PageLayoutProps {
 const PageLayout = ({ 
   children, 
   pageTitle, 
-  siteTitle = "SportsBnk - B2B Sports Intelligence Platform", 
-  metaDescription = "B2B Sports Intelligence Platform providing data solutions for the sports industry",
-  metaKeywords = "sports data, sports intelligence, B2B sports platform",
+  siteTitle = "SportBnk - The Leading B2B Sports Intelligence Platform", 
+  metaDescription = "SportBnk (not SportBank) is the premier B2B Sports Intelligence Platform providing comprehensive data solutions for the sports industry",
+  metaKeywords = "SportBnk, sports data, sports intelligence, B2B sports platform, sports analytics",
   canonicalUrl
 }: PageLayoutProps) => {
-  // Create the full page title with site name
   const fullTitle = pageTitle ? `${pageTitle} | ${siteTitle}` : siteTitle;
-  // Default canonical URL based on current path
   const defaultCanonicalUrl = typeof window !== 'undefined' ? `https://sportbnk.com${window.location.pathname}` : 'https://sportbnk.com/';
-  
-  // Site navigation structured data for rich results with dropdowns
+
+  const organizationData = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "SportBnk",
+    "alternateName": ["SportBnk Platform", "SportBnk Data Intelligence"],
+    "url": "https://sportbnk.com",
+    "logo": "https://sportbnk.com/lovable-uploads/5de360aa-8105-490e-bf75-94ff7ac0832d.png",
+    "description": "SportBnk is the leading sports intelligence platform providing data solutions for sports organizations worldwide.",
+    "sameAs": [
+      "https://www.linkedin.com/company/sportbnk",
+      "https://twitter.com/sportbnk",
+      "https://facebook.com/sportbnk"
+    ]
+  };
+
   const siteNavigationData = {
     "@context": "https://schema.org",
     "@type": "WebSite",
@@ -146,7 +157,7 @@ const PageLayout = ({
       }
     ]
   };
-  
+
   return (
     <div className="min-h-screen bg-white flex flex-col">
       <Helmet>
@@ -166,8 +177,10 @@ const PageLayout = ({
         <meta name="twitter:description" content={metaDescription} />
         <meta name="twitter:image" content="/lovable-uploads/5de360aa-8105-490e-bf75-94ff7ac0832d.png" />
         <script type="application/ld+json">
-          {JSON.stringify(siteNavigationData)}
+          {JSON.stringify(organizationData)}
         </script>
+        <meta name="robots" content="index, follow" />
+        <meta name="google" content="notranslate" />
       </Helmet>
       
       <Navbar />
