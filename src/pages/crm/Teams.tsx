@@ -722,4 +722,25 @@ const teamData = [
         linkedin: "https://linkedin.com/in/patrickoneill"
       }
     ],
-    logo: "/lovable-uploads/b0f94fb5-f923-4243-b466-
+    logo: "/lovable-uploads/b0f94fb5-f923-4243-b466-86aa2a7738d0.png",
+    description: "Professional rugby union team competing in the United Rugby Championship.",
+    founded: 1876,
+    website: "https://www.ulsterrugby.com",
+    social: {
+      facebook: "https://facebook.com/UlsterRugby",
+      twitter: "https://twitter.com/UlsterRugby",
+      instagram: "https://instagram.com/ulsterrugby",
+      linkedin: "https://linkedin.com/company/ulster-rugby"
+    },
+    email: "info@ulsterrugby.com",
+    phone: "+44 28 9051 5100"
+  }
+];
+
+export default function Teams() {
+  return (
+    <div>
+      {/* Add your Teams component code here */}
+    </div>
+  );
+}
