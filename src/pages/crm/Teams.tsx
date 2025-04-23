@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -738,9 +739,98 @@ const teamData = [
 ];
 
 export default function Teams() {
+  const [filters, setFilters] = useState({
+    sport: "all",
+    level: "all",
+    country: "all",
+    city: "all",
+    revenue: "all",
+    employees: "all"
+  });
+
+  const [credits, setCredits] = useState(250);
+
+  // Handler for filter changes
+  const handleFilterChange = (newFilters: any) => {
+    setFilters(newFilters);
+  };
+
+  // Handler for using credits
+  const handleUseCredits = (amount: number) => {
+    setCredits(prevCredits => prevCredits - amount);
+  };
+
+  // Apply filters to the data
+  const filteredData = teamData.filter(team => {
+    // Filter by sport
+    if (filters.sport !== "all" && team.sport !== filters.sport) {
+      return false;
+    }
+    
+    // Filter by level
+    if (filters.level !== "all" && team.level !== filters.level) {
+      return false;
+    }
+    
+    // Filter by country
+    if (filters.country !== "all" && team.country !== filters.country) {
+      return false;
+    }
+    
+    // Filter by city
+    if (filters.city !== "all" && team.city !== filters.city) {
+      return false;
+    }
+    
+    // If all filters passed, include this team
+    return true;
+  });
+
   return (
-    <div>
-      {/* Add your Teams component code here */}
+    <div className="container mx-auto px-4">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">Teams Database</h1>
+        <Button className="flex items-center gap-1">
+          <Plus className="h-4 w-4" /> Add Team
+        </Button>
+      </div>
+      
+      <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
+        <div className="md:col-span-1">
+          <Card className="shadow-md mb-4">
+            <CardHeader className="pb-2 pt-4 px-4">
+              <CardTitle className="text-base font-semibold">Filters</CardTitle>
+            </CardHeader>
+            <CardContent className="p-3">
+              <ContactsFilters 
+                onFilterChange={handleFilterChange} 
+                showTeamFilters={true}
+                totalResults={filteredData.length}
+              />
+            </CardContent>
+          </Card>
+          
+          <Card className="shadow-md">
+            <CardHeader className="pb-2 pt-4 px-4">
+              <CardTitle className="text-base font-semibold">Credits</CardTitle>
+            </CardHeader>
+            <CardContent className="px-4 py-3">
+              <p className="text-2xl font-bold text-green-600">{credits}</p>
+              <p className="text-sm text-muted-foreground">Credits remaining</p>
+              <Button className="w-full mt-4 bg-blue-800 hover:bg-blue-900 text-base">
+                Upgrade
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+        
+        <div className="md:col-span-5">
+          <ContactsTable 
+            data={filteredData} 
+            useCredits={handleUseCredits}
+          />
+        </div>
+      </div>
     </div>
   );
 }
