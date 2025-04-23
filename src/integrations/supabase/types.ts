@@ -9,42 +9,133 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      teams: {
+      team_contacts: {
         Row: {
-          "Annual Revenue": string | null
-          "Club Name": string | null
-          "Company City": string | null
-          "Company Country": string | null
-          "Employees NO": string | null
-          "Facebook Url": string | null
-          "Level (Professional, Semi, Amatuer)": string | null
-          "Sport Type": string | null
-          "Twitter Url": string | null
-          "Website URL": string | null
+          created_at: string | null
+          email: string | null
+          id: number
+          linkedin: string | null
+          name: string
+          phone: string | null
+          position: string | null
+          team_id: number | null
         }
         Insert: {
-          "Annual Revenue"?: string | null
-          "Club Name"?: string | null
-          "Company City"?: string | null
-          "Company Country"?: string | null
-          "Employees NO"?: string | null
-          "Facebook Url"?: string | null
-          "Level (Professional, Semi, Amatuer)"?: string | null
-          "Sport Type"?: string | null
-          "Twitter Url"?: string | null
-          "Website URL"?: string | null
+          created_at?: string | null
+          email?: string | null
+          id?: number
+          linkedin?: string | null
+          name: string
+          phone?: string | null
+          position?: string | null
+          team_id?: number | null
         }
         Update: {
-          "Annual Revenue"?: string | null
-          "Club Name"?: string | null
-          "Company City"?: string | null
-          "Company Country"?: string | null
-          "Employees NO"?: string | null
-          "Facebook Url"?: string | null
-          "Level (Professional, Semi, Amatuer)"?: string | null
-          "Sport Type"?: string | null
-          "Twitter Url"?: string | null
-          "Website URL"?: string | null
+          created_at?: string | null
+          email?: string | null
+          id?: number
+          linkedin?: string | null
+          name?: string
+          phone?: string | null
+          position?: string | null
+          team_id?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "team_contacts_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      team_social_links: {
+        Row: {
+          created_at: string | null
+          id: number
+          platform: string
+          team_id: number | null
+          url: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: number
+          platform: string
+          team_id?: number | null
+          url: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: number
+          platform?: string
+          team_id?: number | null
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "team_social_links_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      teams: {
+        Row: {
+          city: string
+          country: string
+          created_at: string | null
+          description: string | null
+          email: string | null
+          employees: number | null
+          founded: number | null
+          id: number
+          level: string
+          logo: string | null
+          phone: string | null
+          revenue: number | null
+          sport: string
+          team: string
+          updated_at: string | null
+          website: string | null
+        }
+        Insert: {
+          city: string
+          country: string
+          created_at?: string | null
+          description?: string | null
+          email?: string | null
+          employees?: number | null
+          founded?: number | null
+          id?: number
+          level: string
+          logo?: string | null
+          phone?: string | null
+          revenue?: number | null
+          sport: string
+          team: string
+          updated_at?: string | null
+          website?: string | null
+        }
+        Update: {
+          city?: string
+          country?: string
+          created_at?: string | null
+          description?: string | null
+          email?: string | null
+          employees?: number | null
+          founded?: number | null
+          id?: number
+          level?: string
+          logo?: string | null
+          phone?: string | null
+          revenue?: number | null
+          sport?: string
+          team?: string
+          updated_at?: string | null
+          website?: string | null
         }
         Relationships: []
       }
