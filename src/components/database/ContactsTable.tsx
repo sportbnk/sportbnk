@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -35,8 +36,10 @@ interface TeamData {
   contacts: Contact[];
   logo: string;
   description: string;
-  founded: number;
-  website: string;
+  founded?: number;  // Make founded optional to match the Teams.tsx interface
+  website?: string;
+  email?: string;
+  phone?: string;
   social: {
     facebook?: string;
     twitter?: string;
