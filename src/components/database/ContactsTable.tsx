@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -92,12 +91,10 @@ const ContactsTable = ({ data, useCredits, onTeamSelect }: ContactsTableProps) =
   };
   
   const handleTeamClick = (team: TeamData) => {
-    // Navigate to team details page instead of showing modal or employees on same page
     navigate(`/crm/teams/${team.id}`);
   };
 
   const handleAddToList = (team: TeamData) => {
-    // Navigate to Lists page
     toast.success(`${team.team} added to your list`, {
       description: "You can view and manage all your lists"
     });
@@ -105,10 +102,8 @@ const ContactsTable = ({ data, useCredits, onTeamSelect }: ContactsTableProps) =
   };
 
   const revealEmail = (email: string) => {
-    // Check if already revealed
     if (revealedEmails[email]) return;
     
-    // Use 2 credits per email reveal
     useCredits(2);
     
     setRevealedEmails({
@@ -118,10 +113,8 @@ const ContactsTable = ({ data, useCredits, onTeamSelect }: ContactsTableProps) =
   };
   
   const revealPhone = (phone: string) => {
-    // Check if already revealed
     if (revealedPhones[phone]) return;
     
-    // Use 3 credits per phone reveal
     useCredits(3);
     
     setRevealedPhones({
@@ -141,18 +134,10 @@ const ContactsTable = ({ data, useCredits, onTeamSelect }: ContactsTableProps) =
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="cursor-pointer" onClick={() => handleSort("country")}>
+              <TableHead className="cursor-pointer" onClick={() => handleSort("team")}>
                 <div className="flex items-center gap-1">
-                  Country
-                  {sortField === "country" && (
-                    sortDirection === "asc" ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />
-                  )}
-                </div>
-              </TableHead>
-              <TableHead className="cursor-pointer" onClick={() => handleSort("city")}>
-                <div className="flex items-center gap-1">
-                  City
-                  {sortField === "city" && (
+                  Organisation
+                  {sortField === "team" && (
                     sortDirection === "asc" ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />
                   )}
                 </div>
@@ -173,10 +158,18 @@ const ContactsTable = ({ data, useCredits, onTeamSelect }: ContactsTableProps) =
                   )}
                 </div>
               </TableHead>
-              <TableHead className="cursor-pointer" onClick={() => handleSort("team")}>
+              <TableHead className="cursor-pointer" onClick={() => handleSort("city")}>
                 <div className="flex items-center gap-1">
-                  Organisation
-                  {sortField === "team" && (
+                  City
+                  {sortField === "city" && (
+                    sortDirection === "asc" ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />
+                  )}
+                </div>
+              </TableHead>
+              <TableHead className="cursor-pointer" onClick={() => handleSort("country")}>
+                <div className="flex items-center gap-1">
+                  Country
+                  {sortField === "country" && (
                     sortDirection === "asc" ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />
                   )}
                 </div>
@@ -212,10 +205,6 @@ const ContactsTable = ({ data, useCredits, onTeamSelect }: ContactsTableProps) =
             ) : (
               sortedData.map((team) => (
                 <TableRow key={team.id}>
-                  <TableCell>{team.country}</TableCell>
-                  <TableCell>{team.city}</TableCell>
-                  <TableCell>{team.sport}</TableCell>
-                  <TableCell>{team.level}</TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2 cursor-pointer" onClick={() => handleTeamClick(team)}>
                       <Avatar className="h-8 w-8">
@@ -227,6 +216,10 @@ const ContactsTable = ({ data, useCredits, onTeamSelect }: ContactsTableProps) =
                       </span>
                     </div>
                   </TableCell>
+                  <TableCell>{team.sport}</TableCell>
+                  <TableCell>{team.level}</TableCell>
+                  <TableCell>{team.city}</TableCell>
+                  <TableCell>{team.country}</TableCell>
                   <TableCell className="hidden md:table-cell">{formatRevenue(team.revenue)}</TableCell>
                   <TableCell className="hidden md:table-cell">{team.employees}</TableCell>
                   <TableCell className="text-right">
