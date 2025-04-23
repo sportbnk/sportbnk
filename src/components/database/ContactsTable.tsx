@@ -133,13 +133,26 @@ const ContactsTable = ({ data, useCredits, onTeamSelect }: ContactsTableProps) =
   return (
     <Card>
       <CardContent className="p-0">
+        <div className="p-4 border-b">
+          <p className="text-sm text-muted-foreground">
+            Found {sortedData.length} organisation{sortedData.length !== 1 ? 's' : ''} matching your filters
+          </p>
+        </div>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="cursor-pointer" onClick={() => handleSort("team")}>
+              <TableHead className="cursor-pointer" onClick={() => handleSort("country")}>
                 <div className="flex items-center gap-1">
-                  Team
-                  {sortField === "team" && (
+                  Country
+                  {sortField === "country" && (
+                    sortDirection === "asc" ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />
+                  )}
+                </div>
+              </TableHead>
+              <TableHead className="cursor-pointer" onClick={() => handleSort("city")}>
+                <div className="flex items-center gap-1">
+                  City
+                  {sortField === "city" && (
                     sortDirection === "asc" ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />
                   )}
                 </div>
@@ -160,18 +173,10 @@ const ContactsTable = ({ data, useCredits, onTeamSelect }: ContactsTableProps) =
                   )}
                 </div>
               </TableHead>
-              <TableHead className="cursor-pointer hidden md:table-cell" onClick={() => handleSort("city")}>
+              <TableHead className="cursor-pointer" onClick={() => handleSort("team")}>
                 <div className="flex items-center gap-1">
-                  City
-                  {sortField === "city" && (
-                    sortDirection === "asc" ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />
-                  )}
-                </div>
-              </TableHead>
-              <TableHead className="cursor-pointer" onClick={() => handleSort("country")}>
-                <div className="flex items-center gap-1">
-                  Country
-                  {sortField === "country" && (
+                  Organisation
+                  {sortField === "team" && (
                     sortDirection === "asc" ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />
                   )}
                 </div>
@@ -207,6 +212,10 @@ const ContactsTable = ({ data, useCredits, onTeamSelect }: ContactsTableProps) =
             ) : (
               sortedData.map((team) => (
                 <TableRow key={team.id}>
+                  <TableCell>{team.country}</TableCell>
+                  <TableCell>{team.city}</TableCell>
+                  <TableCell>{team.sport}</TableCell>
+                  <TableCell>{team.level}</TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2 cursor-pointer" onClick={() => handleTeamClick(team)}>
                       <Avatar className="h-8 w-8">
@@ -218,10 +227,6 @@ const ContactsTable = ({ data, useCredits, onTeamSelect }: ContactsTableProps) =
                       </span>
                     </div>
                   </TableCell>
-                  <TableCell>{team.sport}</TableCell>
-                  <TableCell>{team.level}</TableCell>
-                  <TableCell className="hidden md:table-cell">{team.city}</TableCell>
-                  <TableCell>{team.country}</TableCell>
                   <TableCell className="hidden md:table-cell">{formatRevenue(team.revenue)}</TableCell>
                   <TableCell className="hidden md:table-cell">{team.employees}</TableCell>
                   <TableCell className="text-right">
