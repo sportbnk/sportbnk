@@ -1,9 +1,8 @@
-
 import React, { useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Filter, X, MapPin, Flag, Dumbbell, Award, DollarSign, Users } from "lucide-react";
+import { Filter, X } from "lucide-react";
 
 interface ContactsFiltersProps {
   onFilterChange: (filters: any) => void;
@@ -64,9 +63,7 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false }: ContactsFi
       {showTeamFilters && (
         <>
           <div className="space-y-1">
-            <Label htmlFor="country" className="text-xs flex items-center gap-1">
-              <Flag className="h-4 w-4" /> Country
-            </Label>
+            <Label htmlFor="country" className="text-xs">Country</Label>
             <Select 
               value={filters.country} 
               onValueChange={(value) => handleFilterChange("country", value)}
@@ -86,9 +83,7 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false }: ContactsFi
           </div>
 
           <div className="space-y-1">
-            <Label htmlFor="city" className="text-xs flex items-center gap-1">
-              <MapPin className="h-4 w-4" /> City
-            </Label>
+            <Label htmlFor="city" className="text-xs">City</Label>
             <Select 
               value={filters.city} 
               onValueChange={(value) => handleFilterChange("city", value)}
@@ -109,9 +104,7 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false }: ContactsFi
           </div>
 
           <div className="space-y-1">
-            <Label htmlFor="sport" className="text-xs flex items-center gap-1">
-              <Dumbbell className="h-4 w-4" /> Sport
-            </Label>
+            <Label htmlFor="sport" className="text-xs">Sport</Label>
             <Select 
               value={filters.sport} 
               onValueChange={(value) => handleFilterChange("sport", value)}
@@ -132,9 +125,7 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false }: ContactsFi
           </div>
 
           <div className="space-y-1">
-            <Label htmlFor="level" className="text-xs flex items-center gap-1">
-              <Award className="h-4 w-4" /> Level
-            </Label>
+            <Label htmlFor="level" className="text-xs">Level</Label>
             <Select 
               value={filters.level} 
               onValueChange={(value) => handleFilterChange("level", value)}
@@ -151,9 +142,7 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false }: ContactsFi
           </div>
 
           <div className="space-y-1">
-            <Label htmlFor="revenue" className="text-xs flex items-center gap-1">
-              <DollarSign className="h-4 w-4" /> Revenue
-            </Label>
+            <Label htmlFor="revenue" className="text-xs">Revenue</Label>
             <Select 
               value={filters.revenue} 
               onValueChange={(value) => handleFilterChange("revenue", value)}
@@ -172,9 +161,7 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false }: ContactsFi
           </div>
 
           <div className="space-y-1">
-            <Label htmlFor="employees" className="text-xs flex items-center gap-1">
-              <Users className="h-4 w-4" /> Employees
-            </Label>
+            <Label htmlFor="employees" className="text-xs">Employees</Label>
             <Select 
               value={filters.employees} 
               onValueChange={(value) => handleFilterChange("employees", value)}
