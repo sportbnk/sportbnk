@@ -43,7 +43,7 @@ const CrmSidebar = () => {
   };
   
   return (
-    <Sidebar collapsible="none" className="border-r h-screen">
+    <Sidebar collapsible="none" className="border-r min-h-screen h-screen">
       <SidebarHeader className="p-4 border-b flex-shrink-0">
         <div className="flex items-center justify-center">
           <img 
@@ -54,7 +54,7 @@ const CrmSidebar = () => {
         </div>
       </SidebarHeader>
       
-      <SidebarContent className="flex-1 flex flex-col justify-between h-full">
+      <SidebarContent className="flex-1 flex flex-col justify-between min-h-0">
         <SidebarGroup className="p-2 flex-shrink-0">
           <SidebarGroupContent>
             <SidebarMenu className="space-y-2">
