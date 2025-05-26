@@ -1,8 +1,9 @@
+
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import ContactsFilters from "@/components/database/ContactsFilters";
-import ContactsView from "@/components/database/ContactsView";
+import { ContactsView } from "@/components/crm/ContactsView";
 import { useNavigate } from "react-router-dom";
 
 // Dummy data for contacts
