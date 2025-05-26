@@ -26,9 +26,7 @@ const CrmSidebar = () => {
   
   // Handle logout
   const handleLogout = () => {
-    // Clear user data from localStorage
     localStorage.removeItem("user");
-    // Redirect to home page
     navigate("/");
   };
 

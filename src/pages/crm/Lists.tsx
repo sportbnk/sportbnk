@@ -1,5 +1,6 @@
+
 import React, { useState, useEffect, useCallback } from 'react';
-import { Plus, Search, ChevronsUpDown, Copy, Edit, Trash2, Download, UserPlus } from 'lucide-react';
+import { Plus, Search, Download, UserPlus, Trash2 } from 'lucide-react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,16 +12,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import {
   Select,
   SelectContent,
@@ -31,9 +23,7 @@ import {
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -48,19 +38,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Textarea } from "@/components/ui/textarea"
-import { useToast } from "@/components/ui/use-toast"
-import { ToastAction } from "@/components/ui/toast"
-import { Progress } from "@/components/ui/progress"
-import { Link } from 'react-router-dom';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import {
-  createColumnHelper,
-  flexRender,
-  getCoreRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from "@tanstack/react-table"
 import {
   Form,
   FormControl,
@@ -73,20 +50,9 @@ import {
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { cn } from "@/lib/utils"
-import { ContactsView } from "@/components/crm/ContactsView";
 import PageLayout from "@/components/PageLayout";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer"
 import { toast } from "sonner";
+import { useLocation } from 'react-router-dom';
 
 // Define the schema for the form
 const formSchema = z.object({
@@ -96,23 +62,30 @@ const formSchema = z.object({
   description: z.string().optional(),
 })
 
+interface Contact {
+  id: string;
+  name: string;
+  email: string;
+  company: string;
+  mobile?: string;
+  role?: string;
+}
+
+interface ContactList {
+  id: string;
+  name: string;
+  description?: string;
+  contacts: Contact[];
+}
+
 const Lists = () => {
+  const location = useLocation();
   const [isCreateListOpen, setIsCreateListOpen] = useState(false);
-  const [contacts, setContacts] = useState([
-    { id: '1', name: 'John Doe', email: 'john.doe@example.com', company: 'ABC Corp' },
-    { id: '2', name: 'Jane Smith', email: 'jane.smith@example.com', company: 'XYZ Ltd' },
-    { id: '3', name: 'Alice Johnson', email: 'alice.johnson@example.com', company: '123 Inc' },
-  ]);
-  const [selectedContacts, setSelectedContacts] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [isSavedList, setIsSavedList] = useState(true);
-  const [lists, setLists] = useState<{id: string, name: string, description?: string, contacts: any[]}[]>([
+  const [lists, setLists] = useState<ContactList[]>([
     { id: '1', name: 'My Contacts', description: 'Default contact list', contacts: [] }
   ]);
   const [activeList, setActiveList] = useState(lists[0]);
-
-  const queryClient = useQueryClient();
-  const { toast: uiToast } = useToast();
 
   // Form logic
   const form = useForm<z.infer<typeof formSchema>>({
@@ -123,12 +96,41 @@ const Lists = () => {
     },
   });
 
+  // Handle contact passed from People page
+  useEffect(() => {
+    if (location.state?.contactToAdd) {
+      const contactToAdd = location.state.contactToAdd as Contact;
+      
+      // Check if contact is already in the active list
+      const isAlreadyInList = activeList.contacts.some(c => c.id === contactToAdd.id);
+      
+      if (!isAlreadyInList) {
+        const updatedList = {
+          ...activeList,
+          contacts: [...activeList.contacts, contactToAdd]
+        };
+        
+        setLists(prev => prev.map(list => 
+          list.id === activeList.id ? updatedList : list
+        ));
+        
+        setActiveList(updatedList);
+        
+        toast.success(`Added ${contactToAdd.name} to ${activeList.name}`);
+      } else {
+        toast.info(`${contactToAdd.name} is already in ${activeList.name}`);
+      }
+      
+      // Clear the location state
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state, activeList]);
+
   // Function to handle form submission
   const onSubmit = useCallback(async (values: z.infer<typeof formSchema>) => {
-    // Create a new list
-    const newList = { 
+    const newList: ContactList = { 
       id: Date.now().toString(),
-      name: values.listName, // Set the name property explicitly
+      name: values.listName,
       description: values.description,
       contacts: []
     };
@@ -136,80 +138,13 @@ const Lists = () => {
     setLists(prev => [...prev, newList]);
     setActiveList(newList);
     
-    // Show a success toast
     toast.success("List created successfully", {
       description: `Your new list "${values.listName}" has been created.`
     });
 
-    // Close the dialog
     setIsCreateListOpen(false);
-    
-    // Reset the form
     form.reset();
   }, [form]);
-
-  // Function to handle contact selection
-  const handleSelectContact = (contactId: string) => {
-    setSelectedContacts(prev =>
-      prev.includes(contactId) ? prev.filter(id => id !== contactId) : [...prev, contactId]
-    );
-  };
-
-  // Function to handle select all contacts
-  const handleSelectAll = () => {
-    const allContactIds = contacts.map(contact => contact.id);
-    setSelectedContacts(allContactIds);
-  };
-
-  // Function to handle deselect all contacts
-  const handleDeselectAll = () => {
-    setSelectedContacts([]);
-  };
-
-  // Function to add selected contacts to the active list
-  const handleAddToList = useCallback(() => {
-    if (selectedContacts.length === 0) {
-      toast.error("No contacts selected", {
-        description: "Please select contacts to add to your list."
-      });
-      return;
-    }
-
-    // Find the selected contacts
-    const contactsToAdd = contacts.filter(contact => 
-      selectedContacts.includes(contact.id) && 
-      !activeList.contacts.some(c => c.id === contact.id)
-    );
-
-    if (contactsToAdd.length === 0) {
-      toast.info("Contacts already in list", {
-        description: "All selected contacts are already in your list."
-      });
-      return;
-    }
-
-    // Update the active list with the new contacts
-    const updatedList = {
-      ...activeList,
-      contacts: [...activeList.contacts, ...contactsToAdd]
-    };
-
-    // Update the lists array
-    setLists(prev => prev.map(list => 
-      list.id === activeList.id ? updatedList : list
-    ));
-    
-    // Update the active list
-    setActiveList(updatedList);
-
-    // Show a success toast
-    toast.success(`${contactsToAdd.length} contacts added to list`, {
-      description: `Added to "${activeList.name}"`
-    });
-
-    // Clear the selection
-    setSelectedContacts([]);
-  }, [activeList, contacts, selectedContacts]);
 
   // Function to handle export to CSV
   const handleExportToCsv = useCallback(() => {
@@ -221,42 +156,30 @@ const Lists = () => {
     }
 
     try {
-      // Create CSV content
-      const headers = ["Name", "Email", "Company"];
+      const headers = ["Name", "Role", "Company", "Email", "Mobile"];
       const rows = activeList.contacts.map(contact => [
-        `"${contact.name.replace(/"/g, '""')}"`, 
-        `"${contact.email.replace(/"/g, '""')}"`, 
-        `"${contact.company.replace(/"/g, '""')}"`
+        `"${contact.name.replace(/"/g, '""')}"`,
+        `"${(contact.role || 'Not specified').replace(/"/g, '""')}"`,
+        `"${contact.company.replace(/"/g, '""')}"`,
+        `"${contact.email.replace(/"/g, '""')}"`,
+        `"${contact.mobile || 'Not available'}"`
       ]);
       
-      // Combine headers and rows
       const csvContent = [
         headers.join(","),
         ...rows.map(row => row.join(","))
       ].join("\n");
       
-      // Create a Blob with the CSV content
       const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-      
-      // Create a URL for the Blob
       const url = URL.createObjectURL(blob);
-      
-      // Create a temporary link element
       const link = document.createElement("a");
       link.href = url;
       link.setAttribute("download", `${activeList.name.replace(/\s+/g, '_')}_contacts.csv`);
-      
-      // Append the link to the document
       document.body.appendChild(link);
-      
-      // Click the link to trigger the download
       link.click();
-      
-      // Clean up
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
       
-      // Show a success toast
       toast.success("Export completed", {
         description: `${activeList.contacts.length} contacts exported to CSV.`
       });
@@ -268,17 +191,46 @@ const Lists = () => {
     }
   }, [activeList]);
 
+  // Function to remove contact from list
+  const handleRemoveContact = (contactId: string) => {
+    const updatedList = {
+      ...activeList,
+      contacts: activeList.contacts.filter(c => c.id !== contactId)
+    };
+    
+    setLists(prev => prev.map(list => 
+      list.id === activeList.id ? updatedList : list
+    ));
+    
+    setActiveList(updatedList);
+    toast.success("Contact removed from list");
+  };
+
+  // Function to delete list
+  const handleDeleteList = () => {
+    if (lists.length <= 1) {
+      toast.error("Cannot delete the last list");
+      return;
+    }
+    
+    const updatedLists = lists.filter(list => list.id !== activeList.id);
+    setLists(updatedLists);
+    setActiveList(updatedLists[0]);
+    toast.success(`Deleted list "${activeList.name}"`);
+  };
+
   // Filter contacts based on search term
-  const filteredContacts = contacts.filter(contact =>
+  const filteredContacts = activeList.contacts.filter(contact =>
     contact.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     contact.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    contact.company.toLowerCase().includes(searchTerm.toLowerCase())
+    contact.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (contact.role && contact.role.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
   return (
-    <PageLayout pageTitle="Lists">
+    <PageLayout pageTitle="Contact Lists">
       <div className="container mx-auto py-8">
-        <div className="flex justify-between items-center mb-4">
+        <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">Contact Lists</h1>
           <div className="flex items-center space-x-2">
             <Input
@@ -288,21 +240,21 @@ const Lists = () => {
               onChange={e => setSearchTerm(e.target.value)}
               className="max-w-sm"
             />
-            <Drawer>
-              <DrawerTrigger asChild>
+            <Dialog open={isCreateListOpen} onOpenChange={setIsCreateListOpen}>
+              <DialogTrigger asChild>
                 <Button variant="outline">
                   <Plus className="w-4 h-4 mr-2" /> Create List
                 </Button>
-              </DrawerTrigger>
-              <DrawerContent>
-                <DrawerHeader>
-                  <DrawerTitle>Create a new list</DrawerTitle>
-                  <DrawerDescription>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Create a new list</DialogTitle>
+                  <DialogDescription>
                     Give your list a name and description.
-                  </DrawerDescription>
-                </DrawerHeader>
+                  </DialogDescription>
+                </DialogHeader>
                 <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                     <FormField
                       control={form.control}
                       name="listName"
@@ -339,18 +291,21 @@ const Lists = () => {
                         </FormItem>
                       )}
                     />
-                    <DrawerFooter>
+                    <div className="flex justify-end space-x-2">
+                      <Button type="button" variant="outline" onClick={() => setIsCreateListOpen(false)}>
+                        Cancel
+                      </Button>
                       <Button type="submit">Create</Button>
-                    </DrawerFooter>
+                    </div>
                   </form>
                 </Form>
-              </DrawerContent>
-            </Drawer>
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
 
-        <div className="mb-6 flex flex-wrap justify-between items-center gap-2">
-          <div className="flex items-center gap-2">
+        <div className="mb-6 flex flex-wrap justify-between items-center gap-4">
+          <div className="flex items-center gap-4">
             <Select
               defaultValue={activeList.id}
               onValueChange={(value) => {
@@ -358,32 +313,26 @@ const Lists = () => {
                 if (selected) setActiveList(selected);
               }}
             >
-              <SelectTrigger className="w-[220px]">
+              <SelectTrigger className="w-[280px]">
                 <SelectValue placeholder="Select a list" />
               </SelectTrigger>
               <SelectContent>
                 {lists.map(list => (
                   <SelectItem key={list.id} value={list.id}>
-                    {list.name}
+                    {list.name} ({list.contacts.length} contacts)
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
-            <span className="text-sm text-muted-foreground">
-              {activeList?.contacts?.length || 0} contacts
-            </span>
+            
+            {activeList.description && (
+              <span className="text-sm text-muted-foreground">
+                {activeList.description}
+              </span>
+            )}
           </div>
           
           <div className="flex gap-2">
-            <Button 
-              variant="outline" 
-              onClick={handleAddToList}
-              disabled={selectedContacts.length === 0}
-            >
-              <UserPlus className="h-4 w-4 mr-2" /> 
-              Add Selected to List
-            </Button>
-            
             <Button
               variant="outline"
               onClick={handleExportToCsv}
@@ -392,13 +341,80 @@ const Lists = () => {
               <Download className="h-4 w-4 mr-2" />
               Export CSV
             </Button>
+            
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button 
+                  variant="outline" 
+                  className="text-red-600 hover:text-red-700"
+                  disabled={lists.length <= 1}
+                >
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  Delete List
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This will permanently delete the list "{activeList.name}" and all its contacts. This action cannot be undone.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={handleDeleteList} className="bg-red-600 hover:bg-red-700">
+                    Delete
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         </div>
 
-        {/* Contacts View */}
-        <ContactsView
-          data={filteredContacts}
-        />
+        {/* Contacts Table */}
+        <div className="rounded-md border">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Name</TableHead>
+                <TableHead>Role</TableHead>
+                <TableHead>Company</TableHead>
+                <TableHead>Email</TableHead>
+                <TableHead>Mobile</TableHead>
+                <TableHead className="w-20">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {filteredContacts.length > 0 ? (
+                filteredContacts.map((contact) => (
+                  <TableRow key={contact.id}>
+                    <TableCell className="font-medium">{contact.name}</TableCell>
+                    <TableCell>{contact.role || 'Not specified'}</TableCell>
+                    <TableCell>{contact.company}</TableCell>
+                    <TableCell>{contact.email}</TableCell>
+                    <TableCell>{contact.mobile || 'Not available'}</TableCell>
+                    <TableCell>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => handleRemoveContact(contact.id)}
+                        className="h-8 w-8 p-0 text-red-500 hover:text-red-700 hover:bg-red-50"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
+                    {searchTerm ? 'No contacts found matching your search.' : 'No contacts in this list. Add contacts from the People page.'}
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
       </div>
     </PageLayout>
   );
