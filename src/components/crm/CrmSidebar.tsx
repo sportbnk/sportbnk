@@ -1,6 +1,6 @@
 
-import React, { useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import React from "react";
+import { Link, useLocation } from "react-router-dom";
 import {
   Sidebar,
   SidebarContent,
@@ -19,60 +19,22 @@ import {
 } from "@/components/ui/sidebar";
 import { 
   List, 
-  SearchIcon,
   CreditCard,
   Users,
   User,
   ArrowUpCircle,
 } from "lucide-react";
-import { Input } from "@/components/ui/input";
 import AccountBadge from "./AccountBadge";
 import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
 
 const CrmSidebar = () => {
   const location = useLocation();
-  const navigate = useNavigate();
-  const [searchTerm, setSearchTerm] = useState('');
-  
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchTerm.trim()) {
-      console.log('Searching for:', searchTerm);
-      
-      let searchContext = '';
-      if (location.pathname.includes('/teams')) {
-        searchContext = 'teams';
-      } else if (location.pathname.includes('/people')) {
-        searchContext = 'people';
-      } else {
-        searchContext = 'all';
-      }
-      
-      toast.info(`Searching for "${searchTerm}" in ${searchContext}`);
-      
-      navigate(`/crm/search?q=${encodeURIComponent(searchTerm.trim())}&context=${searchContext}`);
-      
-      setSearchTerm('');
-    }
-  };
   
   return (
     <Sidebar>
       <SidebarRail />
       <SidebarHeader className="p-3">
-        <div className="flex justify-between items-center mb-2">
-          <h2 className="text-xl font-bold text-sportbnk-green">Welcome Back!</h2>
-        </div>
-        <form onSubmit={handleSearch} className="relative">
-          <SearchIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input 
-            placeholder="Search teams or people..." 
-            className="pl-8 h-9 bg-background focus-visible:ring-sportbnk-green" 
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </form>
+        {/* Empty header or minimal branding if needed */}
       </SidebarHeader>
       
       <SidebarContent>
