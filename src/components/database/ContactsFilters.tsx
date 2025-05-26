@@ -1,8 +1,9 @@
+
 import React, { useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Filter, X } from "lucide-react";
+import { X } from "lucide-react";
 
 interface ContactsFiltersProps {
   onFilterChange: (filters: any) => void;
@@ -45,16 +46,12 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-between items-center mb-2">
-        <div className="flex items-center gap-1">
-          <Filter className="h-4 w-4" />
-          <span className="text-sm font-medium">Filters</span>
-        </div>
+      <div className="flex justify-between items-center">
         <Button 
           variant="ghost" 
           size="sm" 
           onClick={clearFilters}
-          className="h-6 px-2 text-xs text-muted-foreground"
+          className="h-7 px-2 text-xs text-muted-foreground hover:text-foreground"
         >
           <X className="h-3 w-3 mr-1" />
           Clear
