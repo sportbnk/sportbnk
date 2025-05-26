@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { Plus, Search, ChevronsUpDown, Copy, Edit, Trash2, Download, UserPlus } from 'lucide-react';
 import {
@@ -399,12 +398,6 @@ const Lists = () => {
         {/* Contacts View */}
         <ContactsView
           data={filteredContacts}
-          onSelectContact={handleSelectContact}
-          selectedContacts={selectedContacts}
-          onSelectAll={handleSelectAll}
-          onDeselectAll={handleDeselectAll}
-          onAddToList={handleAddToList}
-          isSavedList={true}
         />
       </div>
     </PageLayout>
