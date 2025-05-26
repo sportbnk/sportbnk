@@ -3,7 +3,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import ContactsFilters from "@/components/database/ContactsFilters";
 import ContactsTable from "@/components/database/ContactsTable";
-import AddTeamDialog from "@/components/teams/AddTeamDialog";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { TeamData } from "@/types/teams";
@@ -97,7 +96,6 @@ export default function Teams() {
     <div className="container mx-auto px-4">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Teams Database</h1>
-        <AddTeamDialog />
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
