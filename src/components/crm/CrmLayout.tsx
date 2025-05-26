@@ -10,9 +10,9 @@ const CrmLayout = () => {
   
   return (
     <SidebarProvider defaultOpen={true}>
-      <div className="flex min-h-screen w-full bg-muted/20">
+      <div className="flex h-screen w-full bg-muted/20 overflow-hidden">
         <CrmSidebar />
-        <div className="flex-1 flex flex-col min-h-screen">
+        <div className="flex-1 flex flex-col h-screen overflow-hidden">
           <div className="flex-1 overflow-y-auto p-6">
             <Outlet />
           </div>

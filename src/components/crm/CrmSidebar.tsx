@@ -43,8 +43,8 @@ const CrmSidebar = () => {
   };
   
   return (
-    <Sidebar collapsible="none" className="border-r min-h-screen h-screen">
-      <SidebarHeader className="p-4 border-b flex-shrink-0">
+    <Sidebar collapsible="none" className="border-r h-screen flex-shrink-0">
+      <SidebarHeader className="p-4 border-b">
         <div className="flex items-center justify-center">
           <img 
             src="/lovable-uploads/fe95d116-e43a-4e1e-9439-b2fee1207d72.png" 
@@ -54,8 +54,8 @@ const CrmSidebar = () => {
         </div>
       </SidebarHeader>
       
-      <SidebarContent className="flex-1 flex flex-col justify-between min-h-0">
-        <SidebarGroup className="p-2 flex-shrink-0">
+      <SidebarContent className="flex-1 flex flex-col justify-between h-full">
+        <SidebarGroup className="p-2">
           <SidebarGroupContent>
             <SidebarMenu className="space-y-2">
               <SidebarMenuItem>
@@ -98,7 +98,7 @@ const CrmSidebar = () => {
           </SidebarGroupContent>
         </SidebarGroup>
         
-        <SidebarFooter className="p-2 border-t flex-shrink-0 mt-auto">
+        <SidebarFooter className="p-2 border-t mt-auto">
           <SidebarGroup>
             <SidebarGroupContent>
               <SidebarMenu className="space-y-2">
