@@ -1,5 +1,7 @@
 
 import React from 'react';
+import { Plus } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import {
   Table,
   TableBody,
@@ -20,10 +22,12 @@ interface Contact {
 
 interface ContactsViewProps {
   data: Contact[];
+  onAddToList?: (contact: Contact) => void;
 }
 
 export const ContactsView: React.FC<ContactsViewProps> = ({
   data,
+  onAddToList,
 }) => {
   return (
     <div className="rounded-md border">
@@ -34,6 +38,7 @@ export const ContactsView: React.FC<ContactsViewProps> = ({
             <TableHead>Email</TableHead>
             <TableHead>Company</TableHead>
             <TableHead>Mobile</TableHead>
+            {onAddToList && <TableHead className="w-20">Actions</TableHead>}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -43,6 +48,18 @@ export const ContactsView: React.FC<ContactsViewProps> = ({
               <TableCell>{contact.email}</TableCell>
               <TableCell>{contact.company}</TableCell>
               <TableCell>{contact.mobile || 'Not available'}</TableCell>
+              {onAddToList && (
+                <TableCell>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => onAddToList(contact)}
+                    className="h-8 w-8 p-0"
+                  >
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                </TableCell>
+              )}
             </TableRow>
           ))}
         </TableBody>

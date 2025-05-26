@@ -178,6 +178,7 @@ const People = () => {
     team: "all",
     sport: "all",
   });
+  const [savedContacts, setSavedContacts] = useState<any[]>([]);
   
   const handleFilterChange = (filters: any) => {
     console.log("Filters changed:", filters);
@@ -199,6 +200,58 @@ const People = () => {
   const viewTeam = (teamId: number) => {
     console.log("View team:", teamId);
     navigate(`/crm/teams/${teamId}`);
+  };
+
+  const handleAddToList = (contact: any) => {
+    // Check if contact is already in saved contacts
+    const isAlreadySaved = savedContacts.some(saved => saved.id === contact.id.toString());
+    
+    if (!isAlreadySaved) {
+      setSavedContacts(prev => [...prev, {
+        id: contact.id.toString(),
+        name: contact.name,
+        email: contact.email,
+        company: contact.team,
+        mobile: contact.mobile,
+      }]);
+      console.log(`Added ${contact.name} to saved contacts list`);
+    } else {
+      console.log(`${contact.name} is already in the saved contacts list`);
+    }
+  };
+
+  const handleExportToCSV = () => {
+    if (savedContacts.length === 0) {
+      console.log("No contacts to export");
+      return;
+    }
+
+    // Create CSV content
+    const headers = ["Name", "Email", "Company", "Mobile"];
+    const rows = savedContacts.map(contact => [
+      `"${contact.name.replace(/"/g, '""')}"`,
+      `"${contact.email.replace(/"/g, '""')}"`,
+      `"${contact.company.replace(/"/g, '""')}"`,
+      `"${contact.mobile || 'Not available'}"`
+    ]);
+
+    const csvContent = [
+      headers.join(","),
+      ...rows.map(row => row.join(","))
+    ].join("\n");
+
+    // Create and download the file
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", "contacts_export.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+
+    console.log(`Exported ${savedContacts.length} contacts to CSV`);
   };
 
   // Apply filters to the data
@@ -247,7 +300,7 @@ const People = () => {
             </CardContent>
           </Card>
           
-          <Card className="shadow-md">
+          <Card className="shadow-md mb-4">
             <CardHeader className="pb-2 pt-4 px-4">
               <CardTitle className="text-base font-semibold">Credits</CardTitle>
             </CardHeader>
@@ -256,6 +309,23 @@ const People = () => {
               <p className="text-sm text-muted-foreground">Credits remaining</p>
               <Button className="w-full mt-4 bg-sportbnk-navy hover:bg-sportbnk-navy/90 text-base">
                 Upgrade
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card className="shadow-md">
+            <CardHeader className="pb-2 pt-4 px-4">
+              <CardTitle className="text-base font-semibold">Saved Contacts</CardTitle>
+            </CardHeader>
+            <CardContent className="px-4 py-3">
+              <p className="text-2xl font-bold text-sportbnk-green">{savedContacts.length}</p>
+              <p className="text-sm text-muted-foreground">Contacts saved</p>
+              <Button 
+                className="w-full mt-4 bg-sportbnk-navy hover:bg-sportbnk-navy/90 text-base"
+                onClick={handleExportToCSV}
+                disabled={savedContacts.length === 0}
+              >
+                Export CSV
               </Button>
             </CardContent>
           </Card>
@@ -270,6 +340,7 @@ const People = () => {
               <div className="overflow-x-auto">
                 <ContactsView 
                   data={transformedData}
+                  onAddToList={handleAddToList}
                 />
               </div>
             </CardContent>
