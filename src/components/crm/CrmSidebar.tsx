@@ -57,12 +57,12 @@ const CrmSidebar = () => {
       <SidebarContent className="flex-1 flex flex-col justify-between h-full">
         <SidebarGroup className="p-2">
           <SidebarGroupContent>
-            <SidebarMenu className="space-y-2">
+            <SidebarMenu className="space-y-1">
               <SidebarMenuItem>
                 <SidebarMenuButton 
                   asChild 
                   isActive={location.pathname === "/crm/teams"}
-                  className="w-full justify-start h-12"
+                  className="w-full justify-start h-10"
                 >
                   <Link to="/crm/teams">
                     <Users className="h-5 w-5 mr-3" />
@@ -74,7 +74,7 @@ const CrmSidebar = () => {
                 <SidebarMenuButton 
                   asChild 
                   isActive={location.pathname === "/crm/people"}
-                  className="w-full justify-start h-12"
+                  className="w-full justify-start h-10"
                 >
                   <Link to="/crm/people">
                     <User className="h-5 w-5 mr-3" />
@@ -86,7 +86,7 @@ const CrmSidebar = () => {
                 <SidebarMenuButton 
                   asChild 
                   isActive={location.pathname === "/database/lists"}
-                  className="w-full justify-start h-12"
+                  className="w-full justify-start h-10"
                 >
                   <Link to="/database/lists">
                     <List className="h-5 w-5 mr-3" />
@@ -101,11 +101,11 @@ const CrmSidebar = () => {
         <SidebarFooter className="p-2 border-t mt-auto">
           <SidebarGroup>
             <SidebarGroupContent>
-              <SidebarMenu className="space-y-2">
+              <SidebarMenu className="space-y-1">
                 <SidebarMenuItem>
                   <SidebarMenuButton 
                     onClick={handleProfileClick}
-                    className="w-full justify-start h-12"
+                    className="w-full justify-start h-10"
                   >
                     <User className="h-5 w-5 mr-3" />
                     My Profile
@@ -114,7 +114,7 @@ const CrmSidebar = () => {
                 <SidebarMenuItem>
                   <SidebarMenuButton 
                     onClick={handleSettingsClick}
-                    className="w-full justify-start h-12"
+                    className="w-full justify-start h-10"
                   >
                     <Settings className="h-5 w-5 mr-3" />
                     Settings
@@ -123,7 +123,7 @@ const CrmSidebar = () => {
                 <SidebarMenuItem>
                   <SidebarMenuButton 
                     onClick={handleLogout}
-                    className="w-full justify-start h-12 text-red-600 hover:text-red-700 hover:bg-red-50"
+                    className="w-full justify-start h-10 text-red-600 hover:text-red-700 hover:bg-red-50"
                   >
                     <LogOut className="h-5 w-5 mr-3" />
                     Log Out
