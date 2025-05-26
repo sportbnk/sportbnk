@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -8,9 +9,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ArrowDown, ArrowUp, ListPlus } from "lucide-react";
+import { ArrowDown, ArrowUp, Plus } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import TeamProfile from "./TeamProfile";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -66,10 +66,19 @@ const ContactsTable = ({ data, useCredits, onTeamSelect }: ContactsTableProps) =
   };
 
   const handleAddToList = (team: TeamData) => {
-    toast.success(`${team.team} added to your list`, {
-      description: "You can view and manage all your lists"
+    // Navigate to Lists page with team data formatted as a contact
+    navigate('/database/lists', { 
+      state: { 
+        contactToAdd: {
+          id: team.id.toString(),
+          name: team.team,
+          email: team.email || 'No email available',
+          company: team.team,
+          mobile: team.phone || 'No phone available',
+          role: 'Organisation',
+        }
+      }
     });
-    navigate("/database/lists");
   };
 
   const revealEmail = (email: string) => {
@@ -172,15 +181,12 @@ const ContactsTable = ({ data, useCredits, onTeamSelect }: ContactsTableProps) =
               sortedData.map((team) => (
                 <TableRow key={team.id}>
                   <TableCell>
-                    <div className="flex items-center gap-2 cursor-pointer" onClick={() => handleTeamClick(team)}>
-                      <Avatar className="h-8 w-8">
-                        <AvatarImage src={team.logo} alt={team.team} />
-                        <AvatarFallback>{team.team.substring(0, 2)}</AvatarFallback>
-                      </Avatar>
-                      <span className="font-medium text-blue-600 hover:underline">
-                        {team.team}
-                      </span>
-                    </div>
+                    <span 
+                      className="font-medium text-blue-600 hover:underline cursor-pointer"
+                      onClick={() => handleTeamClick(team)}
+                    >
+                      {team.team}
+                    </span>
                   </TableCell>
                   <TableCell>{team.sport}</TableCell>
                   <TableCell>{team.level}</TableCell>
@@ -195,8 +201,7 @@ const ContactsTable = ({ data, useCredits, onTeamSelect }: ContactsTableProps) =
                       className="text-blue-600" 
                       onClick={() => handleAddToList(team)}
                     >
-                      <ListPlus className="h-4 w-4 mr-1" />
-                      <span className="hidden sm:inline">Add to List</span>
+                      <Plus className="h-4 w-4" />
                     </Button>
                   </TableCell>
                 </TableRow>
