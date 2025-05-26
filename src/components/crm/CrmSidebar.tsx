@@ -12,7 +12,6 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarRail,
 } from "@/components/ui/sidebar";
 import { 
   List, 
@@ -46,7 +45,6 @@ const CrmSidebar = () => {
   
   return (
     <Sidebar>
-      <SidebarRail />
       <SidebarHeader className="p-3">
         {/* Empty header or minimal branding if needed */}
       </SidebarHeader>
