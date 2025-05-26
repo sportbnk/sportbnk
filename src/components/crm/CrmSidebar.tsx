@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
@@ -43,7 +42,7 @@ const CrmSidebar = () => {
   };
   
   return (
-    <Sidebar>
+    <Sidebar collapsible="none">
       <SidebarHeader className="p-3">
         <div className="flex items-center justify-center">
           <img 
