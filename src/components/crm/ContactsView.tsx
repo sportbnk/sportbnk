@@ -15,6 +15,7 @@ interface Contact {
   name: string;
   email: string;
   company: string;
+  mobile?: string;
 }
 
 interface ContactsViewProps {
@@ -32,6 +33,7 @@ export const ContactsView: React.FC<ContactsViewProps> = ({
             <TableHead>Name</TableHead>
             <TableHead>Email</TableHead>
             <TableHead>Company</TableHead>
+            <TableHead>Mobile</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -40,6 +42,7 @@ export const ContactsView: React.FC<ContactsViewProps> = ({
               <TableCell>{contact.name}</TableCell>
               <TableCell>{contact.email}</TableCell>
               <TableCell>{contact.company}</TableCell>
+              <TableCell>{contact.mobile || 'Not available'}</TableCell>
             </TableRow>
           ))}
         </TableBody>

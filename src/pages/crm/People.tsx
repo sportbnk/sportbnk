@@ -1,4 +1,5 @@
 
+
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -17,6 +18,7 @@ const contactsData = [
     sport: "Football",
     email: "j.s******@manutd.com",
     phone: "+44 77** *** ***",
+    mobile: "+44 7123 456 789",
     linkedin: "https://linkedin.com/in/johnsmith",
     teamLogo: "/lovable-uploads/1eb7dc35-8f3d-4a53-8727-249a31db0275.png",
     verified: true,
@@ -30,6 +32,7 @@ const contactsData = [
     teamId: 1,
     sport: "Football",
     email: "s.j****@manutd.com",
+    mobile: "+44 7987 654 321",
     teamLogo: "/lovable-uploads/1eb7dc35-8f3d-4a53-8727-249a31db0275.png",
     verified: true
   },
@@ -42,6 +45,7 @@ const contactsData = [
     sport: "Basketball",
     email: "m.j******@lakers.com",
     phone: "+1 31*-***-****",
+    mobile: "+1 555-123-4567",
     linkedin: "https://linkedin.com/in/michaeljohnson",
     teamLogo: "/lovable-uploads/b95abe05-7dc8-449e-91a1-c17046b01f5e.png",
     verified: true
@@ -54,6 +58,7 @@ const contactsData = [
     teamId: 3,
     sport: "Football",
     email: "c.r********@realmadrid.es",
+    mobile: "+34 678 901 234",
     linkedin: "https://linkedin.com/in/carlosrodriguez",
     teamLogo: "/lovable-uploads/5de360aa-8105-490e-bf75-94ff7ac0832d.png"
   },
@@ -66,6 +71,7 @@ const contactsData = [
     sport: "Basketball",
     email: "j.w******@bulls.com",
     phone: "+1 31*-***-****",
+    mobile: "+1 555-987-6543",
     linkedin: "https://linkedin.com/in/jenniferwilliams",
     teamLogo: "/lovable-uploads/b0f94fb5-f923-4243-b466-86aa2a7738d0.png",
     activeReplier: true
@@ -78,6 +84,7 @@ const contactsData = [
     teamId: 5,
     sport: "Baseball",
     email: "d.t******@redsox.com",
+    mobile: "+1 617-555-0123",
     teamLogo: "/lovable-uploads/53b73771-1565-4d14-87c2-860d6dabe35d.png",
     verified: true
   },
@@ -90,6 +97,7 @@ const contactsData = [
     sport: "Basketball",
     email: "e.w****@lakers.com",
     phone: "+1 32*-***-****",
+    mobile: "+1 555-246-8135",
     teamLogo: "/lovable-uploads/b95abe05-7dc8-449e-91a1-c17046b01f5e.png"
   },
   {
@@ -100,6 +108,7 @@ const contactsData = [
     teamId: 3,
     sport: "Football",
     email: "j.m*****@realmadrid.es",
+    mobile: "+34 612 345 678",
     linkedin: "https://linkedin.com/in/jamesmiller",
     teamLogo: "/lovable-uploads/5de360aa-8105-490e-bf75-94ff7ac0832d.png",
     verified: true,
@@ -114,6 +123,7 @@ const contactsData = [
     sport: "Basketball",
     email: "r.g****@bulls.com",
     phone: "+1 31*-***-****",
+    mobile: "+1 555-369-2580",
     teamLogo: "/lovable-uploads/b0f94fb5-f923-4243-b466-86aa2a7738d0.png",
     verified: true
   },
@@ -125,6 +135,7 @@ const contactsData = [
     teamId: 5,
     sport: "Baseball",
     email: "d.l**@redsox.com",
+    mobile: "+1 617-555-7890",
     linkedin: "https://linkedin.com/in/daniellee",
     teamLogo: "/lovable-uploads/53b73771-1565-4d14-87c2-860d6dabe35d.png",
     activeReplier: true
@@ -138,6 +149,7 @@ const contactsData = [
     sport: "Football",
     email: "o.p*****@manutd.com",
     phone: "+44 78** *** ***",
+    mobile: "+44 7456 789 012",
     teamLogo: "/lovable-uploads/1eb7dc35-8f3d-4a53-8727-249a31db0275.png"
   },
   {
@@ -148,6 +160,7 @@ const contactsData = [
     teamId: 2,
     sport: "Basketball",
     email: "k.z****@lakers.com",
+    mobile: "+1 555-159-7531",
     linkedin: "https://linkedin.com/in/kevinzhang",
     teamLogo: "/lovable-uploads/b95abe05-7dc8-449e-91a1-c17046b01f5e.png",
     verified: true,
@@ -214,6 +227,7 @@ const People = () => {
     name: contact.name,
     email: contact.email,
     company: contact.team,
+    mobile: contact.mobile,
   }));
   
   return (
