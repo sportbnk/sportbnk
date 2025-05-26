@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, Mail, Phone, Globe, Facebook, Twitter, Instagram, Linkedin, Users, DollarSign, MapPin } from "lucide-react";
+import { ArrowLeft, Mail, Phone, Globe, MapPin, Clock, Users, DollarSign } from "lucide-react";
 import TeamEmployees from "@/components/database/TeamEmployees";
 
 // Dummy data for teams with expanded country and sport coverage
@@ -957,6 +956,17 @@ const TeamDetails = () => {
     setCredits(prev => Math.max(0, prev - 3));
     setRevealedPhones(prev => ({ ...prev, [phone]: true }));
   };
+
+  // Mock opening hours - in a real app this would come from the team data
+  const openingHours = {
+    monday: "9:00 AM - 6:00 PM",
+    tuesday: "9:00 AM - 6:00 PM", 
+    wednesday: "9:00 AM - 6:00 PM",
+    thursday: "9:00 AM - 6:00 PM",
+    friday: "9:00 AM - 6:00 PM",
+    saturday: "10:00 AM - 4:00 PM",
+    sunday: "Closed"
+  };
   
   return (
     <div className="container mx-auto px-0">
@@ -967,9 +977,9 @@ const TeamDetails = () => {
         <h1 className="text-2xl font-bold text-sportbnk-navy">Team Details</h1>
       </div>
       
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Team Header Card */}
-        <Card className="shadow-md lg:col-span-4">
+        <Card className="shadow-md lg:col-span-3">
           <CardContent className="pt-6">
             <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
               <Avatar className="h-24 w-24">
@@ -1004,168 +1014,117 @@ const TeamDetails = () => {
           </CardContent>
         </Card>
         
-        {/* Team Information Tabs */}
-        <div className="lg:col-span-4">
-          <Tabs defaultValue="overview">
-            <TabsList className="mb-4">
-              <TabsTrigger value="overview">Overview</TabsTrigger>
-              <TabsTrigger value="contact">Contact Info</TabsTrigger>
-              <TabsTrigger value="social">Social Media</TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="overview" className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <Card>
-                  <CardContent className="pt-6">
-                    <div className="flex items-center gap-2">
-                      <MapPin className="h-4 w-4 text-muted-foreground" />
-                      <CardTitle className="text-sm font-medium">Location</CardTitle>
-                    </div>
-                    <p className="mt-2">{team.city}, {team.country}</p>
-                  </CardContent>
-                </Card>
-                
-                <Card>
-                  <CardContent className="pt-6">
-                    <div className="flex items-center gap-2">
-                      <Users className="h-4 w-4 text-muted-foreground" />
-                      <CardTitle className="text-sm font-medium">Employees</CardTitle>
-                    </div>
-                    <p className="mt-2">{team.employees}</p>
-                  </CardContent>
-                </Card>
-                
-                <Card>
-                  <CardContent className="pt-6">
-                    <div className="flex items-center gap-2">
-                      <DollarSign className="h-4 w-4 text-muted-foreground" />
-                      <CardTitle className="text-sm font-medium">Annual Revenue</CardTitle>
-                    </div>
-                    <p className="mt-2">{formatRevenue(team.revenue)}</p>
-                  </CardContent>
-                </Card>
-                
-                <Card>
-                  <CardContent className="pt-6">
-                    <div className="flex items-center gap-2">
-                      <Globe className="h-4 w-4 text-muted-foreground" />
-                      <CardTitle className="text-sm font-medium">Founded</CardTitle>
-                    </div>
-                    <p className="mt-2">{team.founded}</p>
-                  </CardContent>
-                </Card>
-              </div>
-              
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">About {team.team}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p>{team.description}</p>
-                </CardContent>
-              </Card>
-            </TabsContent>
-            
-            <TabsContent value="contact" className="space-y-4">
+        {/* Business Information Cards */}
+        <div className="lg:col-span-2 space-y-6">
+          {/* Contact Information */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Phone className="h-5 w-5" />
+                Contact Information
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Card>
-                  <CardContent className="pt-6">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Mail className="h-4 w-4 text-muted-foreground" />
-                      <CardTitle className="text-sm font-medium">Email</CardTitle>
-                    </div>
-                    <a href={`mailto:${team.email}`} className="text-blue-600 hover:underline">{team.email}</a>
-                  </CardContent>
-                </Card>
-                
-                <Card>
-                  <CardContent className="pt-6">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Phone className="h-4 w-4 text-muted-foreground" />
-                      <CardTitle className="text-sm font-medium">Phone</CardTitle>
-                    </div>
-                    <a href={`tel:${team.phone}`} className="text-blue-600 hover:underline">{team.phone}</a>
-                  </CardContent>
-                </Card>
-                
-                <Card>
-                  <CardContent className="pt-6">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Globe className="h-4 w-4 text-muted-foreground" />
-                      <CardTitle className="text-sm font-medium">Website</CardTitle>
-                    </div>
-                    <a href={team.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
-                      {team.website.replace(/^https?:\/\//, '')}
-                    </a>
-                  </CardContent>
-                </Card>
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">Phone</p>
+                  <a href={`tel:${team.phone}`} className="text-blue-600 hover:underline">
+                    {team.phone}
+                  </a>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">Email</p>
+                  <a href={`mailto:${team.email}`} className="text-blue-600 hover:underline">
+                    {team.email}
+                  </a>
+                </div>
               </div>
-            </TabsContent>
-            
-            <TabsContent value="social" className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {team.social.facebook && (
-                  <Card>
-                    <CardContent className="pt-6">
-                      <div className="flex items-center gap-2 mb-2">
-                        <Facebook className="h-4 w-4 text-blue-600" />
-                        <CardTitle className="text-sm font-medium">Facebook</CardTitle>
-                      </div>
-                      <a href={team.social.facebook} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
-                        Visit Page
-                      </a>
-                    </CardContent>
-                  </Card>
-                )}
-                
-                {team.social.twitter && (
-                  <Card>
-                    <CardContent className="pt-6">
-                      <div className="flex items-center gap-2 mb-2">
-                        <Twitter className="h-4 w-4 text-sky-500" />
-                        <CardTitle className="text-sm font-medium">Twitter</CardTitle>
-                      </div>
-                      <a href={team.social.twitter} target="_blank" rel="noopener noreferrer" className="text-sky-500 hover:underline">
-                        Visit Profile
-                      </a>
-                    </CardContent>
-                  </Card>
-                )}
-                
-                {team.social.instagram && (
-                  <Card>
-                    <CardContent className="pt-6">
-                      <div className="flex items-center gap-2 mb-2">
-                        <Instagram className="h-4 w-4 text-pink-600" />
-                        <CardTitle className="text-sm font-medium">Instagram</CardTitle>
-                      </div>
-                      <a href={team.social.instagram} target="_blank" rel="noopener noreferrer" className="text-pink-600 hover:underline">
-                        Visit Profile
-                      </a>
-                    </CardContent>
-                  </Card>
-                )}
-                
-                {team.social.linkedin && (
-                  <Card>
-                    <CardContent className="pt-6">
-                      <div className="flex items-center gap-2 mb-2">
-                        <Linkedin className="h-4 w-4 text-blue-700" />
-                        <CardTitle className="text-sm font-medium">LinkedIn</CardTitle>
-                      </div>
-                      <a href={team.social.linkedin} target="_blank" rel="noopener noreferrer" className="text-blue-700 hover:underline">
-                        Visit Page
-                      </a>
-                    </CardContent>
-                  </Card>
-                )}
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">Website</p>
+                <a href={team.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center gap-1">
+                  <Globe className="h-4 w-4" />
+                  {team.website?.replace(/^https?:\/\//, '')}
+                </a>
               </div>
-            </TabsContent>
-          </Tabs>
+            </CardContent>
+          </Card>
+
+          {/* Address Information */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <MapPin className="h-5 w-5" />
+                Address
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-lg">{team.city}, {team.country}</p>
+              <p className="text-sm text-muted-foreground mt-1">
+                Venue location and headquarters
+              </p>
+            </CardContent>
+          </Card>
+
+          {/* Opening Hours */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Clock className="h-5 w-5" />
+                Opening Hours
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                {Object.entries(openingHours).map(([day, hours]) => (
+                  <div key={day} className="flex justify-between items-center">
+                    <span className="capitalize font-medium">{day}</span>
+                    <span className={hours === "Closed" ? "text-red-600" : "text-green-600"}>
+                      {hours}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Business Stats */}
+        <div className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Users className="h-5 w-5" />
+                Organization Stats
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">Employees</p>
+                <p className="text-2xl font-bold">{team.employees}</p>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">Annual Revenue</p>
+                <p className="text-2xl font-bold">{formatRevenue(team.revenue)}</p>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">Founded</p>
+                <p className="text-2xl font-bold">{team.founded}</p>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>About</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm leading-relaxed">{team.description}</p>
+            </CardContent>
+          </Card>
         </div>
         
         {/* Team Employees Section */}
-        <div className="lg:col-span-4 mt-6">
+        <div className="lg:col-span-3 mt-6">
           <Card className="shadow-md">
             <CardHeader className="border-b">
               <CardTitle className="text-lg">Team Employees</CardTitle>
@@ -1190,4 +1149,3 @@ const TeamDetails = () => {
 };
 
 export default TeamDetails;
-
