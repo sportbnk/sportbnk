@@ -47,7 +47,7 @@ const CrmSidebar = () => {
       <SidebarHeader className="p-3">
         <div className="flex items-center justify-center">
           <img 
-            src="/lovable-uploads/5de360aa-8105-490e-bf75-94ff7ac0832d.png" 
+            src="/lovable-uploads/1291eec3-dbeb-4fee-a42e-b7043937e97a.png" 
             alt="SportBnk Logo" 
             className="h-8 w-auto"
           />
