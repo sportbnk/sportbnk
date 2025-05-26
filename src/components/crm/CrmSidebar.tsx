@@ -7,7 +7,6 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -46,12 +45,17 @@ const CrmSidebar = () => {
   return (
     <Sidebar>
       <SidebarHeader className="p-3">
-        {/* Empty header or minimal branding if needed */}
+        <div className="flex items-center justify-center">
+          <img 
+            src="/lovable-uploads/5de360aa-8105-490e-bf75-94ff7ac0832d.png" 
+            alt="SportBnk Logo" 
+            className="h-8 w-auto"
+          />
+        </div>
       </SidebarHeader>
       
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Navigation</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
