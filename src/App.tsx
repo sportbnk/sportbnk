@@ -19,10 +19,6 @@ import FreeTrial from "./pages/FreeTrial";
 import ContactDatabase from "./pages/ContactDatabase";
 import CrmLayout from "./components/crm/CrmLayout";
 import Lists from "./pages/crm/Lists";
-import Emails from "./pages/crm/Emails";
-import Meetings from "./pages/crm/Meetings";
-import Tasks from "./pages/crm/Tasks";
-import Calls from "./pages/crm/Calls";
 import Teams from "./pages/crm/Teams";
 import People from "./pages/crm/People";
 import TeamDetails from "./pages/crm/TeamDetails";
@@ -87,10 +83,6 @@ const App = () => (
               <Route path="/database" element={<Navigate to="/crm/people" replace />} />
               <Route path="/crm/database" element={<Navigate to="/crm/people" replace />} />
               <Route path="/database/lists" element={<Lists />} />
-              <Route path="/database/emails" element={<Emails />} />
-              <Route path="/database/meetings" element={<Meetings />} />
-              <Route path="/database/tasks" element={<Tasks />} />
-              <Route path="/database/calls" element={<Calls />} />
               <Route path="/crm/teams" element={<Teams />} />
               <Route path="/crm/teams/:teamId" element={<TeamDetails />} />
               <Route path="/crm/people" element={<People />} />

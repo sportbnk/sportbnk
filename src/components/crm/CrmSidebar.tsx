@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
@@ -17,20 +18,12 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { 
-  UserPlus, 
   List, 
-  MessageSquare, 
-  DollarSign,
-  Mail,
-  PhoneCall,
-  Calendar,
-  CheckSquare,
   SearchIcon,
   CreditCard,
   Users,
   User,
   ArrowUpCircle,
-  LogOut
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import AccountBadge from "./AccountBadge";
@@ -125,66 +118,6 @@ const CrmSidebar = () => {
                       <Link to="/database/lists">
                         <List className="h-4 w-4 mr-2" />
                         Lists
-                      </Link>
-                    </SidebarMenuSubButton>
-                  </SidebarMenuSubItem>
-                </SidebarMenuSub>
-              </SidebarMenuItem>
-              
-              <SidebarMenuItem>
-                <SidebarMenuButton>
-                  <span>Engage</span>
-                </SidebarMenuButton>
-                <SidebarMenuSub>
-                  <SidebarMenuSubItem>
-                    <SidebarMenuSubButton 
-                      asChild 
-                      isActive={location.pathname === "/database/emails"}
-                    >
-                      <Link to="/database/emails">
-                        <Mail className="h-4 w-4 mr-2" />
-                        Emails
-                      </Link>
-                    </SidebarMenuSubButton>
-                  </SidebarMenuSubItem>
-                  <SidebarMenuSubItem>
-                    <SidebarMenuSubButton 
-                      asChild 
-                      isActive={location.pathname === "/database/calls"}
-                    >
-                      <Link to="/database/calls">
-                        <PhoneCall className="h-4 w-4 mr-2" />
-                        Calls
-                      </Link>
-                    </SidebarMenuSubButton>
-                  </SidebarMenuSubItem>
-                </SidebarMenuSub>
-              </SidebarMenuItem>
-              
-              <SidebarMenuItem>
-                <SidebarMenuButton>
-                  <span>Deals</span>
-                </SidebarMenuButton>
-                <SidebarMenuSub>
-                  <SidebarMenuSubItem>
-                    <SidebarMenuSubButton 
-                      asChild 
-                      isActive={location.pathname === "/database/meetings"}
-                    >
-                      <Link to="/database/meetings">
-                        <Calendar className="h-4 w-4 mr-2" />
-                        Meetings
-                      </Link>
-                    </SidebarMenuSubButton>
-                  </SidebarMenuSubItem>
-                  <SidebarMenuSubItem>
-                    <SidebarMenuSubButton 
-                      asChild 
-                      isActive={location.pathname === "/database/tasks"}
-                    >
-                      <Link to="/database/tasks">
-                        <CheckSquare className="h-4 w-4 mr-2" />
-                        Tasks
                       </Link>
                     </SidebarMenuSubButton>
                   </SidebarMenuSubItem>
