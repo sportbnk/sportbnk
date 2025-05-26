@@ -1,5 +1,3 @@
-
-
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -213,6 +211,7 @@ const People = () => {
         email: contact.email,
         company: contact.team,
         mobile: contact.mobile,
+        role: contact.position,
       }]);
       console.log(`Added ${contact.name} to saved contacts list`);
     } else {
@@ -227,9 +226,10 @@ const People = () => {
     }
 
     // Create CSV content
-    const headers = ["Name", "Email", "Company", "Mobile"];
+    const headers = ["Name", "Role", "Email", "Company", "Mobile"];
     const rows = savedContacts.map(contact => [
       `"${contact.name.replace(/"/g, '""')}"`,
+      `"${(contact.role || 'Not specified').replace(/"/g, '""')}"`,
       `"${contact.email.replace(/"/g, '""')}"`,
       `"${contact.company.replace(/"/g, '""')}"`,
       `"${contact.mobile || 'Not available'}"`
@@ -281,6 +281,7 @@ const People = () => {
     email: contact.email,
     company: contact.team,
     mobile: contact.mobile,
+    role: contact.position,
   }));
   
   return (
