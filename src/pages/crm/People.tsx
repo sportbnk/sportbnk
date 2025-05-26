@@ -1,11 +1,9 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import ContactsFilters from "@/components/database/ContactsFilters";
 import ContactsView from "@/components/database/ContactsView";
 import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
 
 // Dummy data for contacts
 const contactsData = [
@@ -161,7 +159,6 @@ const People = () => {
   const [credits, setCredits] = useState(456);
   const [revealedEmails, setRevealedEmails] = useState<Record<string, boolean>>({});
   const [revealedPhones, setRevealedPhones] = useState<Record<string, boolean>>({});
-  const [savedList, setSavedList] = useState<any[]>([]);
   const [activeFilters, setActiveFilters] = useState({
     position: "all",
     team: "all",
@@ -189,19 +186,6 @@ const People = () => {
     console.log("View team:", teamId);
     navigate(`/crm/teams/${teamId}`);
   };
-  
-  const addToList = (contact: any, listId: number, listName: string) => {
-    if (!savedList.some(item => item.id === contact.id)) {
-      setSavedList(prev => [...prev, contact]);
-      toast.success(`${contact.name} added to ${listName}`);
-    } else {
-      toast.info(`${contact.name} is already in a list`);
-    }
-  };
-  
-  const removeFromList = (contactId: number) => {
-    setSavedList(prev => prev.filter(contact => contact.id !== contactId));
-  };
 
   // Apply filters to the data
   const filteredData = [...contactsData].filter(contact => {
@@ -222,6 +206,14 @@ const People = () => {
     
     return true;
   });
+
+  // Transform data to match ContactsView interface
+  const transformedData = filteredData.map(contact => ({
+    id: contact.id.toString(),
+    name: contact.name,
+    email: contact.email,
+    company: contact.team,
+  }));
   
   return (
     <div className="container max-w-full px-2">
@@ -262,14 +254,7 @@ const People = () => {
             <CardContent className="p-0">
               <div className="overflow-x-auto">
                 <ContactsView 
-                  data={filteredData}
-                  revealedEmails={revealedEmails}
-                  revealedPhones={revealedPhones}
-                  onRevealEmail={revealEmail}
-                  onRevealPhone={revealPhone}
-                  onViewTeam={viewTeam}
-                  onAddToList={addToList}
-                  onRemoveFromList={removeFromList}
+                  data={transformedData}
                 />
               </div>
             </CardContent>
