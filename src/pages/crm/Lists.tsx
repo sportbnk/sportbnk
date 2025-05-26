@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { Plus, Search, Download, UserPlus, Trash2 } from 'lucide-react';
+import { Plus, Trash2 } from 'lucide-react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,7 +12,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { Input } from "@/components/ui/input"
 import {
   Select,
   SelectContent,
@@ -20,14 +19,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -47,6 +38,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -81,7 +73,6 @@ interface ContactList {
 const Lists = () => {
   const location = useLocation();
   const [isCreateListOpen, setIsCreateListOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
   const [lists, setLists] = useState<ContactList[]>([
     { id: '1', name: 'My Contacts', description: 'Default contact list', contacts: [] }
   ]);
@@ -96,7 +87,7 @@ const Lists = () => {
     },
   });
 
-  // Handle contact passed from People page
+  // Handle contact passed from People or Teams page
   useEffect(() => {
     if (location.state?.contactToAdd) {
       const contactToAdd = location.state.contactToAdd as Contact;
@@ -146,66 +137,6 @@ const Lists = () => {
     form.reset();
   }, [form]);
 
-  // Function to handle export to CSV
-  const handleExportToCsv = useCallback(() => {
-    if (!activeList || activeList.contacts.length === 0) {
-      toast.error("No contacts to export", {
-        description: "Your list is empty. Add contacts to export."
-      });
-      return;
-    }
-
-    try {
-      const headers = ["Name", "Role", "Company", "Email", "Mobile"];
-      const rows = activeList.contacts.map(contact => [
-        `"${contact.name.replace(/"/g, '""')}"`,
-        `"${(contact.role || 'Not specified').replace(/"/g, '""')}"`,
-        `"${contact.company.replace(/"/g, '""')}"`,
-        `"${contact.email.replace(/"/g, '""')}"`,
-        `"${contact.mobile || 'Not available'}"`
-      ]);
-      
-      const csvContent = [
-        headers.join(","),
-        ...rows.map(row => row.join(","))
-      ].join("\n");
-      
-      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", `${activeList.name.replace(/\s+/g, '_')}_contacts.csv`);
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
-      
-      toast.success("Export completed", {
-        description: `${activeList.contacts.length} contacts exported to CSV.`
-      });
-    } catch (error) {
-      console.error("Error exporting CSV:", error);
-      toast.error("Export failed", {
-        description: "There was an error exporting your contacts. Please try again."
-      });
-    }
-  }, [activeList]);
-
-  // Function to remove contact from list
-  const handleRemoveContact = (contactId: string) => {
-    const updatedList = {
-      ...activeList,
-      contacts: activeList.contacts.filter(c => c.id !== contactId)
-    };
-    
-    setLists(prev => prev.map(list => 
-      list.id === activeList.id ? updatedList : list
-    ));
-    
-    setActiveList(updatedList);
-    toast.success("Contact removed from list");
-  };
-
   // Function to delete list
   const handleDeleteList = () => {
     if (lists.length <= 1) {
@@ -219,89 +150,72 @@ const Lists = () => {
     toast.success(`Deleted list "${activeList.name}"`);
   };
 
-  // Filter contacts based on search term
-  const filteredContacts = activeList.contacts.filter(contact =>
-    contact.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    contact.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    contact.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (contact.role && contact.role.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
-
   return (
     <PageLayout pageTitle="Contact Lists">
       <div className="container mx-auto py-8">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">Contact Lists</h1>
-          <div className="flex items-center space-x-2">
-            <Input
-              type="text"
-              placeholder="Search contacts..."
-              value={searchTerm}
-              onChange={e => setSearchTerm(e.target.value)}
-              className="max-w-sm"
-            />
-            <Dialog open={isCreateListOpen} onOpenChange={setIsCreateListOpen}>
-              <DialogTrigger asChild>
-                <Button variant="outline">
-                  <Plus className="w-4 h-4 mr-2" /> Create List
-                </Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Create a new list</DialogTitle>
-                  <DialogDescription>
-                    Give your list a name and description.
-                  </DialogDescription>
-                </DialogHeader>
-                <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                    <FormField
-                      control={form.control}
-                      name="listName"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>List Name</FormLabel>
-                          <FormControl>
-                            <Input placeholder="Marketing Leads" {...field} />
-                          </FormControl>
-                          <FormDescription>
-                            This is the name of your list.
-                          </FormDescription>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="description"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Description</FormLabel>
-                          <FormControl>
-                            <Textarea
-                              placeholder="A brief description of the list."
-                              className="resize-none"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormDescription>
-                            Describe the purpose of this list.
-                          </FormDescription>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <div className="flex justify-end space-x-2">
-                      <Button type="button" variant="outline" onClick={() => setIsCreateListOpen(false)}>
-                        Cancel
-                      </Button>
-                      <Button type="submit">Create</Button>
-                    </div>
-                  </form>
-                </Form>
-              </DialogContent>
-            </Dialog>
-          </div>
+          <Dialog open={isCreateListOpen} onOpenChange={setIsCreateListOpen}>
+            <DialogTrigger asChild>
+              <Button variant="outline">
+                <Plus className="w-4 h-4 mr-2" /> Create List
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Create a new list</DialogTitle>
+                <DialogDescription>
+                  Give your list a name and description.
+                </DialogDescription>
+              </DialogHeader>
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                  <FormField
+                    control={form.control}
+                    name="listName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>List Name</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Marketing Leads" {...field} />
+                        </FormControl>
+                        <FormDescription>
+                          This is the name of your list.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="description"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Description</FormLabel>
+                        <FormControl>
+                          <Textarea
+                            placeholder="A brief description of the list."
+                            className="resize-none"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          Describe the purpose of this list.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <div className="flex justify-end space-x-2">
+                    <Button type="button" variant="outline" onClick={() => setIsCreateListOpen(false)}>
+                      Cancel
+                    </Button>
+                    <Button type="submit">Create</Button>
+                  </div>
+                </form>
+              </Form>
+            </DialogContent>
+          </Dialog>
         </div>
 
         <div className="mb-6 flex flex-wrap justify-between items-center gap-4">
@@ -333,15 +247,6 @@ const Lists = () => {
           </div>
           
           <div className="flex gap-2">
-            <Button
-              variant="outline"
-              onClick={handleExportToCsv}
-              disabled={!activeList || activeList.contacts.length === 0}
-            >
-              <Download className="h-4 w-4 mr-2" />
-              Export CSV
-            </Button>
-            
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button 
@@ -371,49 +276,20 @@ const Lists = () => {
           </div>
         </div>
 
-        {/* Contacts Table */}
-        <div className="rounded-md border">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Role</TableHead>
-                <TableHead>Company</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>Mobile</TableHead>
-                <TableHead className="w-20">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredContacts.length > 0 ? (
-                filteredContacts.map((contact) => (
-                  <TableRow key={contact.id}>
-                    <TableCell className="font-medium">{contact.name}</TableCell>
-                    <TableCell>{contact.role || 'Not specified'}</TableCell>
-                    <TableCell>{contact.company}</TableCell>
-                    <TableCell>{contact.email}</TableCell>
-                    <TableCell>{contact.mobile || 'Not available'}</TableCell>
-                    <TableCell>
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        onClick={() => handleRemoveContact(contact.id)}
-                        className="h-8 w-8 p-0 text-red-500 hover:text-red-700 hover:bg-red-50"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
-                    {searchTerm ? 'No contacts found matching your search.' : 'No contacts in this list. Add contacts from the People page.'}
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
+        {/* List Summary */}
+        <div className="bg-white rounded-lg border p-6">
+          <h2 className="text-lg font-semibold mb-2">{activeList.name}</h2>
+          {activeList.description && (
+            <p className="text-muted-foreground mb-4">{activeList.description}</p>
+          )}
+          <div className="text-center py-8">
+            <p className="text-muted-foreground">
+              {activeList.contacts.length === 0 
+                ? "No contacts in this list yet. Add contacts from the People or Organisations pages." 
+                : `This list contains ${activeList.contacts.length} contact${activeList.contacts.length === 1 ? '' : 's'}.`
+              }
+            </p>
+          </div>
         </div>
       </div>
     </PageLayout>
