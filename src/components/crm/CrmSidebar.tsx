@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   Sidebar,
   SidebarContent,
@@ -12,23 +12,37 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { 
   List, 
-  CreditCard,
   Users,
   User,
-  ArrowUpCircle,
+  Settings,
+  LogOut,
 } from "lucide-react";
-import AccountBadge from "./AccountBadge";
-import { Button } from "@/components/ui/button";
 
 const CrmSidebar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  
+  // Handle logout
+  const handleLogout = () => {
+    // Clear user data from localStorage
+    localStorage.removeItem("user");
+    // Redirect to home page
+    navigate("/");
+  };
+
+  // Handle profile navigation
+  const handleProfileClick = () => {
+    navigate("/profile");
+  };
+  
+  // Handle settings navigation
+  const handleSettingsClick = () => {
+    navigate("/settings");
+  };
   
   return (
     <Sidebar>
@@ -49,9 +63,9 @@ const CrmSidebar = () => {
                 >
                   <span>Discover</span>
                 </SidebarMenuButton>
-                <SidebarMenuSub>
-                  <SidebarMenuSubItem>
-                    <SidebarMenuSubButton 
+                <SidebarMenu className="ml-4 mt-2">
+                  <SidebarMenuItem>
+                    <SidebarMenuButton 
                       asChild 
                       isActive={location.pathname === "/crm/teams"}
                     >
@@ -59,10 +73,10 @@ const CrmSidebar = () => {
                         <Users className="h-4 w-4 mr-2" />
                         Organisations
                       </Link>
-                    </SidebarMenuSubButton>
-                  </SidebarMenuSubItem>
-                  <SidebarMenuSubItem>
-                    <SidebarMenuSubButton 
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton 
                       asChild 
                       isActive={location.pathname === "/crm/people"}
                     >
@@ -70,10 +84,10 @@ const CrmSidebar = () => {
                         <User className="h-4 w-4 mr-2" />
                         People
                       </Link>
-                    </SidebarMenuSubButton>
-                  </SidebarMenuSubItem>
-                  <SidebarMenuSubItem>
-                    <SidebarMenuSubButton 
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton 
                       asChild 
                       isActive={location.pathname === "/database/lists"}
                     >
@@ -81,9 +95,9 @@ const CrmSidebar = () => {
                         <List className="h-4 w-4 mr-2" />
                         Lists
                       </Link>
-                    </SidebarMenuSubButton>
-                  </SidebarMenuSubItem>
-                </SidebarMenuSub>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                </SidebarMenu>
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
@@ -93,17 +107,26 @@ const CrmSidebar = () => {
       <SidebarFooter>
         <SidebarGroup>
           <SidebarGroupContent>
-            <Button className="w-full mb-4 bg-sportbnk-navy hover:bg-sportbnk-navy/90 flex items-center justify-center">
-              <ArrowUpCircle className="h-4 w-4 mr-2" /> Upgrade
-            </Button>
-            <div className="mb-2">
-              <CreditCard className="h-4 w-4 text-sportbnk-green inline-block mr-1" />
-              <span className="text-sm">456 Credits Left</span>
-            </div>
-            <AccountBadge 
-              name="Jared Wilson" 
-              email="jared.wilson@example.com" 
-            />
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton onClick={handleProfileClick}>
+                  <User className="h-4 w-4 mr-2" />
+                  My Profile
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton onClick={handleSettingsClick}>
+                  <Settings className="h-4 w-4 mr-2" />
+                  Settings
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton onClick={handleLogout}>
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Log Out
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarFooter>
