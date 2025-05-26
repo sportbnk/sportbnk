@@ -37,8 +37,8 @@ export const ContactsView: React.FC<ContactsViewProps> = ({
           <TableRow>
             <TableHead>Name</TableHead>
             <TableHead>Role</TableHead>
-            <TableHead>Email</TableHead>
             <TableHead>Company</TableHead>
+            <TableHead>Email</TableHead>
             <TableHead>Mobile</TableHead>
             {onAddToList && <TableHead className="w-20">Actions</TableHead>}
           </TableRow>
@@ -48,8 +48,8 @@ export const ContactsView: React.FC<ContactsViewProps> = ({
             <TableRow key={contact.id}>
               <TableCell>{contact.name}</TableCell>
               <TableCell>{contact.role || 'Not specified'}</TableCell>
-              <TableCell>{contact.email}</TableCell>
               <TableCell>{contact.company}</TableCell>
+              <TableCell>{contact.email}</TableCell>
               <TableCell>{contact.mobile || 'Not available'}</TableCell>
               {onAddToList && (
                 <TableCell>
