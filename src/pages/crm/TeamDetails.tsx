@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -24,6 +23,9 @@ const TeamDetails = () => {
     queryFn: async () => {
       if (!teamId) return null;
       
+      const teamIdNumber = parseInt(teamId, 10);
+      if (isNaN(teamIdNumber)) return null;
+      
       const { data, error } = await supabase
         .from('teams')
         .select(`
@@ -31,7 +33,7 @@ const TeamDetails = () => {
           team_contacts (*),
           team_social_links (*)
         `)
-        .eq('id', teamId)
+        .eq('id', teamIdNumber)
         .single();
 
       if (error) {
