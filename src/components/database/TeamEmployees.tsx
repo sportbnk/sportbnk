@@ -50,7 +50,16 @@ const TeamEmployees = ({
   onRevealPhone,
   onCloseEmployees
 }: TeamEmployeesProps) => {
-  if (!selectedTeam) return null;
+  console.log('TeamEmployees rendered with:', {
+    selectedTeam: selectedTeam?.team,
+    employeesCount: selectedTeam?.employees?.length || 0,
+    employees: selectedTeam?.employees
+  });
+
+  if (!selectedTeam) {
+    console.log('TeamEmployees: No selected team provided');
+    return null;
+  }
 
   const handleAddToList = (employee: Employee, listId: number, listName: string) => {
     toast.success(`Added ${employee.name} to ${listName}`, {
@@ -84,7 +93,7 @@ const TeamEmployees = ({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {selectedTeam.employees.length === 0 ? (
+              {!selectedTeam.employees || selectedTeam.employees.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={6} className="text-center py-10 text-muted-foreground">
                     No employee data available for this team.
@@ -112,46 +121,50 @@ const TeamEmployees = ({
                     </TableCell>
                     <TableCell className="text-sm">{employee.position}</TableCell>
                     <TableCell>
-                      {revealedEmails[employee.email] ? (
-                        <div className="flex items-center gap-1">
-                          <span className="text-xs font-mono overflow-hidden text-ellipsis">{employee.email.replace(/\*/g, (match, offset) => employee.email.split('@')[0][offset])}</span>
-                          {employee.verified && (
-                            <TooltipProvider>
-                              <Tooltip>
-                                <TooltipTrigger>
-                                  <ShieldCheck className="h-3.5 w-3.5 text-green-500 flex-shrink-0" />
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                  <p className="text-xs">Verified email address</p>
-                                </TooltipContent>
-                              </Tooltip>
-                            </TooltipProvider>
-                          )}
-                        </div>
+                      {employee.email ? (
+                        revealedEmails[employee.email] ? (
+                          <div className="flex items-center gap-1">
+                            <span className="text-xs font-mono overflow-hidden text-ellipsis">{employee.email}</span>
+                            {employee.verified && (
+                              <TooltipProvider>
+                                <Tooltip>
+                                  <TooltipTrigger>
+                                    <ShieldCheck className="h-3.5 w-3.5 text-green-500 flex-shrink-0" />
+                                  </TooltipTrigger>
+                                  <TooltipContent>
+                                    <p className="text-xs">Verified email address</p>
+                                  </TooltipContent>
+                                </Tooltip>
+                              </TooltipProvider>
+                            )}
+                          </div>
+                        ) : (
+                          <div className="flex items-center gap-1">
+                            <Mail className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
+                            <Button 
+                              size="sm" 
+                              variant="outline"
+                              onClick={() => onRevealEmail(employee.email)}
+                              className="h-6 text-xs px-2"
+                            >
+                              Reveal (2)
+                            </Button>
+                            {employee.verified && (
+                              <TooltipProvider>
+                                <Tooltip>
+                                  <TooltipTrigger>
+                                    <ShieldCheck className="h-3.5 w-3.5 text-green-500 flex-shrink-0" />
+                                  </TooltipTrigger>
+                                  <TooltipContent>
+                                    <p className="text-xs">Verified email address</p>
+                                  </TooltipContent>
+                                </Tooltip>
+                              </TooltipProvider>
+                            )}
+                          </div>
+                        )
                       ) : (
-                        <div className="flex items-center gap-1">
-                          <Mail className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
-                          <Button 
-                            size="sm" 
-                            variant="outline"
-                            onClick={() => onRevealEmail(employee.email)}
-                            className="h-6 text-xs px-2"
-                          >
-                            Reveal (2)
-                          </Button>
-                          {employee.verified && (
-                            <TooltipProvider>
-                              <Tooltip>
-                                <TooltipTrigger>
-                                  <ShieldCheck className="h-3.5 w-3.5 text-green-500 flex-shrink-0" />
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                  <p className="text-xs">Verified email address</p>
-                                </TooltipContent>
-                              </Tooltip>
-                            </TooltipProvider>
-                          )}
-                        </div>
+                        <span className="text-xs text-muted-foreground">Not available</span>
                       )}
                     </TableCell>
                     <TableCell className="hidden md:table-cell">

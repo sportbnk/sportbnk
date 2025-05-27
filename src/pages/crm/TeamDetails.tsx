@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -86,22 +85,27 @@ const TeamDetails = () => {
     enabled: !!teamId
   });
 
-  // Create employee data for TeamEmployees component
-  const teamEmployees = team ? {
+  // Create employee data for TeamEmployees component - properly map all contacts
+  const teamEmployees = team && team.contacts && team.contacts.length > 0 ? {
     id: team.id,
     team: team.team,
     teamLogo: team.logo || '',
-    employees: team.contacts.map((contact, index) => ({
-      id: index + 1,
-      name: contact.name,
-      position: contact.position,
-      email: contact.email,
-      phone: contact.phone,
-      linkedin: contact.linkedin,
-      verified: Math.random() > 0.5,
-      activeReplier: Math.random() > 0.7
-    }))
+    employees: team.contacts.map((contact, index) => {
+      console.log('Mapping contact:', contact);
+      return {
+        id: index + 1,
+        name: contact.name,
+        position: contact.position,
+        email: contact.email,
+        phone: contact.phone,
+        linkedin: contact.linkedin,
+        verified: Math.random() > 0.5,
+        activeReplier: Math.random() > 0.7
+      };
+    })
   } : null;
+
+  console.log('TeamEmployees data created:', teamEmployees);
   
   if (isLoading) {
     return (
@@ -183,7 +187,8 @@ const TeamDetails = () => {
     teamId,
     team: team?.team,
     contactsCount: team?.contacts?.length || 0,
-    teamEmployeesCount: teamEmployees?.employees?.length || 0
+    teamEmployeesCount: teamEmployees?.employees?.length || 0,
+    teamEmployeesData: teamEmployees
   });
   
   return (
@@ -347,24 +352,30 @@ const TeamDetails = () => {
           </Card>
         </div>
         
-        {/* Team Employees Section */}
-        {teamEmployees && teamEmployees.employees.length > 0 && (
+        {/* Team Employees Section - Always show if we have contacts */}
+        {team.contacts && team.contacts.length > 0 && (
           <div className="lg:col-span-3 mt-6">
             <Card className="shadow-md">
               <CardHeader className="border-b">
                 <CardTitle className="text-lg">
-                  Team Contacts ({teamEmployees.employees.length})
+                  Team Contacts ({team.contacts.length})
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-0">
-                <TeamEmployees
-                  selectedTeam={teamEmployees}
-                  revealedEmails={revealedEmails}
-                  revealedPhones={revealedPhones}
-                  onRevealEmail={revealEmail}
-                  onRevealPhone={revealPhone}
-                  onCloseEmployees={() => {}}
-                />
+                {teamEmployees ? (
+                  <TeamEmployees
+                    selectedTeam={teamEmployees}
+                    revealedEmails={revealedEmails}
+                    revealedPhones={revealedPhones}
+                    onRevealEmail={revealEmail}
+                    onRevealPhone={revealPhone}
+                    onCloseEmployees={() => {}}
+                  />
+                ) : (
+                  <div className="p-8 text-center text-muted-foreground">
+                    No employee data could be loaded
+                  </div>
+                )}
               </CardContent>
             </Card>
           </div>
@@ -384,6 +395,7 @@ const TeamDetails = () => {
                   <p><strong>Contacts Count:</strong> {team?.contacts?.length || 0}</p>
                   <p><strong>TeamEmployees Count:</strong> {teamEmployees?.employees?.length || 0}</p>
                   <p><strong>Has TeamEmployees:</strong> {teamEmployees ? 'Yes' : 'No'}</p>
+                  <p><strong>TeamEmployees Data:</strong> {JSON.stringify(teamEmployees, null, 2)}</p>
                 </div>
               </CardContent>
             </Card>
