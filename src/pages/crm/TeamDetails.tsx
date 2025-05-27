@@ -81,7 +81,7 @@ const TeamDetails = () => {
   const teamEmployees = team ? {
     id: team.id,
     team: team.team,
-    teamLogo: team.logo,
+    teamLogo: '', // Remove logo usage
     employees: team.contacts.map((contact, index) => ({
       id: index + 1,
       name: contact.name,
@@ -167,11 +167,6 @@ const TeamDetails = () => {
         <Card className="shadow-md lg:col-span-3">
           <CardContent className="pt-6">
             <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
-              <Avatar className="h-24 w-24">
-                <AvatarImage src={team.logo} alt={team.team} />
-                <AvatarFallback>{team.team.substring(0, 2)}</AvatarFallback>
-              </Avatar>
-              
               <div className="space-y-2 flex-1">
                 <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
                   <h2 className="text-3xl font-bold">{team.team}</h2>
