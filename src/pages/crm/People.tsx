@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import ContactsFilters from "@/components/database/ContactsFilters";
-import { ContactsView } from "@/components/crm/ContactsView";
+import ContactsView from "@/components/database/ContactsView";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
@@ -67,14 +67,24 @@ const People = () => {
   
   const revealEmail = (email: string) => {
     if (revealedEmails[email]) return;
-    setCredits(prev => Math.max(0, prev - 2));
+    if (credits < 1) {
+      console.log("Not enough credits to reveal email");
+      return;
+    }
+    setCredits(prev => prev - 1);
     setRevealedEmails(prev => ({ ...prev, [email]: true }));
+    console.log(`Revealed email: ${email}, Credits remaining: ${credits - 1}`);
   };
   
   const revealPhone = (phone: string) => {
     if (revealedPhones[phone]) return;
-    setCredits(prev => Math.max(0, prev - 3));
+    if (credits < 1) {
+      console.log("Not enough credits to reveal phone");
+      return;
+    }
+    setCredits(prev => prev - 1);
     setRevealedPhones(prev => ({ ...prev, [phone]: true }));
+    console.log(`Revealed phone: ${phone}, Credits remaining: ${credits - 1}`);
   };
   
   const viewTeam = (teamId: number) => {
@@ -82,30 +92,24 @@ const People = () => {
     navigate(`/crm/teams/${teamId}`);
   };
 
-  const handleAddToList = (contact: any) => {
-    // Navigate to Lists page with contact data
-    navigate('/database/lists', { 
-      state: { 
-        contactToAdd: {
-          id: contact.id.toString(),
-          name: contact.name,
-          email: contact.email,
-          company: contact.company,
-          mobile: contact.mobile,
-          role: contact.role,
-        }
-      }
-    });
+  const handleAddToList = (contact: any, listId: number, listName: string) => {
+    console.log("Adding contact to list:", contact, listId, listName);
+    // Here you would implement the actual add to list functionality
   };
 
   // Transform data to match ContactsView interface
   const transformedData = contactsData.map(contact => ({
-    id: contact.id.toString(),
+    id: contact.id,
     name: contact.name || 'Unknown',
+    position: contact.position || 'Not specified',
+    team: contact.teams?.team || 'Unknown Team',
+    teamId: contact.teams?.id || 0,
+    teamLogo: contact.teams?.logo || '',
     email: contact.email || '',
-    company: contact.teams?.team || 'Unknown Team',
-    mobile: contact.phone || '',
-    role: contact.position || 'Not specified',
+    phone: contact.phone || '',
+    linkedin: contact.linkedin || '',
+    verified: Math.random() > 0.5, // Mock data for verified status
+    activeReplier: Math.random() > 0.7, // Mock data for active replier status
   }));
 
   if (isLoading) {
@@ -149,6 +153,7 @@ const People = () => {
             <CardContent className="px-4 py-3">
               <p className="text-2xl font-bold text-sportbnk-green">{credits}</p>
               <p className="text-sm text-muted-foreground">Credits remaining</p>
+              <p className="text-xs text-muted-foreground mt-1">1 credit per email/phone reveal</p>
               <Button className="w-full mt-4 bg-sportbnk-navy hover:bg-sportbnk-navy/90 text-base">
                 Upgrade
               </Button>
@@ -165,6 +170,11 @@ const People = () => {
               <div className="overflow-x-auto">
                 <ContactsView 
                   data={transformedData}
+                  revealedEmails={revealedEmails}
+                  revealedPhones={revealedPhones}
+                  onRevealEmail={revealEmail}
+                  onRevealPhone={revealPhone}
+                  onViewTeam={viewTeam}
                   onAddToList={handleAddToList}
                 />
               </div>
