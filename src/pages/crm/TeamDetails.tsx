@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -376,27 +377,6 @@ const TeamDetails = () => {
                     No employee data could be loaded
                   </div>
                 )}
-              </CardContent>
-            </Card>
-          </div>
-        )}
-
-        {/* Debug Information - Remove in production */}
-        {process.env.NODE_ENV === 'development' && (
-          <div className="lg:col-span-3 mt-6">
-            <Card className="shadow-md border-yellow-400">
-              <CardHeader className="border-b">
-                <CardTitle className="text-lg text-yellow-600">Debug Info</CardTitle>
-              </CardHeader>
-              <CardContent className="p-4">
-                <div className="space-y-2 text-sm">
-                  <p><strong>Team ID:</strong> {teamId}</p>
-                  <p><strong>Team Name:</strong> {team?.team}</p>
-                  <p><strong>Contacts Count:</strong> {team?.contacts?.length || 0}</p>
-                  <p><strong>TeamEmployees Count:</strong> {teamEmployees?.employees?.length || 0}</p>
-                  <p><strong>Has TeamEmployees:</strong> {teamEmployees ? 'Yes' : 'No'}</p>
-                  <p><strong>TeamEmployees Data:</strong> {JSON.stringify(teamEmployees, null, 2)}</p>
-                </div>
               </CardContent>
             </Card>
           </div>
