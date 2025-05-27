@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -95,7 +96,7 @@ export default function Teams() {
   return (
     <div className="container mx-auto px-4">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Teams Database</h1>
+        <h1 className="text-2xl font-bold">Organisations Database</h1>
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
