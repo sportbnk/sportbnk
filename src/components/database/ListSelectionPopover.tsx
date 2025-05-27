@@ -6,12 +6,12 @@ import { Plus, Check } from "lucide-react";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 
-// Example of preset lists - in a real app, this would come from a database
-const defaultLists = [
-  { id: 1, name: "My Contacts" },
-  { id: 2, name: "Marketing Leads" },
-  { id: 3, name: "Key Decision Makers" },
-];
+interface ContactList {
+  id: string;
+  name: string;
+  description?: string;
+  contacts: any[];
+}
 
 interface ListSelectionPopoverProps {
   onAddToList: (contact: any, listId: number, listName: string) => void;
@@ -19,29 +19,76 @@ interface ListSelectionPopoverProps {
 }
 
 const ListSelectionPopover = ({ onAddToList, contact }: ListSelectionPopoverProps) => {
-  const [lists, setLists] = useState(defaultLists);
+  const [lists, setLists] = useState<ContactList[]>([]);
   const [newListName, setNewListName] = useState("");
   const [isOpen, setIsOpen] = useState(false);
 
   // Load lists from local storage on component mount
   useEffect(() => {
+    const loadLists = () => {
+      const storedLists = localStorage.getItem('contactLists');
+      if (storedLists) {
+        try {
+          const parsedLists = JSON.parse(storedLists);
+          if (Array.isArray(parsedLists)) {
+            setLists(parsedLists);
+          }
+        } catch (error) {
+          console.error('Error parsing lists from localStorage:', error);
+        }
+      } else {
+        // Create default list if none exists
+        const defaultList = { id: '1', name: 'My Contacts', description: 'Default contact list', contacts: [] };
+        setLists([defaultList]);
+        localStorage.setItem('contactLists', JSON.stringify([defaultList]));
+      }
+    };
+
+    loadLists();
+  }, []);
+
+  const handleAddToList = (listId: string, listName: string) => {
+    // Load current lists
     const storedLists = localStorage.getItem('contactLists');
     if (storedLists) {
       try {
         const parsedLists = JSON.parse(storedLists);
-        if (Array.isArray(parsedLists) && parsedLists.length > 0) {
-          setLists(parsedLists);
+        const targetList = parsedLists.find((list: ContactList) => list.id === listId);
+        
+        if (targetList) {
+          // Check if contact already exists
+          const contactExists = targetList.contacts.some((c: any) => c.id === contact.id);
+          
+          if (!contactExists) {
+            // Add contact to list
+            targetList.contacts.push({
+              id: contact.id,
+              name: contact.name,
+              email: contact.email,
+              phone: contact.phone,
+              position: contact.position,
+              team: contact.team,
+              teamId: contact.teamId,
+              linkedin: contact.linkedin,
+              verified: contact.verified,
+              activeReplier: contact.activeReplier
+            });
+            
+            // Save updated lists
+            localStorage.setItem('contactLists', JSON.stringify(parsedLists));
+            setLists(parsedLists);
+            
+            setIsOpen(false);
+            toast.success(`Added ${contact.name} to ${listName}`);
+          } else {
+            toast.info(`${contact.name} is already in ${listName}`);
+          }
         }
       } catch (error) {
-        console.error('Error parsing lists from localStorage:', error);
+        console.error('Error updating lists:', error);
+        toast.error('Failed to add contact to list');
       }
     }
-  }, []);
-
-  const handleAddToList = (listId: number, listName: string) => {
-    onAddToList(contact, listId, listName);
-    setIsOpen(false);
-    toast.success(`Added ${contact.name} to ${listName}`);
   };
 
   const handleCreateList = () => {
@@ -50,9 +97,21 @@ const ListSelectionPopover = ({ onAddToList, contact }: ListSelectionPopoverProp
       return;
     }
     
-    const newList = {
-      id: Date.now(),
-      name: newListName.trim()
+    const newList: ContactList = {
+      id: Date.now().toString(),
+      name: newListName.trim(),
+      contacts: [{
+        id: contact.id,
+        name: contact.name,
+        email: contact.email,
+        phone: contact.phone,
+        position: contact.position,
+        team: contact.team,
+        teamId: contact.teamId,
+        linkedin: contact.linkedin,
+        verified: contact.verified,
+        activeReplier: contact.activeReplier
+      }]
     };
     
     const updatedLists = [...lists, newList];
@@ -61,12 +120,13 @@ const ListSelectionPopover = ({ onAddToList, contact }: ListSelectionPopoverProp
     // Save to local storage
     try {
       localStorage.setItem('contactLists', JSON.stringify(updatedLists));
+      setNewListName("");
+      setIsOpen(false);
+      toast.success(`Created "${newList.name}" and added ${contact.name}`);
     } catch (error) {
       console.error('Error saving lists to localStorage:', error);
+      toast.error('Failed to create list');
     }
-    
-    setNewListName("");
-    handleAddToList(newList.id, newList.name);
   };
 
   return (
@@ -90,6 +150,11 @@ const ListSelectionPopover = ({ onAddToList, contact }: ListSelectionPopoverProp
               value={newListName}
               onChange={(e) => setNewListName(e.target.value)}
               className="text-sm"
+              onKeyPress={(e) => {
+                if (e.key === 'Enter') {
+                  handleCreateList();
+                }
+              }}
             />
             <Button 
               size="sm" 
@@ -101,24 +166,26 @@ const ListSelectionPopover = ({ onAddToList, contact }: ListSelectionPopoverProp
             </Button>
           </div>
           
-          <div className="border-t pt-2">
-            <p className="text-xs text-muted-foreground mb-2">Or select existing list:</p>
-            <div className="space-y-1 max-h-40 overflow-y-auto">
-              {lists.map((list) => (
-                <div key={list.id} className="flex justify-between items-center">
-                  <span className="text-sm">{list.name}</span>
-                  <Button 
-                    size="sm" 
-                    variant="ghost" 
-                    onClick={() => handleAddToList(list.id, list.name)}
-                    className="h-6 w-6 p-0"
-                  >
-                    <Check className="h-4 w-4" />
-                  </Button>
-                </div>
-              ))}
+          {lists.length > 0 && (
+            <div className="border-t pt-2">
+              <p className="text-xs text-muted-foreground mb-2">Or select existing list:</p>
+              <div className="space-y-1 max-h-40 overflow-y-auto">
+                {lists.map((list) => (
+                  <div key={list.id} className="flex justify-between items-center">
+                    <span className="text-sm truncate">{list.name}</span>
+                    <Button 
+                      size="sm" 
+                      variant="ghost" 
+                      onClick={() => handleAddToList(list.id, list.name)}
+                      className="h-6 w-6 p-0"
+                    >
+                      <Check className="h-4 w-4" />
+                    </Button>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </PopoverContent>
     </Popover>
