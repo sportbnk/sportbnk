@@ -43,10 +43,33 @@ export default function Teams() {
       if (filters.city !== "all") {
         query = query.eq('city', filters.city);
       }
+      if (filters.revenue !== "all") {
+        if (filters.revenue === "less1m") {
+          query = query.lt('revenue', 1000000);
+        } else if (filters.revenue === "1m-10m") {
+          query = query.gte('revenue', 1000000).lte('revenue', 10000000);
+        } else if (filters.revenue === "10m-50m") {
+          query = query.gte('revenue', 10000000).lte('revenue', 50000000);
+        } else if (filters.revenue === "more50m") {
+          query = query.gt('revenue', 50000000);
+        }
+      }
+      if (filters.employees !== "all") {
+        if (filters.employees === "less50") {
+          query = query.lt('employees', 50);
+        } else if (filters.employees === "50-200") {
+          query = query.gte('employees', 50).lte('employees', 200);
+        } else if (filters.employees === "200-1000") {
+          query = query.gte('employees', 200).lte('employees', 1000);
+        } else if (filters.employees === "more1000") {
+          query = query.gt('employees', 1000);
+        }
+      }
 
       const { data, error } = await query;
       
       if (error) {
+        console.error('Error fetching teams:', error);
         throw error;
       }
       
@@ -81,6 +104,7 @@ export default function Teams() {
         }, {})
       }));
       
+      console.log('Fetched teams data:', transformedData);
       return transformedData;
     }
   });
@@ -93,10 +117,23 @@ export default function Teams() {
     setCredits(prevCredits => prevCredits - amount);
   };
 
+  if (isLoading) {
+    return (
+      <div className="container mx-auto px-4">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold">Organisations Database</h1>
+        </div>
+        <div className="flex justify-center items-center py-10">
+          <p className="text-muted-foreground">Loading cricket organizations...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="container mx-auto px-4">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Organisations Database</h1>
+        <h1 className="text-2xl font-bold">Cricket Organisations Database</h1>
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
