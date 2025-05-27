@@ -1,10 +1,10 @@
+
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Mail, Phone, Globe, MapPin, Clock, Users, DollarSign } from "lucide-react";
+import { ArrowLeft, Phone, Globe, MapPin, Clock, Users, DollarSign } from "lucide-react";
 import TeamEmployees from "@/components/database/TeamEmployees";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
@@ -18,13 +18,15 @@ const TeamDetails = () => {
   const [revealedPhones, setRevealedPhones] = useState<Record<string, boolean>>({});
   
   // Fetch team data from Supabase
-  const { data: team, isLoading } = useQuery({
+  const { data: team, isLoading, error } = useQuery({
     queryKey: ['team', teamId],
     queryFn: async () => {
       if (!teamId) return null;
       
       const teamIdNumber = parseInt(teamId, 10);
       if (isNaN(teamIdNumber)) return null;
+      
+      console.log('Fetching team data for ID:', teamIdNumber);
       
       const { data, error } = await supabase
         .from('teams')
@@ -37,8 +39,12 @@ const TeamDetails = () => {
         .single();
 
       if (error) {
+        console.error('Error fetching team:', error);
         throw error;
       }
+
+      console.log('Raw team data from Supabase:', data);
+      console.log('Team contacts found:', data.team_contacts?.length || 0);
 
       // Transform to match TeamData interface
       const transformedTeam: TeamData = {
@@ -72,16 +78,19 @@ const TeamDetails = () => {
         }, {})
       };
 
+      console.log('Transformed team data:', transformedTeam);
+      console.log('Contacts in transformed data:', transformedTeam.contacts.length);
+
       return transformedTeam;
     },
     enabled: !!teamId
   });
 
-  // Create mock employee data for TeamEmployees component (since we don't have employee data in DB yet)
+  // Create employee data for TeamEmployees component
   const teamEmployees = team ? {
     id: team.id,
     team: team.team,
-    teamLogo: '', // Remove logo usage
+    teamLogo: team.logo || '',
     employees: team.contacts.map((contact, index) => ({
       id: index + 1,
       name: contact.name,
@@ -102,6 +111,23 @@ const TeamDetails = () => {
             <ArrowLeft className="h-5 w-5" />
           </Button>
           <h1 className="text-2xl font-bold text-sportbnk-navy">Loading...</h1>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    console.error('Query error:', error);
+    return (
+      <div className="container mx-auto px-0">
+        <div className="flex items-center gap-2 mb-6 px-2">
+          <Button variant="ghost" size="icon" onClick={() => navigate("/crm/teams")}>
+            <ArrowLeft className="h-5 w-5" />
+          </Button>
+          <h1 className="text-2xl font-bold text-sportbnk-navy">Error loading team</h1>
+        </div>
+        <div className="px-2">
+          <p className="text-red-600">Error: {error.message}</p>
         </div>
       </div>
     );
@@ -153,6 +179,13 @@ const TeamDetails = () => {
     sunday: "Closed"
   };
   
+  console.log('Rendering TeamDetails with:', {
+    teamId,
+    team: team?.team,
+    contactsCount: team?.contacts?.length || 0,
+    teamEmployeesCount: teamEmployees?.employees?.length || 0
+  });
+  
   return (
     <div className="container mx-auto px-0">
       <div className="flex items-center gap-2 mb-6 px-2">
@@ -179,6 +212,12 @@ const TeamDetails = () => {
                 <p className="text-muted-foreground">
                   {team.city}, {team.country}
                 </p>
+
+                {team.contacts && team.contacts.length > 0 && (
+                  <p className="text-sm text-green-600">
+                    {team.contacts.length} team contacts available
+                  </p>
+                )}
               </div>
               
               <div className="flex flex-col gap-2 self-start">
@@ -300,6 +339,10 @@ const TeamDetails = () => {
                   <p className="text-2xl font-bold">{team.founded}</p>
                 </div>
               )}
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">Team Contacts</p>
+                <p className="text-2xl font-bold">{team.contacts?.length || 0}</p>
+              </div>
             </CardContent>
           </Card>
         </div>
@@ -309,7 +352,9 @@ const TeamDetails = () => {
           <div className="lg:col-span-3 mt-6">
             <Card className="shadow-md">
               <CardHeader className="border-b">
-                <CardTitle className="text-lg">Team Contacts</CardTitle>
+                <CardTitle className="text-lg">
+                  Team Contacts ({teamEmployees.employees.length})
+                </CardTitle>
               </CardHeader>
               <CardContent className="p-0">
                 <TeamEmployees
@@ -320,6 +365,26 @@ const TeamDetails = () => {
                   onRevealPhone={revealPhone}
                   onCloseEmployees={() => {}}
                 />
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
+        {/* Debug Information - Remove in production */}
+        {process.env.NODE_ENV === 'development' && (
+          <div className="lg:col-span-3 mt-6">
+            <Card className="shadow-md border-yellow-400">
+              <CardHeader className="border-b">
+                <CardTitle className="text-lg text-yellow-600">Debug Info</CardTitle>
+              </CardHeader>
+              <CardContent className="p-4">
+                <div className="space-y-2 text-sm">
+                  <p><strong>Team ID:</strong> {teamId}</p>
+                  <p><strong>Team Name:</strong> {team?.team}</p>
+                  <p><strong>Contacts Count:</strong> {team?.contacts?.length || 0}</p>
+                  <p><strong>TeamEmployees Count:</strong> {teamEmployees?.employees?.length || 0}</p>
+                  <p><strong>Has TeamEmployees:</strong> {teamEmployees ? 'Yes' : 'No'}</p>
+                </div>
               </CardContent>
             </Card>
           </div>
