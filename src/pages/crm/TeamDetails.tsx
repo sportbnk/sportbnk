@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -26,8 +25,6 @@ const TeamDetails = () => {
       const teamIdNumber = parseInt(teamId, 10);
       if (isNaN(teamIdNumber)) return null;
       
-      console.log('Fetching team data for ID:', teamIdNumber);
-      
       const { data, error } = await supabase
         .from('teams')
         .select(`
@@ -42,9 +39,6 @@ const TeamDetails = () => {
         console.error('Error fetching team:', error);
         throw error;
       }
-
-      console.log('Raw team data from Supabase:', data);
-      console.log('Team contacts found:', data.team_contacts?.length || 0);
 
       // Transform to match TeamData interface
       const transformedTeam: TeamData = {
@@ -78,9 +72,6 @@ const TeamDetails = () => {
         }, {})
       };
 
-      console.log('Transformed team data:', transformedTeam);
-      console.log('Contacts in transformed data:', transformedTeam.contacts.length);
-
       return transformedTeam;
     },
     enabled: !!teamId
@@ -92,7 +83,6 @@ const TeamDetails = () => {
     team: team.team,
     teamLogo: team.logo || '',
     employees: team.contacts.map((contact, index) => {
-      console.log('Mapping contact:', contact);
       return {
         id: index + 1,
         name: contact.name,
@@ -105,8 +95,6 @@ const TeamDetails = () => {
       };
     })
   } : null;
-
-  console.log('TeamEmployees data created:', teamEmployees);
   
   if (isLoading) {
     return (
@@ -184,14 +172,6 @@ const TeamDetails = () => {
     sunday: "Closed"
   };
   
-  console.log('Rendering TeamDetails with:', {
-    teamId,
-    team: team?.team,
-    contactsCount: team?.contacts?.length || 0,
-    teamEmployeesCount: teamEmployees?.employees?.length || 0,
-    teamEmployeesData: teamEmployees
-  });
-  
   return (
     <div className="container mx-auto px-0">
       <div className="flex items-center gap-2 mb-6 px-2">
@@ -221,7 +201,7 @@ const TeamDetails = () => {
 
                 {team.contacts && team.contacts.length > 0 && (
                   <p className="text-sm text-green-600">
-                    {team.contacts.length} team contacts available
+                    {team.contacts.length} employees available
                   </p>
                 )}
               </div>
@@ -359,7 +339,7 @@ const TeamDetails = () => {
             <Card className="shadow-md">
               <CardHeader className="border-b">
                 <CardTitle className="text-lg">
-                  Team Contacts ({team.contacts.length})
+                  Employees ({team.contacts.length})
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-0">
