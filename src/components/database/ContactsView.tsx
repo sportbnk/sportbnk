@@ -107,17 +107,8 @@ const ContactsView = ({
                 </div>
               </TableCell>
               <TableCell>
-                <div className="flex items-center space-x-2 max-w-[140px]">
-                  {contact.teamLogo && (
-                    <img 
-                      src={contact.teamLogo} 
-                      alt={`${contact.team} logo`} 
-                      className="w-6 h-6 object-contain rounded shrink-0"
-                    />
-                  )}
-                  <div className="min-w-0">
-                    <span className="whitespace-normal break-words text-sm">{contact.team}</span>
-                  </div>
+                <div className="max-w-[140px]">
+                  <span className="whitespace-normal break-words text-sm">{contact.team}</span>
                 </div>
               </TableCell>
               <TableCell>
