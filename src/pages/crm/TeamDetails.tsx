@@ -999,8 +999,6 @@ const TeamDetails = () => {
                 <p className="text-muted-foreground">
                   {team.city}, {team.country}
                 </p>
-                
-                <p className="max-w-3xl">{team.description}</p>
               </div>
               
               <div className="flex flex-col gap-2 self-start">
@@ -1110,15 +1108,6 @@ const TeamDetails = () => {
                 <p className="text-sm font-medium text-muted-foreground">Founded</p>
                 <p className="text-2xl font-bold">{team.founded}</p>
               </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>About</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm leading-relaxed">{team.description}</p>
             </CardContent>
           </Card>
         </div>
