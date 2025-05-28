@@ -97,7 +97,7 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
       if (error) throw error;
       
       // Extract unique levels
-      const uniqueLevels = [...new Set(data?.map(team => team.level) || [])] || [];
+      const uniqueLevels = [...new Set(data?.map(team => team.level) || [])];
       return uniqueLevels.sort();
     },
     enabled: showTeamFilters,
@@ -191,9 +191,9 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
       
       // Extract unique levels, filter out null/empty values
       const uniqueLevels = [...new Set(
-        data?.map(team => team.level)
-          .filter(level => level && level.trim() !== '') || []
-      )] || [];
+        (data?.map(team => team.level)
+          .filter(level => level && level.trim() !== '') || [])
+      )];
       
       return uniqueLevels.sort();
     },
