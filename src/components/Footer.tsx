@@ -1,4 +1,3 @@
-
 import { Facebook, Twitter, Instagram, Linkedin, Cookie } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
@@ -61,7 +60,6 @@ const Footer = () => {
               <li><Link to="/resources/articles" className="text-gray-600 hover:text-sportbnk-green transition-colors">Articles</Link></li>
               <li><Link to="/resources/webinars" className="text-gray-600 hover:text-sportbnk-green transition-colors">Webinars</Link></li>
               <li><Link to="/resources/case-studies" className="text-gray-600 hover:text-sportbnk-green transition-colors">Case Studies</Link></li>
-              <li><Link to="/resources/reviews" className="text-gray-600 hover:text-sportbnk-green transition-colors">Reviews</Link></li>
               <li><Link to="/resources/help-center" className="text-gray-600 hover:text-sportbnk-green transition-colors">Help Center</Link></li>
             </ul>
           </div>

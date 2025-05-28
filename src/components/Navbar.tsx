@@ -193,31 +193,11 @@ const Navbar = () => {
                       </li>
                       <li>
                         <NavigationMenuLink asChild>
-                          <Link to="/resources/podcasts" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
-                            <div className="text-sm font-medium text-sportbnk-navy flex items-center">
-                              <Headphones className="h-4 w-4 mr-2" /> Podcasts
-                            </div>
-                            <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Listen to our sports data discussions</p>
-                          </Link>
-                        </NavigationMenuLink>
-                      </li>
-                      <li>
-                        <NavigationMenuLink asChild>
                           <Link to="/resources/case-studies" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
                             <div className="text-sm font-medium text-sportbnk-navy flex items-center">
                               <Clipboard className="h-4 w-4 mr-2" /> Case Studies
                             </div>
                             <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Success stories from our clients</p>
-                          </Link>
-                        </NavigationMenuLink>
-                      </li>
-                      <li>
-                        <NavigationMenuLink asChild>
-                          <Link to="/resources/reviews" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
-                            <div className="text-sm font-medium text-sportbnk-navy flex items-center">
-                              <MessageSquare className="h-4 w-4 mr-2" /> Reviews
-                            </div>
-                            <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">What our customers say</p>
                           </Link>
                         </NavigationMenuLink>
                       </li>
@@ -356,18 +336,8 @@ const Navbar = () => {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link to="/resources/podcasts" className="w-full flex items-center">
-                    <Headphones className="h-4 w-4 mr-2" />Podcasts
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
                   <Link to="/resources/case-studies" className="w-full flex items-center">
                     <Clipboard className="h-4 w-4 mr-2" />Case Studies
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Link to="/resources/reviews" className="w-full flex items-center">
-                    <MessageSquare className="h-4 w-4 mr-2" />Reviews
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>

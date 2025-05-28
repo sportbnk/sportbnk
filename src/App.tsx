@@ -45,7 +45,6 @@ import SportBnkVsSportBankArticle from "./pages/resources/SportBnkVsSportBankArt
 import Community from "./pages/resources/Community";
 import Webinars from "./pages/resources/Webinars";
 import CaseStudies from "./pages/resources/CaseStudies";
-import Reviews from "./pages/resources/Reviews";
 import HelpCenter from "./pages/resources/HelpCenter";
 
 // Legal pages
@@ -108,7 +107,6 @@ const App = () => (
             <Route path="/resources/community" element={<Community />} />
             <Route path="/resources/webinars" element={<Webinars />} />
             <Route path="/resources/case-studies" element={<CaseStudies />} />
-            <Route path="/resources/reviews" element={<Reviews />} />
             <Route path="/resources/help-center" element={<HelpCenter />} />
             
             {/* Legal pages */}
