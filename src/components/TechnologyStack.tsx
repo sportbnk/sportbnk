@@ -1,6 +1,6 @@
 
 import { useEffect, useRef } from 'react';
-import { Database, Mail, ListChecks, Clock, Briefcase, Link } from 'lucide-react';
+import { Database, Clock, Filter, ListChecks, FileExport, TrendingUp } from 'lucide-react';
 
 const TechnologyStack = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -43,36 +43,6 @@ const TechnologyStack = () => {
         >
           <div className="bg-white/5 backdrop-blur-sm rounded-xl p-8 border border-white/10">
             <div className="mb-4">
-              <Briefcase className="text-sportbnk-green w-10 h-10" />
-            </div>
-            <h3 className="text-xl font-semibold mb-3">CRM Integration</h3>
-            <p className="text-gray-300">
-              Seamlessly integrate with popular CRM platforms like Salesforce, HubSpot, and Pipedrive to enhance your sales process.
-            </p>
-          </div>
-          
-          <div className="bg-white/5 backdrop-blur-sm rounded-xl p-8 border border-white/10">
-            <div className="mb-4">
-              <Mail className="text-sportbnk-green w-10 h-10" />
-            </div>
-            <h3 className="text-xl font-semibold mb-3">Email Integration</h3>
-            <p className="text-gray-300">
-              Connect with leading email marketing platforms to nurture leads and build targeted campaigns for sports industry professionals.
-            </p>
-          </div>
-          
-          <div className="bg-white/5 backdrop-blur-sm rounded-xl p-8 border border-white/10">
-            <div className="mb-4">
-              <ListChecks className="text-sportbnk-green w-10 h-10" />
-            </div>
-            <h3 className="text-xl font-semibold mb-3">List Building</h3>
-            <p className="text-gray-300">
-              Create highly targeted lists of sports organizations and professionals using our advanced filtering and segmentation tools.
-            </p>
-          </div>
-          
-          <div className="bg-white/5 backdrop-blur-sm rounded-xl p-8 border border-white/10">
-            <div className="mb-4">
               <Database className="text-sportbnk-green w-10 h-10" />
             </div>
             <h3 className="text-xl font-semibold mb-3">Accurate & Compliant Data</h3>
@@ -85,7 +55,7 @@ const TechnologyStack = () => {
             <div className="mb-4">
               <Clock className="text-sportbnk-green w-10 h-10" />
             </div>
-            <h3 className="text-xl font-semibold mb-3">Job Changes Update</h3>
+            <h3 className="text-xl font-semibold mb-3">Job Changes</h3>
             <p className="text-gray-300">
               Stay informed about personnel movements within the sports industry with automated notifications about relevant job changes.
             </p>
@@ -93,11 +63,41 @@ const TechnologyStack = () => {
           
           <div className="bg-white/5 backdrop-blur-sm rounded-xl p-8 border border-white/10">
             <div className="mb-4">
-              <Link className="text-sportbnk-green w-10 h-10" />
+              <Filter className="text-sportbnk-green w-10 h-10" />
             </div>
-            <h3 className="text-xl font-semibold mb-3">API Ecosystem</h3>
+            <h3 className="text-xl font-semibold mb-3">Filtering System</h3>
             <p className="text-gray-300">
-              Leverage our comprehensive API ecosystem for seamless integration with your existing systems and customized data workflows.
+              Use advanced filtering capabilities to narrow down your search and find exactly the sports professionals you need.
+            </p>
+          </div>
+          
+          <div className="bg-white/5 backdrop-blur-sm rounded-xl p-8 border border-white/10">
+            <div className="mb-4">
+              <ListChecks className="text-sportbnk-green w-10 h-10" />
+            </div>
+            <h3 className="text-xl font-semibold mb-3">List Building</h3>
+            <p className="text-gray-300">
+              Create highly targeted lists of sports organizations and professionals using our advanced segmentation tools.
+            </p>
+          </div>
+          
+          <div className="bg-white/5 backdrop-blur-sm rounded-xl p-8 border border-white/10">
+            <div className="mb-4">
+              <FileExport className="text-sportbnk-green w-10 h-10" />
+            </div>
+            <h3 className="text-xl font-semibold mb-3">CSV Export</h3>
+            <p className="text-gray-300">
+              Export your contact lists and data in CSV format for seamless integration with your existing CRM and marketing tools.
+            </p>
+          </div>
+          
+          <div className="bg-white/5 backdrop-blur-sm rounded-xl p-8 border border-white/10">
+            <div className="mb-4">
+              <TrendingUp className="text-sportbnk-green w-10 h-10" />
+            </div>
+            <h3 className="text-xl font-semibold mb-3">Increasing Your Sales</h3>
+            <p className="text-gray-300">
+              Boost your sales performance with data-driven insights and targeted outreach to the right sports industry contacts.
             </p>
           </div>
         </div>
