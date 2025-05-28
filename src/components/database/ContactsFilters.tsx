@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
@@ -77,6 +78,27 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
       
       if (error) throw error;
       return data;
+    },
+    enabled: showTeamFilters,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000
+  });
+
+  // Fetch all levels from database
+  const { data: allLevels } = useQuery({
+    queryKey: ['all-levels'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('teams')
+        .select('level')
+        .not('level', 'is', null)
+        .neq('level', '');
+      
+      if (error) throw error;
+      
+      // Extract unique levels
+      const uniqueLevels = [...new Set(data?.map(team => team.level))] || [];
+      return uniqueLevels.sort();
     },
     enabled: showTeamFilters,
     staleTime: 5 * 60 * 1000,
@@ -201,22 +223,12 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
     
     // For sport and level changes, check if current selection is still valid
     if (key === "sport") {
-      // If the new sport selection is not available in current level filter, reset level
-      const currentLevel = filters.level;
-      if (currentLevel !== "all") {
-        // We'll let the reactive query handle this validation
-      }
       setFilters(newFilters);
       onFilterChange(newFilters);
       return;
     }
     
     if (key === "level") {
-      // If the new level selection is not available in current sport filter, reset sport
-      const currentSport = filters.sport;
-      if (currentSport !== "all") {
-        // We'll let the reactive query handle this validation
-      }
       setFilters(newFilters);
       onFilterChange(newFilters);
       return;
@@ -236,7 +248,7 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
 
   // Effect to reset sport if it's no longer available
   useEffect(() => {
-    if (filters.sport !== "all" && availableSports) {
+    if (filters.sport !== "all" && availableSports && availableSports.length > 0) {
       const isCurrentSportAvailable = availableSports.find(sport => sport.name === filters.sport);
       if (!isCurrentSportAvailable) {
         const newFilters = { ...filters, sport: "all" };
@@ -248,7 +260,7 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
 
   // Effect to reset level if it's no longer available
   useEffect(() => {
-    if (filters.level !== "all" && availableLevels) {
+    if (filters.level !== "all" && availableLevels && availableLevels.length > 0) {
       const isCurrentLevelAvailable = availableLevels.includes(filters.level);
       if (!isCurrentLevelAvailable) {
         const newFilters = { ...filters, level: "all" };
@@ -276,12 +288,12 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
   const isCityDisabled = filters.country === "all";
   const isCityLoading = citiesLoading || citiesFetching;
 
-  // Use available sports/levels if filters are applied, otherwise use all sports
-  const sportsToShow = (filters.country !== "all" || filters.city !== "all" || filters.level !== "all") 
-    ? (availableSports || []) 
-    : (allSports || []);
-  
-  const levelsToShow = availableLevels || [];
+  // Determine which sports and levels to show based on filters
+  const shouldShowFilteredSports = filters.country !== "all" || filters.city !== "all" || filters.level !== "all";
+  const shouldShowFilteredLevels = filters.country !== "all" || filters.city !== "all" || filters.sport !== "all";
+
+  const sportsToShow = shouldShowFilteredSports ? (availableSports || []) : (allSports || []);
+  const levelsToShow = shouldShowFilteredLevels ? (availableLevels || []) : (allLevels || []);
 
   return (
     <TooltipProvider>
