@@ -38,7 +38,9 @@ export default function Teams() {
     country: "all",
     city: "all",
     revenue: "all",
-    employees: "all"
+    employees: "all",
+    position: "all",
+    team: "all"
   });
 
   const [credits, setCredits] = useState(250);
@@ -204,6 +206,7 @@ export default function Teams() {
                 onFilterChange={handleFilterChange} 
                 showTeamFilters={true}
                 totalResults={organizationsData?.length || 0}
+                filters={filters}
               />
             </CardContent>
           </Card>

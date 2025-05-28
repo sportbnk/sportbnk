@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -12,20 +12,19 @@ interface ContactsFiltersProps {
   onFilterChange: (filters: any) => void;
   showTeamFilters?: boolean;
   totalResults?: number;
+  filters: {
+    position: string;
+    team: string;
+    sport: string;
+    level: string;
+    country: string;
+    city: string;
+    revenue: string;
+    employees: string;
+  };
 }
 
-const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults = 0 }: ContactsFiltersProps) => {
-  const [filters, setFilters] = useState({
-    position: "all",
-    team: "all",
-    sport: "all",
-    level: "all",
-    country: "all",
-    city: "all",
-    revenue: "all",
-    employees: "all"
-  });
-
+const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults = 0, filters }: ContactsFiltersProps) => {
   // Separate states for filter options - these stay independent of filtered results
   const { data: allCountries, isLoading: countriesLoading } = useQuery({
     queryKey: ['all-countries'],
@@ -113,7 +112,6 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
       newFilters.city = "all";
     }
     
-    setFilters(newFilters);
     onFilterChange(newFilters);
   };
 
@@ -129,7 +127,6 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
       revenue: "all",
       employees: "all"
     };
-    setFilters(resetFilters);
     onFilterChange(resetFilters);
   };
 
