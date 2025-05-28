@@ -1,6 +1,3 @@
-
-
-
 import React, { useState, useEffect } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
@@ -41,8 +38,8 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
       return data;
     },
     enabled: showTeamFilters,
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    gcTime: 10 * 60 * 1000 // 10 minutes
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000
   });
 
   // Fetch cities based on selected country
@@ -64,9 +61,123 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
       return data;
     },
     enabled: showTeamFilters && filters.country !== "all" && !!countries,
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    gcTime: 10 * 60 * 1000, // 10 minutes
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
     placeholderData: (previousData) => previousData
+  });
+
+  // Fetch all sports from database
+  const { data: allSports } = useQuery({
+    queryKey: ['all-sports'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('sports')
+        .select('id, name')
+        .order('name');
+      
+      if (error) throw error;
+      return data;
+    },
+    enabled: showTeamFilters,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000
+  });
+
+  // Fetch filtered sports based on current filters
+  const { data: availableSports } = useQuery({
+    queryKey: ['available-sports', filters.country, filters.city, filters.level],
+    queryFn: async () => {
+      let query = supabase
+        .from('teams')
+        .select(`
+          sports!inner (
+            id,
+            name
+          ),
+          cities!inner (
+            name,
+            countries!inner (
+              name
+            )
+          )
+        `);
+
+      // Apply current filters to get available sports
+      if (filters.country !== "all") {
+        query = query.eq('cities.countries.name', filters.country);
+      }
+      if (filters.city !== "all") {
+        query = query.eq('cities.name', filters.city);
+      }
+      if (filters.level !== "all") {
+        query = query.eq('level', filters.level);
+      }
+
+      const { data, error } = await query;
+      
+      if (error) throw error;
+      
+      // Extract unique sports
+      const uniqueSports = data?.reduce((acc, team) => {
+        const sport = team.sports;
+        if (sport && !acc.find(s => s.id === sport.id)) {
+          acc.push(sport);
+        }
+        return acc;
+      }, [] as any[]) || [];
+      
+      return uniqueSports.sort((a, b) => a.name.localeCompare(b.name));
+    },
+    enabled: showTeamFilters,
+    staleTime: 30 * 1000,
+    gcTime: 2 * 60 * 1000
+  });
+
+  // Fetch filtered levels based on current filters
+  const { data: availableLevels } = useQuery({
+    queryKey: ['available-levels', filters.country, filters.city, filters.sport],
+    queryFn: async () => {
+      let query = supabase
+        .from('teams')
+        .select(`
+          level,
+          sports!inner (
+            name
+          ),
+          cities!inner (
+            name,
+            countries!inner (
+              name
+            )
+          )
+        `);
+
+      // Apply current filters to get available levels
+      if (filters.country !== "all") {
+        query = query.eq('cities.countries.name', filters.country);
+      }
+      if (filters.city !== "all") {
+        query = query.eq('cities.name', filters.city);
+      }
+      if (filters.sport !== "all") {
+        query = query.eq('sports.name', filters.sport);
+      }
+
+      const { data, error } = await query;
+      
+      if (error) throw error;
+      
+      // Extract unique levels, filter out null/empty values
+      const uniqueLevels = [...new Set(
+        data?.map(team => team.level)
+          .filter(level => level && level.trim() !== '')
+      )] || [];
+      
+      return uniqueLevels.sort();
+    },
+    enabled: showTeamFilters,
+    staleTime: 30 * 1000,
+    gcTime: 2 * 60 * 1000
   });
 
   const handleFilterChange = (key: string, value: string) => {
@@ -75,9 +186,8 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
     // Reset city when country changes
     if (key === "country") {
       newFilters.city = "all";
-      // Update local state but don't trigger parent callback yet
       setFilters(newFilters);
-      return; // Don't call onFilterChange yet
+      return;
     }
     
     // For city changes, only trigger if we have cities loaded or if setting to "all"
@@ -89,6 +199,29 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
       return;
     }
     
+    // For sport and level changes, check if current selection is still valid
+    if (key === "sport") {
+      // If the new sport selection is not available in current level filter, reset level
+      const currentLevel = filters.level;
+      if (currentLevel !== "all") {
+        // We'll let the reactive query handle this validation
+      }
+      setFilters(newFilters);
+      onFilterChange(newFilters);
+      return;
+    }
+    
+    if (key === "level") {
+      // If the new level selection is not available in current sport filter, reset sport
+      const currentSport = filters.sport;
+      if (currentSport !== "all") {
+        // We'll let the reactive query handle this validation
+      }
+      setFilters(newFilters);
+      onFilterChange(newFilters);
+      return;
+    }
+    
     // For all other filters, update normally
     setFilters(newFilters);
     onFilterChange(newFilters);
@@ -97,10 +230,33 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
   // Effect to trigger filter change when cities are loaded and country is selected
   useEffect(() => {
     if (filters.country !== "all" && cities && !citiesLoading && !citiesFetching) {
-      // Cities are now loaded, trigger the filter update
       onFilterChange(filters);
     }
   }, [cities, citiesLoading, citiesFetching, filters.country]);
+
+  // Effect to reset sport if it's no longer available
+  useEffect(() => {
+    if (filters.sport !== "all" && availableSports) {
+      const isCurrentSportAvailable = availableSports.find(sport => sport.name === filters.sport);
+      if (!isCurrentSportAvailable) {
+        const newFilters = { ...filters, sport: "all" };
+        setFilters(newFilters);
+        onFilterChange(newFilters);
+      }
+    }
+  }, [availableSports, filters.sport]);
+
+  // Effect to reset level if it's no longer available
+  useEffect(() => {
+    if (filters.level !== "all" && availableLevels) {
+      const isCurrentLevelAvailable = availableLevels.includes(filters.level);
+      if (!isCurrentLevelAvailable) {
+        const newFilters = { ...filters, level: "all" };
+        setFilters(newFilters);
+        onFilterChange(newFilters);
+      }
+    }
+  }, [availableLevels, filters.level]);
 
   const clearFilters = () => {
     const resetFilters = {
@@ -119,6 +275,13 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
 
   const isCityDisabled = filters.country === "all";
   const isCityLoading = citiesLoading || citiesFetching;
+
+  // Use available sports/levels if filters are applied, otherwise use all sports
+  const sportsToShow = (filters.country !== "all" || filters.city !== "all" || filters.level !== "all") 
+    ? (availableSports || []) 
+    : (allSports || []);
+  
+  const levelsToShow = availableLevels || [];
 
   return (
     <TooltipProvider>
@@ -213,14 +376,13 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
                 <SelectTrigger id="sport" className="h-8 text-xs">
                   <SelectValue placeholder="All sports" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-white z-50">
                   <SelectItem value="all">All sports</SelectItem>
-                  <SelectItem value="Football">Football</SelectItem>
-                  <SelectItem value="Basketball">Basketball</SelectItem>
-                  <SelectItem value="Baseball">Baseball</SelectItem>
-                  <SelectItem value="Rugby">Rugby</SelectItem>
-                  <SelectItem value="Golf">Golf</SelectItem>
-                  <SelectItem value="Ski">Ski</SelectItem>
+                  {sportsToShow.map((sport) => (
+                    <SelectItem key={sport.id} value={sport.name}>
+                      {sport.name}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
@@ -234,10 +396,13 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
                 <SelectTrigger id="level" className="h-8 text-xs">
                   <SelectValue placeholder="All levels" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-white z-50">
                   <SelectItem value="all">All levels</SelectItem>
-                  <SelectItem value="Professional">Professional</SelectItem>
-                  <SelectItem value="Amateur">Amateur</SelectItem>
+                  {levelsToShow.map((level) => (
+                    <SelectItem key={level} value={level}>
+                      {level}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
@@ -332,5 +497,3 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
 };
 
 export default ContactsFilters;
-
-
