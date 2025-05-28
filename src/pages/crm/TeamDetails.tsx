@@ -1,4 +1,3 @@
-
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -66,6 +65,13 @@ const TeamDetails = () => {
     },
     enabled: !!teamId,
   });
+
+  // Helper function to open URLs in new tab
+  const openInNewTab = (url: string) => {
+    if (url) {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+  };
 
   if (isLoading) {
     return (
@@ -202,15 +208,13 @@ const TeamDetails = () => {
           <CardContent>
             <div className="flex flex-wrap gap-2">
               {team.team_social_links.map((social) => (
-                <a
+                <span
                   key={social.id}
-                  href={social.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-gray-100 hover:bg-gray-200 transition-colors"
+                  onClick={() => openInNewTab(social.url)}
+                  className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-gray-100 hover:bg-gray-200 transition-colors cursor-pointer"
                 >
                   <span className="capitalize">{social.platform}</span>
-                </a>
+                </span>
               ))}
             </div>
           </CardContent>

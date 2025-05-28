@@ -184,7 +184,7 @@ export default function Teams() {
     email: '', // Not included in DTO
     phone: '', // Not included in DTO
     contacts: [], // Not included in DTO
-    social: {} // Not included in DTO
+    social: [] // Changed from {} to [] to match SocialLink[] type
   }));
 
   console.log('Table data for display:', tableData);
