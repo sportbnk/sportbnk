@@ -15,7 +15,7 @@ const LatestNews = () => {
               <div className="grid md:grid-cols-2">
                 <div className="h-full">
                   <img 
-                    src="/lovable-uploads/1d95a70d-8230-4647-9c16-d5c94a124864.png" 
+                    src="/lovable-uploads/94f20b65-d719-4240-b79f-110e5fbe89de.png" 
                     alt="Scott McKecknie joins SportBnk as Advisory Shareholder" 
                     className="w-full h-full object-cover"
                   />
