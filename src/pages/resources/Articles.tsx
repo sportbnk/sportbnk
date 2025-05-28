@@ -1,3 +1,4 @@
+
 import PageLayout from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -77,51 +78,6 @@ const Articles = () => {
               readTime="5 min read" 
               image="/lovable-uploads/53090dbd-8563-439e-951d-47c7b07d47e4.png" 
               category="Company"
-            />
-            
-            <ArticleCard 
-              title="How Data Intelligence is Transforming Sports Marketing" 
-              description="Learn how leading sports organizations are leveraging data to enhance their marketing strategies and create more personalized fan experiences."
-              date="June 15, 2023" 
-              readTime="8 min read" 
-              image="/lovable-uploads/d09f910d-17b2-4f81-bc3b-66badacf3de2.png" 
-              category="Sports Marketing"
-            />
-            
-            <ArticleCard 
-              title="The Future of Fan Engagement Through Data" 
-              description="Discover how sports teams are using data intelligence to create deeper connections with fans and enhance the overall spectator experience."
-              date="May 28, 2023" 
-              readTime="12 min read" 
-              image="/lovable-uploads/c5351de4-d54d-424f-99a5-b07ddc3fcc40.png" 
-              category="Fan Experience"
-            />
-            
-            <ArticleCard 
-              title="Navigating Privacy Regulations in Sports Data" 
-              description="A comprehensive guide to managing sports data while maintaining compliance with GDPR, CCPA, and other privacy regulations around the world."
-              date="May 10, 2023" 
-              readTime="10 min read" 
-              image="/lovable-uploads/1d95a70d-8230-4647-9c16-d5c94a124864.png" 
-              category="Data Compliance"
-            />
-            
-            <ArticleCard 
-              title="Measuring ROI in Sports Data Initiatives" 
-              description="Practical frameworks and metrics for effectively measuring the return on investment of your sports organization's data intelligence initiatives."
-              date="April 25, 2023" 
-              readTime="9 min read" 
-              image="/lovable-uploads/c506ab85-1e88-47f8-941f-cb182443bf55.png" 
-              category="Business Intelligence"
-            />
-            
-            <ArticleCard 
-              title="Innovation in Sports Recruitment" 
-              description="How data intelligence is transforming talent acquisition in sports, with real-world examples from teams and organizations that have revolutionized their recruiting process."
-              date="April 8, 2023" 
-              readTime="11 min read" 
-              image="/lovable-uploads/08f9a58b-fe6c-4ee9-9058-d4d13a5cf79e.png" 
-              category="Recruitment"
             />
           </div>
           
