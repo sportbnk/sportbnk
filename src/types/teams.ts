@@ -7,11 +7,9 @@ export interface Contact {
   linkedin?: string;
 }
 
-export interface SocialLinks {
-  facebook?: string;
-  twitter?: string;
-  instagram?: string;
-  linkedin?: string;
+export interface SocialLink {
+  platform: string;
+  url: string;
 }
 
 export interface TeamData {
@@ -30,5 +28,5 @@ export interface TeamData {
   email?: string;
   phone?: string;
   contacts: Contact[];
-  social: SocialLinks;
+  social: SocialLink[];
 }

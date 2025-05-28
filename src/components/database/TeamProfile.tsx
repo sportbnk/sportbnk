@@ -1,10 +1,9 @@
-
 import React from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription } from "@/components/ui/card";
-import { Globe, Users, DollarSign, MapPin, Facebook, Twitter, Instagram, Linkedin, Mail, Phone } from "lucide-react";
+import { Globe, Users, DollarSign, MapPin, Mail, Phone, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { TeamData } from "@/types/teams";
 
@@ -143,77 +142,26 @@ const TeamProfile: React.FC<TeamProfileProps> = ({
           </TabsContent>
           
           <TabsContent value="social" className="space-y-4 pt-4">
-            {(!team.social.facebook && !team.social.twitter && !team.social.instagram && !team.social.linkedin) ? (
+            {(!team.social || team.social.length === 0) ? (
               <p className="text-center text-muted-foreground py-8">No social media profiles available</p>
             ) : (
               <div className="grid grid-cols-2 gap-4">
-                {team.social.facebook && (
-                  <Card>
+                {team.social.map((socialLink, index) => (
+                  <Card key={index}>
                     <CardContent className="pt-6">
                       <div className="flex items-center gap-2">
-                        <Facebook className="h-4 w-4 text-blue-600" />
-                        <CardDescription>Facebook</CardDescription>
+                        <ExternalLink className="h-4 w-4 text-muted-foreground" />
+                        <CardDescription className="capitalize">{socialLink.platform}</CardDescription>
                       </div>
                       <span 
-                        onClick={() => openInNewTab(team.social.facebook!)} 
+                        onClick={() => openInNewTab(socialLink.url)} 
                         className="mt-1 font-medium text-blue-600 hover:underline cursor-pointer"
                       >
-                        Visit Page
-                      </span>
-                    </CardContent>
-                  </Card>
-                )}
-                
-                {team.social.twitter && (
-                  <Card>
-                    <CardContent className="pt-6">
-                      <div className="flex items-center gap-2">
-                        <Twitter className="h-4 w-4 text-sky-500" />
-                        <CardDescription>Twitter</CardDescription>
-                      </div>
-                      <span 
-                        onClick={() => openInNewTab(team.social.twitter!)} 
-                        className="mt-1 font-medium text-sky-500 hover:underline cursor-pointer"
-                      >
                         Visit Profile
                       </span>
                     </CardContent>
                   </Card>
-                )}
-                
-                {team.social.instagram && (
-                  <Card>
-                    <CardContent className="pt-6">
-                      <div className="flex items-center gap-2">
-                        <Instagram className="h-4 w-4 text-pink-600" />
-                        <CardDescription>Instagram</CardDescription>
-                      </div>
-                      <span 
-                        onClick={() => openInNewTab(team.social.instagram!)} 
-                        className="mt-1 font-medium text-pink-600 hover:underline cursor-pointer"
-                      >
-                        Visit Profile
-                      </span>
-                    </CardContent>
-                  </Card>
-                )}
-                
-                {team.social.linkedin && (
-                  <Card>
-                    <CardContent className="pt-6">
-                      <div className="flex items-center gap-2">
-                        <Linkedin className="h-4 w-4 text-blue-700" />
-                        <CardDescription>LinkedIn</CardDescription>
-                      </div>
-                      <span 
-                        onClick={() => openInNewTab(team.social.linkedin!)} 
-                        className="mt-1 font-medium text-blue-700 hover:underline cursor-pointer"
-                      >
-                        Visit Page
-                      </span>
-                    </CardContent>
-                  </Card>
-                )}
+                ))}
               </div>
             )}
           </TabsContent>
