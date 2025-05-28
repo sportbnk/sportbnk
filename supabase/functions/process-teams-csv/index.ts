@@ -1,3 +1,4 @@
+
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
@@ -93,14 +94,14 @@ serve(async (req) => {
 async function processTeamRow(supabase: any, row: any, rowNumber: number) {
   console.log(`Processing team row ${rowNumber}:`, row);
   
-  // Get or create country
-  const countryName = row.country?.toLowerCase().trim();
+  // Get or create country - preserve original case but match case-insensitively
+  const countryName = row.country?.trim();
   if (!countryName) throw new Error('Country is required');
   
   let { data: country, error: countryError } = await supabase
     .from('countries')
-    .select('id')
-    .eq('name', countryName)
+    .select('id, name')
+    .ilike('name', countryName)
     .single();
 
   if (!country) {
@@ -114,14 +115,14 @@ async function processTeamRow(supabase: any, row: any, rowNumber: number) {
     country = newCountry;
   }
 
-  // Get or create city
-  const cityName = row.city?.toLowerCase().trim();
+  // Get or create city - preserve original case but match case-insensitively
+  const cityName = row.city?.trim();
   if (!cityName) throw new Error('City is required');
   
   let { data: city, error: cityError } = await supabase
     .from('cities')
-    .select('id')
-    .eq('name', cityName)
+    .select('id, name')
+    .ilike('name', cityName)
     .eq('country_id', country.id)
     .single();
 
