@@ -9,40 +9,91 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      team_contacts: {
+      cities: {
         Row: {
-          created_at: string | null
-          email: string | null
-          id: number
-          linkedin: string | null
+          country_id: string
+          created_at: string
+          id: string
           name: string
-          phone: string | null
-          position: string | null
-          team_id: number | null
         }
         Insert: {
-          created_at?: string | null
-          email?: string | null
-          id?: number
-          linkedin?: string | null
+          country_id: string
+          created_at?: string
+          id?: string
           name: string
-          phone?: string | null
-          position?: string | null
-          team_id?: number | null
         }
         Update: {
-          created_at?: string | null
-          email?: string | null
-          id?: number
-          linkedin?: string | null
+          country_id?: string
+          created_at?: string
+          id?: string
           name?: string
-          phone?: string | null
-          position?: string | null
-          team_id?: number | null
         }
         Relationships: [
           {
-            foreignKeyName: "team_contacts_team_id_fkey"
+            foreignKeyName: "cities_country_id_fkey"
+            columns: ["country_id"]
+            isOneToOne: false
+            referencedRelation: "countries"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      contacts: {
+        Row: {
+          created_at: string
+          department_id: string | null
+          email: string | null
+          email_credits_consumed: number
+          id: string
+          linkedin: string | null
+          linkedin_credits_consumed: number
+          name: string
+          phone: string | null
+          phone_credits_consumed: number
+          role: string | null
+          team_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          department_id?: string | null
+          email?: string | null
+          email_credits_consumed?: number
+          id?: string
+          linkedin?: string | null
+          linkedin_credits_consumed?: number
+          name: string
+          phone?: string | null
+          phone_credits_consumed?: number
+          role?: string | null
+          team_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          department_id?: string | null
+          email?: string | null
+          email_credits_consumed?: number
+          id?: string
+          linkedin?: string | null
+          linkedin_credits_consumed?: number
+          name?: string
+          phone?: string | null
+          phone_credits_consumed?: number
+          role?: string | null
+          team_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contacts_department_id_fkey"
+            columns: ["department_id"]
+            isOneToOne: false
+            referencedRelation: "departments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "contacts_team_id_fkey"
             columns: ["team_id"]
             isOneToOne: false
             referencedRelation: "teams"
@@ -50,26 +101,159 @@ export type Database = {
           },
         ]
       }
+      countries: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      departments: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      opening_hours: {
+        Row: {
+          created_at: string
+          day: string
+          end_hour: string
+          id: string
+          start_hour: string
+          team_id: string
+        }
+        Insert: {
+          created_at?: string
+          day: string
+          end_hour: string
+          id?: string
+          start_hour: string
+          team_id: string
+        }
+        Update: {
+          created_at?: string
+          day?: string
+          end_hour?: string
+          id?: string
+          start_hour?: string
+          team_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "opening_hours_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      revealed_details: {
+        Row: {
+          contact_id: string
+          created_at: string
+          has_revealed_email: boolean
+          has_revealed_linkedin: boolean
+          has_revealed_phone: boolean
+          id: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          contact_id: string
+          created_at?: string
+          has_revealed_email?: boolean
+          has_revealed_linkedin?: boolean
+          has_revealed_phone?: boolean
+          id?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          contact_id?: string
+          created_at?: string
+          has_revealed_email?: boolean
+          has_revealed_linkedin?: boolean
+          has_revealed_phone?: boolean
+          id?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "revealed_details_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sports: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
       team_social_links: {
         Row: {
-          created_at: string | null
-          id: number
+          created_at: string
+          id: string
           platform: string
-          team_id: number | null
+          team_id: string
+          updated_at: string
           url: string
         }
         Insert: {
-          created_at?: string | null
-          id?: number
+          created_at?: string
+          id?: string
           platform: string
-          team_id?: number | null
+          team_id: string
+          updated_at?: string
           url: string
         }
         Update: {
-          created_at?: string | null
-          id?: number
+          created_at?: string
+          id?: string
           platform?: string
-          team_id?: number | null
+          team_id?: string
+          updated_at?: string
           url?: string
         }
         Relationships: [
@@ -84,60 +268,69 @@ export type Database = {
       }
       teams: {
         Row: {
-          city: string
-          country: string
-          created_at: string | null
-          description: string | null
+          city_id: string | null
+          created_at: string
           email: string | null
           employees: number | null
-          founded: number | null
-          id: number
-          level: string
-          logo: string | null
+          founded: string | null
+          id: string
+          level: string | null
+          name: string
           phone: string | null
+          postal_code: string | null
           revenue: number | null
-          sport: string
-          team: string
-          updated_at: string | null
+          sport_id: string | null
+          street: string | null
           website: string | null
         }
         Insert: {
-          city: string
-          country: string
-          created_at?: string | null
-          description?: string | null
+          city_id?: string | null
+          created_at?: string
           email?: string | null
           employees?: number | null
-          founded?: number | null
-          id?: number
-          level: string
-          logo?: string | null
+          founded?: string | null
+          id?: string
+          level?: string | null
+          name: string
           phone?: string | null
+          postal_code?: string | null
           revenue?: number | null
-          sport: string
-          team: string
-          updated_at?: string | null
+          sport_id?: string | null
+          street?: string | null
           website?: string | null
         }
         Update: {
-          city?: string
-          country?: string
-          created_at?: string | null
-          description?: string | null
+          city_id?: string | null
+          created_at?: string
           email?: string | null
           employees?: number | null
-          founded?: number | null
-          id?: number
-          level?: string
-          logo?: string | null
+          founded?: string | null
+          id?: string
+          level?: string | null
+          name?: string
           phone?: string | null
+          postal_code?: string | null
           revenue?: number | null
-          sport?: string
-          team?: string
-          updated_at?: string | null
+          sport_id?: string | null
+          street?: string | null
           website?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "teams_city_id_fkey"
+            columns: ["city_id"]
+            isOneToOne: false
+            referencedRelation: "cities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "teams_sport_id_fkey"
+            columns: ["sport_id"]
+            isOneToOne: false
+            referencedRelation: "sports"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

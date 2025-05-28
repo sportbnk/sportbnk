@@ -25,6 +25,7 @@ import TeamDetails from "./pages/crm/TeamDetails";
 import UserProfile from "./pages/UserProfile";
 import Settings from "./pages/Settings";
 import SearchResults from "./pages/SearchResults";
+import CsvUpload from "./pages/CsvUpload";
 
 // Product pages
 import Discover from "./pages/products/Discover";
@@ -77,6 +78,7 @@ const App = () => (
             <Route path="/profile" element={<UserProfile />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/search" element={<SearchResults />} />
+            <Route path="/csv-upload" element={<CsvUpload />} />
             
             {/* CRM System with sidebar layout */}
             <Route element={<CrmLayout />}>
