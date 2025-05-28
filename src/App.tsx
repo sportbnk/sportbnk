@@ -44,7 +44,6 @@ import Articles from "./pages/resources/Articles";
 import SportBnkVsSportBankArticle from "./pages/resources/SportBnkVsSportBankArticle";
 import Community from "./pages/resources/Community";
 import Webinars from "./pages/resources/Webinars";
-import Podcasts from "./pages/resources/Podcasts";
 import CaseStudies from "./pages/resources/CaseStudies";
 import Reviews from "./pages/resources/Reviews";
 import HelpCenter from "./pages/resources/HelpCenter";
@@ -108,7 +107,6 @@ const App = () => (
             <Route path="/resources/articles/sportbnk-vs-sportbank" element={<SportBnkVsSportBankArticle />} />
             <Route path="/resources/community" element={<Community />} />
             <Route path="/resources/webinars" element={<Webinars />} />
-            <Route path="/resources/podcasts" element={<Podcasts />} />
             <Route path="/resources/case-studies" element={<CaseStudies />} />
             <Route path="/resources/reviews" element={<Reviews />} />
             <Route path="/resources/help-center" element={<HelpCenter />} />

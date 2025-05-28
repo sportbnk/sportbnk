@@ -2,7 +2,7 @@
 import PageLayout from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, BookOpen, Video, Mic, FileText, Star } from "lucide-react";
+import { Users, BookOpen, Video, FileText, Star } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const ResourceCard = ({ 
@@ -174,12 +174,12 @@ const Resources = () => {
             />
             
             <ResourceCard 
-              title="The Future of Sports Data: Trends and Predictions"
-              description="Industry experts discuss emerging trends and future predictions for sports data intelligence."
+              title="Building Community in Sports Organizations"
+              description="Learn how to foster strong communities within sports organizations and engage with your audience effectively."
               image="/lovable-uploads/1d95a70d-8230-4647-9c16-d5c94a124864.png"
-              category="Podcast"
-              icon={<Mic size={16} />}
-              link="/resources/podcasts"
+              category="Article"
+              icon={<FileText size={16} />}
+              link="/resources/articles"
             />
           </div>
           
@@ -193,11 +193,6 @@ const Resources = () => {
               <Link to="/resources/webinars">
                 <Button variant="outline" className="border-sportbnk-navy text-sportbnk-navy hover:bg-sportbnk-navy hover:text-white">
                   Webinars
-                </Button>
-              </Link>
-              <Link to="/resources/podcasts">
-                <Button variant="outline" className="border-sportbnk-navy text-sportbnk-navy hover:bg-sportbnk-navy hover:text-white">
-                  Podcasts
                 </Button>
               </Link>
               <Link to="/resources/case-studies">
