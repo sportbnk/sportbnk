@@ -1,5 +1,6 @@
 
 
+
 import React, { useState, useEffect } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
@@ -74,11 +75,32 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
     // Reset city when country changes
     if (key === "country") {
       newFilters.city = "all";
+      // Update local state but don't trigger parent callback yet
+      setFilters(newFilters);
+      return; // Don't call onFilterChange yet
     }
     
+    // For city changes, only trigger if we have cities loaded or if setting to "all"
+    if (key === "city") {
+      if (value === "all" || (cities && cities.length > 0)) {
+        setFilters(newFilters);
+        onFilterChange(newFilters);
+      }
+      return;
+    }
+    
+    // For all other filters, update normally
     setFilters(newFilters);
     onFilterChange(newFilters);
   };
+
+  // Effect to trigger filter change when cities are loaded and country is selected
+  useEffect(() => {
+    if (filters.country !== "all" && cities && !citiesLoading && !citiesFetching) {
+      // Cities are now loaded, trigger the filter update
+      onFilterChange(filters);
+    }
+  }, [cities, citiesLoading, citiesFetching, filters.country]);
 
   const clearFilters = () => {
     const resetFilters = {
@@ -310,4 +332,5 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
 };
 
 export default ContactsFilters;
+
 
