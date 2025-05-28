@@ -47,13 +47,11 @@ const TeamProfile: React.FC<TeamProfileProps> = ({
     return `$${revenue}`;
   };
 
-  // Helper function to ensure URLs have proper protocol
-  const formatUrl = (url: string) => {
-    if (!url) return '';
-    if (url.startsWith('http://') || url.startsWith('https://')) {
-      return url;
+  // Helper function to open URLs in new tab without formatting
+  const openInNewTab = (url: string) => {
+    if (url) {
+      window.open(url, '_blank');
     }
-    return `https://${url}`;
   };
 
   return (
@@ -133,9 +131,12 @@ const TeamProfile: React.FC<TeamProfileProps> = ({
                     <Globe className="h-4 w-4 text-muted-foreground" />
                     <CardDescription>Website</CardDescription>
                   </div>
-                  <a href={team.website} target="_blank" rel="noopener noreferrer" className="mt-1 font-medium text-blue-600 hover:underline">
+                  <span 
+                    onClick={() => openInNewTab(team.website!)} 
+                    className="mt-1 font-medium text-blue-600 hover:underline cursor-pointer"
+                  >
                     {team.website.replace(/^https?:\/\//, '')}
-                  </a>
+                  </span>
                 </CardContent>
               </Card>
             )}
@@ -153,9 +154,12 @@ const TeamProfile: React.FC<TeamProfileProps> = ({
                         <Facebook className="h-4 w-4 text-blue-600" />
                         <CardDescription>Facebook</CardDescription>
                       </div>
-                      <a href={formatUrl(team.social.facebook)} target="_blank" rel="noopener noreferrer" className="mt-1 font-medium text-blue-600 hover:underline">
+                      <span 
+                        onClick={() => openInNewTab(team.social.facebook!)} 
+                        className="mt-1 font-medium text-blue-600 hover:underline cursor-pointer"
+                      >
                         Visit Page
-                      </a>
+                      </span>
                     </CardContent>
                   </Card>
                 )}
@@ -167,9 +171,12 @@ const TeamProfile: React.FC<TeamProfileProps> = ({
                         <Twitter className="h-4 w-4 text-sky-500" />
                         <CardDescription>Twitter</CardDescription>
                       </div>
-                      <a href={formatUrl(team.social.twitter)} target="_blank" rel="noopener noreferrer" className="mt-1 font-medium text-sky-500 hover:underline">
+                      <span 
+                        onClick={() => openInNewTab(team.social.twitter!)} 
+                        className="mt-1 font-medium text-sky-500 hover:underline cursor-pointer"
+                      >
                         Visit Profile
-                      </a>
+                      </span>
                     </CardContent>
                   </Card>
                 )}
@@ -181,9 +188,12 @@ const TeamProfile: React.FC<TeamProfileProps> = ({
                         <Instagram className="h-4 w-4 text-pink-600" />
                         <CardDescription>Instagram</CardDescription>
                       </div>
-                      <a href={formatUrl(team.social.instagram)} target="_blank" rel="noopener noreferrer" className="mt-1 font-medium text-pink-600 hover:underline">
+                      <span 
+                        onClick={() => openInNewTab(team.social.instagram!)} 
+                        className="mt-1 font-medium text-pink-600 hover:underline cursor-pointer"
+                      >
                         Visit Profile
-                      </a>
+                      </span>
                     </CardContent>
                   </Card>
                 )}
@@ -195,9 +205,12 @@ const TeamProfile: React.FC<TeamProfileProps> = ({
                         <Linkedin className="h-4 w-4 text-blue-700" />
                         <CardDescription>LinkedIn</CardDescription>
                       </div>
-                      <a href={formatUrl(team.social.linkedin)} target="_blank" rel="noopener noreferrer" className="mt-1 font-medium text-blue-700 hover:underline">
+                      <span 
+                        onClick={() => openInNewTab(team.social.linkedin!)} 
+                        className="mt-1 font-medium text-blue-700 hover:underline cursor-pointer"
+                      >
                         Visit Page
-                      </a>
+                      </span>
                     </CardContent>
                   </Card>
                 )}
@@ -262,14 +275,12 @@ const TeamProfile: React.FC<TeamProfileProps> = ({
                         {contact.linkedin && (
                           <div className="flex items-center gap-2">
                             <Linkedin className="h-4 w-4 text-blue-700" />
-                            <a 
-                              href={formatUrl(contact.linkedin)} 
-                              target="_blank" 
-                              rel="noopener noreferrer" 
-                              className="text-sm text-blue-700 hover:underline"
+                            <span 
+                              onClick={() => openInNewTab(contact.linkedin!)} 
+                              className="text-sm text-blue-700 hover:underline cursor-pointer"
                             >
                               LinkedIn Profile
-                            </a>
+                            </span>
                           </div>
                         )}
                       </div>
