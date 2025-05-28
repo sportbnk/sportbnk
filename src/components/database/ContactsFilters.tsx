@@ -1,4 +1,5 @@
 
+
 import React, { useState, useEffect } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
@@ -40,7 +41,7 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
     },
     enabled: showTeamFilters,
     staleTime: 5 * 60 * 1000, // 5 minutes
-    cacheTime: 10 * 60 * 1000 // 10 minutes
+    gcTime: 10 * 60 * 1000 // 10 minutes
   });
 
   // Fetch cities based on selected country
@@ -63,8 +64,8 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
     },
     enabled: showTeamFilters && filters.country !== "all" && !!countries,
     staleTime: 5 * 60 * 1000, // 5 minutes
-    cacheTime: 10 * 60 * 1000, // 10 minutes
-    keepPreviousData: true
+    gcTime: 10 * 60 * 1000, // 10 minutes
+    placeholderData: (previousData) => previousData
   });
 
   const handleFilterChange = (key: string, value: string) => {
@@ -309,3 +310,4 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
 };
 
 export default ContactsFilters;
+
