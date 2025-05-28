@@ -16,38 +16,83 @@ import {
 } from "@/components/ui/table";
 import { Search, Mail, Phone, Linkedin, Building2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import ContactsFilters from "@/components/database/ContactsFilters";
 
 const People = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [filters, setFilters] = useState({
+    position: "all",
+    team: "all",
+    sport: "all",
+    level: "all",
+    country: "all",
+    city: "all",
+    revenue: "all",
+    employees: "all"
+  });
   const { toast } = useToast();
 
   const { data: contacts, isLoading } = useQuery({
-    queryKey: ['contacts'],
+    queryKey: ['contacts', filters, searchTerm],
     queryFn: async () => {
-      const { data, error } = await supabase
+      let query = supabase
         .from('contacts')
         .select(`
           *,
           teams (
             id,
-            name
+            name,
+            cities (
+              id,
+              name,
+              countries (
+                id,
+                name
+              )
+            )
           ),
           departments (
             id,
             name
           )
         `);
+
+      // Apply department filter
+      if (filters.position !== "all") {
+        query = query.eq('departments.name', filters.position);
+      }
+
+      // Apply team location filters through joins
+      if (filters.country !== "all") {
+        query = query.eq('teams.cities.countries.name', filters.country);
+      }
+
+      if (filters.city !== "all") {
+        query = query.eq('teams.cities.name', filters.city);
+      }
+
+      if (filters.team !== "all") {
+        query = query.eq('teams.name', filters.team);
+      }
+
+      const { data, error } = await query;
       
       if (error) throw error;
       return data;
     },
   });
 
-  const filteredContacts = contacts?.filter(contact =>
-    contact.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    contact.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    contact.teams?.name?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredContacts = contacts?.filter(contact => {
+    if (!searchTerm) return true;
+    
+    const searchLower = searchTerm.toLowerCase();
+    return (
+      contact.name.toLowerCase().includes(searchLower) ||
+      contact.email?.toLowerCase().includes(searchLower) ||
+      contact.teams?.name?.toLowerCase().includes(searchLower) ||
+      contact.role?.toLowerCase().includes(searchLower)
+    );
+  });
 
   const handleRevealContact = async (contactId: string, field: 'email' | 'phone' | 'linkedin') => {
     try {
@@ -75,116 +120,147 @@ const People = () => {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-sportbnk-navy">People</h1>
-        <div className="flex items-center space-x-4">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-            <Input
-              placeholder="Search contacts..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 w-64"
-            />
-          </div>
-        </div>
+    <div className="flex h-screen">
+      {/* Filters Sidebar */}
+      <div className="w-64 border-r bg-gray-50 p-4 overflow-y-auto">
+        <ContactsFilters 
+          onFilterChange={setFilters}
+          showTeamFilters={false}
+          totalResults={filteredContacts?.length || 0}
+          filters={filters}
+        />
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Contact Database</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Role</TableHead>
-                <TableHead>Team</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>Phone</TableHead>
-                <TableHead>LinkedIn</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredContacts?.map((contact) => (
-                <TableRow key={contact.id}>
-                  <TableCell className="font-medium">{contact.name}</TableCell>
-                  <TableCell>
-                    {contact.role ? (
-                      <Badge variant="secondary">{contact.role}</Badge>
-                    ) : (
-                      <span className="text-gray-400">-</span>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    {contact.teams?.name ? (
-                      <div className="flex items-center space-x-2">
-                        <Building2 className="h-4 w-4 text-gray-400" />
-                        <span>{contact.teams.name}</span>
-                      </div>
-                    ) : (
-                      <span className="text-gray-400">-</span>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    {contact.email ? (
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleRevealContact(contact.id, 'email')}
-                        className="flex items-center space-x-1"
-                      >
-                        <Mail className="h-4 w-4" />
-                        <span className="text-sm">{contact.email}</span>
-                      </Button>
-                    ) : (
-                      <span className="text-gray-400">-</span>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    {contact.phone ? (
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleRevealContact(contact.id, 'phone')}
-                        className="flex items-center space-x-1"
-                      >
-                        <Phone className="h-4 w-4" />
-                        <span className="text-sm">{contact.phone}</span>
-                      </Button>
-                    ) : (
-                      <span className="text-gray-400">-</span>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    {contact.linkedin ? (
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleRevealContact(contact.id, 'linkedin')}
-                        className="flex items-center space-x-1"
-                      >
-                        <Linkedin className="h-4 w-4" />
-                        <span className="text-sm">View Profile</span>
-                      </Button>
-                    ) : (
-                      <span className="text-gray-400">-</span>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    <Button variant="outline" size="sm">
-                      View Details
-                    </Button>
-                  </TableCell>
+      {/* Main Content */}
+      <div className="flex-1 p-6 space-y-6 overflow-y-auto">
+        <div className="flex items-center justify-between">
+          <h1 className="text-3xl font-bold text-sportbnk-navy">People</h1>
+          <div className="flex items-center space-x-4">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Input
+                placeholder="Search contacts..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10 w-64"
+              />
+            </div>
+          </div>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Contact Database</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Role</TableHead>
+                  <TableHead>Department</TableHead>
+                  <TableHead>Team</TableHead>
+                  <TableHead>Location</TableHead>
+                  <TableHead>Email</TableHead>
+                  <TableHead>Phone</TableHead>
+                  <TableHead>LinkedIn</TableHead>
+                  <TableHead>Actions</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+              </TableHeader>
+              <TableBody>
+                {filteredContacts?.map((contact) => (
+                  <TableRow key={contact.id}>
+                    <TableCell className="font-medium">{contact.name}</TableCell>
+                    <TableCell>
+                      {contact.role ? (
+                        <Badge variant="secondary">{contact.role}</Badge>
+                      ) : (
+                        <span className="text-gray-400">-</span>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {contact.departments?.name ? (
+                        <span>{contact.departments.name}</span>
+                      ) : (
+                        <span className="text-gray-400">-</span>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {contact.teams?.name ? (
+                        <div className="flex items-center space-x-2">
+                          <Building2 className="h-4 w-4 text-gray-400" />
+                          <span>{contact.teams.name}</span>
+                        </div>
+                      ) : (
+                        <span className="text-gray-400">-</span>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {contact.teams?.cities ? (
+                        <span className="text-sm text-gray-600">
+                          {contact.teams.cities.name}, {contact.teams.cities.countries.name}
+                        </span>
+                      ) : (
+                        <span className="text-gray-400">-</span>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {contact.email ? (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleRevealContact(contact.id, 'email')}
+                          className="flex items-center space-x-1"
+                        >
+                          <Mail className="h-4 w-4" />
+                          <span className="text-sm">{contact.email}</span>
+                        </Button>
+                      ) : (
+                        <span className="text-gray-400">-</span>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {contact.phone ? (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleRevealContact(contact.id, 'phone')}
+                          className="flex items-center space-x-1"
+                        >
+                          <Phone className="h-4 w-4" />
+                          <span className="text-sm">{contact.phone}</span>
+                        </Button>
+                      ) : (
+                        <span className="text-gray-400">-</span>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {contact.linkedin ? (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleRevealContact(contact.id, 'linkedin')}
+                          className="flex items-center space-x-1"
+                        >
+                          <Linkedin className="h-4 w-4" />
+                          <span className="text-sm">View Profile</span>
+                        </Button>
+                      ) : (
+                        <span className="text-gray-400">-</span>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      <Button variant="outline" size="sm">
+                        View Details
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 };

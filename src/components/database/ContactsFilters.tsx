@@ -25,7 +25,23 @@ interface ContactsFiltersProps {
 }
 
 const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults = 0, filters }: ContactsFiltersProps) => {
-  // Separate states for filter options - these stay independent of filtered results
+  // Fetch all departments for position filter
+  const { data: allDepartments } = useQuery({
+    queryKey: ['all-departments'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('departments')
+        .select('id, name')
+        .order('name');
+      
+      if (error) throw error;
+      return data;
+    },
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000
+  });
+
+  // Fetch all countries for location-based team filtering
   const { data: allCountries, isLoading: countriesLoading } = useQuery({
     queryKey: ['all-countries'],
     queryFn: async () => {
@@ -37,7 +53,6 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
       if (error) throw error;
       return data;
     },
-    enabled: showTeamFilters,
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000
   });
@@ -60,10 +75,33 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
       if (error) throw error;
       return data;
     },
-    enabled: showTeamFilters && filters.country !== "all" && !!allCountries,
+    enabled: filters.country !== "all" && !!allCountries,
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
     placeholderData: (previousData) => previousData
+  });
+
+  // Teams for selected city only
+  const { data: teamsForCity } = useQuery({
+    queryKey: ['teams-for-city', filters.city],
+    queryFn: async () => {
+      if (filters.city === "all") return [];
+      
+      const selectedCity = citiesForCountry?.find(c => c.name === filters.city);
+      if (!selectedCity) return [];
+
+      const { data, error } = await supabase
+        .from('teams')
+        .select('id, name')
+        .eq('city_id', selectedCity.id)
+        .order('name');
+      
+      if (error) throw error;
+      return data;
+    },
+    enabled: filters.city !== "all" && !!citiesForCountry,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000
   });
 
   // All sports available in the system - independent of filters
@@ -107,9 +145,12 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
   const handleFilterChange = (key: string, value: string) => {
     const newFilters = { ...filters, [key]: value };
     
-    // Reset city when country changes
+    // Reset dependent filters when parent changes
     if (key === "country") {
       newFilters.city = "all";
+      newFilters.team = "all";
+    } else if (key === "city") {
+      newFilters.team = "all";
     }
     
     onFilterChange(newFilters);
@@ -131,6 +172,7 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
   };
 
   const isCityDisabled = filters.country === "all";
+  const isTeamDisabled = filters.city === "all";
   const isCityLoading = citiesLoading || citiesFetching;
 
   return (
@@ -152,63 +194,122 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
           {totalResults} result{totalResults !== 1 ? 's' : ''} found
         </div>
 
+        {/* Position Filter (Departments) - Always shown for People page */}
+        <div className="space-y-1">
+          <Label htmlFor="position" className="text-xs">Position</Label>
+          <Select 
+            value={filters.position}
+            onValueChange={(value) => handleFilterChange("position", value)}
+          >
+            <SelectTrigger id="position" className="h-8 text-xs">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent className="bg-white z-50">
+              <SelectItem value="all">All positions</SelectItem>
+              {allDepartments?.map((department) => (
+                <SelectItem key={department.id} value={department.name}>
+                  {department.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* Country Filter */}
+        <div className="space-y-1">
+          <Label htmlFor="country" className="text-xs">Country</Label>
+          <Select 
+            value={filters.country}
+            onValueChange={(value) => handleFilterChange("country", value)}
+          >
+            <SelectTrigger id="country" className="h-8 text-xs">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent className="bg-white z-50">
+              <SelectItem value="all">All countries</SelectItem>
+              {allCountries?.map((country) => (
+                <SelectItem key={country.id} value={country.name}>
+                  {country.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* City Filter */}
+        <div className="space-y-1">
+          <Label htmlFor="city" className="text-xs">City</Label>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div>
+                <Select 
+                  value={filters.city}
+                  onValueChange={(value) => handleFilterChange("city", value)}
+                  disabled={isCityDisabled}
+                >
+                  <SelectTrigger 
+                    id="city" 
+                    className={`h-8 text-xs ${isCityDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  >
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white z-50">
+                    <SelectItem value="all">All cities</SelectItem>
+                    {citiesForCountry?.map((city) => (
+                      <SelectItem key={city.id} value={city.name}>
+                        {city.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </TooltipTrigger>
+            {isCityDisabled && (
+              <TooltipContent className="bg-white border shadow-md">
+                <p>Please select a country first</p>
+              </TooltipContent>
+            )}
+          </Tooltip>
+        </div>
+
+        {/* Team Filter */}
+        <div className="space-y-1">
+          <Label htmlFor="team" className="text-xs">Team</Label>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div>
+                <Select 
+                  value={filters.team}
+                  onValueChange={(value) => handleFilterChange("team", value)}
+                  disabled={isTeamDisabled}
+                >
+                  <SelectTrigger 
+                    id="team" 
+                    className={`h-8 text-xs ${isTeamDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  >
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white z-50">
+                    <SelectItem value="all">All teams</SelectItem>
+                    {teamsForCity?.map((team) => (
+                      <SelectItem key={team.id} value={team.name}>
+                        {team.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </TooltipTrigger>
+            {isTeamDisabled && (
+              <TooltipContent className="bg-white border shadow-md">
+                <p>Please select a city first</p>
+              </TooltipContent>
+            )}
+          </Tooltip>
+        </div>
+
         {showTeamFilters && (
           <>
-            <div className="space-y-1">
-              <Label htmlFor="country" className="text-xs">Country</Label>
-              <Select 
-                value={filters.country}
-                onValueChange={(value) => handleFilterChange("country", value)}
-              >
-                <SelectTrigger id="country" className="h-8 text-xs">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent className="bg-white z-50">
-                  <SelectItem value="all">All countries</SelectItem>
-                  {allCountries?.map((country) => (
-                    <SelectItem key={country.id} value={country.name}>
-                      {country.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-1">
-              <Label htmlFor="city" className="text-xs">City</Label>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <div>
-                    <Select 
-                      value={filters.city}
-                      onValueChange={(value) => handleFilterChange("city", value)}
-                      disabled={isCityDisabled}
-                    >
-                      <SelectTrigger 
-                        id="city" 
-                        className={`h-8 text-xs ${isCityDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
-                      >
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent className="bg-white z-50">
-                        <SelectItem value="all">All cities</SelectItem>
-                        {citiesForCountry?.map((city) => (
-                          <SelectItem key={city.id} value={city.name}>
-                            {city.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </TooltipTrigger>
-                {isCityDisabled && (
-                  <TooltipContent className="bg-white border shadow-md">
-                    <p>Please select a country first</p>
-                  </TooltipContent>
-                )}
-              </Tooltip>
-            </div>
-
             <div className="space-y-1">
               <Label htmlFor="sport" className="text-xs">Sport</Label>
               <Select 
@@ -283,51 +384,6 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
                   <SelectItem value="50-200">50 - 200</SelectItem>
                   <SelectItem value="200-1000">200 - 1000</SelectItem>
                   <SelectItem value="more1000">More than 1000</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </>
-        )}
-
-        {!showTeamFilters && (
-          <>
-            <div className="space-y-1">
-              <Label htmlFor="position" className="text-xs">Position</Label>
-              <Select 
-                value={filters.position}
-                onValueChange={(value) => handleFilterChange("position", value)}
-              >
-                <SelectTrigger id="position" className="h-8 text-xs">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All positions</SelectItem>
-                  <SelectItem value="Marketing Director">Marketing Director</SelectItem>
-                  <SelectItem value="Operations Manager">Operations Manager</SelectItem>
-                  <SelectItem value="Head Coach">Head Coach</SelectItem>
-                  <SelectItem value="Commercial Director">Commercial Director</SelectItem>
-                  <SelectItem value="PR Director">PR Director</SelectItem>
-                  <SelectItem value="Digital Strategy Director">Digital Strategy Director</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-1">
-              <Label htmlFor="team" className="text-xs">Team</Label>
-              <Select 
-                value={filters.team}
-                onValueChange={(value) => handleFilterChange("team", value)}
-              >
-                <SelectTrigger id="team" className="h-8 text-xs">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All teams</SelectItem>
-                  <SelectItem value="Manchester United">Manchester United</SelectItem>
-                  <SelectItem value="LA Lakers">LA Lakers</SelectItem>
-                  <SelectItem value="Real Madrid">Real Madrid</SelectItem>
-                  <SelectItem value="Chicago Bulls">Chicago Bulls</SelectItem>
-                  <SelectItem value="Boston Red Sox">Boston Red Sox</SelectItem>
                 </SelectContent>
               </Select>
             </div>
