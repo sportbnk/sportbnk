@@ -118,6 +118,7 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
   };
 
   const clearFilters = () => {
+    console.log("resetting filter change")
     const resetFilters = {
       position: "all",
       team: "all",
