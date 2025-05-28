@@ -6,7 +6,30 @@ import ContactsFilters from "@/components/database/ContactsFilters";
 import ContactsTable from "@/components/database/ContactsTable";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
-import { TeamData } from "@/types/teams";
+
+// DTO interfaces for proper typing
+interface SportDTO {
+  name: string;
+}
+
+interface CountryDTO {
+  name: string;
+}
+
+interface CityDTO {
+  name: string;
+  country: CountryDTO;
+}
+
+interface OrganizationDTO {
+  id: string;
+  name: string;
+  revenue: number | null;
+  employees: number | null;
+  level: string | null;
+  sport: SportDTO;
+  city: CityDTO;
+}
 
 export default function Teams() {
   const [filters, setFilters] = useState({
@@ -20,42 +43,41 @@ export default function Teams() {
 
   const [credits, setCredits] = useState(250);
 
-  const { data: teamsData, isLoading } = useQuery({
-    queryKey: ['teams', filters],
+  const { data: organizationsData, isLoading } = useQuery({
+    queryKey: ['organizations', filters],
     queryFn: async () => {
+      console.log('Fetching organizations with filters:', filters);
+      
       let query = supabase
         .from('teams')
         .select(`
-          *,
-          cities (
-            id,
-            name,
-            countries (
-              id,
-              name
-            )
-          ),
-          sports (
-            id,
+          id,
+          name,
+          revenue,
+          employees,
+          level,
+          sports!inner (
             name
           ),
-          contacts (*),
-          team_social_links (*)
+          cities!inner (
+            name,
+            countries!inner (
+              name
+            )
+          )
         `);
 
+      // Apply filters
       if (filters.sport !== "all") {
-        // We'll need to join with sports table for filtering
         query = query.eq('sports.name', filters.sport);
       }
       if (filters.level !== "all") {
         query = query.eq('level', filters.level);
       }
       if (filters.country !== "all") {
-        // We'll need to join with countries table for filtering
         query = query.eq('cities.countries.name', filters.country);
       }
       if (filters.city !== "all") {
-        // We'll need to join with cities table for filtering
         query = query.eq('cities.name', filters.city);
       }
       if (filters.revenue !== "all") {
@@ -84,47 +106,44 @@ export default function Teams() {
       const { data, error } = await query;
       
       if (error) {
-        console.error('Error fetching teams:', error);
+        console.error('Error fetching organizations:', error);
         throw error;
       }
       
-      const transformedData: TeamData[] = (data || []).map(team => ({
-        id: team.id,
-        team: team.name, // Map 'name' to 'team' field
-        sport: team.sports?.name || '',
-        level: team.level || '',
-        city: team.cities?.name || '',
-        country: team.cities?.countries?.name || '',
-        revenue: team.revenue || 0,
-        employees: team.employees || 0,
-        logo: '', // No logo field in new schema
-        description: '', // No description field in new schema
-        founded: team.founded,
-        website: team.website,
-        email: team.email,
-        phone: team.phone,
-        contacts: (team.contacts || []).map((contact: any) => ({
-          name: contact.name,
-          position: contact.role || '',
-          email: contact.email || '',
-          phone: contact.phone || '',
-          linkedin: contact.linkedin || ''
-        })),
-        social: (team.team_social_links || []).reduce((acc: any, link: any) => {
-          if (link.platform === 'facebook') acc.facebook = link.url;
-          if (link.platform === 'twitter') acc.twitter = link.url;
-          if (link.platform === 'instagram') acc.instagram = link.url;
-          if (link.platform === 'linkedin') acc.linkedin = link.url;
-          return acc;
-        }, {})
-      }));
+      console.log('Raw data from Supabase:', data);
       
-      console.log('Fetched teams data:', transformedData);
+      // Transform data according to DTO specification
+      const transformedData: OrganizationDTO[] = (data || []).map(team => {
+        console.log('Processing team:', team);
+        
+        const dto: OrganizationDTO = {
+          id: team.id,
+          name: team.name,
+          revenue: team.revenue,
+          employees: team.employees,
+          level: team.level,
+          sport: {
+            name: team.sports?.name || ''
+          },
+          city: {
+            name: team.cities?.name || '',
+            country: {
+              name: team.cities?.countries?.name || ''
+            }
+          }
+        };
+        
+        console.log('Transformed DTO:', dto);
+        return dto;
+      });
+      
+      console.log('Final transformed data:', transformedData);
       return transformedData;
     }
   });
 
   const handleFilterChange = (newFilters: any) => {
+    console.log('Filter change:', newFilters);
     setFilters(newFilters);
   };
 
@@ -139,16 +158,38 @@ export default function Teams() {
           <h1 className="text-2xl font-bold">Organisations Database</h1>
         </div>
         <div className="flex justify-center items-center py-10">
-          <p className="text-muted-foreground">Loading cricket organizations...</p>
+          <p className="text-muted-foreground">Loading organizations...</p>
         </div>
       </div>
     );
   }
 
+  // Transform DTO data to match ContactsTable expected format
+  const tableData = (organizationsData || []).map(org => ({
+    id: org.id,
+    team: org.name, // Map name to team field for table display
+    sport: org.sport.name,
+    level: org.level || '',
+    city: org.city.name,
+    country: org.city.country.name,
+    revenue: org.revenue || 0,
+    employees: org.employees || 0,
+    logo: '', // No logo in current schema
+    description: '', // No description in current schema
+    founded: '', // Not included in DTO
+    website: '', // Not included in DTO
+    email: '', // Not included in DTO
+    phone: '', // Not included in DTO
+    contacts: [], // Not included in DTO
+    social: {} // Not included in DTO
+  }));
+
+  console.log('Table data for display:', tableData);
+
   return (
     <div className="container mx-auto px-4">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Cricket Organisations Database</h1>
+        <h1 className="text-2xl font-bold">Organizations Database</h1>
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
@@ -161,7 +202,7 @@ export default function Teams() {
               <ContactsFilters 
                 onFilterChange={handleFilterChange} 
                 showTeamFilters={true}
-                totalResults={teamsData?.length || 0}
+                totalResults={organizationsData?.length || 0}
               />
             </CardContent>
           </Card>
@@ -182,7 +223,7 @@ export default function Teams() {
         
         <div className="md:col-span-5">
           <ContactsTable 
-            data={teamsData || []} 
+            data={tableData} 
             useCredits={handleUseCredits}
           />
         </div>
