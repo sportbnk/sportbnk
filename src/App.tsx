@@ -36,6 +36,7 @@ import About from "./pages/company/About";
 import Careers from "./pages/company/Careers";
 import PartnerProgram from "./pages/company/PartnerProgram";
 import LatestNews from "./pages/company/LatestNews";
+import ScottMcKecknieArticle from "./pages/company/ScottMcKecknieArticle";
 
 // Resources sub-pages
 import Startups from "./pages/resources/Startups";
@@ -98,6 +99,7 @@ const App = () => (
             <Route path="/company/careers" element={<Careers />} />
             <Route path="/company/partner-program" element={<PartnerProgram />} />
             <Route path="/company/latest-news" element={<LatestNews />} />
+            <Route path="/company/news/scott-mckecknie-advisory-shareholder" element={<ScottMcKecknieArticle />} />
             
             {/* Resources sub-pages */}
             <Route path="/resources/startups" element={<Startups />} />
