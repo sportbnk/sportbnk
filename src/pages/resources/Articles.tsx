@@ -3,6 +3,7 @@ import PageLayout from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { FileText, Clock, Calendar, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const ArticleCard = ({ 
   title, 
@@ -10,7 +11,8 @@ const ArticleCard = ({
   date, 
   readTime, 
   image, 
-  category 
+  category,
+  href
 }: { 
   title: string; 
   description: string; 
@@ -18,6 +20,7 @@ const ArticleCard = ({
   readTime: string; 
   image: string; 
   category: string;
+  href: string;
 }) => (
   <Card className="overflow-hidden border-gray-200 transition-all duration-300 hover:shadow-lg">
     <div className="grid md:grid-cols-3">
@@ -43,8 +46,10 @@ const ArticleCard = ({
           <div className="flex items-center text-gray-500 text-sm">
             <Clock className="h-4 w-4 mr-1" /> {readTime}
           </div>
-          <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white">
-            Read Article
+          <Button asChild className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white">
+            <Link to={href}>
+              Read Article
+            </Link>
           </Button>
         </div>
       </div>
@@ -78,6 +83,7 @@ const Articles = () => {
               readTime="5 min read" 
               image="/lovable-uploads/53090dbd-8563-439e-951d-47c7b07d47e4.png" 
               category="Company"
+              href="/resources/articles/sportbnk-vs-sportbank"
             />
           </div>
           
