@@ -7,7 +7,6 @@ type Review = {
   position: string;
   content: string;
   rating: number;
-  image: string;
 };
 
 const reviews: Review[] = [
@@ -17,7 +16,6 @@ const reviews: Review[] = [
     position: "Sports Data Analyst",
     content: "SportBNK has completely transformed how we analyze sports data! The platform's real-time updates and intuitive interface have significantly improved our workflow efficiency.",
     rating: 5,
-    image: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7?auto=format&fit=crop&w=150&h=150&q=80",
   },
   {
     id: 2,
@@ -25,7 +23,6 @@ const reviews: Review[] = [
     position: "Founder of Filtr Sports",
     content: "SportBNK is the best app I have used with trying to grow my company and access direct links to clubs I am looking to target.",
     rating: 5,
-    image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=150&h=150&q=80",
   },
   {
     id: 3,
@@ -33,7 +30,6 @@ const reviews: Review[] = [
     position: "Marketing Director",
     content: "Outstanding platform that has revolutionized our sports content strategy. The data quality and depth of information available is unmatched in the industry.",
     rating: 5,
-    image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=150&h=150&q=80",
   },
 ];
 
@@ -41,13 +37,6 @@ const ReviewCard = ({ review }: { review: Review }) => {
   return (
     <div className="bg-white p-6 rounded-xl shadow-md">
       <div className="flex items-start mb-4">
-        <div className="flex-shrink-0 mr-4">
-          <img 
-            src={review.image} 
-            alt={review.name} 
-            className="w-12 h-12 rounded-full object-cover"
-          />
-        </div>
         <div>
           <div className="flex items-center mb-1">
             {Array.from({ length: 5 }).map((_, i) => (
