@@ -2,7 +2,7 @@
 import PageLayout from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { MessageSquare, Mail, Phone } from "lucide-react";
+import { MessageSquare, Mail } from "lucide-react";
 
 const HelpCenter = () => {
   const faqs = [
@@ -84,20 +84,11 @@ const HelpCenter = () => {
                 Can't find what you're looking for? Our support team is here to help you get the most out of Sportbnk.
               </p>
               
-              <div className="grid md:grid-cols-2 gap-6 mb-8">
-                <div className="bg-white rounded-lg p-6">
-                  <Mail className="h-8 w-8 text-sportbnk-green mx-auto mb-3" />
-                  <h3 className="font-semibold text-sportbnk-navy mb-2">Email Support</h3>
-                  <p className="text-gray-600 mb-4">Get detailed help via email</p>
-                  <p className="text-sm text-gray-500">support@sportbnk.com</p>
-                </div>
-                
-                <div className="bg-white rounded-lg p-6">
-                  <Phone className="h-8 w-8 text-sportbnk-green mx-auto mb-3" />
-                  <h3 className="font-semibold text-sportbnk-navy mb-2">Phone Support</h3>
-                  <p className="text-gray-600 mb-4">Speak directly with our team</p>
-                  <p className="text-sm text-gray-500">Mon-Fri, 9AM-6PM GMT</p>
-                </div>
+              <div className="bg-white rounded-lg p-6 mb-8 max-w-md mx-auto">
+                <Mail className="h-8 w-8 text-sportbnk-green mx-auto mb-3" />
+                <h3 className="font-semibold text-sportbnk-navy mb-2">Email Support</h3>
+                <p className="text-gray-600 mb-4">Get detailed help via email</p>
+                <p className="text-sm text-gray-500">info@sportbnk.com</p>
               </div>
               
               <div className="flex flex-col sm:flex-row justify-center gap-4">
