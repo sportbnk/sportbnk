@@ -144,7 +144,7 @@ export default function Teams() {
 
   // Use useCallback to prevent re-rendering of ContactsFilters
   const handleFilterChange = useCallback((newFilters: any) => {
-    console.log('Filter change received:', newFilters);
+    console.log('Filter change receivedd:', newFilters);
     setFilters(newFilters);
   }, []);
 
