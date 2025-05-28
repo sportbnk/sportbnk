@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
@@ -114,7 +113,7 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
     }
     
     setFilters(newFilters);
-    onFilterChange(newFilters);
+    // onFilterChange(newFilters); // COMMENTED OUT FOR DEBUGGING
   };
 
   const clearFilters = () => {
