@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -32,6 +31,22 @@ const People = () => {
   });
   const { toast } = useToast();
 
+  // Fetch all departments to get ID for the selected position
+  const { data: allDepartments } = useQuery({
+    queryKey: ['all-departments'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('departments')
+        .select('id, name')
+        .order('name');
+      
+      if (error) throw error;
+      return data;
+    },
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000
+  });
+
   const { data: contacts, isLoading } = useQuery({
     queryKey: ['contacts', filters, searchTerm],
     queryFn: async () => {
@@ -57,9 +72,12 @@ const People = () => {
           )
         `);
 
-      // Apply department filter - this was the issue
+      // Apply department filter using department ID
       if (filters.position !== "all") {
-        query = query.eq('departments.name', filters.position);
+        const selectedDepartment = allDepartments?.find(dept => dept.name === filters.position);
+        if (selectedDepartment) {
+          query = query.eq('department_id', selectedDepartment.id);
+        }
       }
 
       // Apply team filters
@@ -85,6 +103,7 @@ const People = () => {
       
       return data;
     },
+    enabled: !!allDepartments, // Only run query when departments are loaded
   });
 
   const filteredContacts = contacts?.filter(contact => {
