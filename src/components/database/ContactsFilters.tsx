@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
@@ -113,7 +114,7 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
     }
     
     setFilters(newFilters);
-    onFilterChange(newFilters); // UNCOMMENTED - now works with useCallback in parent
+    onFilterChange(newFilters);
   };
 
   const clearFilters = () => {
@@ -158,11 +159,11 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
             <div className="space-y-1">
               <Label htmlFor="country" className="text-xs">Country</Label>
               <Select 
-                value={filters.country} 
+                value={filters.country}
                 onValueChange={(value) => handleFilterChange("country", value)}
               >
                 <SelectTrigger id="country" className="h-8 text-xs">
-                  <SelectValue placeholder={countriesLoading ? "Loading countries..." : "All countries"} />
+                  <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="bg-white z-50">
                   <SelectItem value="all">All countries</SelectItem>
@@ -181,7 +182,7 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
                 <TooltipTrigger asChild>
                   <div>
                     <Select 
-                      value={filters.city} 
+                      value={filters.city}
                       onValueChange={(value) => handleFilterChange("city", value)}
                       disabled={isCityDisabled}
                     >
@@ -189,15 +190,7 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
                         id="city" 
                         className={`h-8 text-xs ${isCityDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
                       >
-                        <SelectValue 
-                          placeholder={
-                            isCityDisabled 
-                              ? "Select a country first" 
-                              : isCityLoading 
-                                ? "Loading cities..." 
-                                : "All cities"
-                          } 
-                        />
+                        <SelectValue />
                       </SelectTrigger>
                       <SelectContent className="bg-white z-50">
                         <SelectItem value="all">All cities</SelectItem>
@@ -221,11 +214,11 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
             <div className="space-y-1">
               <Label htmlFor="sport" className="text-xs">Sport</Label>
               <Select 
-                value={filters.sport} 
+                value={filters.sport}
                 onValueChange={(value) => handleFilterChange("sport", value)}
               >
                 <SelectTrigger id="sport" className="h-8 text-xs">
-                  <SelectValue placeholder="All sports" />
+                  <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="bg-white z-50">
                   <SelectItem value="all">All sports</SelectItem>
@@ -241,11 +234,11 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
             <div className="space-y-1">
               <Label htmlFor="level" className="text-xs">Level</Label>
               <Select 
-                value={filters.level} 
+                value={filters.level}
                 onValueChange={(value) => handleFilterChange("level", value)}
               >
                 <SelectTrigger id="level" className="h-8 text-xs">
-                  <SelectValue placeholder="All levels" />
+                  <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="bg-white z-50">
                   <SelectItem value="all">All levels</SelectItem>
@@ -261,11 +254,11 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
             <div className="space-y-1">
               <Label htmlFor="revenue" className="text-xs">Revenue</Label>
               <Select 
-                value={filters.revenue} 
+                value={filters.revenue}
                 onValueChange={(value) => handleFilterChange("revenue", value)}
               >
                 <SelectTrigger id="revenue" className="h-8 text-xs">
-                  <SelectValue placeholder="All revenues" />
+                  <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All revenues</SelectItem>
@@ -280,11 +273,11 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
             <div className="space-y-1">
               <Label htmlFor="employees" className="text-xs">Employees</Label>
               <Select 
-                value={filters.employees} 
+                value={filters.employees}
                 onValueChange={(value) => handleFilterChange("employees", value)}
               >
                 <SelectTrigger id="employees" className="h-8 text-xs">
-                  <SelectValue placeholder="All sizes" />
+                  <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All sizes</SelectItem>
@@ -303,11 +296,11 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
             <div className="space-y-1">
               <Label htmlFor="position" className="text-xs">Position</Label>
               <Select 
-                value={filters.position} 
+                value={filters.position}
                 onValueChange={(value) => handleFilterChange("position", value)}
               >
                 <SelectTrigger id="position" className="h-8 text-xs">
-                  <SelectValue placeholder="All positions" />
+                  <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All positions</SelectItem>
@@ -324,11 +317,11 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
             <div className="space-y-1">
               <Label htmlFor="team" className="text-xs">Team</Label>
               <Select 
-                value={filters.team} 
+                value={filters.team}
                 onValueChange={(value) => handleFilterChange("team", value)}
               >
                 <SelectTrigger id="team" className="h-8 text-xs">
-                  <SelectValue placeholder="All teams" />
+                  <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All teams</SelectItem>
