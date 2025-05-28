@@ -77,7 +77,7 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
         .order('name');
       
       if (error) throw error;
-      return data;
+      return data || [];
     },
     enabled: showTeamFilters,
     staleTime: 5 * 60 * 1000,
@@ -97,7 +97,7 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
       if (error) throw error;
       
       // Extract unique levels
-      const uniqueLevels = [...new Set(data?.map(team => team.level))] || [];
+      const uniqueLevels = [...new Set(data?.map(team => team.level) || [])] || [];
       return uniqueLevels.sort();
     },
     enabled: showTeamFilters,
@@ -192,7 +192,7 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
       // Extract unique levels, filter out null/empty values
       const uniqueLevels = [...new Set(
         data?.map(team => team.level)
-          .filter(level => level && level.trim() !== '')
+          .filter(level => level && level.trim() !== '') || []
       )] || [];
       
       return uniqueLevels.sort();
@@ -248,7 +248,7 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
 
   // Effect to reset sport if it's no longer available
   useEffect(() => {
-    if (filters.sport !== "all" && availableSports && availableSports.length > 0) {
+    if (filters.sport !== "all" && Array.isArray(availableSports) && availableSports.length > 0) {
       const isCurrentSportAvailable = availableSports.find(sport => sport.name === filters.sport);
       if (!isCurrentSportAvailable) {
         const newFilters = { ...filters, sport: "all" };
@@ -260,7 +260,7 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
 
   // Effect to reset level if it's no longer available
   useEffect(() => {
-    if (filters.level !== "all" && availableLevels && availableLevels.length > 0) {
+    if (filters.level !== "all" && Array.isArray(availableLevels) && availableLevels.length > 0) {
       const isCurrentLevelAvailable = availableLevels.includes(filters.level);
       if (!isCurrentLevelAvailable) {
         const newFilters = { ...filters, level: "all" };
