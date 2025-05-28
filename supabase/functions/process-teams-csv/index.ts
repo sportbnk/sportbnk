@@ -1,4 +1,3 @@
-
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
@@ -140,14 +139,14 @@ async function processTeamRow(supabase: any, row: any, rowNumber: number) {
     city = newCity;
   }
 
-  // Get or create sport
-  const sportName = row.sport?.toLowerCase().trim();
+  // Get or create sport - preserve original case but match case-insensitively
+  const sportName = row.sport?.trim();
   if (!sportName) throw new Error('Sport is required');
   
   let { data: sport, error: sportError } = await supabase
     .from('sports')
     .select('id')
-    .eq('name', sportName)
+    .ilike('name', sportName)
     .single();
 
   if (!sport) {
