@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
@@ -37,11 +38,13 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
       if (error) throw error;
       return data;
     },
-    enabled: showTeamFilters
+    enabled: showTeamFilters,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    cacheTime: 10 * 60 * 1000 // 10 minutes
   });
 
   // Fetch cities based on selected country
-  const { data: cities, isLoading: citiesLoading } = useQuery({
+  const { data: cities, isLoading: citiesLoading, isFetching: citiesFetching } = useQuery({
     queryKey: ['cities', filters.country],
     queryFn: async () => {
       if (filters.country === "all") return [];
@@ -58,7 +61,10 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
       if (error) throw error;
       return data;
     },
-    enabled: showTeamFilters && filters.country !== "all" && !!countries
+    enabled: showTeamFilters && filters.country !== "all" && !!countries,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    cacheTime: 10 * 60 * 1000, // 10 minutes
+    keepPreviousData: true
   });
 
   const handleFilterChange = (key: string, value: string) => {
@@ -89,6 +95,7 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
   };
 
   const isCityDisabled = filters.country === "all";
+  const isCityLoading = citiesLoading || citiesFetching;
 
   return (
     <TooltipProvider>
@@ -120,7 +127,7 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
                 <SelectTrigger id="country" className="h-8 text-xs">
                   <SelectValue placeholder={countriesLoading ? "Loading countries..." : "All countries"} />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-white z-50">
                   <SelectItem value="all">All countries</SelectItem>
                   {countries?.map((country) => (
                     <SelectItem key={country.id} value={country.name}>
@@ -141,18 +148,21 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
                       onValueChange={(value) => handleFilterChange("city", value)}
                       disabled={isCityDisabled}
                     >
-                      <SelectTrigger id="city" className={`h-8 text-xs ${isCityDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}>
+                      <SelectTrigger 
+                        id="city" 
+                        className={`h-8 text-xs ${isCityDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      >
                         <SelectValue 
                           placeholder={
                             isCityDisabled 
                               ? "Select a country first" 
-                              : citiesLoading 
-                                ? "Loading..." 
+                              : isCityLoading 
+                                ? "Loading cities..." 
                                 : "All cities"
                           } 
                         />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="bg-white z-50">
                         <SelectItem value="all">All cities</SelectItem>
                         {cities?.map((city) => (
                           <SelectItem key={city.id} value={city.name}>
@@ -164,7 +174,7 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
                   </div>
                 </TooltipTrigger>
                 {isCityDisabled && (
-                  <TooltipContent>
+                  <TooltipContent className="bg-white border shadow-md">
                     <p>Please select a country first</p>
                   </TooltipContent>
                 )}
