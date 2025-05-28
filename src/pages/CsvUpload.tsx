@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import PageLayout from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
@@ -57,41 +56,122 @@ const CsvUpload = () => {
   };
 
   const parseSocials = (socialsText: string): Array<{ platform: string; url: string }> => {
-    if (!socialsText?.trim()) return [];
+    console.log('=== PARSING SOCIALS ===');
+    console.log('Input socialsText:', socialsText);
+    console.log('Type of socialsText:', typeof socialsText);
+    console.log('Is empty or null?', !socialsText?.trim());
     
+    if (!socialsText?.trim()) {
+      console.log('Returning empty array - no social text');
+      return [];
+    }
+    
+    console.log('Splitting by comma...');
     const socialPairs = socialsText.split(',');
+    console.log('Social pairs after split:', socialPairs);
+    console.log('Number of pairs:', socialPairs.length);
+    
     const socials: Array<{ platform: string; url: string }> = [];
     
-    for (const pair of socialPairs) {
-      const [platform, url] = pair.split(':').map(s => s.trim());
-      if (platform && url) {
-        socials.push({ platform: platform.toLowerCase(), url });
+    for (let i = 0; i < socialPairs.length; i++) {
+      const pair = socialPairs[i];
+      console.log(`Processing pair ${i}:`, pair);
+      
+      const colonSplit = pair.split(':');
+      console.log(`Pair ${i} split by colon:`, colonSplit);
+      
+      if (colonSplit.length >= 2) {
+        const platform = colonSplit[0].trim();
+        const url = colonSplit.slice(1).join(':').trim(); // Handle URLs with multiple colons
+        
+        console.log(`Pair ${i} - Platform:`, platform);
+        console.log(`Pair ${i} - URL:`, url);
+        
+        if (platform && url) {
+          const socialEntry = { platform: platform.toLowerCase(), url };
+          console.log(`Adding social entry ${i}:`, socialEntry);
+          socials.push(socialEntry);
+        } else {
+          console.log(`Skipping pair ${i} - empty platform or URL`);
+        }
+      } else {
+        console.log(`Skipping pair ${i} - no colon found`);
       }
     }
     
+    console.log('Final socials array:', socials);
+    console.log('=== END PARSING SOCIALS ===\n');
     return socials;
   };
 
   const parseHours = (hoursText: string): Array<{ day: string; startHour: string; endHour: string }> => {
-    if (!hoursText?.trim()) return [];
+    console.log('=== PARSING HOURS ===');
+    console.log('Input hoursText:', hoursText);
+    console.log('Type of hoursText:', typeof hoursText);
+    console.log('Is empty or null?', !hoursText?.trim());
     
+    if (!hoursText?.trim()) {
+      console.log('Returning empty array - no hours text');
+      return [];
+    }
+    
+    console.log('Splitting by comma...');
     const hourPairs = hoursText.split(',');
+    console.log('Hour pairs after split:', hourPairs);
+    console.log('Number of pairs:', hourPairs.length);
+    
     const hours: Array<{ day: string; startHour: string; endHour: string }> = [];
     
-    for (const pair of hourPairs) {
-      const [day, timeRange] = pair.split(':').map(s => s.trim());
-      if (day && timeRange) {
-        const [startHour, endHour] = timeRange.split('-').map(s => s.trim());
-        if (startHour && endHour) {
-          hours.push({ 
-            day: day.toLowerCase(), 
-            startHour: startHour.toLowerCase(), 
-            endHour: endHour.toLowerCase() 
-          });
+    for (let i = 0; i < hourPairs.length; i++) {
+      const pair = hourPairs[i];
+      console.log(`Processing hour pair ${i}:`, pair);
+      
+      const colonSplit = pair.split(':');
+      console.log(`Hour pair ${i} split by colon:`, colonSplit);
+      
+      if (colonSplit.length >= 2) {
+        const day = colonSplit[0].trim();
+        const timeRange = colonSplit.slice(1).join(':').trim(); // Handle time ranges with multiple colons
+        
+        console.log(`Hour pair ${i} - Day:`, day);
+        console.log(`Hour pair ${i} - Time range:`, timeRange);
+        
+        if (day && timeRange) {
+          console.log(`Splitting time range by dash: "${timeRange}"`);
+          const dashSplit = timeRange.split('-');
+          console.log(`Time range split by dash:`, dashSplit);
+          
+          if (dashSplit.length >= 2) {
+            const startHour = dashSplit[0].trim();
+            const endHour = dashSplit.slice(1).join('-').trim(); // Handle end times with dashes
+            
+            console.log(`Hour pair ${i} - Start hour:`, startHour);
+            console.log(`Hour pair ${i} - End hour:`, endHour);
+            
+            if (startHour && endHour) {
+              const hourEntry = { 
+                day: day.toLowerCase(), 
+                startHour: startHour.toLowerCase(), 
+                endHour: endHour.toLowerCase() 
+              };
+              console.log(`Adding hour entry ${i}:`, hourEntry);
+              hours.push(hourEntry);
+            } else {
+              console.log(`Skipping hour pair ${i} - empty start or end hour`);
+            }
+          } else {
+            console.log(`Skipping hour pair ${i} - no dash found in time range`);
+          }
+        } else {
+          console.log(`Skipping hour pair ${i} - empty day or time range`);
         }
+      } else {
+        console.log(`Skipping hour pair ${i} - no colon found`);
       }
     }
     
+    console.log('Final hours array:', hours);
+    console.log('=== END PARSING HOURS ===\n');
     return hours;
   };
 
@@ -129,12 +209,19 @@ const CsvUpload = () => {
       // Parse first 10 rows for preview
       for (let i = 1; i < Math.min(11, lines.length); i++) {
         try {
+          console.log(`\n=== PROCESSING ROW ${i} ===`);
           const values = lines[i].split(',').map(v => v.trim().replace(/"/g, ''));
+          console.log('Raw values:', values);
+          
           const row: any = {};
           
           headers.forEach((header, index) => {
             row[header] = values[index] || '';
           });
+
+          console.log('Row object:', row);
+          console.log('Raw socials from CSV:', row.socials);
+          console.log('Raw hours from CSV:', row.hours);
 
           if (!row.name) {
             newErrors.push(`Row ${i}: Team name is required`);
@@ -144,7 +231,7 @@ const CsvUpload = () => {
           const socials = parseSocials(row.socials);
           const hours = parseHours(row.hours);
 
-          parsed.push({
+          const parsedTeam = {
             name: row.name,
             sport: row.sport,
             level: row.level,
@@ -160,8 +247,13 @@ const CsvUpload = () => {
             employees: row.employees,
             socials,
             hours
-          });
+          };
+
+          console.log('Final parsed team:', parsedTeam);
+          parsed.push(parsedTeam);
+          console.log(`=== END ROW ${i} ===\n`);
         } catch (error) {
+          console.error(`Error parsing row ${i}:`, error);
           newErrors.push(`Row ${i}: Error parsing data - ${error}`);
         }
       }
