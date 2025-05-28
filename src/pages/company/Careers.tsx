@@ -1,43 +1,7 @@
 
 import PageLayout from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Briefcase } from "lucide-react";
-import { Link } from "react-router-dom";
-
-const JobCard = ({ 
-  title, 
-  location, 
-  department, 
-  type 
-}: { 
-  title: string; 
-  location: string; 
-  department: string; 
-  type: string;
-}) => (
-  <Card className="border-gray-200 transition-all duration-300 hover:shadow-md">
-    <CardContent className="p-6">
-      <div className="flex justify-between items-start mb-4">
-        <div>
-          <h3 className="text-xl font-bold text-sportbnk-navy">{title}</h3>
-          <p className="text-gray-600">{department}</p>
-        </div>
-        <div className="bg-sportbnk-green/10 text-sportbnk-green text-sm px-3 py-1 rounded-full">
-          {type}
-        </div>
-      </div>
-      <p className="flex items-center text-gray-600">
-        <span className="mr-2">📍</span>{location}
-      </p>
-    </CardContent>
-    <CardFooter className="p-6 pt-0">
-      <Button variant="outline" className="w-full border-sportbnk-green text-sportbnk-green hover:bg-sportbnk-green hover:text-white" asChild>
-        <Link to="/company/careers">View Details</Link>
-      </Button>
-    </CardFooter>
-  </Card>
-);
+import { Mail } from "lucide-react";
 
 const Careers = () => {
   return (
@@ -55,43 +19,30 @@ const Careers = () => {
             </p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <JobCard 
-              title="Senior Data Scientist" 
-              location="London, UK" 
-              department="Data Science" 
-              type="Full-time"
-            />
-            <JobCard 
-              title="Sales Development Rep" 
-              location="Remote" 
-              department="Sales" 
-              type="Full-time"
-            />
-            <JobCard 
-              title="Content Marketing Specialist" 
-              location="New York, US" 
-              department="Marketing" 
-              type="Full-time"
-            />
-            <JobCard 
-              title="Front-End Developer" 
-              location="Remote" 
-              department="Engineering" 
-              type="Full-time"
-            />
-            <JobCard 
-              title="Customer Success Manager" 
-              location="London, UK" 
-              department="Customer Success" 
-              type="Full-time"
-            />
-            <JobCard 
-              title="Sports Data Analyst" 
-              location="Remote" 
-              department="Data" 
-              type="Contract"
-            />
+          <div className="max-w-2xl mx-auto text-center bg-white p-8 rounded-lg border border-gray-200 shadow-sm">
+            <div className="mb-6">
+              <div className="bg-sportbnk-green/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Mail className="w-8 h-8 text-sportbnk-green" />
+              </div>
+              <h3 className="text-2xl font-bold text-sportbnk-navy mb-4">
+                Currently No Open Positions
+              </h3>
+              <p className="text-lg text-gray-600 mb-6">
+                We don't have any open positions at the moment, but we're always interested in hearing from talented individuals.
+              </p>
+              <p className="text-lg text-gray-600 mb-6">
+                Send your CV to <a href="mailto:info@sportbnk.com" className="text-sportbnk-green font-semibold hover:underline">info@sportbnk.com</a> and we will update this page if we are hiring.
+              </p>
+              <Button 
+                className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white"
+                asChild
+              >
+                <a href="mailto:info@sportbnk.com">
+                  <Mail className="w-4 h-4 mr-2" />
+                  Send Your CV
+                </a>
+              </Button>
+            </div>
           </div>
         </div>
       </section>
