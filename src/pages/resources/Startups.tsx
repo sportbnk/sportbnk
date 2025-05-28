@@ -3,6 +3,7 @@ import PageLayout from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Rocket, Check, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Startups = () => {
   return (
@@ -39,9 +40,11 @@ const Startups = () => {
                   <p>Access to our network of sports industry investors and mentors</p>
                 </div>
               </div>
-              <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white">
-                Apply to the Program
-              </Button>
+              <Link to="/contact">
+                <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white">
+                  Apply to the Program
+                </Button>
+              </Link>
             </div>
             <div>
               <img 
@@ -95,9 +98,11 @@ const Startups = () => {
           </div>
           
           <div className="text-center mt-12">
-            <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white group">
-              Apply to the Program <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-            </Button>
+            <Link to="/contact">
+              <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white group">
+                Apply to the Program <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
