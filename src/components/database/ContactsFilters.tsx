@@ -26,9 +26,9 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
     employees: "all"
   });
 
-  // Fetch countries from database when showTeamFilters is true
-  const { data: countries, isLoading: countriesLoading } = useQuery({
-    queryKey: ['countries'],
+  // Separate states for filter options - these stay independent of filtered results
+  const { data: allCountries, isLoading: countriesLoading } = useQuery({
+    queryKey: ['all-countries'],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('countries')
@@ -43,13 +43,13 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
     gcTime: 10 * 60 * 1000
   });
 
-  // Fetch cities based on selected country
-  const { data: cities, isLoading: citiesLoading, isFetching: citiesFetching } = useQuery({
-    queryKey: ['cities', filters.country],
+  // Cities for selected country only
+  const { data: citiesForCountry, isLoading: citiesLoading, isFetching: citiesFetching } = useQuery({
+    queryKey: ['cities-for-country', filters.country],
     queryFn: async () => {
       if (filters.country === "all") return [];
       
-      const selectedCountry = countries?.find(c => c.name === filters.country);
+      const selectedCountry = allCountries?.find(c => c.name === filters.country);
       if (!selectedCountry) return [];
 
       const { data, error } = await supabase
@@ -61,13 +61,13 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
       if (error) throw error;
       return data;
     },
-    enabled: showTeamFilters && filters.country !== "all" && !!countries,
+    enabled: showTeamFilters && filters.country !== "all" && !!allCountries,
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
     placeholderData: (previousData) => previousData
   });
 
-  // Fetch all sports from database
+  // All sports available in the system - independent of filters
   const { data: allSports } = useQuery({
     queryKey: ['all-sports'],
     queryFn: async () => {
@@ -77,14 +77,14 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
         .order('name');
       
       if (error) throw error;
-      return data || [];
+      return data;
     },
     enabled: showTeamFilters,
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000
   });
 
-  // Fetch all levels from database
+  // All levels available in the system - independent of filters
   const { data: allLevels } = useQuery({
     queryKey: ['all-levels'],
     queryFn: async () => {
@@ -105,170 +105,17 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
     gcTime: 10 * 60 * 1000
   });
 
-  // Fetch filtered sports based on current filters
-  const { data: availableSports } = useQuery({
-    queryKey: ['available-sports', filters.country, filters.city, filters.level],
-    queryFn: async () => {
-      let query = supabase
-        .from('teams')
-        .select(`
-          sports!inner (
-            id,
-            name
-          ),
-          cities!inner (
-            name,
-            countries!inner (
-              name
-            )
-          )
-        `);
-
-      // Apply current filters to get available sports
-      if (filters.country !== "all") {
-        query = query.eq('cities.countries.name', filters.country);
-      }
-      if (filters.city !== "all") {
-        query = query.eq('cities.name', filters.city);
-      }
-      if (filters.level !== "all") {
-        query = query.eq('level', filters.level);
-      }
-
-      const { data, error } = await query;
-      
-      if (error) throw error;
-      
-      // Extract unique sports
-      const uniqueSports = data?.reduce((acc, team) => {
-        const sport = team.sports;
-        if (sport && !acc.find(s => s.id === sport.id)) {
-          acc.push(sport);
-        }
-        return acc;
-      }, [] as any[]) || [];
-      
-      return uniqueSports.sort((a, b) => a.name.localeCompare(b.name));
-    },
-    enabled: showTeamFilters,
-    staleTime: 30 * 1000,
-    gcTime: 2 * 60 * 1000
-  });
-
-  // Fetch filtered levels based on current filters
-  const { data: availableLevels } = useQuery({
-    queryKey: ['available-levels', filters.country, filters.city, filters.sport],
-    queryFn: async () => {
-      let query = supabase
-        .from('teams')
-        .select(`
-          level,
-          sports!inner (
-            name
-          ),
-          cities!inner (
-            name,
-            countries!inner (
-              name
-            )
-          )
-        `);
-
-      // Apply current filters to get available levels
-      if (filters.country !== "all") {
-        query = query.eq('cities.countries.name', filters.country);
-      }
-      if (filters.city !== "all") {
-        query = query.eq('cities.name', filters.city);
-      }
-      if (filters.sport !== "all") {
-        query = query.eq('sports.name', filters.sport);
-      }
-
-      const { data, error } = await query;
-      
-      if (error) throw error;
-      
-      // Extract unique levels, filter out null/empty values
-      const uniqueLevels = [...new Set(
-        (data?.map(team => team.level)
-          .filter(level => level && level.trim() !== '') || [])
-      )];
-      
-      return uniqueLevels.sort();
-    },
-    enabled: showTeamFilters,
-    staleTime: 30 * 1000,
-    gcTime: 2 * 60 * 1000
-  });
-
   const handleFilterChange = (key: string, value: string) => {
     const newFilters = { ...filters, [key]: value };
     
     // Reset city when country changes
     if (key === "country") {
       newFilters.city = "all";
-      setFilters(newFilters);
-      return;
     }
     
-    // For city changes, only trigger if we have cities loaded or if setting to "all"
-    if (key === "city") {
-      if (value === "all" || (cities && cities.length > 0)) {
-        setFilters(newFilters);
-        onFilterChange(newFilters);
-      }
-      return;
-    }
-    
-    // For sport and level changes, check if current selection is still valid
-    if (key === "sport") {
-      setFilters(newFilters);
-      onFilterChange(newFilters);
-      return;
-    }
-    
-    if (key === "level") {
-      setFilters(newFilters);
-      onFilterChange(newFilters);
-      return;
-    }
-    
-    // For all other filters, update normally
     setFilters(newFilters);
     onFilterChange(newFilters);
   };
-
-  // Effect to trigger filter change when cities are loaded and country is selected
-  useEffect(() => {
-    if (filters.country !== "all" && cities && !citiesLoading && !citiesFetching) {
-      onFilterChange(filters);
-    }
-  }, [cities, citiesLoading, citiesFetching, filters.country]);
-
-  // Effect to reset sport if it's no longer available
-  useEffect(() => {
-    if (filters.sport !== "all" && Array.isArray(availableSports) && availableSports.length > 0) {
-      const isCurrentSportAvailable = availableSports.find(sport => sport.name === filters.sport);
-      if (!isCurrentSportAvailable) {
-        const newFilters = { ...filters, sport: "all" };
-        setFilters(newFilters);
-        onFilterChange(newFilters);
-      }
-    }
-  }, [availableSports, filters.sport]);
-
-  // Effect to reset level if it's no longer available
-  useEffect(() => {
-    if (filters.level !== "all" && Array.isArray(availableLevels) && availableLevels.length > 0) {
-      const isCurrentLevelAvailable = availableLevels.includes(filters.level);
-      if (!isCurrentLevelAvailable) {
-        const newFilters = { ...filters, level: "all" };
-        setFilters(newFilters);
-        onFilterChange(newFilters);
-      }
-    }
-  }, [availableLevels, filters.level]);
 
   const clearFilters = () => {
     const resetFilters = {
@@ -287,13 +134,6 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
 
   const isCityDisabled = filters.country === "all";
   const isCityLoading = citiesLoading || citiesFetching;
-
-  // Determine which sports and levels to show based on filters
-  const shouldShowFilteredSports = filters.country !== "all" || filters.city !== "all" || filters.level !== "all";
-  const shouldShowFilteredLevels = filters.country !== "all" || filters.city !== "all" || filters.sport !== "all";
-
-  const sportsToShow = shouldShowFilteredSports ? (availableSports || []) : (allSports || []);
-  const levelsToShow = shouldShowFilteredLevels ? (availableLevels || []) : (allLevels || []);
 
   return (
     <TooltipProvider>
@@ -327,7 +167,7 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
                 </SelectTrigger>
                 <SelectContent className="bg-white z-50">
                   <SelectItem value="all">All countries</SelectItem>
-                  {countries?.map((country) => (
+                  {allCountries?.map((country) => (
                     <SelectItem key={country.id} value={country.name}>
                       {country.name}
                     </SelectItem>
@@ -362,7 +202,7 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
                       </SelectTrigger>
                       <SelectContent className="bg-white z-50">
                         <SelectItem value="all">All cities</SelectItem>
-                        {cities?.map((city) => (
+                        {citiesForCountry?.map((city) => (
                           <SelectItem key={city.id} value={city.name}>
                             {city.name}
                           </SelectItem>
@@ -390,7 +230,7 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
                 </SelectTrigger>
                 <SelectContent className="bg-white z-50">
                   <SelectItem value="all">All sports</SelectItem>
-                  {sportsToShow.map((sport) => (
+                  {allSports?.map((sport) => (
                     <SelectItem key={sport.id} value={sport.name}>
                       {sport.name}
                     </SelectItem>
@@ -410,7 +250,7 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
                 </SelectTrigger>
                 <SelectContent className="bg-white z-50">
                   <SelectItem value="all">All levels</SelectItem>
-                  {levelsToShow.map((level) => (
+                  {allLevels?.map((level) => (
                     <SelectItem key={level} value={level}>
                       {level}
                     </SelectItem>
