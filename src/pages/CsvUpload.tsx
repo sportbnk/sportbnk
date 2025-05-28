@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Plus, Upload, FileText, Users, CheckCircle, AlertCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -29,6 +30,25 @@ interface ParsedTeam {
   hours: Array<{ day: string; startHour: string; endHour: string }>;
 }
 
+interface ParsedContact {
+  name: string;
+  role: string;
+  email: string;
+  phone: string;
+  linkedin: string;
+  team: string;
+  department: string;
+  teamId?: string;
+  departmentId?: string;
+  teamOptions?: Array<{ id: string; name: string; city: string; country: string; street: string }>;
+}
+
+interface TeamConflictResolution {
+  rowIndex: number;
+  teamName: string;
+  selectedTeamId: string;
+}
+
 const CsvUpload = () => {
   const [uploadType, setUploadType] = useState<"teams" | "contacts" | "">("");
   const [csvFile, setCsvFile] = useState<File | null>(null);
@@ -36,7 +56,11 @@ const CsvUpload = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
   const [parsedData, setParsedData] = useState<ParsedTeam[]>([]);
+  const [parsedContacts, setParsedContacts] = useState<ParsedContact[]>([]);
   const [errors, setErrors] = useState<string[]>([]);
+  const [teamConflicts, setTeamConflicts] = useState<ParsedContact[]>([]);
+  const [showConflictModal, setShowConflictModal] = useState(false);
+  const [conflictResolutions, setConflictResolutions] = useState<TeamConflictResolution[]>([]);
   const { toast } = useToast();
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,7 +73,10 @@ const CsvUpload = () => {
         setCsvText(text);
         setIsVerified(false);
         setParsedData([]);
+        setParsedContacts([]);
         setErrors([]);
+        setTeamConflicts([]);
+        setConflictResolutions([]);
       };
       reader.readAsText(file);
     }
@@ -82,7 +109,7 @@ const CsvUpload = () => {
       
       if (colonSplit.length >= 2) {
         const platform = colonSplit[0].trim();
-        const url = colonSplit.slice(1).join(':').trim(); // Handle URLs with multiple colons
+        const url = colonSplit.slice(1).join(':').trim();
         
         console.log(`Pair ${i} - Platform:`, platform);
         console.log(`Pair ${i} - URL:`, url);
@@ -131,7 +158,7 @@ const CsvUpload = () => {
       
       if (colonSplit.length >= 2) {
         const day = colonSplit[0].trim();
-        const timeRange = colonSplit.slice(1).join(':').trim(); // Handle time ranges with multiple colons
+        const timeRange = colonSplit.slice(1).join(':').trim();
         
         console.log(`Hour pair ${i} - Day:`, day);
         console.log(`Hour pair ${i} - Time range:`, timeRange);
@@ -143,7 +170,7 @@ const CsvUpload = () => {
           
           if (dashSplit.length >= 2) {
             const startHour = dashSplit[0].trim();
-            const endHour = dashSplit.slice(1).join('-').trim(); // Handle end times with dashes
+            const endHour = dashSplit.slice(1).join('-').trim();
             
             console.log(`Hour pair ${i} - Start hour:`, startHour);
             console.log(`Hour pair ${i} - End hour:`, endHour);
@@ -175,7 +202,134 @@ const CsvUpload = () => {
     return hours;
   };
 
-  const handleVerifyCsv = () => {
+  const verifyContactsCSV = async (lines: string[], headers: string[]) => {
+    const requiredColumns = ['name', 'role', 'email', 'phone', 'linkedin', 'team', 'department'];
+    const missingColumns = requiredColumns.filter(col => !headers.includes(col));
+    
+    if (missingColumns.length > 0) {
+      setErrors([`Missing required columns: ${missingColumns.join(', ')}`]);
+      return;
+    }
+
+    const parsed: ParsedContact[] = [];
+    const newErrors: string[] = [];
+    const conflicts: ParsedContact[] = [];
+
+    // Parse first 10 rows for preview
+    for (let i = 1; i < Math.min(11, lines.length); i++) {
+      try {
+        console.log(`\n=== PROCESSING CONTACT ROW ${i} ===`);
+        const values = lines[i].split(',').map(v => v.trim().replace(/"/g, ''));
+        console.log('Raw values:', values);
+        
+        const row: any = {};
+        
+        headers.forEach((header, index) => {
+          row[header] = values[index] || '';
+        });
+
+        console.log('Row object:', row);
+
+        if (!row.name) {
+          newErrors.push(`Row ${i}: Contact name is required`);
+          continue;
+        }
+
+        // Check for team existence
+        const teamName = row.team?.trim();
+        if (!teamName) {
+          newErrors.push(`Row ${i}: Team name is required`);
+          continue;
+        }
+
+        // Query teams to check for matches
+        const { data: teams, error: teamError } = await supabase
+          .from('teams')
+          .select(`
+            id,
+            name,
+            street,
+            cities (
+              name,
+              countries (
+                name
+              )
+            )
+          `)
+          .ilike('name', teamName);
+
+        if (teamError) {
+          console.error('Error querying teams:', teamError);
+          newErrors.push(`Row ${i}: Error checking team existence`);
+          continue;
+        }
+
+        if (!teams || teams.length === 0) {
+          newErrors.push(`Row ${i}: No team found with name "${teamName}"`);
+          continue;
+        }
+
+        const parsedContact: ParsedContact = {
+          name: row.name,
+          role: row.role || '',
+          email: row.email || '',
+          phone: row.phone || '',
+          linkedin: row.linkedin || '',
+          team: teamName,
+          department: row.department || ''
+        };
+
+        if (teams.length === 1) {
+          // Single team match
+          parsedContact.teamId = teams[0].id;
+          parsed.push(parsedContact);
+        } else {
+          // Multiple teams found - conflict resolution needed
+          parsedContact.teamOptions = teams.map(team => ({
+            id: team.id,
+            name: team.name,
+            city: team.cities?.name || '',
+            country: team.cities?.countries?.name || '',
+            street: team.street || ''
+          }));
+          conflicts.push(parsedContact);
+        }
+
+        console.log('Final parsed contact:', parsedContact);
+        console.log(`=== END CONTACT ROW ${i} ===\n`);
+      } catch (error) {
+        console.error(`Error parsing contact row ${i}:`, error);
+        newErrors.push(`Row ${i}: Error parsing data - ${error}`);
+      }
+    }
+
+    if (newErrors.length > 0) {
+      setErrors(newErrors);
+      setParsedContacts([]);
+      setTeamConflicts([]);
+      setIsVerified(false);
+      return;
+    }
+
+    if (conflicts.length > 0) {
+      setTeamConflicts(conflicts);
+      setShowConflictModal(true);
+      setParsedContacts(parsed);
+      setErrors([]);
+      setIsVerified(false);
+      return;
+    }
+
+    setParsedContacts(parsed);
+    setIsVerified(true);
+    setErrors([]);
+    toast({
+      title: "Verification Successful",
+      description: `Found ${lines.length - 1} contacts to import. Preview shows first ${parsed.length} contacts.`,
+    });
+  };
+
+  const handleVerifyCsv = async () => {
     if (!uploadType || !csvText) {
       toast({
         title: "Error",
@@ -206,7 +360,6 @@ const CsvUpload = () => {
       const parsed: ParsedTeam[] = [];
       const newErrors: string[] = [];
 
-      // Parse first 10 rows for preview
       for (let i = 1; i < Math.min(11, lines.length); i++) {
         try {
           console.log(`\n=== PROCESSING ROW ${i} ===`);
@@ -271,7 +424,49 @@ const CsvUpload = () => {
         setParsedData([]);
         setIsVerified(false);
       }
+    } else if (uploadType === "contacts") {
+      await verifyContactsCSV(lines, headers);
     }
+  };
+
+  const handleTeamConflictResolution = (contactIndex: number, selectedTeamId: string) => {
+    const updatedResolutions = conflictResolutions.filter(r => r.rowIndex !== contactIndex);
+    updatedResolutions.push({
+      rowIndex: contactIndex,
+      teamName: teamConflicts[contactIndex].team,
+      selectedTeamId
+    });
+    setConflictResolutions(updatedResolutions);
+  };
+
+  const handleResolveConflicts = () => {
+    if (conflictResolutions.length < teamConflicts.length) {
+      toast({
+        title: "Error",
+        description: "Please resolve all team conflicts before proceeding",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Apply resolutions to conflicts and move to parsed contacts
+    const resolvedContacts = teamConflicts.map((contact, index) => {
+      const resolution = conflictResolutions.find(r => r.rowIndex === index);
+      return {
+        ...contact,
+        teamId: resolution?.selectedTeamId
+      };
+    });
+
+    setParsedContacts([...parsedContacts, ...resolvedContacts]);
+    setTeamConflicts([]);
+    setShowConflictModal(false);
+    setIsVerified(true);
+    
+    toast({
+      title: "Conflicts Resolved",
+      description: "All team conflicts have been resolved. You can now proceed with processing.",
+    });
   };
 
   const handleProcessCsv = async () => {
@@ -287,9 +482,24 @@ const CsvUpload = () => {
     setIsProcessing(true);
     
     try {
-      const { data, error } = await supabase.functions.invoke('process-teams-csv', {
-        body: { csvData: csvText }
-      });
+      let data, error;
+      
+      if (uploadType === "teams") {
+        const result = await supabase.functions.invoke('process-teams-csv', {
+          body: { csvData: csvText }
+        });
+        data = result.data;
+        error = result.error;
+      } else if (uploadType === "contacts") {
+        const result = await supabase.functions.invoke('process-contacts-csv', {
+          body: { 
+            csvData: csvText, 
+            conflictResolutions: conflictResolutions 
+          }
+        });
+        data = result.data;
+        error = result.error;
+      }
 
       if (error) throw error;
 
@@ -306,6 +516,9 @@ const CsvUpload = () => {
       setUploadType("");
       setIsVerified(false);
       setParsedData([]);
+      setParsedContacts([]);
+      setTeamConflicts([]);
+      setConflictResolutions([]);
       
     } catch (error) {
       console.error('Error processing CSV:', error);
@@ -325,7 +538,7 @@ const CsvUpload = () => {
   ];
 
   const contactsColumns = [
-    "Name", "Email", "Phone", "LinkedIn", "Role", "Department", "Team"
+    "Name", "Role", "Email", "Phone", "LinkedIn", "Team", "Department"
   ];
 
   return (
@@ -429,7 +642,10 @@ const CsvUpload = () => {
                       setCsvText(e.target.value);
                       setIsVerified(false);
                       setParsedData([]);
+                      setParsedContacts([]);
                       setErrors([]);
+                      setTeamConflicts([]);
+                      setConflictResolutions([]);
                     }}
                     rows={10}
                     className="mt-2"
@@ -468,6 +684,12 @@ const CsvUpload = () => {
                             </span>
                           ))}
                         </div>
+                        <p className="mt-4 text-sm font-medium">Important Notes:</p>
+                        <ul className="mt-2 text-xs space-y-1">
+                          <li>• <strong>Team:</strong> Must match existing team name exactly (case insensitive)</li>
+                          <li>• <strong>Department:</strong> Will be created if it doesn't exist</li>
+                          <li>• If multiple teams have the same name, you'll be prompted to choose</li>
+                        </ul>
                       </div>
                     )}
                   </div>
@@ -496,7 +718,7 @@ const CsvUpload = () => {
                       <h4 className="font-semibold text-green-800">Format Verified!</h4>
                     </div>
                     <p className="text-sm text-green-700 mt-1">
-                      CSV format is valid. Preview shows first {parsedData.length} entries.
+                      CSV format is valid. Preview shows first {uploadType === "teams" ? parsedData.length : parsedContacts.length} entries.
                     </p>
                   </div>
                 )}
@@ -513,8 +735,8 @@ const CsvUpload = () => {
                   </Button>
                 )}
 
-                {/* Preview Table */}
-                {isVerified && parsedData.length > 0 && (
+                {/* Preview Table for Teams */}
+                {isVerified && uploadType === "teams" && parsedData.length > 0 && (
                   <Card>
                     <CardHeader>
                       <CardTitle>Preview - First {parsedData.length} Teams</CardTitle>
@@ -584,6 +806,41 @@ const CsvUpload = () => {
                   </Card>
                 )}
 
+                {/* Preview Table for Contacts */}
+                {isVerified && uploadType === "contacts" && parsedContacts.length > 0 && (
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Preview - First {parsedContacts.length} Contacts</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>Name</TableHead>
+                            <TableHead>Role</TableHead>
+                            <TableHead>Email</TableHead>
+                            <TableHead>Phone</TableHead>
+                            <TableHead>Team</TableHead>
+                            <TableHead>Department</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {parsedContacts.map((contact, index) => (
+                            <TableRow key={index}>
+                              <TableCell className="font-medium">{contact.name}</TableCell>
+                              <TableCell>{contact.role}</TableCell>
+                              <TableCell>{contact.email}</TableCell>
+                              <TableCell>{contact.phone}</TableCell>
+                              <TableCell>{contact.team}</TableCell>
+                              <TableCell>{contact.department}</TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </CardContent>
+                  </Card>
+                )}
+
                 {/* Continue Button */}
                 {isVerified && (
                   <Button
@@ -606,6 +863,54 @@ const CsvUpload = () => {
           )}
         </div>
       </div>
+
+      {/* Team Conflict Resolution Modal */}
+      <Dialog open={showConflictModal} onOpenChange={setShowConflictModal}>
+        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Resolve Team Conflicts</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-6">
+            <p className="text-sm text-gray-600">
+              Multiple teams were found with the same name. Please select the correct team for each contact:
+            </p>
+            
+            {teamConflicts.map((contact, contactIndex) => (
+              <Card key={contactIndex} className="p-4">
+                <div className="mb-4">
+                  <h4 className="font-semibold">Contact: {contact.name}</h4>
+                  <p className="text-sm text-gray-600">Team: {contact.team}</p>
+                </div>
+                
+                <Label>Select the correct team:</Label>
+                <Select
+                  value={conflictResolutions.find(r => r.rowIndex === contactIndex)?.selectedTeamId || ""}
+                  onValueChange={(value) => handleTeamConflictResolution(contactIndex, value)}
+                >
+                  <SelectTrigger className="w-full mt-2">
+                    <SelectValue placeholder="Choose team..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {contact.teamOptions?.map((team) => (
+                      <SelectItem key={team.id} value={team.id}>
+                        {team.name} - {team.street && `${team.street}, `}{team.city}, {team.country}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </Card>
+            ))}
+            
+            <Button
+              onClick={handleResolveConflicts}
+              disabled={conflictResolutions.length < teamConflicts.length}
+              className="w-full"
+            >
+              Resolve All Conflicts
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </PageLayout>
   );
 };
