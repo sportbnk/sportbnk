@@ -37,29 +37,6 @@ const EnhancedCTA = () => {
             </Button>
           </div>
           
-          <div className="mt-12 flex flex-col sm:flex-row justify-center items-center gap-8">
-            <div className="flex items-center text-white">
-              <svg className="w-6 h-6 text-sportbnk-green mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-              <span>Free Implementation Support</span>
-            </div>
-            
-            <div className="flex items-center text-white">
-              <svg className="w-6 h-6 text-sportbnk-green mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-              <span>99.9% Uptime SLA</span>
-            </div>
-            
-            <div className="flex items-center text-white">
-              <svg className="w-6 h-6 text-sportbnk-green mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-              <span>Enterprise Support</span>
-            </div>
-          </div>
-          
           <p className="text-gray-400 mt-12">
             Contact us: <a href="mailto:info@sportbnk.com" className="text-sportbnk-green hover:underline">info@sportbnk.com</a>
           </p>
