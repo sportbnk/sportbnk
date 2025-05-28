@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -222,7 +223,7 @@ const TeamProfile: React.FC<TeamProfileProps> = ({
                         
                         {contact.linkedin && (
                           <div className="flex items-center gap-2">
-                            <Linkedin className="h-4 w-4 text-blue-700" />
+                            <ExternalLink className="h-4 w-4 text-blue-700" />
                             <span 
                               onClick={() => openInNewTab(contact.linkedin!)} 
                               className="text-sm text-blue-700 hover:underline cursor-pointer"
