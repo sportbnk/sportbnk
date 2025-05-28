@@ -7,14 +7,37 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { Plus, Upload, FileText, Users } from "lucide-react";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Plus, Upload, FileText, Users, CheckCircle, AlertCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+
+interface ParsedTeam {
+  name: string;
+  sport: string;
+  level: string;
+  street: string;
+  postal: string;
+  city: string;
+  country: string;
+  website: string;
+  phone: string;
+  email: string;
+  founded: string;
+  revenue: string;
+  employees: string;
+  socials: Array<{ platform: string; url: string }>;
+  hours: Array<{ day: string; startHour: string; endHour: string }>;
+}
 
 const CsvUpload = () => {
   const [uploadType, setUploadType] = useState<"teams" | "contacts" | "">("");
   const [csvFile, setCsvFile] = useState<File | null>(null);
   const [csvText, setCsvText] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isVerified, setIsVerified] = useState(false);
+  const [parsedData, setParsedData] = useState<ParsedTeam[]>([]);
+  const [errors, setErrors] = useState<string[]>([]);
   const { toast } = useToast();
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,12 +48,54 @@ const CsvUpload = () => {
       reader.onload = (e) => {
         const text = e.target?.result as string;
         setCsvText(text);
+        setIsVerified(false);
+        setParsedData([]);
+        setErrors([]);
       };
       reader.readAsText(file);
     }
   };
 
-  const handleProcessCsv = async () => {
+  const parseSocials = (socialsText: string): Array<{ platform: string; url: string }> => {
+    if (!socialsText?.trim()) return [];
+    
+    const socialPairs = socialsText.split(',');
+    const socials: Array<{ platform: string; url: string }> = [];
+    
+    for (const pair of socialPairs) {
+      const [platform, url] = pair.split(':').map(s => s.trim());
+      if (platform && url) {
+        socials.push({ platform: platform.toLowerCase(), url });
+      }
+    }
+    
+    return socials;
+  };
+
+  const parseHours = (hoursText: string): Array<{ day: string; startHour: string; endHour: string }> => {
+    if (!hoursText?.trim()) return [];
+    
+    const hourPairs = hoursText.split(',');
+    const hours: Array<{ day: string; startHour: string; endHour: string }> = [];
+    
+    for (const pair of hourPairs) {
+      const [day, timeRange] = pair.split(':').map(s => s.trim());
+      if (day && timeRange) {
+        const [startHour, endHour] = timeRange.split('-').map(s => s.trim());
+        if (startHour && endHour) {
+          hours.push({ 
+            day: day.toLowerCase(), 
+            startHour: startHour.toLowerCase(), 
+            endHour: endHour.toLowerCase() 
+          });
+        }
+      }
+    }
+    
+    return hours;
+  };
+
+  const handleVerifyCsv = () => {
     if (!uploadType || !csvText) {
       toast({
         title: "Error",
@@ -40,24 +105,118 @@ const CsvUpload = () => {
       return;
     }
 
+    const lines = csvText.trim().split('\n');
+    if (lines.length < 2) {
+      setErrors(["CSV must have at least a header row and one data row"]);
+      return;
+    }
+
+    const headers = lines[0].toLowerCase().split(',').map(h => h.trim());
+    console.log('CSV headers:', headers);
+
+    if (uploadType === "teams") {
+      const requiredColumns = ['name', 'sport', 'level', 'street', 'postal', 'city', 'country', 'website', 'phone', 'email', 'founded', 'revenue', 'employees', 'socials', 'hours'];
+      const missingColumns = requiredColumns.filter(col => !headers.includes(col));
+      
+      if (missingColumns.length > 0) {
+        setErrors([`Missing required columns: ${missingColumns.join(', ')}`]);
+        return;
+      }
+
+      const parsed: ParsedTeam[] = [];
+      const newErrors: string[] = [];
+
+      // Parse first 10 rows for preview
+      for (let i = 1; i < Math.min(11, lines.length); i++) {
+        try {
+          const values = lines[i].split(',').map(v => v.trim().replace(/"/g, ''));
+          const row: any = {};
+          
+          headers.forEach((header, index) => {
+            row[header] = values[index] || '';
+          });
+
+          if (!row.name) {
+            newErrors.push(`Row ${i}: Team name is required`);
+            continue;
+          }
+
+          const socials = parseSocials(row.socials);
+          const hours = parseHours(row.hours);
+
+          parsed.push({
+            name: row.name,
+            sport: row.sport,
+            level: row.level,
+            street: row.street,
+            postal: row.postal,
+            city: row.city,
+            country: row.country,
+            website: row.website,
+            phone: row.phone,
+            email: row.email,
+            founded: row.founded,
+            revenue: row.revenue,
+            employees: row.employees,
+            socials,
+            hours
+          });
+        } catch (error) {
+          newErrors.push(`Row ${i}: Error parsing data - ${error}`);
+        }
+      }
+
+      if (newErrors.length === 0) {
+        setParsedData(parsed);
+        setIsVerified(true);
+        setErrors([]);
+        toast({
+          title: "Verification Successful",
+          description: `Found ${lines.length - 1} teams to import. Preview shows first ${parsed.length} teams.`,
+        });
+      } else {
+        setErrors(newErrors);
+        setParsedData([]);
+        setIsVerified(false);
+      }
+    }
+  };
+
+  const handleProcessCsv = async () => {
+    if (!uploadType || !csvText || !isVerified) {
+      toast({
+        title: "Error",
+        description: "Please verify CSV data first",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsProcessing(true);
     
     try {
-      // For now, just show a success message
-      // The actual CSV processing logic will be implemented later
+      const { data, error } = await supabase.functions.invoke('process-teams-csv', {
+        body: { csvData: csvText }
+      });
+
+      if (error) throw error;
+
       toast({
-        title: "CSV Processing Started",
-        description: `Processing ${uploadType} data. This functionality will be fully implemented soon.`,
+        title: "CSV Processing Complete",
+        description: `Successfully processed ${data.successful} out of ${data.processed} rows. ${data.errors.length > 0 ? `Errors: ${data.errors.length}` : ''}`,
       });
       
-      console.log(`Processing ${uploadType} CSV:`, csvText.split('\n').slice(0, 5));
+      console.log('Processing results:', data);
       
       // Reset form
       setCsvFile(null);
       setCsvText("");
       setUploadType("");
+      setIsVerified(false);
+      setParsedData([]);
       
     } catch (error) {
+      console.error('Error processing CSV:', error);
       toast({
         title: "Error",
         description: "Failed to process CSV file",
@@ -80,7 +239,7 @@ const CsvUpload = () => {
   return (
     <PageLayout pageTitle="CSV Upload">
       <div className="container mx-auto px-4 md:px-6 py-8">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           <div className="mb-8 text-center">
             <h1 className="text-3xl font-bold text-sportbnk-navy mb-4">
               Data Import Center
@@ -174,7 +333,12 @@ const CsvUpload = () => {
                     id="csv-text"
                     placeholder={`Paste your CSV data here or upload a file above...`}
                     value={csvText}
-                    onChange={(e) => setCsvText(e.target.value)}
+                    onChange={(e) => {
+                      setCsvText(e.target.value);
+                      setIsVerified(false);
+                      setParsedData([]);
+                      setErrors([]);
+                    }}
                     rows={10}
                     className="mt-2"
                   />
@@ -211,20 +375,134 @@ const CsvUpload = () => {
                   </div>
                 </div>
 
-                <Button
-                  onClick={handleProcessCsv}
-                  disabled={!csvText || isProcessing}
-                  className="w-full bg-sportbnk-green hover:bg-sportbnk-green/90"
-                >
-                  {isProcessing ? (
-                    <>Processing...</>
-                  ) : (
-                    <>
-                      <Upload className="w-4 h-4 mr-2" />
-                      Process CSV
-                    </>
-                  )}
-                </Button>
+                {/* Errors Display */}
+                {errors.length > 0 && (
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                    <div className="flex items-center space-x-2 mb-2">
+                      <AlertCircle className="h-5 w-5 text-red-600" />
+                      <h4 className="font-semibold text-red-800">Validation Errors</h4>
+                    </div>
+                    <ul className="text-sm text-red-700 space-y-1">
+                      {errors.map((error, index) => (
+                        <li key={index}>• {error}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* Verification Status */}
+                {isVerified && (
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                    <div className="flex items-center space-x-2">
+                      <CheckCircle className="h-5 w-5 text-green-600" />
+                      <h4 className="font-semibold text-green-800">Format Verified!</h4>
+                    </div>
+                    <p className="text-sm text-green-700 mt-1">
+                      CSV format is valid. Preview shows first {parsedData.length} entries.
+                    </p>
+                  </div>
+                )}
+
+                {/* Verify Button */}
+                {!isVerified && (
+                  <Button
+                    onClick={handleVerifyCsv}
+                    disabled={!csvText}
+                    className="w-full bg-blue-600 hover:bg-blue-700"
+                  >
+                    <CheckCircle className="w-4 h-4 mr-2" />
+                    Verify CSV Format
+                  </Button>
+                )}
+
+                {/* Preview Table */}
+                {isVerified && parsedData.length > 0 && (
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Preview - First {parsedData.length} Teams</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>Name</TableHead>
+                            <TableHead>Sport</TableHead>
+                            <TableHead>Level</TableHead>
+                            <TableHead>City</TableHead>
+                            <TableHead>Country</TableHead>
+                            <TableHead>Social Links</TableHead>
+                            <TableHead>Opening Hours</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {parsedData.map((team, index) => (
+                            <TableRow key={index}>
+                              <TableCell className="font-medium">{team.name}</TableCell>
+                              <TableCell>{team.sport}</TableCell>
+                              <TableCell className="capitalize">{team.level}</TableCell>
+                              <TableCell>{team.city}</TableCell>
+                              <TableCell>{team.country}</TableCell>
+                              <TableCell>
+                                {team.socials.length > 0 ? (
+                                  <Select>
+                                    <SelectTrigger className="w-40">
+                                      <SelectValue placeholder={`${team.socials.length} links`} />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      {team.socials.map((social, idx) => (
+                                        <SelectItem key={idx} value={`${social.platform}-${idx}`}>
+                                          {social.platform}: {social.url}
+                                        </SelectItem>
+                                      ))}
+                                    </SelectContent>
+                                  </Select>
+                                ) : (
+                                  <span className="text-gray-400">No social links</span>
+                                )}
+                              </TableCell>
+                              <TableCell>
+                                {team.hours.length > 0 ? (
+                                  <Select>
+                                    <SelectTrigger className="w-40">
+                                      <SelectValue placeholder={`${team.hours.length} days`} />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      {team.hours.map((hour, idx) => (
+                                        <SelectItem key={idx} value={`${hour.day}-${idx}`}>
+                                          {hour.day}: {hour.startHour} - {hour.endHour}
+                                        </SelectItem>
+                                      ))}
+                                    </SelectContent>
+                                  </Select>
+                                ) : (
+                                  <span className="text-gray-400">No hours</span>
+                                )}
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </CardContent>
+                  </Card>
+                )}
+
+                {/* Continue Button */}
+                {isVerified && (
+                  <Button
+                    onClick={handleProcessCsv}
+                    disabled={isProcessing}
+                    className="w-full bg-sportbnk-green hover:bg-sportbnk-green/90"
+                  >
+                    {isProcessing ? (
+                      <>Processing...</>
+                    ) : (
+                      <>
+                        <Upload className="w-4 h-4 mr-2" />
+                        Continue - Process CSV
+                      </>
+                    )}
+                  </Button>
+                )}
               </CardContent>
             </Card>
           )}

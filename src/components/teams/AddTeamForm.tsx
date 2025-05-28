@@ -1,258 +1,160 @@
 
-import React from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
-const teamSchema = z.object({
-  team: z.string().min(1, "Team name is required"),
-  sport: z.string().min(1, "Sport is required"),
-  level: z.string().min(1, "Level is required"),
-  city: z.string().min(1, "City is required"),
-  country: z.string().min(1, "Country is required"),
-  revenue: z.string().optional(),
-  employees: z.string().optional(),
-  website: z.string().url().optional().or(z.literal("")),
-  email: z.string().email().optional().or(z.literal("")),
-  phone: z.string().optional(),
-  founded: z.string().optional(),
-  description: z.string().optional(),
-});
+interface AddTeamFormProps {
+  onSuccess: () => void;
+}
 
-type TeamFormValues = z.infer<typeof teamSchema>;
-
-export default function AddTeamForm() {
-  const form = useForm<TeamFormValues>({
-    resolver: zodResolver(teamSchema),
-    defaultValues: {
-      team: "",
-      sport: "",
-      level: "",
-      city: "",
-      country: "",
-      revenue: "",
-      employees: "",
-      website: "",
-      email: "",
-      phone: "",
-      founded: "",
-      description: "",
-    },
+const AddTeamForm = ({ onSuccess }: AddTeamFormProps) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
+  const [formData, setFormData] = useState({
+    name: "",
+    level: "",
+    website: "",
+    email: "",
+    phone: "",
+    employees: 0,
+    founded: "",
+    revenue: 0,
+    postal_code: "",
+    street: "",
   });
 
-  const onSubmit = async (data: TeamFormValues) => {
-    try {
-      // Convert string values to numbers where needed
-      const teamData = {
-        team: data.team,
-        sport: data.sport,
-        level: data.level,
-        city: data.city,
-        country: data.country,
-        revenue: data.revenue ? parseInt(data.revenue) : null,
-        employees: data.employees ? parseInt(data.employees) : null,
-        founded: data.founded ? parseInt(data.founded) : null,
-        website: data.website || null,
-        email: data.email || null,
-        phone: data.phone || null,
-        description: data.description || null,
-      };
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
 
-      const { error } = await supabase.from("teams").insert(teamData);
+    try {
+      const { error } = await supabase
+        .from('teams')
+        .insert({
+          name: formData.name,
+          level: formData.level.toLowerCase(),
+          website: formData.website,
+          email: formData.email,
+          phone: formData.phone,
+          employees: formData.employees,
+          founded: formData.founded,
+          revenue: formData.revenue,
+          postal_code: formData.postal_code,
+          street: formData.street,
+        });
 
       if (error) throw error;
 
-      toast.success("Team added successfully");
-      form.reset();
-    } catch (error: any) {
-      toast.error("Failed to add team", {
-        description: error.message
+      toast({
+        title: "Success",
+        description: "Team added successfully",
       });
+      
+      onSuccess();
+    } catch (error) {
+      console.error('Error adding team:', error);
+      toast({
+        title: "Error",
+        description: "Failed to add team",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <div className="grid grid-cols-2 gap-4">
-          <FormField
-            control={form.control}
-            name="team"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Team Name</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          
-          <FormField
-            control={form.control}
-            name="sport"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Sport</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="level"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Level</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="city"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>City</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="country"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Country</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="revenue"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Annual Revenue</FormLabel>
-                <FormControl>
-                  <Input {...field} type="number" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="employees"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Number of Employees</FormLabel>
-                <FormControl>
-                  <Input {...field} type="number" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="founded"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Founded Year</FormLabel>
-                <FormControl>
-                  <Input {...field} type="number" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
-          <FormField
-            control={form.control}
-            name="website"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Website</FormLabel>
-                <FormControl>
-                  <Input {...field} type="url" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input {...field} type="email" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="phone"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Phone</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-
-        <FormField
-          control={form.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Description</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div>
+        <Label htmlFor="name">Team Name</Label>
+        <Input
+          id="name"
+          value={formData.name}
+          onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+          required
         />
+      </div>
 
-        <Button type="submit">Add Team</Button>
-      </form>
-    </Form>
+      <div>
+        <Label htmlFor="level">Level</Label>
+        <Input
+          id="level"
+          value={formData.level}
+          onChange={(e) => setFormData(prev => ({ ...prev, level: e.target.value }))}
+          placeholder="e.g., amateur, professional"
+        />
+      </div>
+
+      <div>
+        <Label htmlFor="website">Website</Label>
+        <Input
+          id="website"
+          type="url"
+          value={formData.website}
+          onChange={(e) => setFormData(prev => ({ ...prev, website: e.target.value }))}
+        />
+      </div>
+
+      <div>
+        <Label htmlFor="email">Email</Label>
+        <Input
+          id="email"
+          type="email"
+          value={formData.email}
+          onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+        />
+      </div>
+
+      <div>
+        <Label htmlFor="phone">Phone</Label>
+        <Input
+          id="phone"
+          value={formData.phone}
+          onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
+        />
+      </div>
+
+      <div>
+        <Label htmlFor="employees">Employees</Label>
+        <Input
+          id="employees"
+          type="number"
+          min="0"
+          value={formData.employees}
+          onChange={(e) => setFormData(prev => ({ ...prev, employees: parseInt(e.target.value) || 0 }))}
+        />
+      </div>
+
+      <div>
+        <Label htmlFor="founded">Founded</Label>
+        <Input
+          id="founded"
+          value={formData.founded}
+          onChange={(e) => setFormData(prev => ({ ...prev, founded: e.target.value }))}
+          placeholder="e.g., 2020"
+        />
+      </div>
+
+      <div>
+        <Label htmlFor="revenue">Revenue</Label>
+        <Input
+          id="revenue"
+          type="number"
+          min="0"
+          value={formData.revenue}
+          onChange={(e) => setFormData(prev => ({ ...prev, revenue: parseInt(e.target.value) || 0 }))}
+        />
+      </div>
+
+      <Button type="submit" disabled={isLoading} className="w-full">
+        {isLoading ? "Adding..." : "Add Team"}
+      </Button>
+    </form>
   );
-}
+};
+
+export default AddTeamForm;

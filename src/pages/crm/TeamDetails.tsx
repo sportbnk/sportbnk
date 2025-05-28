@@ -1,367 +1,255 @@
-import React, { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Phone, Globe, MapPin, Clock, Users, DollarSign } from "lucide-react";
-import TeamEmployees from "@/components/database/TeamEmployees";
-import { supabase } from "@/integrations/supabase/client";
+
+import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { TeamData } from "@/types/teams";
+import { supabase } from "@/integrations/supabase/client";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { 
+  Building2, 
+  MapPin, 
+  Globe, 
+  Mail, 
+  Phone, 
+  Users, 
+  Calendar,
+  DollarSign,
+  Clock
+} from "lucide-react";
 
 const TeamDetails = () => {
   const { teamId } = useParams();
-  const navigate = useNavigate();
-  const [credits, setCredits] = useState(456);
-  const [revealedEmails, setRevealedEmails] = useState<Record<string, boolean>>({});
-  const [revealedPhones, setRevealedPhones] = useState<Record<string, boolean>>({});
-  
-  // Fetch team data from Supabase
-  const { data: team, isLoading, error } = useQuery({
+
+  const { data: team, isLoading } = useQuery({
     queryKey: ['team', teamId],
     queryFn: async () => {
-      if (!teamId) return null;
-      
-      const teamIdNumber = parseInt(teamId, 10);
-      if (isNaN(teamIdNumber)) return null;
-      
       const { data, error } = await supabase
         .from('teams')
         .select(`
           *,
-          team_contacts (*),
-          team_social_links (*)
+          cities (
+            id,
+            name,
+            countries (
+              id,
+              name
+            )
+          ),
+          sports (
+            id,
+            name
+          ),
+          team_social_links (
+            id,
+            platform,
+            url
+          ),
+          opening_hours (
+            id,
+            day,
+            start_hour,
+            end_hour
+          ),
+          contacts (
+            id,
+            name,
+            email,
+            phone,
+            role
+          )
         `)
-        .eq('id', teamIdNumber)
+        .eq('id', teamId)
         .single();
-
-      if (error) {
-        console.error('Error fetching team:', error);
-        throw error;
-      }
-
-      // Transform to match TeamData interface
-      const transformedTeam: TeamData = {
-        id: data.id,
-        team: data.team,
-        sport: data.sport,
-        level: data.level,
-        city: data.city,
-        country: data.country,
-        revenue: data.revenue || 0,
-        employees: data.employees || 0,
-        logo: data.logo || '',
-        description: data.description || '',
-        founded: data.founded,
-        website: data.website,
-        email: data.email,
-        phone: data.phone,
-        contacts: (data.team_contacts || []).map((contact: any) => ({
-          name: contact.name,
-          position: contact.position || '',
-          email: contact.email || '',
-          phone: contact.phone || '',
-          linkedin: contact.linkedin || ''
-        })),
-        social: (data.team_social_links || []).reduce((acc: any, link: any) => {
-          if (link.platform === 'facebook') acc.facebook = link.url;
-          if (link.platform === 'twitter') acc.twitter = link.url;
-          if (link.platform === 'instagram') acc.instagram = link.url;
-          if (link.platform === 'linkedin') acc.linkedin = link.url;
-          return acc;
-        }, {})
-      };
-
-      return transformedTeam;
+      
+      if (error) throw error;
+      return data;
     },
-    enabled: !!teamId
+    enabled: !!teamId,
   });
 
-  // Create employee data for TeamEmployees component - properly map all contacts
-  const teamEmployees = team && team.contacts && team.contacts.length > 0 ? {
-    id: team.id,
-    team: team.team,
-    teamLogo: team.logo || '',
-    employees: team.contacts.map((contact, index) => {
-      return {
-        id: index + 1,
-        name: contact.name,
-        position: contact.position,
-        email: contact.email,
-        phone: contact.phone,
-        linkedin: contact.linkedin,
-        verified: Math.random() > 0.5,
-        activeReplier: Math.random() > 0.7
-      };
-    })
-  } : null;
-  
   if (isLoading) {
     return (
-      <div className="container mx-auto px-0">
-        <div className="flex items-center gap-2 mb-6 px-2">
-          <Button variant="ghost" size="icon" onClick={() => navigate("/crm/teams")}>
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-          <h1 className="text-2xl font-bold text-sportbnk-navy">Loading...</h1>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    console.error('Query error:', error);
-    return (
-      <div className="container mx-auto px-0">
-        <div className="flex items-center gap-2 mb-6 px-2">
-          <Button variant="ghost" size="icon" onClick={() => navigate("/crm/teams")}>
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-          <h1 className="text-2xl font-bold text-sportbnk-navy">Error loading team</h1>
-        </div>
-        <div className="px-2">
-          <p className="text-red-600">Error: {error.message}</p>
-        </div>
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
       </div>
     );
   }
 
   if (!team) {
     return (
-      <div className="container mx-auto px-0">
-        <div className="flex items-center gap-2 mb-6 px-2">
-          <Button variant="ghost" size="icon" onClick={() => navigate("/crm/teams")}>
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-          <h1 className="text-2xl font-bold text-sportbnk-navy">Team not found</h1>
-        </div>
+      <div className="text-center py-8">
+        <h2 className="text-2xl font-bold text-gray-600">Team not found</h2>
       </div>
     );
   }
-  
-  const formatRevenue = (revenue: number) => {
-    if (revenue >= 1000000) {
-      return `$${(revenue / 1000000).toFixed(1)}M`;
-    }
-    if (revenue >= 1000) {
-      return `$${(revenue / 1000).toFixed(1)}K`;
-    }
-    return `$${revenue}`;
-  };
-  
-  const revealEmail = (email: string) => {
-    if (revealedEmails[email]) return;
-    setCredits(prev => Math.max(0, prev - 2));
-    setRevealedEmails(prev => ({ ...prev, [email]: true }));
-  };
-  
-  const revealPhone = (phone: string) => {
-    if (revealedPhones[phone]) return;
-    setCredits(prev => Math.max(0, prev - 3));
-    setRevealedPhones(prev => ({ ...prev, [phone]: true }));
-  };
 
-  // Mock opening hours - in a real app this would come from the team data
-  const openingHours = {
-    monday: "9:00 AM - 6:00 PM",
-    tuesday: "9:00 AM - 6:00 PM", 
-    wednesday: "9:00 AM - 6:00 PM",
-    thursday: "9:00 AM - 6:00 PM",
-    friday: "9:00 AM - 6:00 PM",
-    saturday: "10:00 AM - 4:00 PM",
-    sunday: "Closed"
-  };
-  
   return (
-    <div className="container mx-auto px-0">
-      <div className="flex items-center gap-2 mb-6 px-2">
-        <Button variant="ghost" size="icon" onClick={() => navigate("/crm/teams")}>
-          <ArrowLeft className="h-5 w-5" />
-        </Button>
-        <h1 className="text-2xl font-bold text-sportbnk-navy">Team Details</h1>
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-sportbnk-navy">{team.name}</h1>
+          <div className="flex items-center space-x-4 mt-2">
+            {team.sports && (
+              <Badge variant="secondary">{team.sports.name}</Badge>
+            )}
+            {team.level && (
+              <Badge variant="outline">{team.level}</Badge>
+            )}
+          </div>
+        </div>
+        <Button>Edit Team</Button>
       </div>
-      
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Team Header Card */}
-        <Card className="shadow-md lg:col-span-3">
-          <CardContent className="pt-6">
-            <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
-              <div className="space-y-2 flex-1">
-                <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
-                  <h2 className="text-3xl font-bold">{team.team}</h2>
-                  <div className="flex flex-wrap gap-2">
-                    <Badge className="bg-blue-500">{team.sport}</Badge>
-                    <Badge variant="outline">{team.level}</Badge>
-                  </div>
-                </div>
-                
-                <p className="text-muted-foreground">
-                  {team.city}, {team.country}
-                </p>
 
-                {team.contacts && team.contacts.length > 0 && (
-                  <p className="text-sm text-green-600">
-                    {team.contacts.length} employees available
-                  </p>
-                )}
-              </div>
-              
-              <div className="flex flex-col gap-2 self-start">
-                <p className="text-sm text-muted-foreground">Credits remaining</p>
-                <p className="text-2xl font-bold text-sportbnk-green">{credits}</p>
-                <Button className="mt-2 bg-sportbnk-navy hover:bg-sportbnk-navy/90 text-sm">
-                  Upgrade
-                </Button>
-              </div>
+      <div className="grid md:grid-cols-2 gap-6">
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center space-x-2">
+              <Building2 className="h-5 w-5" />
+              <span>Organization Details</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex items-center space-x-2">
+              <MapPin className="h-4 w-4 text-gray-400" />
+              <span>
+                {team.street && `${team.street}, `}
+                {team.cities?.name}
+                {team.postal_code && ` ${team.postal_code}`}
+                {team.cities?.countries?.name && `, ${team.cities.countries.name}`}
+              </span>
             </div>
+            
+            {team.website && (
+              <div className="flex items-center space-x-2">
+                <Globe className="h-4 w-4 text-gray-400" />
+                <a 
+                  href={team.website} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:underline"
+                >
+                  {team.website}
+                </a>
+              </div>
+            )}
+            
+            {team.email && (
+              <div className="flex items-center space-x-2">
+                <Mail className="h-4 w-4 text-gray-400" />
+                <span>{team.email}</span>
+              </div>
+            )}
+            
+            {team.phone && (
+              <div className="flex items-center space-x-2">
+                <Phone className="h-4 w-4 text-gray-400" />
+                <span>{team.phone}</span>
+              </div>
+            )}
+            
+            {team.employees && (
+              <div className="flex items-center space-x-2">
+                <Users className="h-4 w-4 text-gray-400" />
+                <span>{team.employees} employees</span>
+              </div>
+            )}
+            
+            {team.founded && (
+              <div className="flex items-center space-x-2">
+                <Calendar className="h-4 w-4 text-gray-400" />
+                <span>Founded in {team.founded}</span>
+              </div>
+            )}
+            
+            {team.revenue && (
+              <div className="flex items-center space-x-2">
+                <DollarSign className="h-4 w-4 text-gray-400" />
+                <span>Revenue: ${team.revenue.toLocaleString()}</span>
+              </div>
+            )}
           </CardContent>
         </Card>
-        
-        {/* Business Information Cards */}
-        <div className="lg:col-span-2 space-y-6">
-          {/* Contact Information */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Phone className="h-5 w-5" />
-                Contact Information
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {team.phone && (
-                  <div>
-                    <p className="text-sm font-medium text-muted-foreground">Phone</p>
-                    <a href={`tel:${team.phone}`} className="text-blue-600 hover:underline">
-                      {team.phone}
-                    </a>
-                  </div>
-                )}
-                {team.email && (
-                  <div>
-                    <p className="text-sm font-medium text-muted-foreground">Email</p>
-                    <a href={`mailto:${team.email}`} className="text-blue-600 hover:underline">
-                      {team.email}
-                    </a>
-                  </div>
-                )}
-              </div>
-              {team.website && (
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">Website</p>
-                  <a href={team.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center gap-1">
-                    <Globe className="h-4 w-4" />
-                    {team.website?.replace(/^https?:\/\//, '')}
-                  </a>
-                </div>
-              )}
-            </CardContent>
-          </Card>
 
-          {/* Address Information */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <MapPin className="h-5 w-5" />
-                Address
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-lg">{team.city}, {team.country}</p>
-              <p className="text-sm text-muted-foreground mt-1">
-                Venue location and headquarters
-              </p>
-            </CardContent>
-          </Card>
-
-          {/* Opening Hours */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Clock className="h-5 w-5" />
-                Opening Hours
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center space-x-2">
+              <Clock className="h-5 w-5" />
+              <span>Opening Hours</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {team.opening_hours && team.opening_hours.length > 0 ? (
               <div className="space-y-2">
-                {Object.entries(openingHours).map(([day, hours]) => (
-                  <div key={day} className="flex justify-between items-center">
-                    <span className="capitalize font-medium">{day}</span>
-                    <span className={hours === "Closed" ? "text-red-600" : "text-green-600"}>
-                      {hours}
-                    </span>
+                {team.opening_hours.map((hours) => (
+                  <div key={hours.id} className="flex justify-between">
+                    <span className="capitalize font-medium">{hours.day}:</span>
+                    <span>{hours.start_hour} - {hours.end_hour}</span>
                   </div>
                 ))}
               </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Business Stats */}
-        <div className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Users className="h-5 w-5" />
-                Organization Stats
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {team.employees > 0 && (
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">Employees</p>
-                  <p className="text-2xl font-bold">{team.employees}</p>
-                </div>
-              )}
-              {team.revenue > 0 && (
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">Annual Revenue</p>
-                  <p className="text-2xl font-bold">{formatRevenue(team.revenue)}</p>
-                </div>
-              )}
-              {team.founded && (
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">Founded</p>
-                  <p className="text-2xl font-bold">{team.founded}</p>
-                </div>
-              )}
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Team Contacts</p>
-                <p className="text-2xl font-bold">{team.contacts?.length || 0}</p>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-        
-        {/* Team Employees Section - Always show if we have contacts */}
-        {team.contacts && team.contacts.length > 0 && (
-          <div className="lg:col-span-3 mt-6">
-            <Card className="shadow-md">
-              <CardHeader className="border-b">
-                <CardTitle className="text-lg">
-                  Employees ({team.contacts.length})
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-0">
-                {teamEmployees ? (
-                  <TeamEmployees
-                    selectedTeam={teamEmployees}
-                    revealedEmails={revealedEmails}
-                    revealedPhones={revealedPhones}
-                    onRevealEmail={revealEmail}
-                    onRevealPhone={revealPhone}
-                    onCloseEmployees={() => {}}
-                  />
-                ) : (
-                  <div className="p-8 text-center text-muted-foreground">
-                    No employee data could be loaded
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </div>
-        )}
+            ) : (
+              <p className="text-gray-500">No opening hours specified</p>
+            )}
+          </CardContent>
+        </Card>
       </div>
+
+      {team.team_social_links && team.team_social_links.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Social Media</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-wrap gap-2">
+              {team.team_social_links.map((social) => (
+                <a
+                  key={social.id}
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-gray-100 hover:bg-gray-200 transition-colors"
+                >
+                  <span className="capitalize">{social.platform}</span>
+                </a>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {team.contacts && team.contacts.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Team Contacts</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {team.contacts.map((contact) => (
+                <div key={contact.id} className="flex items-center justify-between p-3 border rounded-lg">
+                  <div>
+                    <h4 className="font-medium">{contact.name}</h4>
+                    {contact.role && (
+                      <p className="text-sm text-gray-600">{contact.role}</p>
+                    )}
+                  </div>
+                  <div className="flex space-x-2">
+                    {contact.email && (
+                      <Button variant="outline" size="sm">
+                        <Mail className="h-4 w-4" />
+                      </Button>
+                    )}
+                    {contact.phone && (
+                      <Button variant="outline" size="sm">
+                        <Phone className="h-4 w-4" />
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 };
