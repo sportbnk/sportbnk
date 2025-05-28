@@ -36,11 +36,11 @@ const SportBnkVsSportBankArticle = () => {
                   SportBnk vs SportBank: Understanding Our Brand
                 </h1>
                 
-                <div className="aspect-video w-full overflow-hidden rounded-lg mb-8">
+                <div className="aspect-video w-full overflow-hidden rounded-lg mb-8 bg-white flex items-center justify-center p-8">
                   <img 
-                    src="/lovable-uploads/53090dbd-8563-439e-951d-47c7b07d47e4.png" 
-                    alt="SportBnk vs SportBank brand comparison" 
-                    className="w-full h-full object-cover"
+                    src="/lovable-uploads/b727ac17-df3d-4270-a031-139c82129d27.png" 
+                    alt="SportBnk full logo" 
+                    className="max-w-full max-h-full object-contain"
                   />
                 </div>
               </div>
