@@ -66,8 +66,8 @@ const CsvUpload = () => {
       return [];
     }
     
-    console.log('Splitting by comma...');
-    const socialPairs = socialsText.split(',');
+    console.log('Splitting by semicolon...');
+    const socialPairs = socialsText.split(';');
     console.log('Social pairs after split:', socialPairs);
     console.log('Number of pairs:', socialPairs.length);
     
@@ -115,8 +115,8 @@ const CsvUpload = () => {
       return [];
     }
     
-    console.log('Splitting by comma...');
-    const hourPairs = hoursText.split(',');
+    console.log('Splitting by semicolon...');
+    const hourPairs = hoursText.split(';');
     console.log('Hour pairs after split:', hourPairs);
     console.log('Number of pairs:', hourPairs.length);
     
@@ -451,6 +451,12 @@ const CsvUpload = () => {
                             </span>
                           ))}
                         </div>
+                        <p className="mt-4 text-sm font-medium">Data Format:</p>
+                        <ul className="mt-2 text-xs space-y-1">
+                          <li>• <strong>Socials:</strong> platform:url;platform2:url2 (use semicolons to separate multiple entries)</li>
+                          <li>• <strong>Hours:</strong> day:start-end;day2:start-end (use semicolons to separate multiple entries)</li>
+                          <li>• Example: facebook:https://facebook.com/team;twitter:https://twitter.com/team</li>
+                        </ul>
                       </div>
                     ) : (
                       <div>

@@ -1,4 +1,3 @@
-
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
@@ -196,9 +195,9 @@ async function processTeamRow(supabase: any, row: any, rowNumber: number) {
 
   if (teamError) throw new Error(`Failed to create team: ${teamError.message}`);
 
-  // Process social links
+  // Process social links with semicolon separator
   if (row.socials) {
-    const socialPairs = row.socials.split(',');
+    const socialPairs = row.socials.split(';');
     for (const pair of socialPairs) {
       const [platform, url] = pair.split(':').map(s => s.trim());
       if (platform && url) {
@@ -213,9 +212,9 @@ async function processTeamRow(supabase: any, row: any, rowNumber: number) {
     }
   }
 
-  // Process opening hours
+  // Process opening hours with semicolon separator
   if (row.hours) {
-    const hourPairs = row.hours.split(',');
+    const hourPairs = row.hours.split(';');
     for (const pair of hourPairs) {
       const [day, timeRange] = pair.split(':').map(s => s.trim());
       if (day && timeRange) {
