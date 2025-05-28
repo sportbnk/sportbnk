@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import ContactsView from "@/components/database/ContactsView";
 import ContactsFilters from "@/components/database/ContactsFilters";
@@ -58,7 +59,11 @@ const ContactDatabase = () => {
     position: "all",
     team: "all",
     sport: "all",
+    level: "all",
     country: "all",
+    city: "all",
+    revenue: "all",
+    employees: "all"
   });
   
   // State for showing/hiding filters on mobile
@@ -159,7 +164,11 @@ const ContactDatabase = () => {
               <CardTitle className="text-base font-semibold">Filters</CardTitle>
             </CardHeader>
             <CardContent className="p-3">
-              <ContactsFilters onFilterChange={handleFilterChange} />
+              <ContactsFilters 
+                onFilterChange={handleFilterChange} 
+                filters={activeFilters}
+                totalResults={filteredData.length}
+              />
             </CardContent>
           </Card>
           
