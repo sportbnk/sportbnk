@@ -113,7 +113,7 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
     }
     
     setFilters(newFilters);
-    // onFilterChange(newFilters); // COMMENTED OUT FOR DEBUGGING
+    onFilterChange(newFilters); // UNCOMMENTED - now works with useCallback in parent
   };
 
   const clearFilters = () => {

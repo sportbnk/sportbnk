@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import ContactsFilters from "@/components/database/ContactsFilters";
@@ -142,10 +142,11 @@ export default function Teams() {
     }
   });
 
-  const handleFilterChange = (newFilters: any) => {
-    console.log('Filter change:', newFilters);
+  // Use useCallback to prevent re-rendering of ContactsFilters
+  const handleFilterChange = useCallback((newFilters: any) => {
+    console.log('Filter change received:', newFilters);
     setFilters(newFilters);
-  };
+  }, []);
 
   const handleUseCredits = (amount: number) => {
     setCredits(prevCredits => prevCredits - amount);
