@@ -6,6 +6,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Check, Star } from "lucide-react";
 import { Link } from "react-router-dom";
 import { PricingToggle } from "@/components/PricingToggle";
+import { CurrencySelector } from "@/components/CurrencySelector";
 import { useToast } from "@/hooks/use-toast";
 
 const PricingCard = ({ 
@@ -103,6 +104,7 @@ const PricingCard = ({
 
 const Pricing = () => {
   const [isAnnual, setIsAnnual] = useState(false);
+  const [currency, setCurrency] = useState("GBP");
   const { toast } = useToast();
   
   const handleSelectPlan = (planName: string, planPrice: string) => {
@@ -113,6 +115,18 @@ const Pricing = () => {
     });
     
     console.log(`Selected plan: ${planName}, Price: ${planPrice}`);
+  };
+
+  // Currency conversion rates and symbols
+  const currencyData = {
+    GBP: { symbol: "£", rate: 1 },
+    EUR: { symbol: "€", rate: 1.17 }
+  };
+
+  const formatPrice = (basePrice: number) => {
+    const convertedPrice = Math.round(basePrice * currencyData[currency as keyof typeof currencyData].rate);
+    const symbol = currencyData[currency as keyof typeof currencyData].symbol;
+    return `${symbol}${convertedPrice}`;
   };
 
   const freeTrialFeatures = [
@@ -170,13 +184,16 @@ const Pricing = () => {
               Choose the plan that works best for your business needs.
             </p>
             
-            <PricingToggle isAnnual={isAnnual} onToggle={setIsAnnual} />
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-8 mb-8">
+              <PricingToggle isAnnual={isAnnual} onToggle={setIsAnnual} />
+              <CurrencySelector currency={currency} onCurrencyChange={setCurrency} />
+            </div>
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
             <PricingCard 
               title="Free Trial"
-              price="$0"
+              price="£0"
               description="Try our platform with limited features at no cost"
               features={freeTrialFeatures}
               buttonText="Start Free Trial"
@@ -187,25 +204,25 @@ const Pricing = () => {
             
             <PricingCard 
               title="Standard Plan"
-              price="$49"
-              annualPrice="$470"
+              price={formatPrice(49)}
+              annualPrice={formatPrice(470)}
               description="All the features you need to grow your business in the sports industry"
               features={standardFeatures}
               buttonText="Subscribe Now"
               isAnnual={isAnnual}
-              onSelectPlan={() => handleSelectPlan("Standard Plan", isAnnual ? "$470/year" : "$49/month")}
+              onSelectPlan={() => handleSelectPlan("Standard Plan", isAnnual ? `${formatPrice(470)}/year` : `${formatPrice(49)}/month`)}
             />
             
             <PricingCard 
               title="Pro Plan"
-              price="$99"
-              annualPrice="$950"
+              price={formatPrice(99)}
+              annualPrice={formatPrice(950)}
               description="Enhanced features and support for growing teams and enterprises"
               features={proFeatures}
               buttonText="Subscribe Now"
               highlighted={true}
               isAnnual={isAnnual}
-              onSelectPlan={() => handleSelectPlan("Pro Plan", isAnnual ? "$950/year" : "$99/month")}
+              onSelectPlan={() => handleSelectPlan("Pro Plan", isAnnual ? `${formatPrice(950)}/year` : `${formatPrice(99)}/month`)}
             />
 
             <PricingCard 
