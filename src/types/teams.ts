@@ -15,8 +15,8 @@ export interface SocialLinks {
 }
 
 export interface TeamData {
-  id: number;
-  team: string;
+  id: string; // Changed from number to string (UUID)
+  team: string; // This should be 'name' from the database
   sport: string;
   level: string;
   city: string;
@@ -25,7 +25,7 @@ export interface TeamData {
   employees: number;
   logo: string;
   description: string;
-  founded?: number;
+  founded?: string; // Changed from number to string
   website?: string;
   email?: string;
   phone?: string;

@@ -27,21 +27,36 @@ export default function Teams() {
         .from('teams')
         .select(`
           *,
-          team_contacts (*),
+          cities (
+            id,
+            name,
+            countries (
+              id,
+              name
+            )
+          ),
+          sports (
+            id,
+            name
+          ),
+          contacts (*),
           team_social_links (*)
         `);
 
       if (filters.sport !== "all") {
-        query = query.eq('sport', filters.sport);
+        // We'll need to join with sports table for filtering
+        query = query.eq('sports.name', filters.sport);
       }
       if (filters.level !== "all") {
         query = query.eq('level', filters.level);
       }
       if (filters.country !== "all") {
-        query = query.eq('country', filters.country);
+        // We'll need to join with countries table for filtering
+        query = query.eq('cities.countries.name', filters.country);
       }
       if (filters.city !== "all") {
-        query = query.eq('city', filters.city);
+        // We'll need to join with cities table for filtering
+        query = query.eq('cities.name', filters.city);
       }
       if (filters.revenue !== "all") {
         if (filters.revenue === "less1m") {
@@ -75,22 +90,22 @@ export default function Teams() {
       
       const transformedData: TeamData[] = (data || []).map(team => ({
         id: team.id,
-        team: team.team,
-        sport: team.sport,
-        level: team.level,
-        city: team.city,
-        country: team.country,
+        team: team.name, // Map 'name' to 'team' field
+        sport: team.sports?.name || '',
+        level: team.level || '',
+        city: team.cities?.name || '',
+        country: team.cities?.countries?.name || '',
         revenue: team.revenue || 0,
         employees: team.employees || 0,
-        logo: team.logo || '',
-        description: team.description || '',
+        logo: '', // No logo field in new schema
+        description: '', // No description field in new schema
         founded: team.founded,
         website: team.website,
         email: team.email,
         phone: team.phone,
-        contacts: (team.team_contacts || []).map((contact: any) => ({
+        contacts: (team.contacts || []).map((contact: any) => ({
           name: contact.name,
-          position: contact.position || '',
+          position: contact.role || '',
           email: contact.email || '',
           phone: contact.phone || '',
           linkedin: contact.linkedin || ''
