@@ -57,12 +57,17 @@ const People = () => {
           )
         `);
 
-      // Apply department filter
+      // Apply department filter - this was the issue
       if (filters.position !== "all") {
         query = query.eq('departments.name', filters.position);
       }
 
-      // Apply team location filters through joins
+      // Apply team filters
+      if (filters.team !== "all") {
+        query = query.eq('teams.name', filters.team);
+      }
+
+      // Apply location filters through team relationships
       if (filters.country !== "all") {
         query = query.eq('teams.cities.countries.name', filters.country);
       }
@@ -71,13 +76,13 @@ const People = () => {
         query = query.eq('teams.cities.name', filters.city);
       }
 
-      if (filters.team !== "all") {
-        query = query.eq('teams.name', filters.team);
-      }
-
       const { data, error } = await query;
       
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching contacts:', error);
+        throw error;
+      }
+      
       return data;
     },
   });
