@@ -67,24 +67,14 @@ const Startups = () => {
                   <span className="text-sportbnk-green font-bold">1</span>
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-sportbnk-navy mb-1">Less than 3 years in operation</h3>
-                  <p className="text-gray-600">Your company must have been founded within the last three years.</p>
+                  <h3 className="text-lg font-bold text-sportbnk-navy mb-1">Less than 2 years in operation</h3>
+                  <p className="text-gray-600">Your company must have been founded within the last two years.</p>
                 </div>
               </div>
               
               <div className="flex items-start">
                 <div className="h-8 w-8 bg-sportbnk-green/10 rounded-full flex items-center justify-center mr-4 mt-1">
                   <span className="text-sportbnk-green font-bold">2</span>
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-sportbnk-navy mb-1">Less than $1M in funding</h3>
-                  <p className="text-gray-600">Your startup has raised less than $1 million in total funding.</p>
-                </div>
-              </div>
-              
-              <div className="flex items-start">
-                <div className="h-8 w-8 bg-sportbnk-green/10 rounded-full flex items-center justify-center mr-4 mt-1">
-                  <span className="text-sportbnk-green font-bold">3</span>
                 </div>
                 <div>
                   <h3 className="text-lg font-bold text-sportbnk-navy mb-1">Sports industry focus</h3>
@@ -94,7 +84,7 @@ const Startups = () => {
               
               <div className="flex items-start">
                 <div className="h-8 w-8 bg-sportbnk-green/10 rounded-full flex items-center justify-center mr-4 mt-1">
-                  <span className="text-sportbnk-green font-bold">4</span>
+                  <span className="text-sportbnk-green font-bold">3</span>
                 </div>
                 <div>
                   <h3 className="text-lg font-bold text-sportbnk-navy mb-1">Not previously enrolled</h3>
@@ -102,78 +92,6 @@ const Startups = () => {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-      
-      <section className="py-16 md:py-24">
-        <div className="container mx-auto px-4 md:px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-sportbnk-navy mb-4">
-              Success Stories
-            </h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              See how sports startups have accelerated their growth with Sportsbnk.
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card className="border-gray-200">
-              <CardContent className="p-6">
-                <div className="mb-4">
-                  <img 
-                    src="/placeholder.svg" 
-                    alt="SportsTech Logo" 
-                    className="h-12 w-auto"
-                  />
-                </div>
-                <h3 className="text-xl font-bold text-sportbnk-navy mb-2">SportsTech</h3>
-                <p className="text-gray-600 mb-4">
-                  "Sportsbnk's data intelligence platform helped us identify and connect with our ideal customers from day one, accelerating our go-to-market strategy by months."
-                </p>
-                <p className="text-sm text-gray-500">
-                  – Alex Chen, Founder & CEO
-                </p>
-              </CardContent>
-            </Card>
-            
-            <Card className="border-gray-200">
-              <CardContent className="p-6">
-                <div className="mb-4">
-                  <img 
-                    src="/placeholder.svg" 
-                    alt="AthleteAI Logo" 
-                    className="h-12 w-auto"
-                  />
-                </div>
-                <h3 className="text-xl font-bold text-sportbnk-navy mb-2">AthleteAI</h3>
-                <p className="text-gray-600 mb-4">
-                  "As a small team with limited resources, Sportsbnk's startup program gave us access to enterprise-level data tools that would have otherwise been out of reach."
-                </p>
-                <p className="text-sm text-gray-500">
-                  – Sarah Johnson, Co-Founder
-                </p>
-              </CardContent>
-            </Card>
-            
-            <Card className="border-gray-200">
-              <CardContent className="p-6">
-                <div className="mb-4">
-                  <img 
-                    src="/placeholder.svg" 
-                    alt="FanEngage Logo" 
-                    className="h-12 w-auto"
-                  />
-                </div>
-                <h3 className="text-xl font-bold text-sportbnk-navy mb-2">FanEngage</h3>
-                <p className="text-gray-600 mb-4">
-                  "The connections we made through Sportsbnk's network led to our first major client and eventually our seed funding round."
-                </p>
-                <p className="text-sm text-gray-500">
-                  – Mike Roberts, Founder
-                </p>
-              </CardContent>
-            </Card>
           </div>
           
           <div className="text-center mt-12">
