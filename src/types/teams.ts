@@ -1,10 +1,12 @@
-
 export interface Contact {
   name: string;
   position: string;
   email: string;
   phone?: string;
   linkedin?: string;
+  email_credits_consumed?: number;
+  phone_credits_consumed?: number;
+  linkedin_credits_consumed?: number;
 }
 
 export interface SocialLink {
