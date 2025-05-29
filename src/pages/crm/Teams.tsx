@@ -146,7 +146,7 @@ export default function Teams() {
 
   // Use useCallback to prevent re-rendering of ContactsFilters
   const handleFilterChange = useCallback((newFilters: any) => {
-    console.log('Filter change receivedd:', newFilters);
+    console.log('Filter change received:', newFilters);
     setFilters(newFilters);
   }, []);
 
@@ -158,7 +158,7 @@ export default function Teams() {
     return (
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Organisations Database</h1>
+          <h1 className="text-2xl font-bold">Organizations Database</h1>
         </div>
         <div className="flex justify-center items-center py-10">
           <p className="text-muted-foreground">Loading organizations...</p>
