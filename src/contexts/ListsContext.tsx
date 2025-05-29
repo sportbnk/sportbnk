@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/components/auth/AuthContext";
@@ -89,6 +90,9 @@ export const ListsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
               phone,
               role,
               linkedin,
+              email_credits_consumed,
+              phone_credits_consumed,
+              linkedin_credits_consumed,
               teams (
                 id,
                 name
@@ -121,9 +125,9 @@ export const ListsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           linkedin: item.contacts.linkedin,
           verified: false,
           activeReplier: false,
-          email_credits_consumed: 0,
-          phone_credits_consumed: 0,
-          linkedin_credits_consumed: 0
+          email_credits_consumed: item.contacts.email_credits_consumed || 1,
+          phone_credits_consumed: item.contacts.phone_credits_consumed || 2,
+          linkedin_credits_consumed: item.contacts.linkedin_credits_consumed || 0
         })) || []
       })) || [];
 

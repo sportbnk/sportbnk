@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Plus, Trash2, Download } from 'lucide-react';
 import {
@@ -176,9 +177,12 @@ const Lists = () => {
   };
 
   const handleRevealEmail = (email: string) => {
+    console.log('Revealing email:', email);
     // Find the contact to get the required credits
     const contact = activeList?.contacts.find(c => c.email === email);
     const requiredCredits = contact?.email_credits_consumed || 1;
+    
+    console.log('Required credits for email:', requiredCredits, 'Available credits:', credits);
     
     if (credits < requiredCredits) {
       setCreditsDialogInfo({ required: requiredCredits, actionType: "email" });
@@ -189,9 +193,12 @@ const Lists = () => {
   };
 
   const handleRevealPhone = (phone: string) => {
+    console.log('Revealing phone:', phone);
     // Find the contact to get the required credits
     const contact = activeList?.contacts.find(c => c.phone === phone);
     const requiredCredits = contact?.phone_credits_consumed || 2;
+    
+    console.log('Required credits for phone:', requiredCredits, 'Available credits:', credits);
     
     if (credits < requiredCredits) {
       setCreditsDialogInfo({ required: requiredCredits, actionType: "phone" });
@@ -202,9 +209,12 @@ const Lists = () => {
   };
 
   const handleRevealLinkedin = (linkedin: string) => {
+    console.log('Revealing linkedin:', linkedin);
     // Find the contact to get the required credits
     const contact = activeList?.contacts.find(c => c.linkedin === linkedin);
     const requiredCredits = contact?.linkedin_credits_consumed || 0;
+    
+    console.log('Required credits for linkedin:', requiredCredits, 'Available credits:', credits);
     
     if (credits < requiredCredits) {
       setCreditsDialogInfo({ required: requiredCredits, actionType: "linkedin" });
