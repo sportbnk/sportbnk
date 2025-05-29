@@ -71,6 +71,18 @@ const Lists = () => {
   // Create or update list mutation
   const createOrUpdateListMutation = useMutation({
     mutationFn: async () => {
+      // Get user's profile first
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("No authenticated user");
+
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('user_id', user.id)
+        .single();
+
+      if (!profile) throw new Error("Profile not found");
+
       if (editingList) {
         // Update list
         const { data, error } = await supabase
@@ -84,12 +96,11 @@ const Lists = () => {
         return data;
       } else {
         // Create list
-        const { data, error } = await supabase.from("lists").insert([
-          {
-            name: listName,
-            description: listDescription,
-          },
-        ]);
+        const { data, error } = await supabase.from("lists").insert({
+          name: listName,
+          description: listDescription,
+          profile_id: profile.id,
+        });
         if (error) {
           toast.error(error.message);
           throw error;

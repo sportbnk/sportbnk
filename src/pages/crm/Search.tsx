@@ -97,7 +97,7 @@ const mockTeams = [
     phone: "+15555556666",
     contacts: [],
     social: [],
-    employees: [
+    teamEmployees: [
       {
         id: "4",
         name: "Charlie Brown",
@@ -223,7 +223,7 @@ const Search = () => {
                 {showEmployees[team.id] && (
                   <div className="mt-4 border-t pt-4">
                     <ContactsView
-                      data={team.employees}
+                      data={team.employees || team.teamEmployees || []}
                       revealedEmails={revealedEmails}
                       revealedPhones={revealedPhones}
                       revealedLinkedIns={revealedLinkedIns}
