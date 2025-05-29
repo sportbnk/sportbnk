@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import PageLayout from "@/components/PageLayout";
@@ -16,6 +17,7 @@ interface ProfileData {
   id: string;
   user_id: string;
   job_title: string | null;
+  avatar_url: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -75,14 +77,14 @@ const UserProfile = () => {
           console.error('Error fetching profile:', error);
         }
 
-        // Create user data object using job_title from profiles table
+        // Create user data object using job_title and avatar_url from profiles table
         const fullUserData: UserData = {
           name: user.user_metadata?.name || user.email?.split('@')[0] || "User",
           email: user.email || "",
           phone: user.phone || user.user_metadata?.phone || "",
-          job_title: profile?.job_title || "", // Use job_title from profiles table
-          role: profile?.job_title || "User", // Use job_title as role too
-          avatarUrl: user.user_metadata?.avatar_url || "",
+          job_title: profile?.job_title || "",
+          role: profile?.job_title || "User",
+          avatarUrl: profile?.avatar_url || user.user_metadata?.avatar_url || "",
           billing: {
             plan: "Free Trial",
             price: "$0/month",
@@ -124,7 +126,7 @@ const UserProfile = () => {
       const { error } = await supabase
         .from('profiles')
         .update({
-          job_title: data.role, // Map the 'role' field from the form to 'job_title' in database
+          job_title: data.role,
           updated_at: new Date().toISOString()
         })
         .eq('user_id', user.id);
@@ -139,7 +141,7 @@ const UserProfile = () => {
       const updatedUserData = { 
         ...userData, 
         ...data,
-        job_title: data.role, // Ensure job_title is updated in local state
+        job_title: data.role,
         role: data.role
       };
       setUserData(updatedUserData);
@@ -150,6 +152,15 @@ const UserProfile = () => {
     } catch (e) {
       console.error("Failed to update profile", e);
       toast.error('Failed to update profile');
+    }
+  };
+
+  const handleAvatarUpdate = (avatarUrl: string) => {
+    if (userData) {
+      setUserData({
+        ...userData,
+        avatarUrl
+      });
     }
   };
 
@@ -187,13 +198,18 @@ const UserProfile = () => {
           name={userData.name} 
           email={userData.email} 
           role={userData.job_title || userData.role || ""} 
+          avatarUrl={userData.avatarUrl}
         />
         
         <ProfileTabs activeTab={activeTab} onTabChange={handleTabChange} />
         
         <div className="mt-6 bg-white p-6 rounded-lg border">
           {activeTab === "personal" && (
-            <PersonalInfo userData={userData} onUpdate={handleProfileUpdate} />
+            <PersonalInfo 
+              userData={userData} 
+              onUpdate={handleProfileUpdate}
+              onAvatarUpdate={handleAvatarUpdate}
+            />
           )}
           
           {activeTab === "billing" && (

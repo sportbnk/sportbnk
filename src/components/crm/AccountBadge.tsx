@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { 
   DropdownMenu, 
@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { LogOut, Settings, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/components/auth/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 
 interface AccountBadgeProps {
   name?: string;
@@ -21,13 +22,33 @@ interface AccountBadgeProps {
   showEmail?: boolean;
 }
 
-const AccountBadge = ({ name: propName, email: propEmail, avatarUrl, showEmail = true }: AccountBadgeProps) => {
+const AccountBadge = ({ name: propName, email: propEmail, avatarUrl: propAvatarUrl, showEmail = true }: AccountBadgeProps) => {
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
+  const [avatarUrl, setAvatarUrl] = useState<string | undefined>(propAvatarUrl);
   
   // Use props if provided, otherwise use data from auth context
   const name = propName || user?.user_metadata?.name || user?.email?.split('@')[0] || "User";
   const email = propEmail || user?.email || "user@example.com";
+
+  // Fetch avatar from database when component mounts
+  useEffect(() => {
+    if (!propAvatarUrl && user) {
+      const fetchAvatar = async () => {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('avatar_url')
+          .eq('user_id', user.id)
+          .maybeSingle();
+        
+        if (profile?.avatar_url) {
+          setAvatarUrl(profile.avatar_url);
+        }
+      };
+      
+      fetchAvatar();
+    }
+  }, [user, propAvatarUrl]);
   
   // Handle logout
   const handleLogout = async () => {

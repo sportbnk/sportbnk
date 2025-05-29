@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -8,7 +8,11 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Camera } from "lucide-react";
+import { Camera, Loader2 } from "lucide-react";
+import { useImageUpload } from "@/hooks/useImageUpload";
+import { useAuth } from "@/components/auth/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const personaInfoSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -28,9 +32,14 @@ interface PersonalInfoProps {
     avatarUrl?: string;
   };
   onUpdate: (data: PersonalInfoValues) => void;
+  onAvatarUpdate?: (avatarUrl: string) => void;
 }
 
-const PersonalInfo = ({ userData, onUpdate }: PersonalInfoProps) => {
+const PersonalInfo = ({ userData, onUpdate, onAvatarUpdate }: PersonalInfoProps) => {
+  const { user } = useAuth();
+  const { uploadImage, uploading } = useImageUpload();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const form = useForm<PersonalInfoValues>({
     resolver: zodResolver(personaInfoSchema),
     defaultValues: {
@@ -45,6 +54,42 @@ const PersonalInfo = ({ userData, onUpdate }: PersonalInfoProps) => {
     onUpdate(data);
   };
 
+  const handleAvatarClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file || !user) return;
+
+    try {
+      const avatarUrl = await uploadImage(file, user.id);
+      if (avatarUrl) {
+        // Update the avatar_url in the profiles table
+        const { error } = await supabase
+          .from('profiles')
+          .update({ avatar_url: avatarUrl })
+          .eq('user_id', user.id);
+
+        if (error) {
+          console.error('Error updating avatar in database:', error);
+          toast.error('Failed to update profile picture');
+          return;
+        }
+
+        // Call the callback to update the parent component
+        onAvatarUpdate?.(avatarUrl);
+        toast.success('Profile picture updated successfully');
+      }
+    } catch (error) {
+      console.error('Error handling file upload:', error);
+      toast.error('Failed to update profile picture');
+    }
+
+    // Reset the input
+    event.target.value = '';
+  };
+
   return (
     <TooltipProvider>
       <div>
@@ -52,13 +97,30 @@ const PersonalInfo = ({ userData, onUpdate }: PersonalInfoProps) => {
         
         <div className="mb-8 flex justify-center">
           <div className="relative">
-            <Avatar className="h-24 w-24">
+            <Avatar className="h-24 w-24 cursor-pointer" onClick={handleAvatarClick}>
               <AvatarImage src={userData.avatarUrl} alt={userData.name} />
               <AvatarFallback className="text-2xl">{userData.name.charAt(0)}</AvatarFallback>
             </Avatar>
-            <Button variant="outline" size="icon" className="absolute bottom-0 right-0 h-8 w-8 rounded-full">
-              <Camera className="h-4 w-4" />
+            <Button 
+              variant="outline" 
+              size="icon" 
+              className="absolute bottom-0 right-0 h-8 w-8 rounded-full"
+              onClick={handleAvatarClick}
+              disabled={uploading}
+            >
+              {uploading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Camera className="h-4 w-4" />
+              )}
             </Button>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              className="hidden"
+            />
           </div>
         </div>
         
