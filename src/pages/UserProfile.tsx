@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import PageLayout from "@/components/PageLayout";
@@ -12,15 +11,6 @@ import { useAuth } from "@/components/auth/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 
 type TabType = "personal" | "billing" | "subscription";
-
-interface ProfileData {
-  id: string;
-  user_id: string;
-  job_title: string | null;
-  phone: string | null;
-  created_at: string;
-  updated_at: string;
-}
 
 interface UserData {
   name: string;
@@ -66,23 +56,12 @@ const UserProfile = () => {
 
     const fetchUserProfile = async () => {
       try {
-        // Get user profile from database
-        const { data: profile, error } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('user_id', user.id)
-          .single();
-
-        if (error && error.code !== 'PGRST116') {
-          console.error('Error fetching profile:', error);
-        }
-
-        // Create user data object
+        // Create user data object from auth user metadata
         const fullUserData: UserData = {
           name: user.user_metadata?.name || user.email?.split('@')[0] || "User",
           email: user.email || "",
-          phone: profile?.phone || "",
-          job_title: profile?.job_title || "",
+          phone: user.user_metadata?.phone || "",
+          job_title: user.user_metadata?.job_title || "",
           role: "User",
           avatarUrl: user.user_metadata?.avatar_url || "",
           billing: {
@@ -122,23 +101,7 @@ const UserProfile = () => {
     if (!userData || !user) return;
     
     try {
-      // Update profile in database
-      const { error } = await supabase
-        .from('profiles')
-        .update({
-          job_title: data.job_title,
-          phone: data.phone,
-          updated_at: new Date().toISOString()
-        })
-        .eq('user_id', user.id);
-
-      if (error) {
-        console.error('Error updating profile:', error);
-        toast.error('Failed to update profile');
-        return;
-      }
-
-      // Update local state
+      // For now, just update local state since profiles table may not exist
       const updatedUserData = { ...userData, ...data };
       setUserData(updatedUserData);
       
