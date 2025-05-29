@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Plus, Trash2, Download } from 'lucide-react';
 import {
@@ -61,14 +60,6 @@ const Lists = () => {
   const location = useLocation();
   const [isCreateListOpen, setIsCreateListOpen] = useState(false);
   const [activeListId, setActiveListId] = useState<string | null>(null);
-  const [revealedEmails, setRevealedEmails] = useState<Record<string, boolean>>({});
-  const [revealedPhones, setRevealedPhones] = useState<Record<string, boolean>>({});
-  const [revealedLinkedins, setRevealedLinkedins] = useState<Record<string, boolean>>({});
-  const [showCreditsDialog, setShowCreditsDialog] = useState(false);
-  const [creditsDialogInfo, setCreditsDialogInfo] = useState<{
-    required: number;
-    actionType: "email" | "phone" | "linkedin";
-  }>({ required: 0, actionType: "email" });
   
   const { 
     lists, 
@@ -77,8 +68,6 @@ const Lists = () => {
     deleteList, 
     removeContactFromList 
   } = useListsContext();
-
-  const { credits } = useCredits();
 
   const activeList = lists.find(list => list.id === activeListId) || null;
 
@@ -176,54 +165,6 @@ const Lists = () => {
     }
   };
 
-  const handleRevealEmail = (email: string) => {
-    console.log('Revealing email:', email);
-    // Find the contact to get the required credits
-    const contact = activeList?.contacts.find(c => c.email === email);
-    const requiredCredits = contact?.email_credits_consumed || 1;
-    
-    console.log('Required credits for email:', requiredCredits, 'Available credits:', credits);
-    
-    if (credits < requiredCredits) {
-      setCreditsDialogInfo({ required: requiredCredits, actionType: "email" });
-      setShowCreditsDialog(true);
-      return;
-    }
-    setRevealedEmails(prev => ({ ...prev, [email]: true }));
-  };
-
-  const handleRevealPhone = (phone: string) => {
-    console.log('Revealing phone:', phone);
-    // Find the contact to get the required credits
-    const contact = activeList?.contacts.find(c => c.phone === phone);
-    const requiredCredits = contact?.phone_credits_consumed || 2;
-    
-    console.log('Required credits for phone:', requiredCredits, 'Available credits:', credits);
-    
-    if (credits < requiredCredits) {
-      setCreditsDialogInfo({ required: requiredCredits, actionType: "phone" });
-      setShowCreditsDialog(true);
-      return;
-    }
-    setRevealedPhones(prev => ({ ...prev, [phone]: true }));
-  };
-
-  const handleRevealLinkedin = (linkedin: string) => {
-    console.log('Revealing linkedin:', linkedin);
-    // Find the contact to get the required credits
-    const contact = activeList?.contacts.find(c => c.linkedin === linkedin);
-    const requiredCredits = contact?.linkedin_credits_consumed || 0;
-    
-    console.log('Required credits for linkedin:', requiredCredits, 'Available credits:', credits);
-    
-    if (credits < requiredCredits) {
-      setCreditsDialogInfo({ required: requiredCredits, actionType: "linkedin" });
-      setShowCreditsDialog(true);
-      return;
-    }
-    setRevealedLinkedins(prev => ({ ...prev, [linkedin]: true }));
-  };
-
   // Function to export to CSV
   const handleExportCSV = () => {
     if (!activeList || activeList.contacts.length === 0) {
@@ -268,187 +209,171 @@ const Lists = () => {
   }
 
   return (
-    <>
-      <div className="container mx-auto py-8">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Lists</h1>
-          <div className="flex gap-2">
-            <Button 
-              variant="outline" 
-              onClick={handleExportCSV}
-              disabled={!activeList || activeList.contacts.length === 0}
-            >
-              <Download className="w-4 h-4 mr-2" /> Export CSV
-            </Button>
-            <Dialog open={isCreateListOpen} onOpenChange={setIsCreateListOpen}>
-              <DialogTrigger asChild>
-                <Button variant="outline">
-                  <Plus className="w-4 h-4 mr-2" /> Create List
-                </Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Create a new list</DialogTitle>
-                  <DialogDescription>
-                    Give your list a name and description.
-                  </DialogDescription>
-                </DialogHeader>
-                <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                    <FormField
-                      control={form.control}
-                      name="listName"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>List Name</FormLabel>
-                          <FormControl>
-                            <Input placeholder="Marketing Leads" {...field} />
-                          </FormControl>
-                          <FormDescription>
-                            This is the name of your list.
-                          </FormDescription>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="description"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Description</FormLabel>
-                          <FormControl>
-                            <Textarea
-                              placeholder="A brief description of the list."
-                              className="resize-none"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormDescription>
-                            Describe the purpose of this list.
-                          </FormDescription>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <div className="flex justify-end space-x-2">
-                      <Button type="button" variant="outline" onClick={() => setIsCreateListOpen(false)}>
-                        Cancel
-                      </Button>
-                      <Button type="submit">Create</Button>
-                    </div>
-                  </form>
-                </Form>
-              </DialogContent>
-            </Dialog>
-          </div>
+    <div className="container mx-auto py-8">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">Lists</h1>
+        <div className="flex gap-2">
+          <Button 
+            variant="outline" 
+            onClick={handleExportCSV}
+            disabled={!activeList || activeList.contacts.length === 0}
+          >
+            <Download className="w-4 h-4 mr-2" /> Export CSV
+          </Button>
+          <Dialog open={isCreateListOpen} onOpenChange={setIsCreateListOpen}>
+            <DialogTrigger asChild>
+              <Button variant="outline">
+                <Plus className="w-4 h-4 mr-2" /> Create List
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Create a new list</DialogTitle>
+                <DialogDescription>
+                  Give your list a name and description.
+                </DialogDescription>
+              </DialogHeader>
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                  <FormField
+                    control={form.control}
+                    name="listName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>List Name</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Marketing Leads" {...field} />
+                        </FormControl>
+                        <FormDescription>
+                          This is the name of your list.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="description"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Description</FormLabel>
+                        <FormControl>
+                          <Textarea
+                            placeholder="A brief description of the list."
+                            className="resize-none"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          Describe the purpose of this list.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <div className="flex justify-end space-x-2">
+                    <Button type="button" variant="outline" onClick={() => setIsCreateListOpen(false)}>
+                      Cancel
+                    </Button>
+                    <Button type="submit">Create</Button>
+                  </div>
+                </form>
+              </Form>
+            </DialogContent>
+          </Dialog>
         </div>
+      </div>
 
-        <div className="mb-6 flex flex-wrap justify-between items-center gap-4">
-          <div className="flex items-center gap-4">
-            {lists.length > 0 ? (
-              <Select
-                value={activeListId || ''}
-                onValueChange={(value) => setActiveListId(value)}
-              >
-                <SelectTrigger className="w-[280px]">
-                  <SelectValue placeholder="Select a list" />
-                </SelectTrigger>
-                <SelectContent>
-                  {lists.map(list => (
-                    <SelectItem key={list.id} value={list.id}>
-                      {list.name} ({list.contacts.length} contacts)
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            ) : (
-              <p className="text-muted-foreground">No lists found. Create your first list.</p>
-            )}
-            
-            {activeList?.description && (
-              <span className="text-sm text-muted-foreground">
-                {activeList.description}
-              </span>
-            )}
-          </div>
+      <div className="mb-6 flex flex-wrap justify-between items-center gap-4">
+        <div className="flex items-center gap-4">
+          {lists.length > 0 ? (
+            <Select
+              value={activeListId || ''}
+              onValueChange={(value) => setActiveListId(value)}
+            >
+              <SelectTrigger className="w-[280px]">
+                <SelectValue placeholder="Select a list" />
+              </SelectTrigger>
+              <SelectContent>
+                {lists.map(list => (
+                  <SelectItem key={list.id} value={list.id}>
+                    {list.name} ({list.contacts.length} contacts)
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          ) : (
+            <p className="text-muted-foreground">No lists found. Create your first list.</p>
+          )}
           
-          {activeList && (
-            <div className="flex gap-2">
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button 
-                    variant="outline" 
-                    className="text-red-600 hover:text-red-700"
-                    disabled={lists.length <= 1}
-                  >
-                    <Trash2 className="h-4 w-4 mr-2" />
-                    Delete List
-                  </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      This will permanently delete the list "{activeList.name}" and all its contacts. This action cannot be undone.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleDeleteList} className="bg-red-600 hover:bg-red-700">
-                      Delete
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
+          {activeList?.description && (
+            <span className="text-sm text-muted-foreground">
+              {activeList.description}
+            </span>
+          )}
+        </div>
+        
+        {activeList && (
+          <div className="flex gap-2">
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button 
+                  variant="outline" 
+                  className="text-red-600 hover:text-red-700"
+                  disabled={lists.length <= 1}
+                >
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  Delete List
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This will permanently delete the list "{activeList.name}" and all its contacts. This action cannot be undone.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={handleDeleteList} className="bg-red-600 hover:bg-red-700">
+                    Delete
+                  </AlertDialogAction>
                 </AlertDialogContent>
               </AlertDialog>
             </div>
           )}
         </div>
-
-        {/* List Content */}
-        <div className="bg-white rounded-lg border">
-          {activeList && activeList.contacts.length > 0 ? (
-            <ContactsView 
-              data={activeList.contacts}
-              revealedEmails={revealedEmails}
-              revealedPhones={revealedPhones}
-              revealedLinkedins={revealedLinkedins}
-              onRevealEmail={handleRevealEmail}
-              onRevealPhone={handleRevealPhone}
-              onRevealLinkedin={handleRevealLinkedin}
-              onViewTeam={() => {}}
-              onAddToList={() => {}}
-              onRemoveFromList={handleRemoveFromList}
-              isSavedList={true}
-            />
-          ) : activeList ? (
-            <div className="text-center py-12">
-              <h3 className="text-lg font-medium mb-2">{activeList.name}</h3>
-              {activeList.description && (
-                <p className="text-muted-foreground mb-4">{activeList.description}</p>
-              )}
-              <p className="text-muted-foreground">
-                No contacts in this list yet. Add contacts from the People page using the + button.
-              </p>
-            </div>
-          ) : (
-            <div className="text-center py-12">
-              <p className="text-muted-foreground">
-                Create your first list to get started.
-              </p>
-            </div>
-          )}
-        </div>
       </div>
 
-      <InsufficientCreditsDialog
-        open={showCreditsDialog}
-        onOpenChange={setShowCreditsDialog}
-        creditsRequired={creditsDialogInfo.required}
-        creditsAvailable={credits}
-        actionType={creditsDialogInfo.actionType}
-      />
-    </>
+      {/* List Content */}
+      <div className="bg-white rounded-lg border">
+        {activeList && activeList.contacts.length > 0 ? (
+          <ContactsView 
+            data={activeList.contacts}
+            onViewTeam={() => {}}
+            onAddToList={() => {}}
+            onRemoveFromList={handleRemoveFromList}
+            isSavedList={true}
+          />
+        ) : activeList ? (
+          <div className="text-center py-12">
+            <h3 className="text-lg font-medium mb-2">{activeList.name}</h3>
+            {activeList.description && (
+              <p className="text-muted-foreground mb-4">{activeList.description}</p>
+            )}
+            <p className="text-muted-foreground">
+              No contacts in this list yet. Add contacts from the People page using the + button.
+            </p>
+          </div>
+        ) : (
+          <div className="text-center py-12">
+            <p className="text-muted-foreground">
+              Create your first list to get started.
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
 

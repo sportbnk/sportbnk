@@ -1,3 +1,4 @@
+
 import React from "react";
 import {
   Table,
@@ -12,15 +13,10 @@ import { Eye, MessageSquare, Plus, UserPlus, CheckCircle, Trash, Mail, Phone, Li
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import ListSelectionPopover from "./ListSelectionPopover";
+import { useReveal } from "@/contexts/RevealContext";
 
 interface ContactsViewProps {
   data: any[];
-  revealedEmails: Record<string, boolean>;
-  revealedPhones: Record<string, boolean>;
-  revealedLinkedins?: Record<string, boolean>;
-  onRevealEmail: (email: string) => void;
-  onRevealPhone: (phone: string) => void;
-  onRevealLinkedin?: (linkedin: string) => void;
   onViewTeam: (teamId: number) => void;
   onAddToList: (contact: any, listId: string, listName: string) => void;
   onRemoveFromList?: (contactId: string) => void;
@@ -29,17 +25,28 @@ interface ContactsViewProps {
 
 const ContactsView = ({
   data,
-  revealedEmails,
-  revealedPhones,
-  revealedLinkedins = {},
-  onRevealEmail,
-  onRevealPhone,
-  onRevealLinkedin = () => {},
   onViewTeam,
   onAddToList,
   onRemoveFromList = () => {},
   isSavedList = false
 }: ContactsViewProps) => {
+  const { isRevealed, canReveal, revealContact, loading } = useReveal();
+
+  const handleRevealClick = async (contact: any, type: 'email' | 'phone' | 'linkedin') => {
+    await revealContact(contact, type);
+  };
+
+  const shouldShowRevealButton = (contact: any, type: 'email' | 'phone' | 'linkedin') => {
+    const creditsRequired = contact[`${type}_credits_consumed`];
+    // Show reveal button if credits are required AND not yet revealed
+    return creditsRequired > 0 && !isRevealed(contact.id, type);
+  };
+
+  const shouldShowContent = (contact: any, type: 'email' | 'phone' | 'linkedin') => {
+    // Show content if it's free (0 credits) OR already revealed
+    return canReveal(contact, type);
+  };
+
   return (
     <div className="w-full overflow-auto">
       <Table>
@@ -56,13 +63,6 @@ const ContactsView = ({
         </TableHeader>
         <TableBody>
           {data.map((contact) => {
-            // Debug logging for credits
-            console.log('Contact:', contact.name, {
-              email_credits_consumed: contact.email_credits_consumed,
-              phone_credits_consumed: contact.phone_credits_consumed,
-              linkedin_credits_consumed: contact.linkedin_credits_consumed
-            });
-            
             return (
               <TableRow key={contact.id}>
                 <TableCell className="font-medium">
@@ -116,29 +116,25 @@ const ContactsView = ({
                 <TableCell>
                   <div className="max-w-[140px]">
                     {contact.email ? (
-                      (contact.email_credits_consumed === 0) ? (
+                      shouldShowContent(contact, 'email') ? (
                         <div className="flex items-center gap-1">
                           <Mail className="h-3.5 w-3.5 text-blue-500 flex-shrink-0" />
                           <span className="text-xs font-mono overflow-hidden text-ellipsis">{contact.email}</span>
                         </div>
-                      ) : revealedEmails[contact.email] ? (
-                        <div className="flex items-center gap-1">
-                          <Mail className="h-3.5 w-3.5 text-blue-500 flex-shrink-0" />
-                          <span className="text-xs font-mono overflow-hidden text-ellipsis">{contact.email}</span>
-                        </div>
-                      ) : (
+                      ) : shouldShowRevealButton(contact, 'email') ? (
                         <div className="flex items-center gap-1">
                           <Mail className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
                           <Button 
                             size="sm" 
                             variant="outline"
-                            onClick={() => onRevealEmail(contact.email)}
+                            onClick={() => handleRevealClick(contact, 'email')}
                             className="h-6 text-xs px-2"
+                            disabled={loading}
                           >
-                            Reveal ({contact.email_credits_consumed || 1})
+                            Reveal ({contact.email_credits_consumed})
                           </Button>
                         </div>
-                      )
+                      ) : null
                     ) : (
                       <span className="text-gray-400 italic text-xs">Not available</span>
                     )}
@@ -147,29 +143,25 @@ const ContactsView = ({
                 <TableCell>
                   <div className="max-w-[140px]">
                     {contact.phone ? (
-                      (contact.phone_credits_consumed === 0) ? (
+                      shouldShowContent(contact, 'phone') ? (
                         <div className="flex items-center gap-1">
                           <Phone className="h-3.5 w-3.5 text-blue-500 flex-shrink-0" />
                           <span className="text-xs font-mono">{contact.phone}</span>
                         </div>
-                      ) : revealedPhones[contact.phone] ? (
-                        <div className="flex items-center gap-1">
-                          <Phone className="h-3.5 w-3.5 text-blue-500 flex-shrink-0" />
-                          <span className="text-xs font-mono">{contact.phone}</span>
-                        </div>
-                      ) : (
+                      ) : shouldShowRevealButton(contact, 'phone') ? (
                         <div className="flex items-center gap-1">
                           <Phone className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
                           <Button 
                             size="sm" 
                             variant="outline"
-                            onClick={() => onRevealPhone(contact.phone)}
+                            onClick={() => handleRevealClick(contact, 'phone')}
                             className="h-6 text-xs px-2"
+                            disabled={loading}
                           >
-                            Reveal ({contact.phone_credits_consumed || 2})
+                            Reveal ({contact.phone_credits_consumed})
                           </Button>
                         </div>
-                      )
+                      ) : null
                     ) : (
                       <span className="text-gray-400 italic text-xs">Not available</span>
                     )}
@@ -178,7 +170,7 @@ const ContactsView = ({
                 <TableCell>
                   <div className="max-w-[140px]">
                     {contact.linkedin ? (
-                      (contact.linkedin_credits_consumed === 0) ? (
+                      shouldShowContent(contact, 'linkedin') ? (
                         <a 
                           href={contact.linkedin} 
                           target="_blank" 
@@ -187,28 +179,20 @@ const ContactsView = ({
                         >
                           <Linkedin className="h-4 w-4" />
                         </a>
-                      ) : revealedLinkedins[contact.linkedin] ? (
-                        <a 
-                          href={contact.linkedin} 
-                          target="_blank" 
-                          rel="noopener noreferrer" 
-                          className="flex items-center text-blue-700 hover:underline"
-                        >
-                          <Linkedin className="h-4 w-4" />
-                        </a>
-                      ) : (
+                      ) : shouldShowRevealButton(contact, 'linkedin') ? (
                         <div className="flex items-center gap-1">
                           <Linkedin className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
                           <Button 
                             size="sm" 
                             variant="outline"
-                            onClick={() => onRevealLinkedin(contact.linkedin)}
+                            onClick={() => handleRevealClick(contact, 'linkedin')}
                             className="h-6 text-xs px-2"
+                            disabled={loading}
                           >
-                            Reveal ({contact.linkedin_credits_consumed || 0})
+                            Reveal ({contact.linkedin_credits_consumed})
                           </Button>
                         </div>
-                      )
+                      ) : null
                     ) : (
                       <span className="text-gray-400 italic text-xs">Not available</span>
                     )}
