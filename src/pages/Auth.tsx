@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
@@ -12,6 +11,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Mail, Lock, User, Phone, Briefcase, Eye, EyeOff, CheckCircle, AlertCircle } from 'lucide-react';
 import { useAuth } from '@/components/auth/AuthContext';
 import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -39,6 +39,52 @@ const Auth = () => {
     job_title: '',
     phone: '',
   });
+
+  // Handle URL hash parameters for email confirmation
+  useEffect(() => {
+    const handleHashParams = async () => {
+      const hash = window.location.hash;
+      if (hash) {
+        const params = new URLSearchParams(hash.substring(1));
+        const accessToken = params.get('access_token');
+        const refreshToken = params.get('refresh_token');
+        const type = params.get('type');
+
+        if (accessToken && refreshToken && type === 'signup') {
+          try {
+            setIsLoading(true);
+            
+            // Set the session with the tokens from the URL
+            const { data, error } = await supabase.auth.setSession({
+              access_token: accessToken,
+              refresh_token: refreshToken,
+            });
+
+            if (error) {
+              console.error('Error setting session:', error);
+              setError('Failed to verify email. Please try again.');
+              return;
+            }
+
+            if (data.user) {
+              toast.success('Email verified successfully! Welcome to SportsBnk!');
+              // Clear the hash from URL
+              window.history.replaceState(null, '', window.location.pathname);
+              // Redirect to main app
+              navigate('/crm/people');
+            }
+          } catch (err) {
+            console.error('Error handling email confirmation:', err);
+            setError('Failed to verify email. Please try again.');
+          } finally {
+            setIsLoading(false);
+          }
+        }
+      }
+    };
+
+    handleHashParams();
+  }, [navigate]);
 
   useEffect(() => {
     if (user && user.email_confirmed_at) {
@@ -158,6 +204,24 @@ const Auth = () => {
       setIsLoading(false);
     }
   };
+
+  // Show loading state during email verification
+  if (isLoading && window.location.hash.includes('access_token')) {
+    return (
+      <PageLayout>
+        <div className="min-h-screen pt-32 pb-12">
+          <div className="container mx-auto px-4 max-w-md">
+            <Card className="w-full">
+              <CardContent className="flex flex-col items-center justify-center p-8">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-sportbnk-green mb-4"></div>
+                <p className="text-center text-gray-600">Verifying your email...</p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </PageLayout>
+    );
+  }
 
   return (
     <PageLayout>
