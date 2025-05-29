@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -13,8 +14,8 @@ import {
   TableRow 
 } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
-import { useAuth } from "@/components/auth/AuthContext";
 import { Plus, X } from "lucide-react";
+import { useLists } from "@/contexts/ListsContext";
 
 interface Contact {
   id: string;
@@ -35,29 +36,8 @@ interface List {
 const Lists = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedList, setSelectedList] = useState<List | null>(null);
-  const { user } = useAuth();
   const { toast } = useToast();
-
-  // Fetch lists for the current user
-  const { data: lists } = useQuery({
-    queryKey: ['lists'],
-    queryFn: async () => {
-      if (!user) return [];
-
-      const { data, error } = await supabase
-        .from('lists')
-        .select('*')
-        .eq('profile_id', user.id);
-
-      if (error) {
-        console.error('Error fetching lists:', error);
-        toast.error('Failed to load lists');
-        return [];
-      }
-
-      return data as List[];
-    },
-  });
+  const { lists, refreshLists } = useLists();
 
   // Fetch contacts for the selected list
   const { data: contacts, refetch: refetchContacts } = useQuery({
@@ -84,7 +64,11 @@ const Lists = () => {
 
       if (error) {
         console.error('Error fetching contacts:', error);
-        toast.error('Failed to load contacts');
+        toast({
+          title: "Error",
+          description: "Failed to load contacts",
+          variant: "destructive",
+        });
         return [];
       }
 
@@ -117,16 +101,27 @@ const Lists = () => {
 
       if (error) {
         console.error('Error removing contact from list:', error);
-        toast.error('Failed to remove contact from list');
+        toast({
+          title: "Error",
+          description: "Failed to remove contact from list",
+          variant: "destructive",
+        });
         return;
       }
 
-      toast.success('Contact removed from list');
+      toast({
+        title: "Success",
+        description: "Contact removed from list",
+      });
       // Refresh contacts
       refetchContacts();
     } catch (error) {
       console.error('Error removing contact from list:', error);
-      toast.error('Failed to remove contact from list');
+      toast({
+        title: "Error", 
+        description: "Failed to remove contact from list",
+        variant: "destructive",
+      });
     }
   };
 

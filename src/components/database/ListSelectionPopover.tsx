@@ -6,14 +6,7 @@ import { Plus, Check } from "lucide-react";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/components/auth/AuthContext";
-
-interface ContactList {
-  id: string;
-  name: string;
-  description?: string;
-  isContactInList?: boolean;
-}
+import { useLists } from "@/contexts/ListsContext";
 
 interface ListSelectionPopoverProps {
   onAddToList: (contact: any, listId: string, listName: string) => void;
@@ -21,72 +14,36 @@ interface ListSelectionPopoverProps {
 }
 
 const ListSelectionPopover = ({ onAddToList, contact }: ListSelectionPopoverProps) => {
-  const [lists, setLists] = useState<ContactList[]>([]);
   const [newListName, setNewListName] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const [contactLists, setContactLists] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(false);
-  const { user } = useAuth();
+  const { lists, createList, refreshLists } = useLists();
 
-  // Load all lists and check which ones contain this contact
+  // Load which lists contain this contact
   useEffect(() => {
-    if (isOpen && user) {
-      loadListsWithContactStatus();
+    if (isOpen && contact?.id) {
+      loadContactLists();
     }
-  }, [isOpen, user, contact.id]);
+  }, [isOpen, contact?.id]);
 
-  const loadListsWithContactStatus = async () => {
+  const loadContactLists = async () => {
     setLoading(true);
     try {
-      // Get user's profile
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('id')
-        .eq('user_id', user.id)
-        .single();
-
-      if (!profile) {
-        console.error('No profile found for user');
-        return;
-      }
-
-      // Get all lists for this user
-      const { data: allLists, error: listsError } = await supabase
-        .from('lists')
-        .select('id, name, description')
-        .eq('profile_id', profile.id)
-        .order('created_at', { ascending: false });
-
-      if (listsError) {
-        console.error('Error fetching lists:', listsError);
-        return;
-      }
-
-      // Get all list items for this contact across all lists
-      const { data: contactListItems, error: itemsError } = await supabase
+      const { data: contactListItems, error } = await supabase
         .from('list_items')
         .select('list_id')
         .eq('contact_id', contact.id);
 
-      if (itemsError) {
-        console.error('Error fetching list items:', itemsError);
+      if (error) {
+        console.error('Error fetching contact lists:', error);
         return;
       }
 
-      // Create a set of list IDs that contain this contact
-      const contactListIds = new Set(contactListItems?.map(item => item.list_id) || []);
-
-      // Process lists to check if contact is already in each list
-      const listsWithStatus = allLists?.map(list => ({
-        id: list.id,
-        name: list.name,
-        description: list.description,
-        isContactInList: contactListIds.has(list.id)
-      })) || [];
-
-      setLists(listsWithStatus);
+      const listIds = new Set(contactListItems?.map(item => item.list_id) || []);
+      setContactLists(listIds);
     } catch (error) {
-      console.error('Error loading lists:', error);
-      toast.error('Failed to load lists');
+      console.error('Error loading contact lists:', error);
     } finally {
       setLoading(false);
     }
@@ -95,14 +52,7 @@ const ListSelectionPopover = ({ onAddToList, contact }: ListSelectionPopoverProp
   const handleAddToList = async (listId: string, listName: string) => {
     try {
       // Check if contact is already in this list
-      const { data: existingItem } = await supabase
-        .from('list_items')
-        .select('id')
-        .eq('list_id', listId)
-        .eq('contact_id', contact.id)
-        .maybeSingle();
-
-      if (existingItem) {
+      if (contactLists.has(listId)) {
         toast.info(`${contact.name} is already in ${listName}`);
         return;
       }
@@ -121,12 +71,8 @@ const ListSelectionPopover = ({ onAddToList, contact }: ListSelectionPopoverProp
         return;
       }
 
-      // Update the local state to show the contact is now in this list
-      setLists(prevLists => 
-        prevLists.map(list => 
-          list.id === listId ? { ...list, isContactInList: true } : list
-        )
-      );
+      // Update local state
+      setContactLists(prev => new Set([...prev, listId]));
 
       toast.success(`Added ${contact.name} to ${listName}`);
       onAddToList(contact, listId, listName);
@@ -141,38 +87,12 @@ const ListSelectionPopover = ({ onAddToList, contact }: ListSelectionPopoverProp
       toast.error("Please enter a list name");
       return;
     }
-    
-    if (!user) {
-      toast.error("You must be logged in to create lists");
-      return;
-    }
 
     try {
-      // Get user's profile
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('id')
-        .eq('user_id', user.id)
-        .single();
-
-      if (!profile) {
-        toast.error("Profile not found");
-        return;
-      }
-
-      // Create new list
-      const { data: newList, error: listError } = await supabase
-        .from('lists')
-        .insert({
-          profile_id: profile.id,
-          name: newListName.trim()
-        })
-        .select()
-        .single();
-
-      if (listError) {
-        console.error('Error creating list:', listError);
-        toast.error('Failed to create list');
+      const newList = await createList(newListName.trim());
+      
+      if (!newList) {
+        toast.error("Failed to create list");
         return;
       }
 
@@ -190,6 +110,8 @@ const ListSelectionPopover = ({ onAddToList, contact }: ListSelectionPopoverProp
         return;
       }
 
+      // Update local state
+      setContactLists(prev => new Set([...prev, newList.id]));
       setNewListName("");
       setIsOpen(false);
       toast.success(`Created "${newList.name}" and added ${contact.name}`);
@@ -246,24 +168,27 @@ const ListSelectionPopover = ({ onAddToList, contact }: ListSelectionPopoverProp
             <div className="border-t pt-2">
               <p className="text-xs text-muted-foreground mb-2">Or select existing list:</p>
               <div className="space-y-1 max-h-40 overflow-y-auto">
-                {lists.map((list) => (
-                  <div key={list.id} className="flex justify-between items-center">
-                    <span className="text-sm truncate">{list.name}</span>
-                    <Button 
-                      size="sm" 
-                      variant="ghost" 
-                      onClick={() => handleAddToList(list.id, list.name)}
-                      className="h-6 w-6 p-0"
-                      disabled={list.isContactInList}
-                    >
-                      {list.isContactInList ? (
-                        <Check className="h-4 w-4 text-green-500" />
-                      ) : (
-                        <Plus className="h-4 w-4" />
-                      )}
-                    </Button>
-                  </div>
-                ))}
+                {lists.map((list) => {
+                  const isContactInList = contactLists.has(list.id);
+                  return (
+                    <div key={list.id} className="flex justify-between items-center">
+                      <span className="text-sm truncate">{list.name}</span>
+                      <Button 
+                        size="sm" 
+                        variant="ghost" 
+                        onClick={() => handleAddToList(list.id, list.name)}
+                        className="h-6 w-6 p-0"
+                        disabled={isContactInList}
+                      >
+                        {isContactInList ? (
+                          <Check className="h-4 w-4 text-green-500" />
+                        ) : (
+                          <Plus className="h-4 w-4" />
+                        )}
+                      </Button>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           ) : (
