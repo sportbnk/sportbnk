@@ -84,7 +84,7 @@ const PersonalInfo = ({ userData, onUpdate }: PersonalInfoProps) => {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input {...field} type="email" />
+                    <Input {...field} type="email" disabled className="bg-gray-50 cursor-not-allowed" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -98,7 +98,7 @@ const PersonalInfo = ({ userData, onUpdate }: PersonalInfoProps) => {
                 <FormItem>
                   <FormLabel>Phone Number</FormLabel>
                   <FormControl>
-                    <Input {...field} type="tel" />
+                    <Input {...field} type="tel" disabled className="bg-gray-50 cursor-not-allowed" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
