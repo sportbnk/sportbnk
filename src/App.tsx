@@ -61,7 +61,7 @@ const queryClient = new QueryClient();
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
+    <QueryClient>
       <AuthProvider>
         <ListsProvider>
           <HelmetProvider>
@@ -137,7 +137,7 @@ function App() {
           </HelmetProvider>
         </ListsProvider>
       </AuthProvider>
-    </QueryClientProvider>
+    </QueryClient>
   );
 }
 
