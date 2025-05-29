@@ -13,10 +13,13 @@ import {
   TableHeader, 
   TableRow 
 } from "@/components/ui/table";
-import { Search, Mail, Phone, Linkedin, Building2 } from "lucide-react";
+import { Search, Mail, Phone, Linkedin, Building2, ShieldCheck } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import ContactsFilters from "@/components/database/ContactsFilters";
 import ListSelectionPopover from "@/components/database/ListSelectionPopover";
+import InsufficientCreditsDialog from "@/components/database/InsufficientCreditsDialog";
+import { useCredits } from "@/contexts/CreditsContext";
 
 const People = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -30,7 +33,17 @@ const People = () => {
     revenue: "all",
     employees: "all"
   });
+  const [revealedEmails, setRevealedEmails] = useState<Record<string, boolean>>({});
+  const [revealedPhones, setRevealedPhones] = useState<Record<string, boolean>>({});
+  const [revealedLinkedins, setRevealedLinkedins] = useState<Record<string, boolean>>({});
+  const [showCreditsDialog, setShowCreditsDialog] = useState(false);
+  const [creditsDialogInfo, setCreditsDialogInfo] = useState<{
+    required: number;
+    actionType: "email" | "phone" | "linkedin";
+  }>({ required: 0, actionType: "email" });
+  
   const { toast } = useToast();
+  const { credits } = useCredits();
 
   // Fetch all departments to get ID for the selected position
   const { data: allDepartments } = useQuery({
@@ -119,21 +132,31 @@ const People = () => {
     );
   });
 
-  const handleRevealContact = async (contactId: string, field: 'email' | 'phone' | 'linkedin') => {
-    try {
-      // This would normally involve credit checking and user authentication
-      toast({
-        title: "Contact Revealed",
-        description: `${field} details revealed for this contact.`,
-      });
-    } catch (error) {
-      console.error('Error revealing contact:', error);
-      toast({
-        title: "Error",
-        description: "Failed to reveal contact details",
-        variant: "destructive",
-      });
+  const handleRevealEmail = (email: string, requiredCredits: number) => {
+    if (credits < requiredCredits) {
+      setCreditsDialogInfo({ required: requiredCredits, actionType: "email" });
+      setShowCreditsDialog(true);
+      return;
     }
+    setRevealedEmails(prev => ({ ...prev, [email]: true }));
+  };
+
+  const handleRevealPhone = (phone: string, requiredCredits: number) => {
+    if (credits < requiredCredits) {
+      setCreditsDialogInfo({ required: requiredCredits, actionType: "phone" });
+      setShowCreditsDialog(true);
+      return;
+    }
+    setRevealedPhones(prev => ({ ...prev, [phone]: true }));
+  };
+
+  const handleRevealLinkedin = (linkedin: string, requiredCredits: number) => {
+    if (credits < requiredCredits) {
+      setCreditsDialogInfo({ required: requiredCredits, actionType: "linkedin" });
+      setShowCreditsDialog(true);
+      return;
+    }
+    setRevealedLinkedins(prev => ({ ...prev, [linkedin]: true }));
   };
 
   const handleAddToList = (contact: any, listId: string, listName: string) => {
@@ -157,167 +180,256 @@ const People = () => {
   }
 
   return (
-    <div className="container mx-auto px-4">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">People Database</h1>
-        <div className="flex items-center space-x-4">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-            <Input
-              placeholder="Search contacts..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 w-64"
-            />
+    <>
+      <div className="container mx-auto px-4">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold">People Database</h1>
+          <div className="flex items-center space-x-4">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Input
+                placeholder="Search contacts..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10 w-64"
+              />
+            </div>
+          </div>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
+          <div className="md:col-span-1">
+            <Card className="shadow-md">
+              <CardHeader className="pb-2 pt-4 px-4">
+                <CardTitle className="text-base font-semibold">Filters</CardTitle>
+              </CardHeader>
+              <CardContent className="p-3">
+                <ContactsFilters 
+                  onFilterChange={setFilters}
+                  showTeamFilters={false}
+                  totalResults={filteredContacts?.length || 0}
+                  filters={filters}
+                />
+              </CardContent>
+            </Card>
+          </div>
+          
+          <div className="md:col-span-5">
+            <Card>
+              <CardHeader>
+                <CardTitle>Contact Database</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Name</TableHead>
+                      <TableHead>Role</TableHead>
+                      <TableHead>Department</TableHead>
+                      <TableHead>Team</TableHead>
+                      <TableHead>Location</TableHead>
+                      <TableHead>Email</TableHead>
+                      <TableHead>Phone</TableHead>
+                      <TableHead>LinkedIn</TableHead>
+                      <TableHead>Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredContacts?.map((contact) => (
+                      <TableRow key={contact.id}>
+                        <TableCell className="font-medium">{contact.name}</TableCell>
+                        <TableCell>
+                          {contact.role ? (
+                            <Badge variant="secondary">{contact.role}</Badge>
+                          ) : (
+                            <span className="text-gray-400">-</span>
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          {contact.departments?.name ? (
+                            <span>{contact.departments.name}</span>
+                          ) : (
+                            <span className="text-gray-400">-</span>
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          {contact.teams?.name ? (
+                            <div className="flex items-center space-x-2">
+                              <Building2 className="h-4 w-4 text-gray-400" />
+                              <span>{contact.teams.name}</span>
+                            </div>
+                          ) : (
+                            <span className="text-gray-400">-</span>
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          {contact.teams?.cities ? (
+                            <span className="text-sm text-gray-600">
+                              {contact.teams.cities.name}, {contact.teams.cities.countries.name}
+                            </span>
+                          ) : (
+                            <span className="text-gray-400">-</span>
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          {contact.email ? (
+                            contact.email_credits_consumed === 0 ? (
+                              // Show email directly if no credits required
+                              <div className="flex items-center gap-1">
+                                <Mail className="h-3.5 w-3.5 text-blue-500 flex-shrink-0" />
+                                <span className="text-xs font-mono overflow-hidden text-ellipsis">{contact.email}</span>
+                                <TooltipProvider>
+                                  <Tooltip>
+                                    <TooltipTrigger>
+                                      <ShieldCheck className="h-3.5 w-3.5 text-green-500 flex-shrink-0" />
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                      <p className="text-xs">Verified email address</p>
+                                    </TooltipContent>
+                                  </Tooltip>
+                                </TooltipProvider>
+                              </div>
+                            ) : revealedEmails[contact.email] ? (
+                              <div className="flex items-center gap-1">
+                                <span className="text-xs font-mono overflow-hidden text-ellipsis">{contact.email}</span>
+                                <TooltipProvider>
+                                  <Tooltip>
+                                    <TooltipTrigger>
+                                      <ShieldCheck className="h-3.5 w-3.5 text-green-500 flex-shrink-0" />
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                      <p className="text-xs">Verified email address</p>
+                                    </TooltipContent>
+                                  </Tooltip>
+                                </TooltipProvider>
+                              </div>
+                            ) : (
+                              <div className="flex items-center gap-1">
+                                <Mail className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
+                                <Button 
+                                  size="sm" 
+                                  variant="outline"
+                                  onClick={() => handleRevealEmail(contact.email, contact.email_credits_consumed)}
+                                  className="h-6 text-xs px-2"
+                                >
+                                  Reveal ({contact.email_credits_consumed})
+                                </Button>
+                                <TooltipProvider>
+                                  <Tooltip>
+                                    <TooltipTrigger>
+                                      <ShieldCheck className="h-3.5 w-3.5 text-green-500 flex-shrink-0" />
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                      <p className="text-xs">Verified email address</p>
+                                    </TooltipContent>
+                                  </Tooltip>
+                                </TooltipProvider>
+                              </div>
+                            )
+                          ) : (
+                            <span className="text-gray-400">-</span>
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          {contact.phone ? (
+                            contact.phone_credits_consumed === 0 ? (
+                              // Show phone directly if no credits required
+                              <div className="flex items-center gap-1">
+                                <Phone className="h-3.5 w-3.5 text-blue-500 flex-shrink-0" />
+                                <span className="text-xs font-mono">{contact.phone}</span>
+                              </div>
+                            ) : revealedPhones[contact.phone] ? (
+                              <span className="text-xs font-mono">{contact.phone}</span>
+                            ) : (
+                              <div className="flex items-center gap-1">
+                                <Phone className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
+                                <Button 
+                                  size="sm" 
+                                  variant="outline"
+                                  onClick={() => handleRevealPhone(contact.phone!, contact.phone_credits_consumed)}
+                                  className="h-6 text-xs px-2"
+                                >
+                                  Reveal ({contact.phone_credits_consumed})
+                                </Button>
+                              </div>
+                            )
+                          ) : (
+                            <span className="text-gray-400">-</span>
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          {contact.linkedin ? (
+                            contact.linkedin_credits_consumed === 0 ? (
+                              // Show LinkedIn directly if no credits required
+                              <a 
+                                href={contact.linkedin} 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                className="flex items-center text-blue-700 hover:underline"
+                              >
+                                <Linkedin className="h-4 w-4" />
+                              </a>
+                            ) : revealedLinkedins[contact.linkedin] ? (
+                              <a 
+                                href={contact.linkedin} 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                className="flex items-center text-blue-700 hover:underline"
+                              >
+                                <Linkedin className="h-4 w-4" />
+                              </a>
+                            ) : (
+                              <div className="flex items-center gap-1">
+                                <Linkedin className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
+                                <Button 
+                                  size="sm" 
+                                  variant="outline"
+                                  onClick={() => handleRevealLinkedin(contact.linkedin!, contact.linkedin_credits_consumed)}
+                                  className="h-6 text-xs px-2"
+                                >
+                                  Reveal ({contact.linkedin_credits_consumed})
+                                </Button>
+                              </div>
+                            )
+                          ) : (
+                            <span className="text-gray-400">-</span>
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          <ListSelectionPopover
+                            contact={{
+                              id: contact.id,
+                              name: contact.name,
+                              email: contact.email,
+                              phone: contact.phone,
+                              position: contact.role,
+                              team: contact.teams?.name,
+                              teamId: contact.teams?.id,
+                              linkedin: contact.linkedin,
+                              verified: false,
+                              activeReplier: false
+                            }}
+                            onAddToList={handleAddToList}
+                          />
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
-        <div className="md:col-span-1">
-          <Card className="shadow-md">
-            <CardHeader className="pb-2 pt-4 px-4">
-              <CardTitle className="text-base font-semibold">Filters</CardTitle>
-            </CardHeader>
-            <CardContent className="p-3">
-              <ContactsFilters 
-                onFilterChange={setFilters}
-                showTeamFilters={false}
-                totalResults={filteredContacts?.length || 0}
-                filters={filters}
-              />
-            </CardContent>
-          </Card>
-        </div>
-        
-        <div className="md:col-span-5">
-          <Card>
-            <CardHeader>
-              <CardTitle>Contact Database</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Role</TableHead>
-                    <TableHead>Department</TableHead>
-                    <TableHead>Team</TableHead>
-                    <TableHead>Location</TableHead>
-                    <TableHead>Email</TableHead>
-                    <TableHead>Phone</TableHead>
-                    <TableHead>LinkedIn</TableHead>
-                    <TableHead>Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredContacts?.map((contact) => (
-                    <TableRow key={contact.id}>
-                      <TableCell className="font-medium">{contact.name}</TableCell>
-                      <TableCell>
-                        {contact.role ? (
-                          <Badge variant="secondary">{contact.role}</Badge>
-                        ) : (
-                          <span className="text-gray-400">-</span>
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        {contact.departments?.name ? (
-                          <span>{contact.departments.name}</span>
-                        ) : (
-                          <span className="text-gray-400">-</span>
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        {contact.teams?.name ? (
-                          <div className="flex items-center space-x-2">
-                            <Building2 className="h-4 w-4 text-gray-400" />
-                            <span>{contact.teams.name}</span>
-                          </div>
-                        ) : (
-                          <span className="text-gray-400">-</span>
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        {contact.teams?.cities ? (
-                          <span className="text-sm text-gray-600">
-                            {contact.teams.cities.name}, {contact.teams.cities.countries.name}
-                          </span>
-                        ) : (
-                          <span className="text-gray-400">-</span>
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        {contact.email ? (
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleRevealContact(contact.id, 'email')}
-                            className="flex items-center space-x-1"
-                          >
-                            <Mail className="h-4 w-4" />
-                            <span className="text-sm">{contact.email}</span>
-                          </Button>
-                        ) : (
-                          <span className="text-gray-400">-</span>
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        {contact.phone ? (
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleRevealContact(contact.id, 'phone')}
-                            className="flex items-center space-x-1"
-                          >
-                            <Phone className="h-4 w-4" />
-                            <span className="text-sm">{contact.phone}</span>
-                          </Button>
-                        ) : (
-                          <span className="text-gray-400">-</span>
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        {contact.linkedin ? (
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleRevealContact(contact.id, 'linkedin')}
-                            className="flex items-center space-x-1"
-                          >
-                            <Linkedin className="h-4 w-4" />
-                            <span className="text-sm">View Profile</span>
-                          </Button>
-                        ) : (
-                          <span className="text-gray-400">-</span>
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        <ListSelectionPopover
-                          contact={{
-                            id: contact.id,
-                            name: contact.name,
-                            email: contact.email,
-                            phone: contact.phone,
-                            position: contact.role,
-                            team: contact.teams?.name,
-                            teamId: contact.teams?.id,
-                            linkedin: contact.linkedin,
-                            verified: false,
-                            activeReplier: false
-                          }}
-                          onAddToList={handleAddToList}
-                        />
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-    </div>
+
+      <InsufficientCreditsDialog
+        open={showCreditsDialog}
+        onOpenChange={setShowCreditsDialog}
+        creditsRequired={creditsDialogInfo.required}
+        creditsAvailable={credits}
+        actionType={creditsDialogInfo.actionType}
+      />
+    </>
   );
 };
 
