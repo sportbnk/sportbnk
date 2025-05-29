@@ -12,6 +12,15 @@ import { supabase } from "@/integrations/supabase/client";
 
 type TabType = "personal" | "billing" | "subscription";
 
+interface ProfileData {
+  id: string;
+  user_id: string;
+  job_title: string | null;
+  phone: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
 interface UserData {
   name: string;
   email: string;
@@ -56,12 +65,23 @@ const UserProfile = () => {
 
     const fetchUserProfile = async () => {
       try {
-        // Create user data object from auth user metadata
+        // Get user profile from database
+        const { data: profile, error } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('user_id', user.id)
+          .maybeSingle();
+
+        if (error) {
+          console.error('Error fetching profile:', error);
+        }
+
+        // Create user data object
         const fullUserData: UserData = {
           name: user.user_metadata?.name || user.email?.split('@')[0] || "User",
           email: user.email || "",
-          phone: user.user_metadata?.phone || "",
-          job_title: user.user_metadata?.job_title || "",
+          phone: profile?.phone || user.user_metadata?.phone || "",
+          job_title: profile?.job_title || user.user_metadata?.job_title || "",
           role: "User",
           avatarUrl: user.user_metadata?.avatar_url || "",
           billing: {
@@ -101,7 +121,23 @@ const UserProfile = () => {
     if (!userData || !user) return;
     
     try {
-      // For now, just update local state since profiles table may not exist
+      // Update profile in database
+      const { error } = await supabase
+        .from('profiles')
+        .update({
+          job_title: data.role,
+          phone: data.phone,
+          updated_at: new Date().toISOString()
+        })
+        .eq('user_id', user.id);
+
+      if (error) {
+        console.error('Error updating profile:', error);
+        toast.error('Failed to update profile');
+        return;
+      }
+
+      // Update local state
       const updatedUserData = { ...userData, ...data };
       setUserData(updatedUserData);
       
