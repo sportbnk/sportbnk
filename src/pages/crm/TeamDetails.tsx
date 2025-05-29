@@ -29,11 +29,10 @@ const TeamDetails = () => {
   const { teamId } = useParams();
   const [revealedEmails, setRevealedEmails] = useState<Record<string, boolean>>({});
   const [revealedPhones, setRevealedPhones] = useState<Record<string, boolean>>({});
-  const [revealedLinkedIns, setRevealedLinkedIns] = useState<Record<string, boolean>>({});
   const [showCreditsDialog, setShowCreditsDialog] = useState(false);
   const [creditsDialogInfo, setCreditsDialogInfo] = useState<{
     required: number;
-    actionType: "email" | "phone" | "linkedin";
+    actionType: "email" | "phone";
   }>({ required: 0, actionType: "email" });
   
   const { credits } = useCredits();
@@ -73,10 +72,7 @@ const TeamDetails = () => {
             name,
             email,
             phone,
-            role,
-            email_credits_consumed,
-            phone_credits_consumed,
-            linkedin_credits_consumed
+            role
           )
         `)
         .eq('id', teamId)
@@ -95,7 +91,8 @@ const TeamDetails = () => {
     }
   };
 
-  const handleRevealEmail = (email: string, requiredCredits: number) => {
+  const handleRevealEmail = (email: string) => {
+    const requiredCredits = 2;
     if (credits < requiredCredits) {
       setCreditsDialogInfo({ required: requiredCredits, actionType: "email" });
       setShowCreditsDialog(true);
@@ -104,22 +101,14 @@ const TeamDetails = () => {
     setRevealedEmails(prev => ({ ...prev, [email]: true }));
   };
 
-  const handleRevealPhone = (phone: string, requiredCredits: number) => {
+  const handleRevealPhone = (phone: string) => {
+    const requiredCredits = 3;
     if (credits < requiredCredits) {
       setCreditsDialogInfo({ required: requiredCredits, actionType: "phone" });
       setShowCreditsDialog(true);
       return;
     }
     setRevealedPhones(prev => ({ ...prev, [phone]: true }));
-  };
-
-  const handleRevealLinkedIn = (linkedin: string, requiredCredits: number) => {
-    if (credits < requiredCredits) {
-      setCreditsDialogInfo({ required: requiredCredits, actionType: "linkedin" });
-      setShowCreditsDialog(true);
-      return;
-    }
-    setRevealedLinkedIns(prev => ({ ...prev, [linkedin]: true }));
   };
 
   const handleAddToList = (contact: any, listId: string, listName: string) => {
@@ -293,140 +282,116 @@ const TeamDetails = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {team.contacts.map((contact) => {
-                    const emailCredits = contact.email_credits_consumed || 1;
-                    const phoneCredits = contact.phone_credits_consumed || 2;
-                    const linkedinCredits = contact.linkedin_credits_consumed || 0;
-
-                    return (
-                      <TableRow key={contact.id}>
-                        <TableCell>
-                          <div className="font-medium flex items-center gap-1 text-sm">
-                            {contact.name}
-                            <TooltipProvider>
-                              <Tooltip>
-                                <TooltipTrigger>
-                                  <Flame className="h-4 w-4 text-orange-500" />
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                  <p className="text-xs">Active replier - high response rate</p>
-                                </TooltipContent>
-                              </Tooltip>
-                            </TooltipProvider>
-                          </div>
-                        </TableCell>
-                        <TableCell className="text-sm">
-                          {contact.role || 'N/A'}
-                        </TableCell>
-                        <TableCell>
-                          {contact.email ? (
-                            emailCredits === 0 || revealedEmails[contact.email] ? (
-                              <div className="flex items-center gap-1">
-                                <span className="text-xs font-mono overflow-hidden text-ellipsis">{contact.email}</span>
-                                <TooltipProvider>
-                                  <Tooltip>
-                                    <TooltipTrigger>
-                                      <ShieldCheck className="h-3.5 w-3.5 text-green-500 flex-shrink-0" />
-                                    </TooltipTrigger>
-                                    <TooltipContent>
-                                      <p className="text-xs">Verified email address</p>
-                                    </TooltipContent>
-                                  </Tooltip>
-                                </TooltipProvider>
-                              </div>
-                            ) : (
-                              <div className="flex items-center gap-1">
-                                <Mail className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
-                                <Button 
-                                  size="sm" 
-                                  variant="outline"
-                                  onClick={() => handleRevealEmail(contact.email, emailCredits)}
-                                  className="h-6 text-xs px-2"
-                                >
-                                  Reveal ({emailCredits})
-                                </Button>
-                                <TooltipProvider>
-                                  <Tooltip>
-                                    <TooltipTrigger>
-                                      <ShieldCheck className="h-3.5 w-3.5 text-green-500 flex-shrink-0" />
-                                    </TooltipTrigger>
-                                    <TooltipContent>
-                                      <p className="text-xs">Verified email address</p>
-                                    </TooltipContent>
-                                  </Tooltip>
-                                </TooltipProvider>
-                              </div>
-                            )
+                  {team.contacts.map((contact) => (
+                    <TableRow key={contact.id}>
+                      <TableCell>
+                        <div className="font-medium flex items-center gap-1 text-sm">
+                          {contact.name}
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger>
+                                <Flame className="h-4 w-4 text-orange-500" />
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p className="text-xs">Active replier - high response rate</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-sm">
+                        {contact.role || 'N/A'}
+                      </TableCell>
+                      <TableCell>
+                        {contact.email ? (
+                          revealedEmails[contact.email] ? (
+                            <div className="flex items-center gap-1">
+                              <span className="text-xs font-mono overflow-hidden text-ellipsis">{contact.email}</span>
+                              <TooltipProvider>
+                                <Tooltip>
+                                  <TooltipTrigger>
+                                    <ShieldCheck className="h-3.5 w-3.5 text-green-500 flex-shrink-0" />
+                                  </TooltipTrigger>
+                                  <TooltipContent>
+                                    <p className="text-xs">Verified email address</p>
+                                  </TooltipContent>
+                                </Tooltip>
+                              </TooltipProvider>
+                            </div>
                           ) : (
-                            <span className="text-xs text-muted-foreground">Not available</span>
-                          )}
-                        </TableCell>
-                        <TableCell className="hidden md:table-cell">
-                          {contact.phone ? (
-                            phoneCredits === 0 || revealedPhones[contact.phone] ? (
-                              <span className="text-xs font-mono">{contact.phone}</span>
-                            ) : (
-                              <div className="flex items-center gap-1">
-                                <Phone className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
-                                <Button 
-                                  size="sm" 
-                                  variant="outline"
-                                  onClick={() => handleRevealPhone(contact.phone!, phoneCredits)}
-                                  className="h-6 text-xs px-2"
-                                >
-                                  Reveal ({phoneCredits})
-                                </Button>
-                              </div>
-                            )
-                          ) : (
-                            <span className="text-xs text-muted-foreground">Not available</span>
-                          )}
-                        </TableCell>
-                        <TableCell className="hidden md:table-cell">
-                          {contact.linkedin ? (
-                            linkedinCredits === 0 || revealedLinkedIns[contact.linkedin] ? (
-                              <a 
-                                href={contact.linkedin} 
-                                target="_blank" 
-                                rel="noopener noreferrer" 
-                                className="flex items-center text-blue-700 hover:underline"
+                            <div className="flex items-center gap-1">
+                              <Mail className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
+                              <Button 
+                                size="sm" 
+                                variant="outline"
+                                onClick={() => handleRevealEmail(contact.email)}
+                                className="h-6 text-xs px-2"
                               >
-                                <Linkedin className="h-4 w-4" />
-                              </a>
-                            ) : (
-                              <div className="flex items-center gap-1">
-                                <Linkedin className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
-                                <Button 
-                                  size="sm" 
-                                  variant="outline"
-                                  onClick={() => handleRevealLinkedIn(contact.linkedin!, linkedinCredits)}
-                                  className="h-6 text-xs px-2"
-                                >
-                                  Reveal ({linkedinCredits})
-                                </Button>
-                              </div>
-                            )
+                                Reveal (2)
+                              </Button>
+                              <TooltipProvider>
+                                <Tooltip>
+                                  <TooltipTrigger>
+                                    <ShieldCheck className="h-3.5 w-3.5 text-green-500 flex-shrink-0" />
+                                  </TooltipTrigger>
+                                  <TooltipContent>
+                                    <p className="text-xs">Verified email address</p>
+                                  </TooltipContent>
+                                </Tooltip>
+                              </TooltipProvider>
+                            </div>
+                          )
+                        ) : (
+                          <span className="text-xs text-muted-foreground">Not available</span>
+                        )}
+                      </TableCell>
+                      <TableCell className="hidden md:table-cell">
+                        {contact.phone ? (
+                          revealedPhones[contact.phone] ? (
+                            <span className="text-xs font-mono">{contact.phone}</span>
                           ) : (
-                            <span className="text-xs text-muted-foreground">N/A</span>
-                          )}
-                        </TableCell>
-                        <TableCell>
-                          <ListSelectionPopover 
-                            contact={{
-                              id: contact.id,
-                              name: contact.name,
-                              email: contact.email,
-                              phone: contact.phone,
-                              position: contact.role,
-                              team: team.name,
-                              teamId: team.id
-                            }}
-                            onAddToList={handleAddToList}
-                          />
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
+                            <div className="flex items-center gap-1">
+                              <Phone className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
+                              <Button 
+                                size="sm" 
+                                variant="outline"
+                                onClick={() => handleRevealPhone(contact.phone!)}
+                                className="h-6 text-xs px-2"
+                              >
+                                Reveal (3)
+                              </Button>
+                            </div>
+                          )
+                        ) : (
+                          <span className="text-xs text-muted-foreground">Not available</span>
+                        )}
+                      </TableCell>
+                      <TableCell className="hidden md:table-cell">
+                        <a 
+                          href="#" 
+                          target="_blank" 
+                          rel="noopener noreferrer" 
+                          className="flex items-center text-blue-700 hover:underline"
+                        >
+                          <Linkedin className="h-4 w-4" />
+                        </a>
+                      </TableCell>
+                      <TableCell>
+                        <ListSelectionPopover 
+                          contact={{
+                            id: contact.id,
+                            name: contact.name,
+                            email: contact.email,
+                            phone: contact.phone,
+                            position: contact.role,
+                            team: team.name,
+                            teamId: team.id
+                          }}
+                          onAddToList={handleAddToList}
+                        />
+                      </TableCell>
+                    </TableRow>
+                  ))}
                 </TableBody>
               </Table>
             </CardContent>
