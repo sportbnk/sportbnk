@@ -175,7 +175,11 @@ const Lists = () => {
     }
   };
 
-  const handleRevealEmail = (email: string, requiredCredits: number = 1) => {
+  const handleRevealEmail = (email: string) => {
+    // Find the contact to get the required credits
+    const contact = activeList?.contacts.find(c => c.email === email);
+    const requiredCredits = contact?.email_credits_consumed || 1;
+    
     if (credits < requiredCredits) {
       setCreditsDialogInfo({ required: requiredCredits, actionType: "email" });
       setShowCreditsDialog(true);
@@ -184,7 +188,11 @@ const Lists = () => {
     setRevealedEmails(prev => ({ ...prev, [email]: true }));
   };
 
-  const handleRevealPhone = (phone: string, requiredCredits: number = 2) => {
+  const handleRevealPhone = (phone: string) => {
+    // Find the contact to get the required credits
+    const contact = activeList?.contacts.find(c => c.phone === phone);
+    const requiredCredits = contact?.phone_credits_consumed || 2;
+    
     if (credits < requiredCredits) {
       setCreditsDialogInfo({ required: requiredCredits, actionType: "phone" });
       setShowCreditsDialog(true);
@@ -193,7 +201,11 @@ const Lists = () => {
     setRevealedPhones(prev => ({ ...prev, [phone]: true }));
   };
 
-  const handleRevealLinkedin = (linkedin: string, requiredCredits: number = 0) => {
+  const handleRevealLinkedin = (linkedin: string) => {
+    // Find the contact to get the required credits
+    const contact = activeList?.contacts.find(c => c.linkedin === linkedin);
+    const requiredCredits = contact?.linkedin_credits_consumed || 0;
+    
     if (credits < requiredCredits) {
       setCreditsDialogInfo({ required: requiredCredits, actionType: "linkedin" });
       setShowCreditsDialog(true);
