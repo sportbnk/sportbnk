@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -23,10 +22,10 @@ export const useImageUpload = () => {
         return null;
       }
 
-      // Compress the image to keep it under 100KB
+      // Compress the image to keep it under 50KB
       console.log('Original file size:', (file.size / 1024).toFixed(2), 'KB');
       
-      const compressedFile = await compressImage(file, 10, 0.8);
+      const compressedFile = await compressImage(file, 50, 0.8);
       
       console.log('Compressed file size:', (compressedFile.size / 1024).toFixed(2), 'KB');
       
