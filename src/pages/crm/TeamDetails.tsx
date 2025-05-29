@@ -1,3 +1,4 @@
+
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -21,6 +22,7 @@ import {
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useState } from "react";
+import ListSelectionPopover from "@/components/database/ListSelectionPopover";
 
 const TeamDetails = () => {
   const { teamId } = useParams();
@@ -87,6 +89,10 @@ const TeamDetails = () => {
 
   const handleRevealPhone = (phone: string) => {
     setRevealedPhones(prev => ({ ...prev, [phone]: true }));
+  };
+
+  const handleAddToList = (contact: any, listId: string, listName: string) => {
+    console.log(`Added ${contact.name} to list ${listName}`);
   };
 
   if (isLoading) {
@@ -251,6 +257,7 @@ const TeamDetails = () => {
                   <TableHead>Email</TableHead>
                   <TableHead className="hidden md:table-cell">Phone</TableHead>
                   <TableHead className="hidden md:table-cell">LinkedIn</TableHead>
+                  <TableHead>Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -347,6 +354,20 @@ const TeamDetails = () => {
                       >
                         <Linkedin className="h-4 w-4" />
                       </a>
+                    </TableCell>
+                    <TableCell>
+                      <ListSelectionPopover 
+                        contact={{
+                          id: contact.id,
+                          name: contact.name,
+                          email: contact.email,
+                          phone: contact.phone,
+                          position: contact.role,
+                          team: team.name,
+                          teamId: team.id
+                        }}
+                        onAddToList={handleAddToList}
+                      />
                     </TableCell>
                   </TableRow>
                 ))}
