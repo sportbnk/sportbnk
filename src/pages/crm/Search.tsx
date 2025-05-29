@@ -1,6 +1,5 @@
-
 import React, { useState } from "react";
-import CrmLayout from "@/components/crm/CrmLayout";
+import CrmLayout from "@/layouts/CrmLayout";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search as SearchIcon, Eye, PlusCircle } from "lucide-react";
@@ -63,7 +62,7 @@ const mockTeams = [
     phone: "+15551112222",
     contacts: [],
     social: [],
-    teamEmployees: [
+    employees: [
       {
         id: "3",
         name: "Bob Williams",
@@ -98,7 +97,7 @@ const mockTeams = [
     phone: "+15555556666",
     contacts: [],
     social: [],
-    teamEmployees: [
+    employees: [
       {
         id: "4",
         name: "Charlie Brown",
@@ -125,7 +124,6 @@ const Search = () => {
 
   const [revealedEmails, setRevealedEmails] = useState<Record<string, boolean>>({});
   const [revealedPhones, setRevealedPhones] = useState<Record<string, boolean>>({});
-  const [revealedLinkedIns, setRevealedLinkedIns] = useState<Record<string, boolean>>({});
 
   const handleRevealEmail = (email: string, credits: number) => {
     setRevealedEmails(prev => ({ ...prev, [email]: true }));
@@ -135,11 +133,6 @@ const Search = () => {
   const handleRevealPhone = (phone: string, credits: number) => {
     setRevealedPhones(prev => ({ ...prev, [phone]: true }));
     toast.success(`Phone revealed! ${credits} credits used.`);
-  };
-
-  const handleRevealLinkedIn = (linkedin: string, credits: number) => {
-    setRevealedLinkedIns(prev => ({ ...prev, [linkedin]: true }));
-    toast.success(`LinkedIn revealed! ${credits} credits used.`);
   };
 
   const handleViewTeam = (teamId: number) => {
@@ -153,6 +146,13 @@ const Search = () => {
     toast.success(`${contact.name} added to ${listName}`, {
       description: "You can manage all your lists in the Lists section"
     });
+  };
+
+  const [revealedLinkedIns, setRevealedLinkedIns] = useState<Record<string, boolean>>({});
+
+  const handleRevealLinkedIn = (linkedin: string, credits: number) => {
+    setRevealedLinkedIns(prev => ({ ...prev, [linkedin]: true }));
+    toast.success(`LinkedIn revealed! ${credits} credits used.`);
   };
 
   return (
@@ -224,7 +224,7 @@ const Search = () => {
                 {showEmployees[team.id] && (
                   <div className="mt-4 border-t pt-4">
                     <ContactsView
-                      data={team.teamEmployees}
+                      data={team.employees}
                       revealedEmails={revealedEmails}
                       revealedPhones={revealedPhones}
                       revealedLinkedIns={revealedLinkedIns}
