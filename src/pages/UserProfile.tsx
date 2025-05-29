@@ -16,7 +16,6 @@ interface ProfileData {
   id: string;
   user_id: string;
   job_title: string | null;
-  phone: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -80,7 +79,7 @@ const UserProfile = () => {
         const fullUserData: UserData = {
           name: user.user_metadata?.name || user.email?.split('@')[0] || "User",
           email: user.email || "",
-          phone: profile?.phone || user.user_metadata?.phone || "",
+          phone: user.phone || user.user_metadata?.phone || "",
           job_title: profile?.job_title || user.user_metadata?.job_title || "",
           role: "User",
           avatarUrl: user.user_metadata?.avatar_url || "",
@@ -126,7 +125,6 @@ const UserProfile = () => {
         .from('profiles')
         .update({
           job_title: data.role,
-          phone: data.phone,
           updated_at: new Date().toISOString()
         })
         .eq('user_id', user.id);
