@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import PageLayout from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
@@ -8,6 +7,7 @@ import { Link } from "react-router-dom";
 import { PricingToggle } from "@/components/PricingToggle";
 import { CurrencySelector } from "@/components/CurrencySelector";
 import { useToast } from "@/hooks/use-toast";
+import { usePricing } from "@/contexts/PricingContext";
 
 const PricingCard = ({ 
   title,
@@ -106,6 +106,7 @@ const Pricing = () => {
   const [isAnnual, setIsAnnual] = useState(false);
   const [currency, setCurrency] = useState("GBP");
   const { toast } = useToast();
+  const { freeTrialFeatures, standardFeatures, proFeatures, enterpriseFeatures } = usePricing();
   
   const handleSelectPlan = (planName: string, planPrice: string) => {
     toast({
@@ -129,49 +130,6 @@ const Pricing = () => {
     return `${symbol}${convertedPrice}`;
   };
 
-  const freeTrialFeatures = [
-    "Access to basic Discover tool filters",
-    "Limited data enrichment with Boost",
-    "5 searches per day",
-    "Export up to 50 contacts per month",
-    "Email support",
-    "No credit card required",
-    "14-day access",
-  ];
-
-  const standardFeatures = [
-    "Access to Discover tool with all filters",
-    "Access to Boost for data enrichment",
-    "Unlimited searches",
-    "Export up to 1,000 contacts per month",
-    "CRM integration (HubSpot, Salesforce)",
-    "Email and chat support",
-    "Cancel anytime"
-  ];
-  
-  const proFeatures = [
-    "All Standard features",
-    "Export up to 5,000 contacts per month",
-    "Advanced data analytics dashboard",
-    "API access for custom integrations",
-    "Dedicated account manager",
-    "Priority support response",
-    "Custom training sessions",
-    "Team collaboration tools"
-  ];
-
-  const enterpriseFeatures = [
-    "All Pro features",
-    "Unlimited data exports",
-    "Custom data models and integrations",
-    "Advanced security features",
-    "Dedicated support team",
-    "SLA guarantees",
-    "Customized training program",
-    "White-labeling options",
-    "Priority feature development"
-  ];
-  
   return (
     <PageLayout pageTitle="Pricing">
       <section className="py-16 md:py-24">

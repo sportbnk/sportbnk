@@ -11,6 +11,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { CreditCard, Zap } from "lucide-react";
+import { usePricing } from "@/contexts/PricingContext";
 
 interface InsufficientCreditsDialogProps {
   open: boolean;
@@ -27,6 +28,8 @@ const InsufficientCreditsDialog = ({
   creditsAvailable,
   actionType
 }: InsufficientCreditsDialogProps) => {
+  const { proFeatures } = usePricing();
+  
   const handleUpgrade = () => {
     // Navigate to upgrade page or open upgrade modal
     window.location.href = "/pricing";
@@ -62,18 +65,12 @@ const InsufficientCreditsDialog = ({
           <div className="space-y-2">
             <p className="text-sm font-medium">Get unlimited access with Pro:</p>
             <ul className="text-sm text-gray-600 space-y-1">
-              <li className="flex items-center gap-2">
-                <Zap className="h-3 w-3 text-green-500" />
-                Unlimited contact reveals
-              </li>
-              <li className="flex items-center gap-2">
-                <Zap className="h-3 w-3 text-green-500" />
-                Advanced search filters
-              </li>
-              <li className="flex items-center gap-2">
-                <Zap className="h-3 w-3 text-green-500" />
-                Priority support
-              </li>
+              {proFeatures.slice(0, 3).map((feature, index) => (
+                <li key={index} className="flex items-center gap-2">
+                  <Zap className="h-3 w-3 text-green-500" />
+                  {feature}
+                </li>
+              ))}
             </ul>
           </div>
         </div>
