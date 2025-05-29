@@ -19,15 +19,24 @@ import {
   Settings,
   LogOut,
 } from "lucide-react";
+import { useAuth } from "@/components/auth/AuthContext";
+import { toast } from "sonner";
 
 const CrmSidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { signOut } = useAuth();
   
-  // Handle logout
-  const handleLogout = () => {
-    localStorage.removeItem("user");
-    navigate("/");
+  // Handle logout with proper Supabase signout
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      navigate("/");
+      toast.success("Logged out successfully");
+    } catch (error) {
+      console.error("Error logging out:", error);
+      toast.error("Error logging out");
+    }
   };
 
   // Handle profile navigation
