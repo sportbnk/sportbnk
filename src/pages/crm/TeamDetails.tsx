@@ -19,6 +19,7 @@ import {
   Linkedin
 } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useState } from "react";
 
 const TeamDetails = () => {
@@ -242,27 +243,38 @@ const TeamDetails = () => {
             <CardTitle>Team Contacts</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-3">
-              {team.contacts.map((contact) => (
-                <div key={contact.id} className="flex items-center justify-between p-3 border rounded-lg">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <h4 className="font-medium text-sm">{contact.name}</h4>
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger>
-                            <Flame className="h-4 w-4 text-orange-500" />
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p className="text-xs">Active replier - high response rate</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                    </div>
-                    {contact.role && (
-                      <p className="text-sm text-gray-600">{contact.role}</p>
-                    )}
-                    <div className="flex items-center gap-4 mt-2">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Role</TableHead>
+                  <TableHead>Email</TableHead>
+                  <TableHead className="hidden md:table-cell">Phone</TableHead>
+                  <TableHead className="hidden md:table-cell">LinkedIn</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {team.contacts.map((contact) => (
+                  <TableRow key={contact.id}>
+                    <TableCell>
+                      <div className="font-medium flex items-center gap-1 text-sm">
+                        {contact.name}
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger>
+                              <Flame className="h-4 w-4 text-orange-500" />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p className="text-xs">Active replier - high response rate</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-sm">
+                      {contact.role || 'N/A'}
+                    </TableCell>
+                    <TableCell>
                       {contact.email ? (
                         revealedEmails[contact.email] ? (
                           <div className="flex items-center gap-1">
@@ -302,9 +314,10 @@ const TeamDetails = () => {
                           </div>
                         )
                       ) : (
-                        <span className="text-xs text-muted-foreground">Email not available</span>
+                        <span className="text-xs text-muted-foreground">Not available</span>
                       )}
-                      
+                    </TableCell>
+                    <TableCell className="hidden md:table-cell">
                       {contact.phone ? (
                         revealedPhones[contact.phone] ? (
                           <span className="text-xs font-mono">{contact.phone}</span>
@@ -322,9 +335,10 @@ const TeamDetails = () => {
                           </div>
                         )
                       ) : (
-                        <span className="text-xs text-muted-foreground">Phone not available</span>
+                        <span className="text-xs text-muted-foreground">Not available</span>
                       )}
-                      
+                    </TableCell>
+                    <TableCell className="hidden md:table-cell">
                       <a 
                         href="#" 
                         target="_blank" 
@@ -333,11 +347,11 @@ const TeamDetails = () => {
                       >
                         <Linkedin className="h-4 w-4" />
                       </a>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           </CardContent>
         </Card>
       )}
