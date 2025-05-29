@@ -317,8 +317,7 @@ const TeamDetails = () => {
                       </TableCell>
                       <TableCell>
                         {contact.email ? (
-                          contact.email_credits_consumed === 0 ? (
-                            // Show email directly if no credits required
+                          (contact.email_credits_consumed || 0) === 0 ? (
                             <div className="flex items-center gap-1">
                               <Mail className="h-3.5 w-3.5 text-blue-500 flex-shrink-0" />
                               <span className="text-xs font-mono overflow-hidden text-ellipsis">{contact.email}</span>
@@ -335,6 +334,7 @@ const TeamDetails = () => {
                             </div>
                           ) : revealedEmails[contact.email] ? (
                             <div className="flex items-center gap-1">
+                              <Mail className="h-3.5 w-3.5 text-blue-500 flex-shrink-0" />
                               <span className="text-xs font-mono overflow-hidden text-ellipsis">{contact.email}</span>
                               <TooltipProvider>
                                 <Tooltip>
@@ -376,14 +376,16 @@ const TeamDetails = () => {
                       </TableCell>
                       <TableCell className="hidden md:table-cell">
                         {contact.phone ? (
-                          contact.phone_credits_consumed === 0 ? (
-                            // Show phone directly if no credits required
+                          (contact.phone_credits_consumed || 0) === 0 ? (
                             <div className="flex items-center gap-1">
                               <Phone className="h-3.5 w-3.5 text-blue-500 flex-shrink-0" />
                               <span className="text-xs font-mono">{contact.phone}</span>
                             </div>
                           ) : revealedPhones[contact.phone] ? (
-                            <span className="text-xs font-mono">{contact.phone}</span>
+                            <div className="flex items-center gap-1">
+                              <Phone className="h-3.5 w-3.5 text-blue-500 flex-shrink-0" />
+                              <span className="text-xs font-mono">{contact.phone}</span>
+                            </div>
                           ) : (
                             <div className="flex items-center gap-1">
                               <Phone className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
@@ -403,8 +405,7 @@ const TeamDetails = () => {
                       </TableCell>
                       <TableCell className="hidden md:table-cell">
                         {contact.linkedin ? (
-                          contact.linkedin_credits_consumed === 0 ? (
-                            // Show LinkedIn directly if no credits required
+                          (contact.linkedin_credits_consumed || 0) === 0 ? (
                             <a 
                               href={contact.linkedin} 
                               target="_blank" 
