@@ -1,3 +1,4 @@
+
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -20,11 +21,8 @@ import {
 } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { useState } from "react";
 import ListSelectionPopover from "@/components/database/ListSelectionPopover";
 import { useReveal } from "@/contexts/RevealContext";
-import InsufficientCreditsDialog from "@/components/database/InsufficientCreditsDialog";
-import { useCredits } from "@/contexts/CreditsContext";
 
 const TeamDetails = () => {
   const { teamId } = useParams();
@@ -328,98 +326,90 @@ const TeamDetails = () => {
                                 <TooltipContent>
                                   <p className="text-xs">Verified email address</p>
                                 </TooltipContent>
-                              </TooltipProvider>
-                            </div>
-                          ) : null
-                        ) : (
-                          <span className="text-xs text-muted-foreground">Not available</span>
-                        )}
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        {contact.phone ? (
-                          shouldShowContent(contact, 'phone') ? (
-                            <div className="flex items-center gap-1">
-                              <Phone className="h-3.5 w-3.5 text-blue-500 flex-shrink-0" />
-                              <span className="text-xs font-mono">{contact.phone}</span>
-                            </div>
-                          ) : shouldShowRevealButton(contact, 'phone') ? (
-                            <div className="flex items-center gap-1">
-                              <Phone className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
-                              <Button 
-                                size="sm" 
-                                variant="outline"
-                                onClick={() => handleRevealClick(contact, 'phone')}
-                                className="h-6 text-xs px-2"
-                                disabled={revealLoading}
-                              >
-                                Reveal ({contact.phone_credits_consumed})
-                              </Button>
-                            </div>
-                          ) : null
-                        ) : (
-                          <span className="text-xs text-muted-foreground">Not available</span>
-                        )}
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        {contact.linkedin ? (
-                          shouldShowContent(contact, 'linkedin') ? (
-                            <a 
-                              href={contact.linkedin} 
-                              target="_blank" 
-                              rel="noopener noreferrer" 
-                              className="flex items-center text-blue-700 hover:underline"
+                              </Tooltip>
+                            </TooltipProvider>
+                          </div>
+                        ) : null
+                      ) : (
+                        <span className="text-xs text-muted-foreground">Not available</span>
+                      )}
+                    </TableCell>
+                    <TableCell className="hidden md:table-cell">
+                      {contact.phone ? (
+                        shouldShowContent(contact, 'phone') ? (
+                          <div className="flex items-center gap-1">
+                            <Phone className="h-3.5 w-3.5 text-blue-500 flex-shrink-0" />
+                            <span className="text-xs font-mono">{contact.phone}</span>
+                          </div>
+                        ) : shouldShowRevealButton(contact, 'phone') ? (
+                          <div className="flex items-center gap-1">
+                            <Phone className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
+                            <Button 
+                              size="sm" 
+                              variant="outline"
+                              onClick={() => handleRevealClick(contact, 'phone')}
+                              className="h-6 text-xs px-2"
+                              disabled={revealLoading}
                             >
-                              <Linkedin className="h-4 w-4" />
-                            </a>
-                          ) : shouldShowRevealButton(contact, 'linkedin') ? (
-                            <div className="flex items-center gap-1">
-                              <Linkedin className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
-                              <Button 
-                                size="sm" 
-                                variant="outline"
-                                onClick={() => handleRevealClick(contact, 'linkedin')}
-                                className="h-6 text-xs px-2"
-                                disabled={revealLoading}
-                              >
-                                Reveal ({contact.linkedin_credits_consumed})
-                              </Button>
-                            </div>
-                          ) : null
-                        ) : (
-                          <span className="text-xs text-muted-foreground">N/A</span>
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        <ListSelectionPopover 
-                          contact={{
-                            id: contact.id,
-                            name: contact.name,
-                            email: contact.email,
-                            phone: contact.phone,
-                            position: contact.role,
-                            team: team.name,
-                            teamId: team.id
-                          }}
-                          onAddToList={handleAddToList}
-                        />
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
-        )}
-      </div>
-
-      <InsufficientCreditsDialog
-        open={showCreditsDialog}
-        onOpenChange={setShowCreditsDialog}
-        creditsRequired={creditsDialogInfo.required}
-        creditsAvailable={credits}
-        actionType={creditsDialogInfo.actionType}
-      />
-    </>
+                              Reveal ({contact.phone_credits_consumed})
+                            </Button>
+                          </div>
+                        ) : null
+                      ) : (
+                        <span className="text-xs text-muted-foreground">Not available</span>
+                      )}
+                    </TableCell>
+                    <TableCell className="hidden md:table-cell">
+                      {contact.linkedin ? (
+                        shouldShowContent(contact, 'linkedin') ? (
+                          <a 
+                            href={contact.linkedin} 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            className="flex items-center text-blue-700 hover:underline"
+                          >
+                            <Linkedin className="h-4 w-4" />
+                          </a>
+                        ) : shouldShowRevealButton(contact, 'linkedin') ? (
+                          <div className="flex items-center gap-1">
+                            <Linkedin className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
+                            <Button 
+                              size="sm" 
+                              variant="outline"
+                              onClick={() => handleRevealClick(contact, 'linkedin')}
+                              className="h-6 text-xs px-2"
+                              disabled={revealLoading}
+                            >
+                              Reveal ({contact.linkedin_credits_consumed})
+                            </Button>
+                          </div>
+                        ) : null
+                      ) : (
+                        <span className="text-xs text-muted-foreground">N/A</span>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      <ListSelectionPopover 
+                        contact={{
+                          id: contact.id,
+                          name: contact.name,
+                          email: contact.email,
+                          phone: contact.phone,
+                          position: contact.role,
+                          team: team.name,
+                          teamId: team.id
+                        }}
+                        onAddToList={handleAddToList}
+                      />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+      )}
+    </div>
   );
 };
 

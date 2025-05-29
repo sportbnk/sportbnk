@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Plus, Trash2, Download } from 'lucide-react';
 import {
@@ -45,8 +46,6 @@ import { toast } from "sonner";
 import { useLocation } from 'react-router-dom';
 import ContactsView from "@/components/database/ContactsView";
 import { useListsContext } from "@/contexts/ListsContext";
-import InsufficientCreditsDialog from "@/components/database/InsufficientCreditsDialog";
-import { useCredits } from "@/contexts/CreditsContext";
 
 // Define the schema for the form
 const formSchema = z.object({
@@ -338,11 +337,11 @@ const Lists = () => {
                   <AlertDialogAction onClick={handleDeleteList} className="bg-red-600 hover:bg-red-700">
                     Delete
                   </AlertDialogAction>
-                </AlertDialogContent>
-              </AlertDialog>
-            </div>
-          )}
-        </div>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </div>
+        )}
       </div>
 
       {/* List Content */}
