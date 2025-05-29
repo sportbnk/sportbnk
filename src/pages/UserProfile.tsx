@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import PageLayout from "@/components/PageLayout";
@@ -7,24 +8,27 @@ import PersonalInfo from "@/components/profile/PersonalInfo";
 import BillingInfo from "@/components/profile/BillingInfo";
 import SubscriptionPlan from "@/components/profile/SubscriptionPlan";
 import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/components/auth/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 
 type TabType = "personal" | "billing" | "subscription";
+
+interface ProfileData {
+  id: string;
+  user_id: string;
+  job_title: string | null;
+  phone: string | null;
+  created_at: string;
+  updated_at: string;
+}
 
 interface UserData {
   name: string;
   email: string;
   phone?: string;
   role?: string;
+  job_title?: string;
   avatarUrl?: string;
-  company?: {
-    name: string;
-    position?: string;
-    website?: string;
-    size?: string;
-    industry?: string;
-    address?: string;
-  };
   billing?: {
     plan: string;
     price: string;
@@ -52,150 +56,99 @@ const UserProfile = () => {
   const [activeTab, setActiveTab] = useState<TabType>("personal");
   const [userData, setUserData] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
+  const { user } = useAuth();
   
   useEffect(() => {
-    // Get user data from localStorage
-    const storedUser = localStorage.getItem("user");
-    
-    if (!storedUser) {
-      // If no user is logged in, redirect to login
-      navigate("/");
+    if (!user) {
+      setLoading(false);
       return;
     }
-    
-    try {
-      const parsedUser = JSON.parse(storedUser);
-      
-      // Create a full user object with default values for missing fields
-      const fullUserData: UserData = {
-        name: parsedUser.name || "User",
-        email: parsedUser.email || "user@example.com",
-        phone: parsedUser.phone || "",
-        role: parsedUser.role || "Free Trial User",
-        avatarUrl: parsedUser.avatarUrl || "",
-        company: parsedUser.company || {
-          name: "",
-          position: "",
-          website: "",
-          size: "",
-          industry: "",
-          address: ""
-        },
-        billing: parsedUser.billing || {
-          plan: parsedUser.isFreeTrial ? "Free Trial" : "Basic",
-          price: parsedUser.isFreeTrial ? "$0/month" : "$49/month",
-          nextBillingDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toLocaleDateString(),
-          paymentMethod: "None",
-          invoices: []
-        },
-        subscription: parsedUser.subscription || {
-          plan: parsedUser.isFreeTrial ? "Free Trial" : "Basic",
-          status: "Active",
-          startDate: new Date().toLocaleDateString(),
-          nextRenewalDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toLocaleDateString(),
-          features: parsedUser.isFreeTrial ? 
-            ["5 searches per day", "Limited data enrichment", "Basic filters", "Export up to 50 contacts"] : 
-            ["100 searches per day", "Standard data enrichment", "Advanced filters", "Export up to 1000 contacts"],
-          creditUsage: 0,
-          creditTotal: parsedUser.isFreeTrial ? 50 : 1000
+
+    const fetchUserProfile = async () => {
+      try {
+        // Get user profile from database
+        const { data: profile, error } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('user_id', user.id)
+          .single();
+
+        if (error && error.code !== 'PGRST116') {
+          console.error('Error fetching profile:', error);
         }
-      };
-      
-      setUserData(fullUserData);
-    } catch (e) {
-      console.error("Failed to parse user data", e);
-      // Create a default user object if parsing fails
-      setUserData({
-        name: "User",
-        email: "user@example.com",
-        role: "Free Trial User",
-        company: {
-          name: "",
-          position: "",
-          website: "",
-          size: "",
-          industry: "",
-          address: ""
-        },
-        billing: {
-          plan: "Free Trial",
-          price: "$0/month",
-          nextBillingDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toLocaleDateString(),
-          paymentMethod: "None",
-          invoices: []
-        },
-        subscription: {
-          plan: "Free Trial",
-          status: "Active",
-          startDate: new Date().toLocaleDateString(),
-          nextRenewalDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toLocaleDateString(),
-          features: ["5 searches per day", "Limited data enrichment", "Basic filters", "Export up to 50 contacts"],
-          creditUsage: 0,
-          creditTotal: 50
-        }
-      });
-    } finally {
-      setLoading(false);
-    }
-  }, [navigate]);
+
+        // Create user data object
+        const fullUserData: UserData = {
+          name: user.user_metadata?.name || user.email?.split('@')[0] || "User",
+          email: user.email || "",
+          phone: profile?.phone || "",
+          job_title: profile?.job_title || "",
+          role: "User",
+          avatarUrl: user.user_metadata?.avatar_url || "",
+          billing: {
+            plan: "Free Trial",
+            price: "$0/month",
+            nextBillingDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toLocaleDateString(),
+            paymentMethod: "None",
+            invoices: []
+          },
+          subscription: {
+            plan: "Free Trial",
+            status: "Active",
+            startDate: new Date(user.created_at || Date.now()).toLocaleDateString(),
+            nextRenewalDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toLocaleDateString(),
+            features: ["5 searches per day", "Limited data enrichment", "Basic filters", "Export up to 50 contacts"],
+            creditUsage: 0,
+            creditTotal: 50
+          }
+        };
+        
+        setUserData(fullUserData);
+      } catch (e) {
+        console.error("Failed to fetch user data", e);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserProfile();
+  }, [user]);
 
   const handleTabChange = (tab: TabType) => {
     setActiveTab(tab);
   };
 
-  const handleProfileUpdate = (data: any) => {
-    if (!userData) return;
+  const handleProfileUpdate = async (data: any) => {
+    if (!userData || !user) return;
     
-    // Update the user data in state
-    const updatedUserData = { ...userData, ...data };
-    setUserData(updatedUserData);
-    
-    // Update the user data in localStorage
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      try {
-        const parsedUser = JSON.parse(storedUser);
-        const updatedStoredUser = { ...parsedUser, ...data };
-        localStorage.setItem("user", JSON.stringify(updatedStoredUser));
-      } catch (e) {
-        console.error("Failed to update user data", e);
-      }
-    }
-    
-    toast.success("Profile updated", {
-      description: "Your profile information has been updated successfully."
-    });
-  };
+    try {
+      // Update profile in database
+      const { error } = await supabase
+        .from('profiles')
+        .update({
+          job_title: data.job_title,
+          phone: data.phone,
+          updated_at: new Date().toISOString()
+        })
+        .eq('user_id', user.id);
 
-  const handleCompanyUpdate = (data: any) => {
-    if (!userData) return;
-    
-    // Update the company data in state
-    const updatedUserData = { 
-      ...userData, 
-      company: { ...userData.company, ...data } 
-    };
-    setUserData(updatedUserData);
-    
-    // Update the company data in localStorage
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      try {
-        const parsedUser = JSON.parse(storedUser);
-        const updatedStoredUser = { 
-          ...parsedUser, 
-          company: { ...parsedUser.company, ...data } 
-        };
-        localStorage.setItem("user", JSON.stringify(updatedStoredUser));
-      } catch (e) {
-        console.error("Failed to update company data", e);
+      if (error) {
+        console.error('Error updating profile:', error);
+        toast.error('Failed to update profile');
+        return;
       }
+
+      // Update local state
+      const updatedUserData = { ...userData, ...data };
+      setUserData(updatedUserData);
+      
+      toast.success("Profile updated", {
+        description: "Your profile information has been updated successfully."
+      });
+    } catch (e) {
+      console.error("Failed to update profile", e);
+      toast.error('Failed to update profile');
     }
-    
-    toast.success("Company information updated", {
-      description: "Your company information has been updated successfully."
-    });
   };
 
   if (loading) {
@@ -203,14 +156,14 @@ const UserProfile = () => {
       <PageLayout>
         <div className="container mx-auto py-8 pt-32 max-w-5xl">
           <div className="flex justify-center items-center h-64">
-            <p>Loading profile...</p>
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-sportbnk-green"></div>
           </div>
         </div>
       </PageLayout>
     );
   }
 
-  if (!userData) {
+  if (!userData || !user) {
     return (
       <PageLayout>
         <div className="container mx-auto py-8 pt-32 max-w-5xl">

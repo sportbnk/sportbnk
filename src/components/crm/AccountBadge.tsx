@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { 
   DropdownMenu, 
@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { LogOut, Settings, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/components/auth/AuthContext";
 
 interface AccountBadgeProps {
   name?: string;
@@ -21,34 +22,20 @@ interface AccountBadgeProps {
 
 const AccountBadge = ({ name: propName, email: propEmail, avatarUrl }: AccountBadgeProps) => {
   const navigate = useNavigate();
-  const [userData, setUserData] = useState<{name: string, email: string} | null>(null);
+  const { user, signOut } = useAuth();
   
-  useEffect(() => {
-    // Get user data from localStorage
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      try {
-        const parsedUser = JSON.parse(storedUser);
-        setUserData({
-          name: parsedUser.name || "User",
-          email: parsedUser.email || "user@example.com"
-        });
-      } catch (e) {
-        console.error("Failed to parse user data", e);
-      }
-    }
-  }, []);
-  
-  // Use props if provided, otherwise use data from localStorage
-  const name = propName || userData?.name || "User";
-  const email = propEmail || userData?.email || "user@example.com";
+  // Use props if provided, otherwise use data from auth context
+  const name = propName || user?.user_metadata?.name || user?.email?.split('@')[0] || "User";
+  const email = propEmail || user?.email || "user@example.com";
   
   // Handle logout
-  const handleLogout = () => {
-    // Clear user data from localStorage
-    localStorage.removeItem("user");
-    // Redirect to home page
-    navigate("/");
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      navigate("/");
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
   };
 
   // Handle profile navigation
