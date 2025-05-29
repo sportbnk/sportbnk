@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { 
@@ -31,10 +30,10 @@ const AccountBadge = ({ name: propName, email: propEmail, avatarUrl: propAvatarU
   const name = propName || user?.user_metadata?.name || user?.email?.split('@')[0] || "User";
   const email = propEmail || user?.email || "user@example.com";
 
-  // Fetch avatar from database when component mounts
+  // Always fetch latest avatar from database on mount (don't rely on props or cache)
   useEffect(() => {
-    if (!propAvatarUrl && user) {
-      const fetchAvatar = async () => {
+    const fetchLatestAvatar = async () => {
+      if (user) {
         const { data: profile } = await supabase
           .from('profiles')
           .select('avatar_url')
@@ -43,11 +42,13 @@ const AccountBadge = ({ name: propName, email: propEmail, avatarUrl: propAvatarU
         
         if (profile?.avatar_url) {
           setAvatarUrl(profile.avatar_url);
+        } else if (propAvatarUrl) {
+          setAvatarUrl(propAvatarUrl);
         }
-      };
-      
-      fetchAvatar();
-    }
+      }
+    };
+
+    fetchLatestAvatar();
   }, [user, propAvatarUrl]);
 
   // Listen for avatar updates from other components

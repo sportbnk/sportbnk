@@ -66,7 +66,7 @@ const UserProfile = () => {
 
     const fetchUserProfile = async () => {
       try {
-        // Get user profile from database
+        // Always fetch latest profile data from database
         const { data: profile, error } = await supabase
           .from('profiles')
           .select('*')
@@ -77,14 +77,14 @@ const UserProfile = () => {
           console.error('Error fetching profile:', error);
         }
 
-        // Create user data object using job_title and avatar_url from profiles table
+        // Create user data object using latest data from profiles table
         const fullUserData: UserData = {
           name: user.user_metadata?.name || user.email?.split('@')[0] || "User",
           email: user.email || "",
           phone: user.phone || user.user_metadata?.phone || "",
           job_title: profile?.job_title || "",
           role: profile?.job_title || "User",
-          avatarUrl: profile?.avatar_url || user.user_metadata?.avatar_url || "",
+          avatarUrl: profile?.avatar_url || "", // Always use latest avatar from database
           billing: {
             plan: "Free Trial",
             price: "$0/month",

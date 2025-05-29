@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/components/auth/AuthContext";
 
 interface ProfileHeaderProps {
   name: string;
@@ -12,11 +14,28 @@ interface ProfileHeaderProps {
 
 const ProfileHeader = ({ name, email, role, avatarUrl: initialAvatarUrl }: ProfileHeaderProps) => {
   const [avatarUrl, setAvatarUrl] = useState<string | undefined>(initialAvatarUrl);
+  const { user } = useAuth();
 
-  // Update avatar when prop changes
+  // Fetch latest avatar from database on mount
   useEffect(() => {
-    setAvatarUrl(initialAvatarUrl);
-  }, [initialAvatarUrl]);
+    const fetchLatestAvatar = async () => {
+      if (user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('avatar_url')
+          .eq('user_id', user.id)
+          .maybeSingle();
+        
+        if (profile?.avatar_url) {
+          setAvatarUrl(profile.avatar_url);
+        } else {
+          setAvatarUrl(initialAvatarUrl);
+        }
+      }
+    };
+
+    fetchLatestAvatar();
+  }, [user, initialAvatarUrl]);
 
   // Listen for avatar updates from other components
   useEffect(() => {
