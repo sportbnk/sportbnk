@@ -1,5 +1,6 @@
+
 import React, { useState } from "react";
-import CrmLayout from "@/layouts/CrmLayout";
+import CrmLayout from "@/components/crm/CrmLayout";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search as SearchIcon, Eye, PlusCircle } from "lucide-react";
@@ -53,7 +54,6 @@ const mockTeams = [
     city: "New York",
     country: "USA",
     revenue: 1000000,
-    employees: 500,
     logo: "https://via.placeholder.com/100",
     description: "Leading basketball organization",
     founded: "1950",
@@ -88,7 +88,6 @@ const mockTeams = [
     city: "Los Angeles",
     country: "USA",
     revenue: 500000,
-    employees: 250,
     logo: "https://via.placeholder.com/100",
     description: "Amateur football organization",
     founded: "1980",
