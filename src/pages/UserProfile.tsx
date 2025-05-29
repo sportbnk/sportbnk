@@ -75,13 +75,13 @@ const UserProfile = () => {
           console.error('Error fetching profile:', error);
         }
 
-        // Create user data object
+        // Create user data object using job_title from profiles table
         const fullUserData: UserData = {
           name: user.user_metadata?.name || user.email?.split('@')[0] || "User",
           email: user.email || "",
           phone: user.phone || user.user_metadata?.phone || "",
-          job_title: profile?.job_title || user.user_metadata?.job_title || "",
-          role: "User",
+          job_title: profile?.job_title || "", // Use job_title from profiles table
+          role: profile?.job_title || "User", // Use job_title as role too
           avatarUrl: user.user_metadata?.avatar_url || "",
           billing: {
             plan: "Free Trial",
@@ -124,7 +124,7 @@ const UserProfile = () => {
       const { error } = await supabase
         .from('profiles')
         .update({
-          job_title: data.role,
+          job_title: data.role, // Map the 'role' field from the form to 'job_title' in database
           updated_at: new Date().toISOString()
         })
         .eq('user_id', user.id);
@@ -136,7 +136,12 @@ const UserProfile = () => {
       }
 
       // Update local state
-      const updatedUserData = { ...userData, ...data };
+      const updatedUserData = { 
+        ...userData, 
+        ...data,
+        job_title: data.role, // Ensure job_title is updated in local state
+        role: data.role
+      };
       setUserData(updatedUserData);
       
       toast.success("Profile updated", {
@@ -181,7 +186,7 @@ const UserProfile = () => {
         <ProfileHeader 
           name={userData.name} 
           email={userData.email} 
-          role={userData.role || ""} 
+          role={userData.job_title || userData.role || ""} 
         />
         
         <ProfileTabs activeTab={activeTab} onTabChange={handleTabChange} />
