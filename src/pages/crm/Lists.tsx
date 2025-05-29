@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect } from "react";
-import CrmLayout from "@/components/crm/CrmLayout";
+import CrmLayout from "@/components/CrmLayout";
 import { Button } from "@/components/ui/button";
 import { Plus, List as ListIcon, MoreHorizontal, Eye, Edit, Trash } from "lucide-react";
 import {
@@ -59,25 +58,19 @@ const Lists = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("lists")
-        .select("*, created_at, updated_at")
+        .select("*")
         .order("created_at", { ascending: false });
       if (error) {
         toast.error(error.message);
         throw error;
       }
-      return data.map(list => ({
-        ...list,
-        updated_at: list.updated_at || list.created_at
-      })) as List[];
+      return data as List[];
     },
   });
 
   // Create or update list mutation
-  const createOrUpdateListMutation = useMutation({
-    mutationFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("User not authenticated");
-
+  const createOrUpdateListMutation = useMutation(
+    async () => {
       if (editingList) {
         // Update list
         const { data, error } = await supabase
@@ -95,7 +88,6 @@ const Lists = () => {
           {
             name: listName,
             description: listDescription,
-            profile_id: user.id,
           },
         ]);
         if (error) {
@@ -105,19 +97,21 @@ const Lists = () => {
         return data;
       }
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["lists"] });
-      setShowCreateDialog(false);
-      setEditingList(null);
-      setListName("");
-      setListDescription("");
-      toast.success(editingList ? "List updated!" : "List created!");
-    },
-  });
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["lists"] });
+        setShowCreateDialog(false);
+        setEditingList(null);
+        setListName("");
+        setListDescription("");
+        toast.success(editingList ? "List updated!" : "List created!");
+      },
+    }
+  );
 
   // Delete list mutation
-  const deleteListMutation = useMutation({
-    mutationFn: async (id: string) => {
+  const deleteListMutation = useMutation(
+    async (id: string) => {
       const { data, error } = await supabase.from("lists").delete().eq("id", id);
       if (error) {
         toast.error(error.message);
@@ -125,11 +119,13 @@ const Lists = () => {
       }
       return data;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["lists"] });
-      toast.success("List deleted!");
-    },
-  });
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["lists"] });
+        toast.success("List deleted!");
+      },
+    }
+  );
 
   const handleCreateList = () => {
     setEditingList(null);
@@ -144,7 +140,7 @@ const Lists = () => {
 
     // Fetch contacts for the selected list
     const { data, error } = await supabase
-      .from("list_items")
+      .from("list_contacts")
       .select("contact_id")
       .eq("list_id", list.id);
 
@@ -229,8 +225,6 @@ const Lists = () => {
                         <DropdownMenuItem onClick={(e) => {
                           e.stopPropagation();
                           setEditingList(list);
-                          setListName(list.name);
-                          setListDescription(list.description || "");
                           setShowCreateDialog(true);
                         }}>
                           <Edit className="h-4 w-4 mr-2" />
@@ -327,15 +321,15 @@ const Lists = () => {
                 />
               </div>
             </div>
-            <div className="flex justify-end gap-2">
+            <div className="flex justify-end">
               <Button variant="secondary" onClick={() => setShowCreateDialog(false)}>
                 Cancel
               </Button>
               <Button
                 onClick={handleSaveList}
-                disabled={createOrUpdateListMutation.isPending}
+                disabled={createOrUpdateListMutation.isLoading}
               >
-                {createOrUpdateListMutation.isPending ? (
+                {createOrUpdateListMutation.isLoading ? (
                   "Saving..."
                 ) : editingList ? (
                   "Update List"
