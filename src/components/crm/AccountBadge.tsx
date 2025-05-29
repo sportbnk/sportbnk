@@ -33,16 +33,25 @@ const AccountBadge = ({ name: propName, email: propEmail, avatarUrl: propAvatarU
   // Always fetch latest avatar from database on mount (don't rely on props or cache)
   useEffect(() => {
     const fetchLatestAvatar = async () => {
+      console.log('AccountBadge: User object from auth:', user);
+      console.log('AccountBadge: Prop avatar URL:', propAvatarUrl);
+      
       if (user) {
-        const { data: profile } = await supabase
+        console.log('AccountBadge: Fetching profile for user ID:', user.id);
+        const { data: profile, error } = await supabase
           .from('profiles')
           .select('avatar_url')
           .eq('user_id', user.id)
           .maybeSingle();
         
+        console.log('AccountBadge: Profile data from database:', profile);
+        console.log('AccountBadge: Database query error:', error);
+        
         if (profile?.avatar_url) {
+          console.log('AccountBadge: Setting avatar URL from database:', profile.avatar_url);
           setAvatarUrl(profile.avatar_url);
         } else if (propAvatarUrl) {
+          console.log('AccountBadge: No avatar in database, using prop:', propAvatarUrl);
           setAvatarUrl(propAvatarUrl);
         }
       }
@@ -54,7 +63,7 @@ const AccountBadge = ({ name: propName, email: propEmail, avatarUrl: propAvatarU
   // Listen for avatar updates from other components
   useEffect(() => {
     const handleAvatarUpdate = (event: CustomEvent) => {
-      console.log('Avatar update received:', event.detail.avatarUrl);
+      console.log('AccountBadge: Avatar update received:', event.detail.avatarUrl);
       setAvatarUrl(event.detail.avatarUrl);
     };
 
@@ -64,6 +73,8 @@ const AccountBadge = ({ name: propName, email: propEmail, avatarUrl: propAvatarU
       window.removeEventListener('avatarUpdated', handleAvatarUpdate as EventListener);
     };
   }, []);
+
+  console.log('AccountBadge: Current avatar URL being displayed:', avatarUrl);
   
   // Handle logout
   const handleLogout = async () => {

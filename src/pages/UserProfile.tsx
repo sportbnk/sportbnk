@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import PageLayout from "@/components/PageLayout";
@@ -66,12 +65,18 @@ const UserProfile = () => {
 
     const fetchUserProfile = async () => {
       try {
+        console.log('UserProfile: User object from auth on mount:', user);
+        console.log('UserProfile: User metadata:', user.user_metadata);
+        
         // Always fetch latest profile data from database
         const { data: profile, error } = await supabase
           .from('profiles')
           .select('*')
           .eq('user_id', user.id)
           .maybeSingle();
+
+        console.log('UserProfile: Profile data from database:', profile);
+        console.log('UserProfile: Database query error:', error);
 
         if (error) {
           console.error('Error fetching profile:', error);
@@ -102,6 +107,9 @@ const UserProfile = () => {
             creditTotal: 50
           }
         };
+        
+        console.log('UserProfile: Final user data object:', fullUserData);
+        console.log('UserProfile: Avatar URL being set:', fullUserData.avatarUrl);
         
         setUserData(fullUserData);
       } catch (e) {

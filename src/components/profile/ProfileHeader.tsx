@@ -19,16 +19,25 @@ const ProfileHeader = ({ name, email, role, avatarUrl: initialAvatarUrl }: Profi
   // Fetch latest avatar from database on mount
   useEffect(() => {
     const fetchLatestAvatar = async () => {
+      console.log('ProfileHeader: User object from auth:', user);
+      console.log('ProfileHeader: Initial avatar URL prop:', initialAvatarUrl);
+      
       if (user) {
-        const { data: profile } = await supabase
+        console.log('ProfileHeader: Fetching profile for user ID:', user.id);
+        const { data: profile, error } = await supabase
           .from('profiles')
           .select('avatar_url')
           .eq('user_id', user.id)
           .maybeSingle();
         
+        console.log('ProfileHeader: Profile data from database:', profile);
+        console.log('ProfileHeader: Database query error:', error);
+        
         if (profile?.avatar_url) {
+          console.log('ProfileHeader: Setting avatar URL from database:', profile.avatar_url);
           setAvatarUrl(profile.avatar_url);
         } else {
+          console.log('ProfileHeader: No avatar in database, using initial prop:', initialAvatarUrl);
           setAvatarUrl(initialAvatarUrl);
         }
       }
@@ -50,6 +59,8 @@ const ProfileHeader = ({ name, email, role, avatarUrl: initialAvatarUrl }: Profi
       window.removeEventListener('avatarUpdated', handleAvatarUpdate as EventListener);
     };
   }, []);
+
+  console.log('ProfileHeader: Current avatar URL being displayed:', avatarUrl);
 
   return (
     <Card className="mb-6">
