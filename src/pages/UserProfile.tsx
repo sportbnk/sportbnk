@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+
+import React, { useState, useEffect, useRef } from "react";
 import { Helmet } from "react-helmet-async";
 import PageLayout from "@/components/PageLayout";
 import ProfileHeader from "@/components/profile/ProfileHeader";
@@ -56,19 +57,20 @@ const UserProfile = () => {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
+  const fetchedRef = useRef(false);
   
   useEffect(() => {
-    if (!user) {
-      setLoading(false);
+    if (!user || fetchedRef.current) {
+      if (!user) setLoading(false);
       return;
     }
 
     const fetchUserProfile = async () => {
       try {
-        console.log('UserProfile: User object from auth on mount:', user);
-        console.log('UserProfile: User metadata:', user.user_metadata);
+        console.log('UserProfile: Fetching profile data once for user:', user.id);
+        fetchedRef.current = true;
         
-        // Always fetch latest profile data from database
+        // Fetch latest profile data from database
         const { data: profile, error } = await supabase
           .from('profiles')
           .select('*')
@@ -76,7 +78,6 @@ const UserProfile = () => {
           .maybeSingle();
 
         console.log('UserProfile: Profile data from database:', profile);
-        console.log('UserProfile: Database query error:', error);
 
         if (error) {
           console.error('Error fetching profile:', error);
@@ -89,7 +90,7 @@ const UserProfile = () => {
           phone: user.phone || user.user_metadata?.phone || "",
           job_title: profile?.job_title || "",
           role: profile?.job_title || "User",
-          avatarUrl: profile?.avatar_url || "", // Always use latest avatar from database
+          avatarUrl: profile?.avatar_url || "",
           billing: {
             plan: "Free Trial",
             price: "$0/month",
@@ -109,7 +110,6 @@ const UserProfile = () => {
         };
         
         console.log('UserProfile: Final user data object:', fullUserData);
-        console.log('UserProfile: Avatar URL being set:', fullUserData.avatarUrl);
         
         setUserData(fullUserData);
       } catch (e) {
@@ -120,7 +120,7 @@ const UserProfile = () => {
     };
 
     fetchUserProfile();
-  }, [user]);
+  }, [user?.id]); // Only depend on user.id, not the entire user object
 
   const handleTabChange = (tab: TabType) => {
     setActiveTab(tab);
