@@ -242,7 +242,7 @@ const Navbar = () => {
                 <Link to="/book-demo">Book A Demo</Link>
               </Button>
 
-              {user && <AccountBadge />}
+              {user && <AccountBadge showEmail={false} />}
             </div>
 
             <button 
@@ -372,7 +372,7 @@ const Navbar = () => {
 
               {user && (
                 <div className="w-full">
-                  <AccountBadge />
+                  <AccountBadge showEmail={false} />
                 </div>
               )}
             </div>

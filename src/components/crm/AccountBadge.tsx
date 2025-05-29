@@ -18,9 +18,10 @@ interface AccountBadgeProps {
   name?: string;
   email?: string;
   avatarUrl?: string;
+  showEmail?: boolean;
 }
 
-const AccountBadge = ({ name: propName, email: propEmail, avatarUrl }: AccountBadgeProps) => {
+const AccountBadge = ({ name: propName, email: propEmail, avatarUrl, showEmail = true }: AccountBadgeProps) => {
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
   
@@ -58,7 +59,7 @@ const AccountBadge = ({ name: propName, email: propEmail, avatarUrl }: AccountBa
           </Avatar>
           <div className="flex flex-col items-start text-sm">
             <span className="font-medium">{name}</span>
-            <span className="text-xs text-muted-foreground">{email}</span>
+            {showEmail && <span className="text-xs text-muted-foreground">{email}</span>}
           </div>
         </Button>
       </DropdownMenuTrigger>
