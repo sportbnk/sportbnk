@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { SignInDialog } from '@/components/SignInDialog';
-import { AccountBadge } from '@/components/crm/AccountBadge';
+import AccountBadge from '@/components/crm/AccountBadge';
 import { useAuth } from '@/components/auth/AuthContext';
 import {
   NavigationMenu,
