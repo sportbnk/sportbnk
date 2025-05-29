@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/components/auth/AuthContext";
@@ -114,23 +113,34 @@ export const ListsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         id: list.id,
         name: list.name,
         description: list.description,
-        contacts: list.list_items?.map((item: any) => ({
-          id: item.contacts.id,
-          name: item.contacts.name,
-          email: item.contacts.email,
-          phone: item.contacts.phone,
-          position: item.contacts.role,
-          team: item.contacts.teams?.name || '',
-          teamId: item.contacts.teams?.id,
-          linkedin: item.contacts.linkedin,
-          verified: false,
-          activeReplier: false,
-          email_credits_consumed: item.contacts.email_credits_consumed || 1,
-          phone_credits_consumed: item.contacts.phone_credits_consumed || 2,
-          linkedin_credits_consumed: item.contacts.linkedin_credits_consumed || 0
-        })) || []
+        contacts: list.list_items?.map((item: any) => {
+          console.log('Raw contact data from DB:', {
+            name: item.contacts.name,
+            email_credits_consumed: item.contacts.email_credits_consumed,
+            phone_credits_consumed: item.contacts.phone_credits_consumed,
+            linkedin_credits_consumed: item.contacts.linkedin_credits_consumed
+          });
+          
+          return {
+            id: item.contacts.id,
+            name: item.contacts.name,
+            email: item.contacts.email,
+            phone: item.contacts.phone,
+            position: item.contacts.role,
+            team: item.contacts.teams?.name || '',
+            teamId: item.contacts.teams?.id,
+            linkedin: item.contacts.linkedin,
+            verified: false,
+            activeReplier: false,
+            // Use nullish coalescing (??) instead of logical OR (||) to preserve 0 values
+            email_credits_consumed: item.contacts.email_credits_consumed ?? 1,
+            phone_credits_consumed: item.contacts.phone_credits_consumed ?? 2,
+            linkedin_credits_consumed: item.contacts.linkedin_credits_consumed ?? 0
+          };
+        }) || []
       })) || [];
 
+      console.log('Transformed lists data:', transformedLists);
       setLists(transformedLists);
     } catch (error) {
       console.error('Error loading lists:', error);
