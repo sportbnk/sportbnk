@@ -1,5 +1,6 @@
+
 import React, { useState } from "react";
-import CrmLayout from "@/layouts/CrmLayout";
+import CrmLayout from "@/components/crm/CrmLayout";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search as SearchIcon, Eye, PlusCircle } from "lucide-react";
@@ -53,7 +54,6 @@ const mockTeams = [
     city: "New York",
     country: "USA",
     revenue: 1000000,
-    employees: 500,
     logo: "https://via.placeholder.com/100",
     description: "Leading basketball organization",
     founded: "1950",
@@ -124,6 +124,7 @@ const Search = () => {
 
   const [revealedEmails, setRevealedEmails] = useState<Record<string, boolean>>({});
   const [revealedPhones, setRevealedPhones] = useState<Record<string, boolean>>({});
+  const [revealedLinkedIns, setRevealedLinkedIns] = useState<Record<string, boolean>>({});
 
   const handleRevealEmail = (email: string, credits: number) => {
     setRevealedEmails(prev => ({ ...prev, [email]: true }));
@@ -133,6 +134,11 @@ const Search = () => {
   const handleRevealPhone = (phone: string, credits: number) => {
     setRevealedPhones(prev => ({ ...prev, [phone]: true }));
     toast.success(`Phone revealed! ${credits} credits used.`);
+  };
+
+  const handleRevealLinkedIn = (linkedin: string, credits: number) => {
+    setRevealedLinkedIns(prev => ({ ...prev, [linkedin]: true }));
+    toast.success(`LinkedIn revealed! ${credits} credits used.`);
   };
 
   const handleViewTeam = (teamId: number) => {
@@ -146,13 +152,6 @@ const Search = () => {
     toast.success(`${contact.name} added to ${listName}`, {
       description: "You can manage all your lists in the Lists section"
     });
-  };
-
-  const [revealedLinkedIns, setRevealedLinkedIns] = useState<Record<string, boolean>>({});
-
-  const handleRevealLinkedIn = (linkedin: string, credits: number) => {
-    setRevealedLinkedIns(prev => ({ ...prev, [linkedin]: true }));
-    toast.success(`LinkedIn revealed! ${credits} credits used.`);
   };
 
   return (

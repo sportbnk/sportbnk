@@ -1,5 +1,6 @@
+
 import React, { useState, useEffect } from "react";
-import CrmLayout from "@/components/CrmLayout";
+import CrmLayout from "@/components/crm/CrmLayout";
 import { Button } from "@/components/ui/button";
 import { Plus, List as ListIcon, MoreHorizontal, Eye, Edit, Trash } from "lucide-react";
 import {
@@ -37,7 +38,6 @@ interface List {
   name: string;
   description?: string;
   created_at: string;
-  updated_at: string;
   contact_count?: number;
 }
 
@@ -69,8 +69,8 @@ const Lists = () => {
   });
 
   // Create or update list mutation
-  const createOrUpdateListMutation = useMutation(
-    async () => {
+  const createOrUpdateListMutation = useMutation({
+    mutationFn: async () => {
       if (editingList) {
         // Update list
         const { data, error } = await supabase
@@ -97,21 +97,19 @@ const Lists = () => {
         return data;
       }
     },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["lists"] });
-        setShowCreateDialog(false);
-        setEditingList(null);
-        setListName("");
-        setListDescription("");
-        toast.success(editingList ? "List updated!" : "List created!");
-      },
-    }
-  );
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["lists"] });
+      setShowCreateDialog(false);
+      setEditingList(null);
+      setListName("");
+      setListDescription("");
+      toast.success(editingList ? "List updated!" : "List created!");
+    },
+  });
 
   // Delete list mutation
-  const deleteListMutation = useMutation(
-    async (id: string) => {
+  const deleteListMutation = useMutation({
+    mutationFn: async (id: string) => {
       const { data, error } = await supabase.from("lists").delete().eq("id", id);
       if (error) {
         toast.error(error.message);
@@ -119,13 +117,11 @@ const Lists = () => {
       }
       return data;
     },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["lists"] });
-        toast.success("List deleted!");
-      },
-    }
-  );
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["lists"] });
+      toast.success("List deleted!");
+    },
+  });
 
   const handleCreateList = () => {
     setEditingList(null);
@@ -140,7 +136,7 @@ const Lists = () => {
 
     // Fetch contacts for the selected list
     const { data, error } = await supabase
-      .from("list_contacts")
+      .from("list_items")
       .select("contact_id")
       .eq("list_id", list.id);
 
@@ -251,7 +247,7 @@ const Lists = () => {
                 <CardContent>
                   <div className="flex items-center justify-between text-sm text-muted-foreground">
                     <span>{list.contact_count || 0} contacts</span>
-                    <span>Updated {new Date(list.updated_at).toLocaleDateString()}</span>
+                    <span>Updated {new Date(list.created_at).toLocaleDateString()}</span>
                   </div>
                 </CardContent>
               </Card>
@@ -327,9 +323,9 @@ const Lists = () => {
               </Button>
               <Button
                 onClick={handleSaveList}
-                disabled={createOrUpdateListMutation.isLoading}
+                disabled={createOrUpdateListMutation.isPending}
               >
-                {createOrUpdateListMutation.isLoading ? (
+                {createOrUpdateListMutation.isPending ? (
                   "Saving..."
                 ) : editingList ? (
                   "Update List"
