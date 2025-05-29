@@ -1,9 +1,12 @@
+
 import { useState, useEffect } from 'react';
 import { Menu, X, ChevronDown, Package, BarChart3, Building, BookOpen, DollarSign, Calendar, Users, Rocket, Shield, Briefcase, Newspaper, Phone, BookmarkPlus, Users2, FileText, Video, Headphones, Clipboard, MessageSquare, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { SignInDialog } from '@/components/SignInDialog';
+import { AccountBadge } from '@/components/crm/AccountBadge';
+import { useAuth } from '@/components/auth/AuthContext';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -24,6 +27,7 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   useEffect(() => {
     setIsMobileMenuOpen(false);
@@ -229,7 +233,7 @@ const Navbar = () => {
             </NavigationMenu>
 
             <div className="hidden md:flex items-center space-x-3">
-              <SignInDialog triggerClassName="px-4 py-2 text-sm" />
+              {!user && <SignInDialog triggerClassName="px-4 py-2 text-sm" />}
               
               <Button 
                 className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white rounded-md items-center"
@@ -237,6 +241,8 @@ const Navbar = () => {
               >
                 <Link to="/book-demo">Book A Demo</Link>
               </Button>
+
+              {user && <AccountBadge />}
             </div>
 
             <button 
@@ -355,7 +361,7 @@ const Navbar = () => {
             </div>
             
             <div className="flex flex-col space-y-3 mt-4">
-              <SignInDialog triggerClassName="w-full justify-center" />
+              {!user && <SignInDialog triggerClassName="w-full justify-center" />}
               
               <Button 
                 className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white rounded-md w-full flex items-center justify-center"
@@ -363,6 +369,12 @@ const Navbar = () => {
               >
                 <Link to="/book-demo">Book A Demo</Link>
               </Button>
+
+              {user && (
+                <div className="w-full">
+                  <AccountBadge />
+                </div>
+              )}
             </div>
           </div>
         </div>
