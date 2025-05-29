@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import ContactsView from "@/components/database/ContactsView";
 import ContactsFilters from "@/components/database/ContactsFilters";
@@ -7,10 +6,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 
-// Mock data for testing
+// Mock data for testing - updated to use string IDs
 const dummyData = [
   {
-    id: 1,
+    id: "1",
     name: "John Smith",
     position: "Marketing Director",
     team: "Forest Green Rovers FC",
@@ -24,7 +23,7 @@ const dummyData = [
     activeReplier: true
   },
   {
-    id: 2,
+    id: "2",
     name: "Sarah Johnson",
     position: "Operations Manager",
     team: "Aberavon Rugby",
@@ -35,7 +34,7 @@ const dummyData = [
     verified: true
   },
   {
-    id: 3,
+    id: "3",
     name: "Michael Chen",
     position: "Head Coach",
     team: "ZAG SKIS",
@@ -114,8 +113,8 @@ const ContactDatabase = () => {
     }
   };
 
-  // Handler for removing a contact from a list
-  const handleRemoveFromList = (contactId: number) => {
+  // Handler for removing a contact from a list - updated to accept string ID
+  const handleRemoveFromList = (contactId: string) => {
     setSavedList(savedList.filter(contact => contact.id !== contactId));
     toast.info("Contact removed from your list.");
   };
