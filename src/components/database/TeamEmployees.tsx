@@ -24,6 +24,9 @@ interface Employee {
   linkedin?: string;
   verified?: boolean;
   activeReplier?: boolean;
+  email_credits_consumed?: number;
+  phone_credits_consumed?: number;
+  linkedin_credits_consumed?: number;
 }
 
 interface TeamEmployee {
@@ -37,8 +40,10 @@ interface TeamEmployeesProps {
   selectedTeam: TeamEmployee | null;
   revealedEmails: Record<string, boolean>;
   revealedPhones: Record<string, boolean>;
-  onRevealEmail: (email: string) => void;
-  onRevealPhone: (phone: string) => void;
+  revealedLinkedIns: Record<string, boolean>;
+  onRevealEmail: (email: string, credits: number) => void;
+  onRevealPhone: (phone: string, credits: number) => void;
+  onRevealLinkedIn: (linkedin: string, credits: number) => void;
   onCloseEmployees?: () => void;
 }
 
@@ -46,8 +51,10 @@ const TeamEmployees = ({
   selectedTeam,
   revealedEmails,
   revealedPhones,
+  revealedLinkedIns,
   onRevealEmail,
   onRevealPhone,
+  onRevealLinkedIn,
   onCloseEmployees
 }: TeamEmployeesProps) => {
   if (!selectedTeam) {
@@ -81,116 +88,140 @@ const TeamEmployees = ({
               </TableCell>
             </TableRow>
           ) : (
-            selectedTeam.employees.map((employee) => (
-              <TableRow key={employee.id}>
-                <TableCell>
-                  <div className="font-medium flex items-center gap-1 text-sm">
-                    {employee.name}
-                    {employee.activeReplier && (
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger>
-                            <Flame className="h-4 w-4 text-orange-500" />
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p className="text-xs">Active replier - high response rate</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
+            selectedTeam.employees.map((employee) => {
+              const emailCredits = employee.email_credits_consumed || 1;
+              const phoneCredits = employee.phone_credits_consumed || 2;
+              const linkedinCredits = employee.linkedin_credits_consumed || 0;
+
+              return (
+                <TableRow key={employee.id}>
+                  <TableCell>
+                    <div className="font-medium flex items-center gap-1 text-sm">
+                      {employee.name}
+                      {employee.activeReplier && (
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger>
+                              <Flame className="h-4 w-4 text-orange-500" />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p className="text-xs">Active replier - high response rate</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      )}
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-sm">{employee.position}</TableCell>
+                  <TableCell>
+                    {employee.email ? (
+                      emailCredits === 0 || revealedEmails[employee.email] ? (
+                        <div className="flex items-center gap-1">
+                          <Mail className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
+                          <span className="text-xs font-mono overflow-hidden text-ellipsis">{employee.email}</span>
+                          {employee.verified && (
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger>
+                                  <ShieldCheck className="h-3.5 w-3.5 text-green-500 flex-shrink-0" />
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  <p className="text-xs">Verified email address</p>
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                          )}
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-1">
+                          <Mail className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            onClick={() => onRevealEmail(employee.email, emailCredits)}
+                            className="h-6 text-xs px-2"
+                          >
+                            Reveal ({emailCredits})
+                          </Button>
+                          {employee.verified && (
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger>
+                                  <ShieldCheck className="h-3.5 w-3.5 text-green-500 flex-shrink-0" />
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  <p className="text-xs">Verified email address</p>
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                          )}
+                        </div>
+                      )
+                    ) : (
+                      <span className="text-xs text-muted-foreground">Not available</span>
                     )}
-                  </div>
-                </TableCell>
-                <TableCell className="text-sm">{employee.position}</TableCell>
-                <TableCell>
-                  {employee.email ? (
-                    revealedEmails[employee.email] ? (
-                      <div className="flex items-center gap-1">
-                        <span className="text-xs font-mono overflow-hidden text-ellipsis">{employee.email}</span>
-                        {employee.verified && (
-                          <TooltipProvider>
-                            <Tooltip>
-                              <TooltipTrigger>
-                                <ShieldCheck className="h-3.5 w-3.5 text-green-500 flex-shrink-0" />
-                              </TooltipTrigger>
-                              <TooltipContent>
-                                <p className="text-xs">Verified email address</p>
-                              </TooltipContent>
-                            </Tooltip>
-                          </TooltipProvider>
-                        )}
-                      </div>
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    {employee.phone ? (
+                      phoneCredits === 0 || revealedPhones[employee.phone] ? (
+                        <div className="flex items-center gap-1">
+                          <Phone className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
+                          <span className="text-xs font-mono">{employee.phone}</span>
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-1">
+                          <Phone className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            onClick={() => onRevealPhone(employee.phone!, phoneCredits)}
+                            className="h-6 text-xs px-2"
+                          >
+                            Reveal ({phoneCredits})
+                          </Button>
+                        </div>
+                      )
                     ) : (
-                      <div className="flex items-center gap-1">
-                        <Mail className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
-                        <Button 
-                          size="sm" 
-                          variant="outline"
-                          onClick={() => onRevealEmail(employee.email)}
-                          className="h-6 text-xs px-2"
+                      <span className="text-xs text-muted-foreground">Not available</span>
+                    )}
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    {employee.linkedin ? (
+                      linkedinCredits === 0 || revealedLinkedIns[employee.linkedin] ? (
+                        <a 
+                          href={employee.linkedin} 
+                          target="_blank" 
+                          rel="noopener noreferrer" 
+                          className="flex items-center text-blue-700 hover:underline"
                         >
-                          Reveal (2)
-                        </Button>
-                        {employee.verified && (
-                          <TooltipProvider>
-                            <Tooltip>
-                              <TooltipTrigger>
-                                <ShieldCheck className="h-3.5 w-3.5 text-green-500 flex-shrink-0" />
-                              </TooltipTrigger>
-                              <TooltipContent>
-                                <p className="text-xs">Verified email address</p>
-                              </TooltipContent>
-                            </Tooltip>
-                          </TooltipProvider>
-                        )}
-                      </div>
-                    )
-                  ) : (
-                    <span className="text-xs text-muted-foreground">Not available</span>
-                  )}
-                </TableCell>
-                <TableCell className="hidden md:table-cell">
-                  {employee.phone ? (
-                    revealedPhones[employee.phone] ? (
-                      <span className="text-xs font-mono">{employee.phone}</span>
+                          <Linkedin className="h-4 w-4" />
+                        </a>
+                      ) : (
+                        <div className="flex items-center gap-1">
+                          <Linkedin className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            onClick={() => onRevealLinkedIn(employee.linkedin!, linkedinCredits)}
+                            className="h-6 text-xs px-2"
+                          >
+                            Reveal ({linkedinCredits})
+                          </Button>
+                        </div>
+                      )
                     ) : (
-                      <div className="flex items-center gap-1">
-                        <Phone className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
-                        <Button 
-                          size="sm" 
-                          variant="outline"
-                          onClick={() => onRevealPhone(employee.phone!)}
-                          className="h-6 text-xs px-2"
-                        >
-                          Reveal (3)
-                        </Button>
-                      </div>
-                    )
-                  ) : (
-                    <span className="text-xs text-muted-foreground">Not available</span>
-                  )}
-                </TableCell>
-                <TableCell className="hidden md:table-cell">
-                  {employee.linkedin ? (
-                    <a 
-                      href={employee.linkedin} 
-                      target="_blank" 
-                      rel="noopener noreferrer" 
-                      className="flex items-center text-blue-700 hover:underline"
-                    >
-                      <Linkedin className="h-4 w-4" />
-                    </a>
-                  ) : (
-                    <span className="text-xs text-muted-foreground">N/A</span>
-                  )}
-                </TableCell>
-                <TableCell className="text-right">
-                  <ListSelectionPopover
-                    onAddToList={handleAddToList}
-                    contact={employee}
-                  />
-                </TableCell>
-              </TableRow>
-            ))
+                      <span className="text-xs text-muted-foreground">N/A</span>
+                    )}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <ListSelectionPopover
+                      onAddToList={handleAddToList}
+                      contact={employee}
+                    />
+                  </TableCell>
+                </TableRow>
+              );
+            })
           )}
         </TableBody>
       </Table>

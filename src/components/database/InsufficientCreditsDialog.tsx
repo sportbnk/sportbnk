@@ -18,7 +18,7 @@ interface InsufficientCreditsDialogProps {
   onOpenChange: (open: boolean) => void;
   creditsRequired: number;
   creditsAvailable: number;
-  actionType: "email" | "phone";
+  actionType: "email" | "phone" | "linkedin";
 }
 
 const InsufficientCreditsDialog = ({
@@ -33,6 +33,19 @@ const InsufficientCreditsDialog = ({
   const handleUpgrade = () => {
     // Navigate to upgrade page or open upgrade modal
     window.location.href = "/pricing";
+  };
+
+  const getActionText = () => {
+    switch (actionType) {
+      case "email":
+        return "email";
+      case "phone":
+        return "phone number";
+      case "linkedin":
+        return "LinkedIn profile";
+      default:
+        return "contact information";
+    }
   };
 
   return (
@@ -55,7 +68,7 @@ const InsufficientCreditsDialog = ({
         <div className="py-4 space-y-3">
           <div className="bg-gray-50 rounded-lg p-4">
             <p className="text-sm font-medium text-gray-900">
-              Revealing this {actionType} requires {creditsRequired} credits
+              Revealing this {getActionText()} requires {creditsRequired} credits
             </p>
             <p className="text-sm text-gray-600 mt-1">
               You currently have {creditsAvailable} credits remaining
