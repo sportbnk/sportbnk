@@ -18,7 +18,7 @@ interface InsufficientCreditsDialogProps {
   onOpenChange: (open: boolean) => void;
   creditsRequired: number;
   creditsAvailable: number;
-  actionType: "email" | "phone";
+  actionType: "email" | "phone" | "linkedin";
 }
 
 const InsufficientCreditsDialog = ({
