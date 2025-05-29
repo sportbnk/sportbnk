@@ -1,3 +1,4 @@
+
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -29,10 +30,11 @@ const TeamDetails = () => {
   const { teamId } = useParams();
   const [revealedEmails, setRevealedEmails] = useState<Record<string, boolean>>({});
   const [revealedPhones, setRevealedPhones] = useState<Record<string, boolean>>({});
+  const [revealedLinkedins, setRevealedLinkedins] = useState<Record<string, boolean>>({});
   const [showCreditsDialog, setShowCreditsDialog] = useState(false);
   const [creditsDialogInfo, setCreditsDialogInfo] = useState<{
     required: number;
-    actionType: "email" | "phone";
+    actionType: "email" | "phone" | "linkedin";
   }>({ required: 0, actionType: "email" });
   
   const { credits } = useCredits();
@@ -72,7 +74,11 @@ const TeamDetails = () => {
             name,
             email,
             phone,
-            role
+            role,
+            linkedin,
+            email_credits_consumed,
+            phone_credits_consumed,
+            linkedin_credits_consumed
           )
         `)
         .eq('id', teamId)
@@ -91,8 +97,7 @@ const TeamDetails = () => {
     }
   };
 
-  const handleRevealEmail = (email: string) => {
-    const requiredCredits = 2;
+  const handleRevealEmail = (email: string, requiredCredits: number) => {
     if (credits < requiredCredits) {
       setCreditsDialogInfo({ required: requiredCredits, actionType: "email" });
       setShowCreditsDialog(true);
@@ -101,14 +106,22 @@ const TeamDetails = () => {
     setRevealedEmails(prev => ({ ...prev, [email]: true }));
   };
 
-  const handleRevealPhone = (phone: string) => {
-    const requiredCredits = 3;
+  const handleRevealPhone = (phone: string, requiredCredits: number) => {
     if (credits < requiredCredits) {
       setCreditsDialogInfo({ required: requiredCredits, actionType: "phone" });
       setShowCreditsDialog(true);
       return;
     }
     setRevealedPhones(prev => ({ ...prev, [phone]: true }));
+  };
+
+  const handleRevealLinkedin = (linkedin: string, requiredCredits: number) => {
+    if (credits < requiredCredits) {
+      setCreditsDialogInfo({ required: requiredCredits, actionType: "linkedin" });
+      setShowCreditsDialog(true);
+      return;
+    }
+    setRevealedLinkedins(prev => ({ ...prev, [linkedin]: true }));
   };
 
   const handleAddToList = (contact: any, listId: string, listName: string) => {
@@ -304,7 +317,23 @@ const TeamDetails = () => {
                       </TableCell>
                       <TableCell>
                         {contact.email ? (
-                          revealedEmails[contact.email] ? (
+                          contact.email_credits_consumed === 0 ? (
+                            // Show email directly if no credits required
+                            <div className="flex items-center gap-1">
+                              <Mail className="h-3.5 w-3.5 text-blue-500 flex-shrink-0" />
+                              <span className="text-xs font-mono overflow-hidden text-ellipsis">{contact.email}</span>
+                              <TooltipProvider>
+                                <Tooltip>
+                                  <TooltipTrigger>
+                                    <ShieldCheck className="h-3.5 w-3.5 text-green-500 flex-shrink-0" />
+                                  </TooltipTrigger>
+                                  <TooltipContent>
+                                    <p className="text-xs">Verified email address</p>
+                                  </TooltipContent>
+                                </Tooltip>
+                              </TooltipProvider>
+                            </div>
+                          ) : revealedEmails[contact.email] ? (
                             <div className="flex items-center gap-1">
                               <span className="text-xs font-mono overflow-hidden text-ellipsis">{contact.email}</span>
                               <TooltipProvider>
@@ -324,10 +353,10 @@ const TeamDetails = () => {
                               <Button 
                                 size="sm" 
                                 variant="outline"
-                                onClick={() => handleRevealEmail(contact.email)}
+                                onClick={() => handleRevealEmail(contact.email, contact.email_credits_consumed)}
                                 className="h-6 text-xs px-2"
                               >
-                                Reveal (2)
+                                Reveal ({contact.email_credits_consumed})
                               </Button>
                               <TooltipProvider>
                                 <Tooltip>
@@ -347,7 +376,13 @@ const TeamDetails = () => {
                       </TableCell>
                       <TableCell className="hidden md:table-cell">
                         {contact.phone ? (
-                          revealedPhones[contact.phone] ? (
+                          contact.phone_credits_consumed === 0 ? (
+                            // Show phone directly if no credits required
+                            <div className="flex items-center gap-1">
+                              <Phone className="h-3.5 w-3.5 text-blue-500 flex-shrink-0" />
+                              <span className="text-xs font-mono">{contact.phone}</span>
+                            </div>
+                          ) : revealedPhones[contact.phone] ? (
                             <span className="text-xs font-mono">{contact.phone}</span>
                           ) : (
                             <div className="flex items-center gap-1">
@@ -355,10 +390,10 @@ const TeamDetails = () => {
                               <Button 
                                 size="sm" 
                                 variant="outline"
-                                onClick={() => handleRevealPhone(contact.phone!)}
+                                onClick={() => handleRevealPhone(contact.phone!, contact.phone_credits_consumed)}
                                 className="h-6 text-xs px-2"
                               >
-                                Reveal (3)
+                                Reveal ({contact.phone_credits_consumed})
                               </Button>
                             </div>
                           )
@@ -367,14 +402,42 @@ const TeamDetails = () => {
                         )}
                       </TableCell>
                       <TableCell className="hidden md:table-cell">
-                        <a 
-                          href="#" 
-                          target="_blank" 
-                          rel="noopener noreferrer" 
-                          className="flex items-center text-blue-700 hover:underline"
-                        >
-                          <Linkedin className="h-4 w-4" />
-                        </a>
+                        {contact.linkedin ? (
+                          contact.linkedin_credits_consumed === 0 ? (
+                            // Show LinkedIn directly if no credits required
+                            <a 
+                              href={contact.linkedin} 
+                              target="_blank" 
+                              rel="noopener noreferrer" 
+                              className="flex items-center text-blue-700 hover:underline"
+                            >
+                              <Linkedin className="h-4 w-4" />
+                            </a>
+                          ) : revealedLinkedins[contact.linkedin] ? (
+                            <a 
+                              href={contact.linkedin} 
+                              target="_blank" 
+                              rel="noopener noreferrer" 
+                              className="flex items-center text-blue-700 hover:underline"
+                            >
+                              <Linkedin className="h-4 w-4" />
+                            </a>
+                          ) : (
+                            <div className="flex items-center gap-1">
+                              <Linkedin className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
+                              <Button 
+                                size="sm" 
+                                variant="outline"
+                                onClick={() => handleRevealLinkedin(contact.linkedin!, contact.linkedin_credits_consumed)}
+                                className="h-6 text-xs px-2"
+                              >
+                                Reveal ({contact.linkedin_credits_consumed})
+                              </Button>
+                            </div>
+                          )
+                        ) : (
+                          <span className="text-xs text-muted-foreground">N/A</span>
+                        )}
                       </TableCell>
                       <TableCell>
                         <ListSelectionPopover 
