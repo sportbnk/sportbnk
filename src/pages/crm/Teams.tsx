@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -6,6 +5,7 @@ import ContactsFilters from "@/components/database/ContactsFilters";
 import ContactsTable from "@/components/database/ContactsTable";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
+import { useCredits } from "@/contexts/CreditsContext";
 
 // DTO interfaces for proper typing
 interface SportDTO {
@@ -43,7 +43,7 @@ export default function Teams() {
     team: "all"
   });
 
-  const [credits, setCredits] = useState(250);
+  const { credits, tier } = useCredits();
 
   const { data: organizationsData, isLoading } = useQuery({
     queryKey: ['organizations', filters],
@@ -151,7 +151,8 @@ export default function Teams() {
   }, []);
 
   const handleUseCredits = (amount: number) => {
-    setCredits(prevCredits => prevCredits - amount);
+    // This will be handled by the credits context in the future
+    console.log(`Using ${amount} credits`);
   };
 
   if (isLoading) {
@@ -218,6 +219,7 @@ export default function Teams() {
             <CardContent className="px-4 py-3">
               <p className="text-2xl font-bold text-green-600">{credits}</p>
               <p className="text-sm text-muted-foreground">Credits remaining</p>
+              <p className="text-xs text-muted-foreground capitalize mb-4">({tier} plan)</p>
               <Button className="w-full mt-4 bg-blue-800 hover:bg-blue-900 text-base">
                 Upgrade
               </Button>
