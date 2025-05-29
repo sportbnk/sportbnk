@@ -1,4 +1,3 @@
-
 import React from "react";
 import {
   Table,
@@ -54,7 +53,7 @@ const TeamEmployees = ({
     return null;
   }
 
-  const handleAddToList = (employee: Employee, listId: number, listName: string) => {
+  const handleAddToList = (employee: Employee, listId: string, listName: string) => {
     toast.success(`Added ${employee.name} to ${listName}`, {
       description: "You can manage all your lists in the Lists section"
     });
@@ -185,7 +184,7 @@ const TeamEmployees = ({
                 </TableCell>
                 <TableCell className="text-right">
                   <ListSelectionPopover
-                    onAddToList={(_, listId, listName) => handleAddToList(employee, listId, listName)}
+                    onAddToList={handleAddToList}
                     contact={employee}
                   />
                 </TableCell>

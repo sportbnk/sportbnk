@@ -1,4 +1,3 @@
-
 import React from "react";
 import {
   Table,
@@ -21,8 +20,8 @@ interface ContactsViewProps {
   onRevealEmail: (email: string) => void;
   onRevealPhone: (phone: string) => void;
   onViewTeam: (teamId: number) => void;
-  onAddToList: (contact: any, listId: number, listName: string) => void;
-  onRemoveFromList?: (contactId: number) => void;
+  onAddToList: (contact: any, listId: string, listName: string) => void;
+  onRemoveFromList?: (contactId: string) => void;
   isSavedList?: boolean;
 }
 
