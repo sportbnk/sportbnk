@@ -45,6 +45,8 @@ import { useForm } from "react-hook-form"
 import { toast } from "sonner";
 import { useLocation } from 'react-router-dom';
 import ContactsView from "@/components/database/ContactsView";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/components/auth/AuthContext";
 
 // Define the schema for the form
 const formSchema = z.object({
@@ -77,10 +79,10 @@ interface ContactList {
 const Lists = () => {
   const location = useLocation();
   const [isCreateListOpen, setIsCreateListOpen] = useState(false);
-  const [lists, setLists] = useState<ContactList[]>([
-    { id: '1', name: 'My Contacts', description: 'Default contact list', contacts: [] }
-  ]);
-  const [activeList, setActiveList] = useState(lists[0]);
+  const [lists, setLists] = useState<ContactList[]>([]);
+  const [activeList, setActiveList] = useState<ContactList | null>(null);
+  const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
 
   // Form logic
   const form = useForm<z.infer<typeof formSchema>>({
@@ -91,48 +93,102 @@ const Lists = () => {
     },
   });
 
-  // Load lists from localStorage on component mount
-  useEffect(() => {
-    const storedLists = localStorage.getItem('contactLists');
-    if (storedLists) {
-      try {
-        const parsedLists = JSON.parse(storedLists);
-        if (Array.isArray(parsedLists) && parsedLists.length > 0) {
-          setLists(parsedLists);
-          setActiveList(parsedLists[0]);
-        }
-      } catch (error) {
-        console.error('Error parsing lists from localStorage:', error);
-      }
-    }
-  }, []);
+  // Load lists from database
+  const loadLists = useCallback(async () => {
+    if (!user) return;
+    
+    setLoading(true);
+    try {
+      // Get user's profile
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('user_id', user.id)
+        .single();
 
-  // Save lists to localStorage whenever lists change
+      if (!profile) {
+        console.error('No profile found for user');
+        return;
+      }
+
+      // Get all lists for this user with their contacts
+      const { data: listsData, error } = await supabase
+        .from('lists')
+        .select(`
+          id,
+          name,
+          description,
+          created_at,
+          list_items (
+            contacts (
+              id,
+              name,
+              email,
+              phone,
+              role,
+              linkedin,
+              teams (
+                id,
+                name
+              )
+            )
+          )
+        `)
+        .eq('profile_id', profile.id)
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('Error loading lists:', error);
+        toast.error('Failed to load lists');
+        return;
+      }
+
+      // Transform the data to match our interface
+      const transformedLists: ContactList[] = listsData?.map(list => ({
+        id: list.id,
+        name: list.name,
+        description: list.description,
+        contacts: list.list_items?.map((item: any) => ({
+          id: item.contacts.id,
+          name: item.contacts.name,
+          email: item.contacts.email,
+          phone: item.contacts.phone,
+          position: item.contacts.role,
+          team: item.contacts.teams?.name || '',
+          teamId: item.contacts.teams?.id,
+          linkedin: item.contacts.linkedin,
+          verified: false,
+          activeReplier: false
+        })) || []
+      })) || [];
+
+      setLists(transformedLists);
+      if (transformedLists.length > 0 && !activeList) {
+        setActiveList(transformedLists[0]);
+      }
+    } catch (error) {
+      console.error('Error loading lists:', error);
+      toast.error('Failed to load lists');
+    } finally {
+      setLoading(false);
+    }
+  }, [user, activeList]);
+
   useEffect(() => {
-    localStorage.setItem('contactLists', JSON.stringify(lists));
-  }, [lists]);
+    loadLists();
+  }, [loadLists]);
 
   // Handle contact passed from People or Teams page
   useEffect(() => {
-    if (location.state?.contactToAdd) {
+    if (location.state?.contactToAdd && activeList) {
       const contactToAdd = location.state.contactToAdd as Contact;
       
       // Check if contact is already in the active list
       const isAlreadyInList = activeList.contacts.some(c => c.id === contactToAdd.id);
       
       if (!isAlreadyInList) {
-        const updatedList = {
-          ...activeList,
-          contacts: [...activeList.contacts, contactToAdd]
-        };
-        
-        setLists(prev => prev.map(list => 
-          list.id === activeList.id ? updatedList : list
-        ));
-        
-        setActiveList(updatedList);
-        
-        toast.success(`Added ${contactToAdd.name} to ${activeList.name}`);
+        // This will be handled by the database operations in ListSelectionPopover
+        toast.info(`Please use the + button to add ${contactToAdd.name} to a list`);
       } else {
         toast.info(`${contactToAdd.name} is already in ${activeList.name}`);
       }
@@ -144,56 +200,120 @@ const Lists = () => {
 
   // Function to handle form submission
   const onSubmit = useCallback(async (values: z.infer<typeof formSchema>) => {
-    const newList: ContactList = { 
-      id: Date.now().toString(),
-      name: values.listName,
-      description: values.description,
-      contacts: []
-    };
-    
-    const updatedLists = [...lists, newList];
-    setLists(updatedLists);
-    setActiveList(newList);
-    
-    toast.success("List created successfully", {
-      description: `Your new list "${values.listName}" has been created.`
-    });
+    if (!user) {
+      toast.error("You must be logged in to create lists");
+      return;
+    }
 
-    setIsCreateListOpen(false);
-    form.reset();
-  }, [lists, form]);
+    try {
+      // Get user's profile
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('user_id', user.id)
+        .single();
+
+      if (!profile) {
+        toast.error("Profile not found");
+        return;
+      }
+
+      // Create new list
+      const { data: newList, error } = await supabase
+        .from('lists')
+        .insert({
+          profile_id: profile.id,
+          name: values.listName,
+          description: values.description
+        })
+        .select()
+        .single();
+
+      if (error) {
+        console.error('Error creating list:', error);
+        toast.error('Failed to create list');
+        return;
+      }
+
+      toast.success("List created successfully", {
+        description: `Your new list "${values.listName}" has been created.`
+      });
+
+      setIsCreateListOpen(false);
+      form.reset();
+      
+      // Reload lists and set the new list as active
+      await loadLists();
+      const newListWithContacts: ContactList = {
+        id: newList.id,
+        name: newList.name,
+        description: newList.description,
+        contacts: []
+      };
+      setActiveList(newListWithContacts);
+    } catch (error) {
+      console.error('Error creating list:', error);
+      toast.error('Failed to create list');
+    }
+  }, [user, form, loadLists]);
 
   // Function to delete list
-  const handleDeleteList = () => {
+  const handleDeleteList = async () => {
+    if (!activeList) return;
+    
     if (lists.length <= 1) {
       toast.error("Cannot delete the last list");
       return;
     }
     
-    const updatedLists = lists.filter(list => list.id !== activeList.id);
-    setLists(updatedLists);
-    setActiveList(updatedLists[0]);
-    toast.success(`Deleted list "${activeList.name}"`);
+    try {
+      const { error } = await supabase
+        .from('lists')
+        .delete()
+        .eq('id', activeList.id);
+
+      if (error) {
+        console.error('Error deleting list:', error);
+        toast.error('Failed to delete list');
+        return;
+      }
+
+      toast.success(`Deleted list "${activeList.name}"`);
+      await loadLists();
+    } catch (error) {
+      console.error('Error deleting list:', error);
+      toast.error('Failed to delete list');
+    }
   };
 
   // Function to remove contact from list
-  const handleRemoveFromList = (contactId: number) => {
-    const updatedList = {
-      ...activeList,
-      contacts: activeList.contacts.filter(contact => contact.id !== contactId.toString())
-    };
-    
-    setLists(prev => prev.map(list => 
-      list.id === activeList.id ? updatedList : list
-    ));
-    
-    setActiveList(updatedList);
-    toast.info("Contact removed from list");
+  const handleRemoveFromList = async (contactId: string) => {
+    if (!activeList) return;
+
+    try {
+      const { error } = await supabase
+        .from('list_items')
+        .delete()
+        .eq('list_id', activeList.id)
+        .eq('contact_id', contactId);
+
+      if (error) {
+        console.error('Error removing contact from list:', error);
+        toast.error('Failed to remove contact from list');
+        return;
+      }
+
+      toast.info("Contact removed from list");
+      await loadLists();
+    } catch (error) {
+      console.error('Error removing contact from list:', error);
+      toast.error('Failed to remove contact from list');
+    }
   };
 
   // Function to export to CSV
   const handleExportCSV = () => {
-    if (activeList.contacts.length === 0) {
+    if (!activeList || activeList.contacts.length === 0) {
       toast.error("No contacts to export");
       return;
     }
@@ -224,6 +344,16 @@ const Lists = () => {
     toast.success(`Exported ${activeList.contacts.length} contacts to CSV`);
   };
 
+  if (loading) {
+    return (
+      <div className="container mx-auto py-8">
+        <div className="flex justify-center items-center py-10">
+          <p className="text-muted-foreground">Loading lists...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="container mx-auto py-8">
       <div className="flex justify-between items-center mb-6">
@@ -232,7 +362,7 @@ const Lists = () => {
           <Button 
             variant="outline" 
             onClick={handleExportCSV}
-            disabled={activeList.contacts.length === 0}
+            disabled={!activeList || activeList.contacts.length === 0}
           >
             <Download className="w-4 h-4 mr-2" /> Export CSV
           </Button>
@@ -302,65 +432,71 @@ const Lists = () => {
 
       <div className="mb-6 flex flex-wrap justify-between items-center gap-4">
         <div className="flex items-center gap-4">
-          <Select
-            value={activeList.id}
-            onValueChange={(value) => {
-              const selected = lists.find(list => list.id === value);
-              if (selected) setActiveList(selected);
-            }}
-          >
-            <SelectTrigger className="w-[280px]">
-              <SelectValue placeholder="Select a list" />
-            </SelectTrigger>
-            <SelectContent>
-              {lists.map(list => (
-                <SelectItem key={list.id} value={list.id}>
-                  {list.name} ({list.contacts.length} contacts)
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          {lists.length > 0 ? (
+            <Select
+              value={activeList?.id || ''}
+              onValueChange={(value) => {
+                const selected = lists.find(list => list.id === value);
+                if (selected) setActiveList(selected);
+              }}
+            >
+              <SelectTrigger className="w-[280px]">
+                <SelectValue placeholder="Select a list" />
+              </SelectTrigger>
+              <SelectContent>
+                {lists.map(list => (
+                  <SelectItem key={list.id} value={list.id}>
+                    {list.name} ({list.contacts.length} contacts)
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          ) : (
+            <p className="text-muted-foreground">No lists found. Create your first list.</p>
+          )}
           
-          {activeList.description && (
+          {activeList?.description && (
             <span className="text-sm text-muted-foreground">
               {activeList.description}
             </span>
           )}
         </div>
         
-        <div className="flex gap-2">
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button 
-                variant="outline" 
-                className="text-red-600 hover:text-red-700"
-                disabled={lists.length <= 1}
-              >
-                <Trash2 className="h-4 w-4 mr-2" />
-                Delete List
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This will permanently delete the list "{activeList.name}" and all its contacts. This action cannot be undone.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={handleDeleteList} className="bg-red-600 hover:bg-red-700">
-                  Delete
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-        </div>
+        {activeList && (
+          <div className="flex gap-2">
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button 
+                  variant="outline" 
+                  className="text-red-600 hover:text-red-700"
+                  disabled={lists.length <= 1}
+                >
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  Delete List
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This will permanently delete the list "{activeList.name}" and all its contacts. This action cannot be undone.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={handleDeleteList} className="bg-red-600 hover:bg-red-700">
+                    Delete
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </div>
+        )}
       </div>
 
       {/* List Content */}
       <div className="bg-white rounded-lg border">
-        {activeList.contacts.length > 0 ? (
+        {activeList && activeList.contacts.length > 0 ? (
           <ContactsView 
             data={activeList.contacts}
             revealedEmails={{}}
@@ -372,14 +508,20 @@ const Lists = () => {
             onRemoveFromList={handleRemoveFromList}
             isSavedList={true}
           />
-        ) : (
+        ) : activeList ? (
           <div className="text-center py-12">
             <h3 className="text-lg font-medium mb-2">{activeList.name}</h3>
             {activeList.description && (
               <p className="text-muted-foreground mb-4">{activeList.description}</p>
             )}
             <p className="text-muted-foreground">
-              No contacts in this list yet. Add contacts from the People or Teams pages.
+              No contacts in this list yet. Add contacts from the People page using the + button.
+            </p>
+          </div>
+        ) : (
+          <div className="text-center py-12">
+            <p className="text-muted-foreground">
+              Create your first list to get started.
             </p>
           </div>
         )}

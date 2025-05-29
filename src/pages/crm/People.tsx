@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -137,7 +136,7 @@ const People = () => {
     }
   };
 
-  const handleAddToList = (contact: any, listId: number, listName: string) => {
+  const handleAddToList = (contact: any, listId: string, listName: string) => {
     toast({
       title: "Contact Added",
       description: `${contact.name} has been added to ${listName}`,
