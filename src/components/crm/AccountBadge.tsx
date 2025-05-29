@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { 
@@ -38,14 +39,19 @@ const AccountBadge = ({ name: propName, email: propEmail, avatarUrl: propAvatarU
       
       if (user) {
         console.log('AccountBadge: Fetching profile for user ID:', user.id);
+        
+        // Add a fresh query with no cache and select all fields
         const { data: profile, error } = await supabase
           .from('profiles')
-          .select('avatar_url')
+          .select('*')  // Select all fields to see what's there
           .eq('user_id', user.id)
           .maybeSingle();
         
-        console.log('AccountBadge: Profile data from database:', profile);
+        console.log('AccountBadge: RAW Profile data from database:', profile);
         console.log('AccountBadge: Database query error:', error);
+        console.log('AccountBadge: Profile avatar_url specifically:', profile?.avatar_url);
+        console.log('AccountBadge: Profile avatar_url type:', typeof profile?.avatar_url);
+        console.log('AccountBadge: Profile avatar_url length:', profile?.avatar_url?.length);
         
         if (profile?.avatar_url) {
           console.log('AccountBadge: Setting avatar URL from database:', profile.avatar_url);
@@ -75,6 +81,9 @@ const AccountBadge = ({ name: propName, email: propEmail, avatarUrl: propAvatarU
   }, []);
 
   console.log('AccountBadge: Current avatar URL being displayed:', avatarUrl);
+  console.log('AccountBadge: Avatar URL is empty?', !avatarUrl);
+  console.log('AccountBadge: Avatar URL is undefined?', avatarUrl === undefined);
+  console.log('AccountBadge: Avatar URL is null?', avatarUrl === null);
   
   // Handle logout
   const handleLogout = async () => {

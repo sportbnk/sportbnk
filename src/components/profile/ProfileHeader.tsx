@@ -24,14 +24,19 @@ const ProfileHeader = ({ name, email, role, avatarUrl: initialAvatarUrl }: Profi
       
       if (user) {
         console.log('ProfileHeader: Fetching profile for user ID:', user.id);
+        
+        // Add a fresh query with no cache
         const { data: profile, error } = await supabase
           .from('profiles')
-          .select('avatar_url')
+          .select('*')  // Select all fields to see what's there
           .eq('user_id', user.id)
           .maybeSingle();
         
-        console.log('ProfileHeader: Profile data from database:', profile);
+        console.log('ProfileHeader: RAW Profile data from database:', profile);
         console.log('ProfileHeader: Database query error:', error);
+        console.log('ProfileHeader: Profile avatar_url specifically:', profile?.avatar_url);
+        console.log('ProfileHeader: Profile avatar_url type:', typeof profile?.avatar_url);
+        console.log('ProfileHeader: Profile avatar_url length:', profile?.avatar_url?.length);
         
         if (profile?.avatar_url) {
           console.log('ProfileHeader: Setting avatar URL from database:', profile.avatar_url);
@@ -61,6 +66,9 @@ const ProfileHeader = ({ name, email, role, avatarUrl: initialAvatarUrl }: Profi
   }, []);
 
   console.log('ProfileHeader: Current avatar URL being displayed:', avatarUrl);
+  console.log('ProfileHeader: Avatar URL is empty?', !avatarUrl);
+  console.log('ProfileHeader: Avatar URL is undefined?', avatarUrl === undefined);
+  console.log('ProfileHeader: Avatar URL is null?', avatarUrl === null);
 
   return (
     <Card className="mb-6">
