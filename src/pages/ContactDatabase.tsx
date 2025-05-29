@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import ContactsView from "@/components/database/ContactsView";
 import ContactsFilters from "@/components/database/ContactsFilters";
@@ -20,7 +21,10 @@ const dummyData = [
     linkedin: "https://linkedin.com/in/johnsmith",
     teamLogo: "https://placehold.co/100x100?text=FGR",
     verified: true,
-    activeReplier: true
+    activeReplier: true,
+    email_credits_consumed: 1,
+    phone_credits_consumed: 2,
+    linkedin_credits_consumed: 0
   },
   {
     id: "2",
@@ -31,7 +35,10 @@ const dummyData = [
     sport: "Rugby",
     email: "s.johnson@aberavonrugby.co.uk",
     teamLogo: "https://placehold.co/100x100?text=AR",
-    verified: true
+    verified: true,
+    email_credits_consumed: 1,
+    phone_credits_consumed: 2,
+    linkedin_credits_consumed: 0
   },
   {
     id: "3",
@@ -43,7 +50,10 @@ const dummyData = [
     email: "m.chen@zagskis.com",
     phone: "+33612345678",
     teamLogo: "https://placehold.co/100x100?text=ZAG",
-    activeReplier: true
+    activeReplier: true,
+    email_credits_consumed: 1,
+    phone_credits_consumed: 2,
+    linkedin_credits_consumed: 0
   }
 ];
 
@@ -51,6 +61,7 @@ const ContactDatabase = () => {
   // State for revealed emails and phones
   const [revealedEmails, setRevealedEmails] = useState<Record<string, boolean>>({});
   const [revealedPhones, setRevealedPhones] = useState<Record<string, boolean>>({});
+  const [revealedLinkedIns, setRevealedLinkedIns] = useState<Record<string, boolean>>({});
   const [savedList, setSavedList] = useState<Array<typeof dummyData[0]>>([]);
   
   // State for filters
@@ -72,27 +83,39 @@ const ContactDatabase = () => {
   const [credits, setCredits] = useState(250);
 
   // Handler for revealing emails
-  const handleRevealEmail = (email: string) => {
+  const handleRevealEmail = (email: string, requiredCredits: number) => {
     if (revealedEmails[email]) return;
     
     setRevealedEmails({
       ...revealedEmails,
       [email]: true
     });
-    setCredits(prev => prev - 2);
-    toast.success("Email revealed! 2 credits used.");
+    setCredits(prev => prev - requiredCredits);
+    toast.success(`Email revealed! ${requiredCredits} credits used.`);
   };
 
   // Handler for revealing phone numbers
-  const handleRevealPhone = (phone: string) => {
+  const handleRevealPhone = (phone: string, requiredCredits: number) => {
     if (revealedPhones[phone]) return;
     
     setRevealedPhones({
       ...revealedPhones,
       [phone]: true
     });
-    setCredits(prev => prev - 3);
-    toast.success("Phone revealed! 3 credits used.");
+    setCredits(prev => prev - requiredCredits);
+    toast.success(`Phone revealed! ${requiredCredits} credits used.`);
+  };
+
+  // Handler for revealing LinkedIn
+  const handleRevealLinkedIn = (linkedin: string, requiredCredits: number) => {
+    if (revealedLinkedIns[linkedin]) return;
+    
+    setRevealedLinkedIns({
+      ...revealedLinkedIns,
+      [linkedin]: true
+    });
+    setCredits(prev => prev - requiredCredits);
+    toast.success(`LinkedIn revealed! ${requiredCredits} credits used.`);
   };
 
   // Handler for viewing team details
@@ -102,7 +125,7 @@ const ContactDatabase = () => {
   };
 
   // Handler for adding a contact to a list
-  const handleAddToList = (contact: typeof dummyData[0]) => {
+  const handleAddToList = (contact: typeof dummyData[0], listId: string, listName: string) => {
     const isAlreadyInList = savedList.some(item => item.id === contact.id);
     
     if (!isAlreadyInList) {
@@ -195,8 +218,10 @@ const ContactDatabase = () => {
                 data={filteredData}
                 revealedEmails={revealedEmails}
                 revealedPhones={revealedPhones}
+                revealedLinkedIns={revealedLinkedIns}
                 onRevealEmail={handleRevealEmail}
                 onRevealPhone={handleRevealPhone}
+                onRevealLinkedIn={handleRevealLinkedIn}
                 onViewTeam={handleViewTeam}
                 onAddToList={handleAddToList}
                 onRemoveFromList={handleRemoveFromList}

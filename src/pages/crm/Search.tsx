@@ -1,367 +1,248 @@
+import React, { useState } from "react";
+import CrmLayout from "@/layouts/CrmLayout";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Search as SearchIcon, Eye, PlusCircle } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import ContactsView from "@/components/database/ContactsView";
+import { toast } from "sonner";
 
-import React, { useEffect, useState } from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Search as SearchIcon, Users, User, Loader } from 'lucide-react';
-import ContactsView from '@/components/database/ContactsView';
+// Mock data for contacts
+const mockContacts = [
+  {
+    id: "1",
+    name: "John Smith",
+    position: "Marketing Director",
+    team: "Acme Corp",
+    teamId: 1,
+    email: "john.smith@acme.com",
+    phone: "+15551234567",
+    linkedin: "https://www.linkedin.com/in/johnsmith",
+    verified: true,
+    activeReplier: true,
+    email_credits_consumed: 1,
+    phone_credits_consumed: 2,
+    linkedin_credits_consumed: 0
+  },
+  {
+    id: "2",
+    name: "Alice Johnson",
+    position: "Sales Manager",
+    team: "Beta Inc",
+    teamId: 2,
+    email: "alice.johnson@beta.com",
+    phone: "+15557890123",
+    linkedin: "https://www.linkedin.com/in/alicejohnson",
+    verified: false,
+    activeReplier: false,
+    email_credits_consumed: 1,
+    phone_credits_consumed: 2,
+    linkedin_credits_consumed: 0
+  },
+];
 
-// Sample data for teams
-const teamsData = [
+// Mock data for teams
+const mockTeams = [
   {
     id: 1,
-    name: "Manchester United",
-    sport: "Football",
-    country: "United Kingdom",
-    logo: "/lovable-uploads/1eb7dc35-8f3d-4a53-8727-249a31db0275.png",
-    employees: 24,
-    verified: true
+    name: "Acme Corp",
+    sport: "Basketball",
+    level: "Professional",
+    city: "New York",
+    country: "USA",
+    revenue: 1000000,
+    employees: 500,
+    logo: "https://via.placeholder.com/100",
+    description: "Leading basketball organization",
+    founded: "1950",
+    website: "https://www.acmecorp.com",
+    email: "info@acmecorp.com",
+    phone: "+15551112222",
+    contacts: [],
+    social: [],
+    employees: [
+      {
+        id: "3",
+        name: "Bob Williams",
+        position: "Team Coach",
+        team: "Acme Corp",
+        teamId: 1,
+        email: "bob.williams@acme.com",
+        phone: "+15553334444",
+        linkedin: "https://www.linkedin.com/in/bobwilliams",
+        verified: true,
+        activeReplier: true,
+        email_credits_consumed: 1,
+        phone_credits_consumed: 2,
+        linkedin_credits_consumed: 0
+      },
+    ]
   },
   {
     id: 2,
-    name: "LA Lakers",
-    sport: "Basketball",
-    country: "United States",
-    logo: "/lovable-uploads/b95abe05-7dc8-449e-91a1-c17046b01f5e.png",
-    employees: 18,
-    verified: true
-  },
-  {
-    id: 3,
-    name: "Real Madrid",
+    name: "Beta Inc",
     sport: "Football",
-    country: "Spain",
-    logo: "/lovable-uploads/5de360aa-8105-490e-bf75-94ff7ac0832d.png",
-    employees: 22,
-    verified: true
-  }
-];
-
-// Sample data for people
-const peopleData = [
-  {
-    id: 1,
-    name: "John Smith",
-    position: "Marketing Director",
-    team: "Manchester United",
-    teamId: 1,
-    sport: "Football",
-    email: "j.s******@manutd.com",
-    phone: "+44 77** *** ***",
-    teamLogo: "/lovable-uploads/1eb7dc35-8f3d-4a53-8727-249a31db0275.png",
-    verified: true,
-    activeReplier: true
+    level: "Amateur",
+    city: "Los Angeles",
+    country: "USA",
+    revenue: 500000,
+    employees: 250,
+    logo: "https://via.placeholder.com/100",
+    description: "Amateur football organization",
+    founded: "1980",
+    website: "https://www.betainc.com",
+    email: "info@betainc.com",
+    phone: "+15555556666",
+    contacts: [],
+    social: [],
+    employees: [
+      {
+        id: "4",
+        name: "Charlie Brown",
+        position: "Team Manager",
+        team: "Beta Inc",
+        teamId: 2,
+        email: "charlie.brown@beta.com",
+        phone: "+15557778888",
+        linkedin: "https://www.linkedin.com/in/charliebrown",
+        verified: false,
+        activeReplier: false,
+        email_credits_consumed: 1,
+        phone_credits_consumed: 2,
+        linkedin_credits_consumed: 0
+      },
+    ]
   },
-  {
-    id: 3,
-    name: "Michael Johnson",
-    position: "Operations Director",
-    team: "LA Lakers",
-    teamId: 2,
-    sport: "Basketball",
-    email: "m.j******@lakers.com",
-    phone: "+1 31*-***-****",
-    teamLogo: "/lovable-uploads/b95abe05-7dc8-449e-91a1-c17046b01f5e.png",
-    verified: true
-  },
-  {
-    id: 8,
-    name: "James Miller",
-    position: "Sponsorship Director",
-    team: "Real Madrid",
-    teamId: 3,
-    sport: "Football",
-    email: "j.m*****@realmadrid.es",
-    teamLogo: "/lovable-uploads/5de360aa-8105-490e-bf75-94ff7ac0832d.png",
-    verified: true,
-    activeReplier: true
-  }
 ];
 
 const Search = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const query = searchParams.get('q') || '';
-  const context = searchParams.get('context') || 'all';
-  const [searchTerm, setSearchTerm] = useState(query);
-  const [activeTab, setActiveTab] = useState(context === 'people' ? 'people' : context === 'teams' ? 'teams' : 'all');
-  const [isLoading, setIsLoading] = useState(false);
-  
-  // States for teams and people search results
-  const [teamsResults, setTeamsResults] = useState<typeof teamsData>([]);
-  const [peopleResults, setPeopleResults] = useState<typeof peopleData>([]);
-  
-  // Helper states for contacts view
+  const [searchTerm, setSearchTerm] = useState("");
+  const [activeTab, setActiveTab] = useState("contacts");
+  const [showEmployees, setShowEmployees] = useState<{ [key: number]: boolean }>({});
+
   const [revealedEmails, setRevealedEmails] = useState<Record<string, boolean>>({});
   const [revealedPhones, setRevealedPhones] = useState<Record<string, boolean>>({});
-  const [credits, setCredits] = useState(456);
-  
-  // Search function
-  useEffect(() => {
-    if (query) {
-      setIsLoading(true);
-      
-      // Simulate API search delay
-      setTimeout(() => {
-        // Search in teams
-        const filteredTeams = teamsData.filter(team => 
-          team.name.toLowerCase().includes(query.toLowerCase()) ||
-          team.sport.toLowerCase().includes(query.toLowerCase()) ||
-          team.country.toLowerCase().includes(query.toLowerCase())
-        );
-        setTeamsResults(filteredTeams);
-        
-        // Search in people
-        const filteredPeople = peopleData.filter(person => 
-          person.name.toLowerCase().includes(query.toLowerCase()) ||
-          person.position.toLowerCase().includes(query.toLowerCase()) ||
-          person.team.toLowerCase().includes(query.toLowerCase())
-        );
-        setPeopleResults(filteredPeople);
-        
-        setIsLoading(false);
-      }, 800);
-    } else {
-      setTeamsResults([]);
-      setPeopleResults([]);
-    }
-  }, [query]);
-  
-  // Handle search form submission
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchTerm.trim()) {
-      setSearchParams({ q: searchTerm.trim(), context: activeTab });
-    }
-  };
-  
-  // Handlers for ContactsView
-  const handleRevealEmail = (email: string) => {
-    if (revealedEmails[email]) return;
-    setCredits(prev => Math.max(0, prev - 2));
+
+  const handleRevealEmail = (email: string, credits: number) => {
     setRevealedEmails(prev => ({ ...prev, [email]: true }));
+    toast.success(`Email revealed! ${credits} credits used.`);
   };
-  
-  const handleRevealPhone = (phone: string) => {
-    if (revealedPhones[phone]) return;
-    setCredits(prev => Math.max(0, prev - 3));
+
+  const handleRevealPhone = (phone: string, credits: number) => {
     setRevealedPhones(prev => ({ ...prev, [phone]: true }));
+    toast.success(`Phone revealed! ${credits} credits used.`);
   };
-  
+
   const handleViewTeam = (teamId: number) => {
-    // Navigate to team details page
-    window.location.href = `/crm/teams/${teamId}`;
+    setShowEmployees(prev => ({
+      ...prev,
+      [teamId]: !prev[teamId]
+    }));
   };
-  
-  const handleAddToList = () => {
-    // Placeholder function
+
+  const handleAddToList = (contact: any, listId: string, listName: string) => {
+    toast.success(`${contact.name} added to ${listName}`, {
+      description: "You can manage all your lists in the Lists section"
+    });
   };
-  
-  const handleRemoveFromList = () => {
-    // Placeholder function
+
+  const [revealedLinkedIns, setRevealedLinkedIns] = useState<Record<string, boolean>>({});
+
+  const handleRevealLinkedIn = (linkedin: string, credits: number) => {
+    setRevealedLinkedIns(prev => ({ ...prev, [linkedin]: true }));
+    toast.success(`LinkedIn revealed! ${credits} credits used.`);
   };
-  
-  // Calculate total results
-  const totalResults = 
-    (activeTab === 'all' || activeTab === 'teams' ? teamsResults.length : 0) + 
-    (activeTab === 'all' || activeTab === 'people' ? peopleResults.length : 0);
 
   return (
-    <div className="container max-w-full px-2">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-sportbnk-navy">Search Results</h1>
-      </div>
-      
-      <div className="mb-6">
-        <form onSubmit={handleSearch} className="flex gap-2">
-          <div className="relative flex-1">
+    <CrmLayout>
+      <div className="p-6">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold">Search</h1>
+          <Button className="flex items-center gap-1">
+            <PlusCircle className="h-4 w-4" /> Add Contact
+          </Button>
+        </div>
+
+        <div className="mb-4">
+          <div className="relative">
             <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input 
-              placeholder="Search teams or people..." 
+            <Input
+              type="search"
+              placeholder="Search contacts or teams..."
               className="pl-9 focus-visible:ring-sportbnk-green"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <Button type="submit" className="bg-sportbnk-green hover:bg-sportbnk-green/90">
-            Search
-          </Button>
-        </form>
-      </div>
-      
-      {query && (
-        <div className="mb-4">
-          <p className="text-muted-foreground">
-            {isLoading 
-              ? 'Searching...' 
-              : totalResults === 0 
-                ? 'No results found' 
-                : `Found ${totalResults} results for "${query}"`}
-          </p>
         </div>
-      )}
-      
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-6">
-        <TabsList>
-          <TabsTrigger value="all" className="flex items-center gap-1">
-            All Results
-          </TabsTrigger>
-          <TabsTrigger value="teams" className="flex items-center gap-1">
-            <Users className="h-4 w-4" /> Teams ({teamsResults.length})
-          </TabsTrigger>
-          <TabsTrigger value="people" className="flex items-center gap-1">
-            <User className="h-4 w-4" /> People ({peopleResults.length})
-          </TabsTrigger>
-        </TabsList>
-        
-        <TabsContent value="all" className="mt-4 space-y-6">
-          {isLoading ? (
-            <div className="flex justify-center items-center py-12">
-              <Loader className="h-8 w-8 animate-spin text-sportbnk-green" />
-            </div>
-          ) : (
-            <>
-              {teamsResults.length > 0 && (
-                <div>
-                  <h2 className="text-xl font-semibold mb-3">Teams</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {teamsResults.map(team => (
-                      <Card key={team.id} className="overflow-hidden">
-                        <Link to={`/crm/teams/${team.id}`} className="block h-full">
-                          <div className="flex items-center p-4">
-                            <img 
-                              src={team.logo} 
-                              alt={team.name} 
-                              className="w-16 h-16 object-contain mr-3"
-                            />
-                            <div>
-                              <CardTitle className="text-base">{team.name}</CardTitle>
-                              <div className="flex items-center gap-2 mt-1">
-                                <Badge variant="outline">{team.sport}</Badge>
-                                <Badge variant="outline">{team.country}</Badge>
-                              </div>
-                              <p className="text-sm text-muted-foreground mt-2">
-                                {team.employees} team members
-                              </p>
-                            </div>
-                          </div>
-                        </Link>
-                      </Card>
-                    ))}
+
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="contacts">Contacts ({mockContacts.length})</TabsTrigger>
+            <TabsTrigger value="teams">Teams ({mockTeams.length})</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="contacts" className="space-y-4">
+            <ContactsView
+              data={mockContacts}
+              revealedEmails={revealedEmails}
+              revealedPhones={revealedPhones}
+              revealedLinkedIns={revealedLinkedIns}
+              onRevealEmail={handleRevealEmail}
+              onRevealPhone={handleRevealPhone}
+              onRevealLinkedIn={handleRevealLinkedIn}
+              onViewTeam={handleViewTeam}
+              onAddToList={handleAddToList}
+              onRemoveFromList={() => {}}
+            />
+          </TabsContent>
+
+          <TabsContent value="teams" className="space-y-4">
+            {mockTeams.map((team) => (
+              <Card key={team.id} className="p-4">
+                <CardHeader>
+                  <div className="flex justify-between items-start">
+                    <CardTitle className="text-lg font-semibold">{team.name}</CardTitle>
+                    <Badge variant="secondary">{team.sport}</Badge>
                   </div>
-                </div>
-              )}
-              
-              {peopleResults.length > 0 && (
-                <div className="mt-6">
-                  <h2 className="text-xl font-semibold mb-3">People</h2>
-                  <Card>
-                    <CardContent className="p-0">
-                      <ContactsView 
-                        data={peopleResults}
-                        revealedEmails={revealedEmails}
-                        revealedPhones={revealedPhones}
-                        onRevealEmail={handleRevealEmail}
-                        onRevealPhone={handleRevealPhone}
-                        onViewTeam={handleViewTeam}
-                        onAddToList={handleAddToList}
-                        onRemoveFromList={handleRemoveFromList}
-                      />
-                    </CardContent>
-                  </Card>
-                </div>
-              )}
-              
-              {teamsResults.length === 0 && peopleResults.length === 0 && !isLoading && (
-                <div className="py-8 text-center">
-                  <h3 className="text-lg font-medium mb-2">No results found for "{query}"</h3>
-                  <p className="text-muted-foreground">
-                    Try adjusting your search terms or browse our database directly.
+                  <p className="text-sm text-muted-foreground">{team.description}</p>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <p>
+                    <span className="font-semibold">Level:</span> {team.level}
                   </p>
-                </div>
-              )}
-            </>
-          )}
-        </TabsContent>
-        
-        <TabsContent value="teams" className="mt-4">
-          {isLoading ? (
-            <div className="flex justify-center items-center py-12">
-              <Loader className="h-8 w-8 animate-spin text-sportbnk-green" />
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {teamsResults.map(team => (
-                <Card key={team.id} className="overflow-hidden">
-                  <Link to={`/crm/teams/${team.id}`} className="block h-full">
-                    <div className="flex items-center p-4">
-                      <img 
-                        src={team.logo} 
-                        alt={team.name} 
-                        className="w-16 h-16 object-contain mr-3"
-                      />
-                      <div>
-                        <CardTitle className="text-base">{team.name}</CardTitle>
-                        <div className="flex items-center gap-2 mt-1">
-                          <Badge variant="outline">{team.sport}</Badge>
-                          <Badge variant="outline">{team.country}</Badge>
-                        </div>
-                        <p className="text-sm text-muted-foreground mt-2">
-                          {team.employees} team members
-                        </p>
-                      </div>
-                    </div>
-                  </Link>
-                </Card>
-              ))}
-              
-              {teamsResults.length === 0 && !isLoading && (
-                <div className="col-span-full py-8 text-center">
-                  <h3 className="text-lg font-medium mb-2">No teams found for "{query}"</h3>
-                  <p className="text-muted-foreground">
-                    Try adjusting your search terms or browse our teams database directly.
+                  <p>
+                    <span className="font-semibold">Location:</span> {team.city}, {team.country}
                   </p>
-                </div>
-              )}
-            </div>
-          )}
-        </TabsContent>
-        
-        <TabsContent value="people" className="mt-4">
-          {isLoading ? (
-            <div className="flex justify-center items-center py-12">
-              <Loader className="h-8 w-8 animate-spin text-sportbnk-green" />
-            </div>
-          ) : (
-            <Card>
-              <CardContent className="p-0">
-                <ContactsView 
-                  data={peopleResults}
-                  revealedEmails={revealedEmails}
-                  revealedPhones={revealedPhones}
-                  onRevealEmail={handleRevealEmail}
-                  onRevealPhone={handleRevealPhone}
-                  onViewTeam={handleViewTeam}
-                  onAddToList={handleAddToList}
-                  onRemoveFromList={handleRemoveFromList}
-                />
-              </CardContent>
-            </Card>
-          )}
-          
-          {peopleResults.length === 0 && !isLoading && (
-            <div className="py-8 text-center">
-              <h3 className="text-lg font-medium mb-2">No people found for "{query}"</h3>
-              <p className="text-muted-foreground">
-                Try adjusting your search terms or browse our people database directly.
-              </p>
-            </div>
-          )}
-        </TabsContent>
-      </Tabs>
-    </div>
+                  <Button variant="link" size="sm" onClick={() => handleViewTeam(team.id)}>
+                    {showEmployees[team.id] ? "Hide Employees" : "View Employees"}
+                  </Button>
+                </CardContent>
+                
+                {showEmployees[team.id] && (
+                  <div className="mt-4 border-t pt-4">
+                    <ContactsView
+                      data={team.employees}
+                      revealedEmails={revealedEmails}
+                      revealedPhones={revealedPhones}
+                      revealedLinkedIns={revealedLinkedIns}
+                      onRevealEmail={handleRevealEmail}
+                      onRevealPhone={handleRevealPhone}
+                      onRevealLinkedIn={handleRevealLinkedIn}
+                      onViewTeam={handleViewTeam}
+                      onAddToList={handleAddToList}
+                      onRemoveFromList={() => {}}
+                    />
+                  </div>
+                )}
+              </Card>
+            ))}
+          </TabsContent>
+        </Tabs>
+      </div>
+    </CrmLayout>
   );
 };
 
