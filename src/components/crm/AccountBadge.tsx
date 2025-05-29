@@ -146,7 +146,7 @@ const AccountBadge = ({ name: propName, email: propEmail, avatarUrl: propAvatarU
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="h-auto p-0 flex items-center gap-2">
+        <Button variant="ghost" className="h-auto px-3 py-2 flex items-center gap-2 rounded-md">
           <Avatar className="h-8 w-8">
             <AvatarImage src={avatarUrl} alt={name} />
             <AvatarFallback>{name.charAt(0)}</AvatarFallback>
