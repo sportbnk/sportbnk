@@ -1,77 +1,147 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+
+import { Toaster } from "@/components/ui/toaster";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { HelmetProvider } from 'react-helmet-async';
-import { Toaster } from "@/components/ui/toaster"
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import FaviconUpdater from './FaviconUpdater';
+import FaviconUpdater from "./components/FaviconUpdater";
+import { AuthProvider } from "./components/auth/AuthContext";
+import { CreditsProvider } from "./contexts/CreditsContext";
+import { ListsProvider } from "./contexts/ListsContext";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
+import Index from "./pages/Index";
+import Auth from "./pages/Auth";
+import NotFound from "./pages/NotFound";
+import Products from "./pages/Products";
+import Data from "./pages/Data";
+import Company from "./pages/Company";
+import Resources from "./pages/Resources";
+import Pricing from "./pages/Pricing";
+import BookDemo from "./pages/BookDemo";
+import ContactUs from "./pages/ContactUs";
+import FreeTrial from "./pages/FreeTrial";
+import ContactDatabase from "./pages/ContactDatabase";
+import CrmLayout from "./components/crm/CrmLayout";
+import Lists from "./pages/crm/Lists";
+import Teams from "./pages/crm/Teams";
+import People from "./pages/crm/People";
+import TeamDetails from "./pages/crm/TeamDetails";
+import UserProfile from "./pages/UserProfile";
+import Settings from "./pages/Settings";
+import SearchResults from "./pages/SearchResults";
+import CsvUpload from "./pages/CsvUpload";
 
-import Home from './pages/Home';
-import Dashboard from './pages/Dashboard';
-import BookDemo from './pages/BookDemo';
-import Pricing from './pages/Pricing';
-import Contact from './pages/Contact';
-import Blog from './pages/Blog';
-import BlogPost from './pages/BlogPost';
-import FreeTrial from './pages/FreeTrial';
-import Crm from './pages/crm/Crm';
-import TeamDetails from './pages/crm/TeamDetails';
-import Lists from './pages/crm/Lists';
-import Settings from './pages/Settings';
-import Profile from './pages/Profile';
-import PasswordReset from './pages/PasswordReset';
-import ComingSoon from './pages/ComingSoon';
-import Terms from './pages/Terms';
-import Privacy from './pages/Privacy';
-import NotFound from './pages/NotFound';
+// Product pages
+import Discover from "./pages/products/Discover";
+import Boost from "./pages/products/Boost";
+import Recruit from "./pages/products/Recruit";
 
-import { AuthProvider } from './contexts/AuthContext';
-import { ListsProvider } from './contexts/ListsContext';
-import { CreditsProvider } from './contexts/CreditsContext';
-import { PricingProvider } from "@/contexts/PricingContext";
+// Company sub-pages
+import About from "./pages/company/About";
+import Careers from "./pages/company/Careers";
+import PartnerProgram from "./pages/company/PartnerProgram";
+import LatestNews from "./pages/company/LatestNews";
+import ScottMcKecknieArticle from "./pages/company/ScottMcKecknieArticle";
+
+// Resources sub-pages
+import Startups from "./pages/resources/Startups";
+import Articles from "./pages/resources/Articles";
+import SportBnkVsSportBankArticle from "./pages/resources/SportBnkVsSportBankArticle";
+import Community from "./pages/resources/Community";
+import Webinars from "./pages/resources/Webinars";
+import CaseStudies from "./pages/resources/CaseStudies";
+import HelpCenter from "./pages/resources/HelpCenter";
+
+// Legal pages
+import Privacy from "./pages/legal/Privacy";
+import Terms from "./pages/legal/Terms";
+import Cookies from "./pages/legal/Cookies";
 
 const queryClient = new QueryClient();
 
-function App() {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <Router>
-        <HelmetProvider>
-          <AuthProvider>
-            <CreditsProvider>
-              <PricingProvider>
-                <ListsProvider>
-                  <div className="min-h-screen bg-background">
-                    <FaviconUpdater />
-                    <Toaster />
-                    <Routes>
-                      <Route path="/" element={<Home />} />
-                      <Route path="/dashboard" element={<Dashboard />} />
-                      <Route path="/book-demo" element={<BookDemo />} />
-                      <Route path="/pricing" element={<Pricing />} />
-                      <Route path="/contact" element={<Contact />} />
-                      <Route path="/blog" element={<Blog />} />
-                      <Route path="/blog/:id" element={<BlogPost />} />
-                      <Route path="/free-trial" element={<FreeTrial />} />
-                      <Route path="/crm" element={<Crm />} />
-                      <Route path="/crm/team/:teamId" element={<TeamDetails />} />
-                      <Route path="/crm/lists" element={<Lists />} />
-                      <Route path="/settings" element={<Settings />} />
-                      <Route path="/profile" element={<Profile />} />
-                      <Route path="/password-reset" element={<PasswordReset />} />
-                      <Route path="/coming-soon" element={<ComingSoon />} />
-                      <Route path="/terms" element={<Terms />} />
-                      <Route path="/privacy" element={<Privacy />} />
-                      <Route path="*" element={<NotFound />} />
-                    </Routes>
-                  </div>
-                </ListsProvider>
-              </PricingProvider>
-            </CreditsProvider>
-          </AuthProvider>
-        </HelmetProvider>
-      </Router>
-    </QueryClientProvider>
-  );
-}
+const App = () => (
+  <QueryClientProvider client={queryClient}>
+    <HelmetProvider>
+      <AuthProvider>
+        <CreditsProvider>
+          <ListsProvider>
+            <TooltipProvider>
+              <FaviconUpdater iconUrl="/lovable-uploads/5de360aa-8105-490e-bf75-94ff7ac0832d.png" />
+              <Toaster />
+              <Sonner />
+              <BrowserRouter>
+                <Routes>
+                  <Route path="/" element={<Index />} />
+                  <Route path="/auth" element={<Auth />} />
+                  
+                  {/* Main menu pages */}
+                  <Route path="/products" element={<Products />} />
+                  <Route path="/data" element={<Data />} />
+                  <Route path="/company" element={<Company />} />
+                  <Route path="/resources" element={<Resources />} />
+                  <Route path="/pricing" element={<Pricing />} />
+                  <Route path="/book-demo" element={<BookDemo />} />
+                  <Route path="/contact" element={<ContactUs />} />
+                  <Route path="/free-trial" element={<Navigate to="/auth?tab=signup" replace />} />
+                  
+                  {/* Protected Routes */}
+                  <Route path="/profile" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
+                  <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+                  <Route path="/search" element={<ProtectedRoute><SearchResults /></ProtectedRoute>} />
+                  <Route path="/csv-upload" element={<ProtectedRoute><CsvUpload /></ProtectedRoute>} />
+                  
+                  {/* CRM System with sidebar layout - Protected */}
+                  <Route element={<ProtectedRoute><CrmLayout /></ProtectedRoute>}>
+                    <Route path="/database" element={<Navigate to="/crm/people" replace />} />
+                    <Route path="/crm/database" element={<Navigate to="/crm/people" replace />} />
+                    <Route path="/database/lists" element={<Lists />} />
+                    <Route path="/crm/teams" element={<Teams />} />
+                    <Route path="/crm/teams/:teamId" element={<TeamDetails />} />
+                    <Route path="/crm/people" element={<People />} />
+                  </Route>
+                  
+                  {/* Product sub-pages */}
+                  <Route path="/products/discover" element={<Discover />} />
+                  <Route path="/products/boost" element={<Boost />} />
+                  <Route path="/products/recruit" element={<Recruit />} />
+                  
+                  {/* Company sub-pages */}
+                  <Route path="/company/about" element={<About />} />
+                  <Route path="/company/careers" element={<Careers />} />
+                  <Route path="/company/partner-program" element={<PartnerProgram />} />
+                  <Route path="/company/latest-news" element={<LatestNews />} />
+                  <Route path="/company/news/scott-mckecknie-advisory-shareholder" element={<ScottMcKecknieArticle />} />
+                  
+                  {/* Resources sub-pages */}
+                  <Route path="/resources/startups" element={<Startups />} />
+                  <Route path="/resources/articles" element={<Articles />} />
+                  <Route path="/resources/articles/sportbnk-vs-sportbank" element={<SportBnkVsSportBankArticle />} />
+                  <Route path="/resources/community" element={<Community />} />
+                  <Route path="/resources/webinars" element={<Webinars />} />
+                  <Route path="/resources/case-studies" element={<CaseStudies />} />
+                  <Route path="/resources/help-center" element={<HelpCenter />} />
+                  
+                  {/* Legal pages */}
+                  <Route path="/legal/privacy" element={<Privacy />} />
+                  <Route path="/legal/terms" element={<Terms />} />
+                  <Route path="/legal/cookies" element={<Cookies />} />
+                  
+                  {/* Redirect to root from any sportbnk.com URLs that should go to home */}
+                  <Route path="/index" element={<Navigate replace to="/" />} />
+                  <Route path="/index.html" element={<Navigate replace to="/" />} />
+                  <Route path="/home" element={<Navigate replace to="/" />} />
+                  
+                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </BrowserRouter>
+            </TooltipProvider>
+          </ListsProvider>
+        </CreditsProvider>
+      </AuthProvider>
+    </HelmetProvider>
+  </QueryClientProvider>
+);
 
 export default App;
