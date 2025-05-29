@@ -7,6 +7,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Camera } from "lucide-react";
 
 const personaInfoSchema = z.object({
@@ -45,87 +46,113 @@ const PersonalInfo = ({ userData, onUpdate }: PersonalInfoProps) => {
   };
 
   return (
-    <div>
-      <h2 className="text-xl font-semibold mb-6">Personal Information</h2>
-      
-      <div className="mb-8 flex justify-center">
-        <div className="relative">
-          <Avatar className="h-24 w-24">
-            <AvatarImage src={userData.avatarUrl} alt={userData.name} />
-            <AvatarFallback className="text-2xl">{userData.name.charAt(0)}</AvatarFallback>
-          </Avatar>
-          <Button variant="outline" size="icon" className="absolute bottom-0 right-0 h-8 w-8 rounded-full">
-            <Camera className="h-4 w-4" />
-          </Button>
+    <TooltipProvider>
+      <div>
+        <h2 className="text-xl font-semibold mb-6">Personal Information</h2>
+        
+        <div className="mb-8 flex justify-center">
+          <div className="relative">
+            <Avatar className="h-24 w-24">
+              <AvatarImage src={userData.avatarUrl} alt={userData.name} />
+              <AvatarFallback className="text-2xl">{userData.name.charAt(0)}</AvatarFallback>
+            </Avatar>
+            <Button variant="outline" size="icon" className="absolute bottom-0 right-0 h-8 w-8 rounded-full">
+              <Camera className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
+        
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Full Name</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Input 
+                            {...field} 
+                            type="email" 
+                            disabled 
+                            className="text-black cursor-not-allowed" 
+                          />
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Email address cannot be changed</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={form.control}
+                name="phone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Phone Number</FormLabel>
+                    <FormControl>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Input 
+                            {...field} 
+                            type="tel" 
+                            disabled 
+                            className="text-black cursor-not-allowed" 
+                          />
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Phone number cannot be changed</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={form.control}
+                name="role"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Job Title</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            
+            <div className="flex justify-end">
+              <Button type="submit">Save Changes</Button>
+            </div>
+          </form>
+        </Form>
       </div>
-      
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Full Name</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input {...field} type="email" disabled className="bg-gray-50 cursor-not-allowed" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            
-            <FormField
-              control={form.control}
-              name="phone"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Phone Number</FormLabel>
-                  <FormControl>
-                    <Input {...field} type="tel" disabled className="bg-gray-50 cursor-not-allowed" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            
-            <FormField
-              control={form.control}
-              name="role"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Job Title</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          
-          <div className="flex justify-end">
-            <Button type="submit">Save Changes</Button>
-          </div>
-        </form>
-      </Form>
-    </div>
+    </TooltipProvider>
   );
 };
 
