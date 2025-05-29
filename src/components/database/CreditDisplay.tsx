@@ -3,18 +3,31 @@ import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { CreditCard, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useCredits } from "@/contexts/CreditsContext";
 
-interface CreditDisplayProps {
-  credits: number;
-}
+const CreditDisplay = () => {
+  const { credits, tier, loading } = useCredits();
 
-const CreditDisplay = ({ credits }: CreditDisplayProps) => {
+  if (loading) {
+    return (
+      <Card className="border-sportbnk-green">
+        <CardContent className="p-4 flex flex-col sm:flex-row items-center gap-4">
+          <div className="flex items-center gap-2">
+            <CreditCard className="h-5 w-5 text-sportbnk-green" />
+            <span className="text-lg font-semibold">Loading...</span>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <Card className="border-sportbnk-green">
       <CardContent className="p-4 flex flex-col sm:flex-row items-center gap-4">
         <div className="flex items-center gap-2">
           <CreditCard className="h-5 w-5 text-sportbnk-green" />
           <span className="text-lg font-semibold">{credits} Credits</span>
+          <span className="text-sm text-muted-foreground capitalize">({tier})</span>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" size="sm" className="h-9">

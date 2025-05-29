@@ -10,9 +10,10 @@ import {
   DropdownMenuTrigger 
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { LogOut, Settings, User } from "lucide-react";
+import { LogOut, Settings, User, CreditCard } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/components/auth/AuthContext";
+import { useCredits } from "@/contexts/CreditsContext";
 import { supabase } from "@/integrations/supabase/client";
 
 interface AccountBadgeProps {
@@ -25,6 +26,7 @@ interface AccountBadgeProps {
 const AccountBadge = ({ name: propName, email: propEmail, avatarUrl: propAvatarUrl, showEmail = true }: AccountBadgeProps) => {
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
+  const { credits, tier } = useCredits();
   const [avatarUrl, setAvatarUrl] = useState<string | undefined>(propAvatarUrl);
   
   // Use props if provided, otherwise use data from auth context
@@ -154,6 +156,7 @@ const AccountBadge = ({ name: propName, email: propEmail, avatarUrl: propAvatarU
           <div className="flex flex-col items-start text-sm">
             <span className="font-medium">{name}</span>
             {showEmail && <span className="text-xs text-muted-foreground">{email}</span>}
+            <span className="text-xs text-sportbnk-green font-medium">{credits} credits</span>
           </div>
         </Button>
       </DropdownMenuTrigger>
@@ -163,6 +166,10 @@ const AccountBadge = ({ name: propName, email: propEmail, avatarUrl: propAvatarU
         <DropdownMenuItem onClick={handleProfileClick}>
           <User className="mr-2 h-4 w-4" />
           <span>Profile</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <CreditCard className="mr-2 h-4 w-4" />
+          <span>{credits} Credits ({tier})</span>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={handleSettingsClick}>
           <Settings className="mr-2 h-4 w-4" />

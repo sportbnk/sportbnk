@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -6,6 +7,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { HelmetProvider } from 'react-helmet-async';
 import FaviconUpdater from "./components/FaviconUpdater";
 import { AuthProvider } from "./components/auth/AuthContext";
+import { CreditsProvider } from "./contexts/CreditsContext";
 import { ListsProvider } from "./contexts/ListsContext";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import Index from "./pages/Index";
@@ -62,79 +64,81 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <HelmetProvider>
       <AuthProvider>
-        <ListsProvider>
-          <TooltipProvider>
-            <FaviconUpdater iconUrl="/lovable-uploads/5de360aa-8105-490e-bf75-94ff7ac0832d.png" />
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/auth" element={<Auth />} />
-                
-                {/* Main menu pages */}
-                <Route path="/products" element={<Products />} />
-                <Route path="/data" element={<Data />} />
-                <Route path="/company" element={<Company />} />
-                <Route path="/resources" element={<Resources />} />
-                <Route path="/pricing" element={<Pricing />} />
-                <Route path="/book-demo" element={<BookDemo />} />
-                <Route path="/contact" element={<ContactUs />} />
-                <Route path="/free-trial" element={<Navigate to="/auth?tab=signup" replace />} />
-                
-                {/* Protected Routes */}
-                <Route path="/profile" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
-                <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
-                <Route path="/search" element={<ProtectedRoute><SearchResults /></ProtectedRoute>} />
-                <Route path="/csv-upload" element={<ProtectedRoute><CsvUpload /></ProtectedRoute>} />
-                
-                {/* CRM System with sidebar layout - Protected */}
-                <Route element={<ProtectedRoute><CrmLayout /></ProtectedRoute>}>
-                  <Route path="/database" element={<Navigate to="/crm/people" replace />} />
-                  <Route path="/crm/database" element={<Navigate to="/crm/people" replace />} />
-                  <Route path="/database/lists" element={<Lists />} />
-                  <Route path="/crm/teams" element={<Teams />} />
-                  <Route path="/crm/teams/:teamId" element={<TeamDetails />} />
-                  <Route path="/crm/people" element={<People />} />
-                </Route>
-                
-                {/* Product sub-pages */}
-                <Route path="/products/discover" element={<Discover />} />
-                <Route path="/products/boost" element={<Boost />} />
-                <Route path="/products/recruit" element={<Recruit />} />
-                
-                {/* Company sub-pages */}
-                <Route path="/company/about" element={<About />} />
-                <Route path="/company/careers" element={<Careers />} />
-                <Route path="/company/partner-program" element={<PartnerProgram />} />
-                <Route path="/company/latest-news" element={<LatestNews />} />
-                <Route path="/company/news/scott-mckecknie-advisory-shareholder" element={<ScottMcKecknieArticle />} />
-                
-                {/* Resources sub-pages */}
-                <Route path="/resources/startups" element={<Startups />} />
-                <Route path="/resources/articles" element={<Articles />} />
-                <Route path="/resources/articles/sportbnk-vs-sportbank" element={<SportBnkVsSportBankArticle />} />
-                <Route path="/resources/community" element={<Community />} />
-                <Route path="/resources/webinars" element={<Webinars />} />
-                <Route path="/resources/case-studies" element={<CaseStudies />} />
-                <Route path="/resources/help-center" element={<HelpCenter />} />
-                
-                {/* Legal pages */}
-                <Route path="/legal/privacy" element={<Privacy />} />
-                <Route path="/legal/terms" element={<Terms />} />
-                <Route path="/legal/cookies" element={<Cookies />} />
-                
-                {/* Redirect to root from any sportbnk.com URLs that should go to home */}
-                <Route path="/index" element={<Navigate replace to="/" />} />
-                <Route path="/index.html" element={<Navigate replace to="/" />} />
-                <Route path="/home" element={<Navigate replace to="/" />} />
-                
-                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </BrowserRouter>
-          </TooltipProvider>
-        </ListsProvider>
+        <CreditsProvider>
+          <ListsProvider>
+            <TooltipProvider>
+              <FaviconUpdater iconUrl="/lovable-uploads/5de360aa-8105-490e-bf75-94ff7ac0832d.png" />
+              <Toaster />
+              <Sonner />
+              <BrowserRouter>
+                <Routes>
+                  <Route path="/" element={<Index />} />
+                  <Route path="/auth" element={<Auth />} />
+                  
+                  {/* Main menu pages */}
+                  <Route path="/products" element={<Products />} />
+                  <Route path="/data" element={<Data />} />
+                  <Route path="/company" element={<Company />} />
+                  <Route path="/resources" element={<Resources />} />
+                  <Route path="/pricing" element={<Pricing />} />
+                  <Route path="/book-demo" element={<BookDemo />} />
+                  <Route path="/contact" element={<ContactUs />} />
+                  <Route path="/free-trial" element={<Navigate to="/auth?tab=signup" replace />} />
+                  
+                  {/* Protected Routes */}
+                  <Route path="/profile" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
+                  <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+                  <Route path="/search" element={<ProtectedRoute><SearchResults /></ProtectedRoute>} />
+                  <Route path="/csv-upload" element={<ProtectedRoute><CsvUpload /></ProtectedRoute>} />
+                  
+                  {/* CRM System with sidebar layout - Protected */}
+                  <Route element={<ProtectedRoute><CrmLayout /></ProtectedRoute>}>
+                    <Route path="/database" element={<Navigate to="/crm/people" replace />} />
+                    <Route path="/crm/database" element={<Navigate to="/crm/people" replace />} />
+                    <Route path="/database/lists" element={<Lists />} />
+                    <Route path="/crm/teams" element={<Teams />} />
+                    <Route path="/crm/teams/:teamId" element={<TeamDetails />} />
+                    <Route path="/crm/people" element={<People />} />
+                  </Route>
+                  
+                  {/* Product sub-pages */}
+                  <Route path="/products/discover" element={<Discover />} />
+                  <Route path="/products/boost" element={<Boost />} />
+                  <Route path="/products/recruit" element={<Recruit />} />
+                  
+                  {/* Company sub-pages */}
+                  <Route path="/company/about" element={<About />} />
+                  <Route path="/company/careers" element={<Careers />} />
+                  <Route path="/company/partner-program" element={<PartnerProgram />} />
+                  <Route path="/company/latest-news" element={<LatestNews />} />
+                  <Route path="/company/news/scott-mckecknie-advisory-shareholder" element={<ScottMcKecknieArticle />} />
+                  
+                  {/* Resources sub-pages */}
+                  <Route path="/resources/startups" element={<Startups />} />
+                  <Route path="/resources/articles" element={<Articles />} />
+                  <Route path="/resources/articles/sportbnk-vs-sportbank" element={<SportBnkVsSportBankArticle />} />
+                  <Route path="/resources/community" element={<Community />} />
+                  <Route path="/resources/webinars" element={<Webinars />} />
+                  <Route path="/resources/case-studies" element={<CaseStudies />} />
+                  <Route path="/resources/help-center" element={<HelpCenter />} />
+                  
+                  {/* Legal pages */}
+                  <Route path="/legal/privacy" element={<Privacy />} />
+                  <Route path="/legal/terms" element={<Terms />} />
+                  <Route path="/legal/cookies" element={<Cookies />} />
+                  
+                  {/* Redirect to root from any sportbnk.com URLs that should go to home */}
+                  <Route path="/index" element={<Navigate replace to="/" />} />
+                  <Route path="/index.html" element={<Navigate replace to="/" />} />
+                  <Route path="/home" element={<Navigate replace to="/" />} />
+                  
+                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </BrowserRouter>
+            </TooltipProvider>
+          </ListsProvider>
+        </CreditsProvider>
       </AuthProvider>
     </HelmetProvider>
   </QueryClientProvider>

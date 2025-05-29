@@ -9,6 +9,7 @@ import BillingInfo from "@/components/profile/BillingInfo";
 import SubscriptionPlan from "@/components/profile/SubscriptionPlan";
 import { toast } from "sonner";
 import { useAuth } from "@/components/auth/AuthContext";
+import { useCredits } from "@/contexts/CreditsContext";
 import { supabase } from "@/integrations/supabase/client";
 
 type TabType = "personal" | "billing" | "subscription";
@@ -57,6 +58,7 @@ const UserProfile = () => {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
+  const { credits, tier, refreshCredits } = useCredits();
   const fetchedRef = useRef(false);
   
   useEffect(() => {
@@ -92,20 +94,24 @@ const UserProfile = () => {
           role: profile?.job_title || "User",
           avatarUrl: profile?.avatar_url || "",
           billing: {
-            plan: "Free Trial",
-            price: "$0/month",
+            plan: tier === 'free' ? 'Free Trial' : tier.charAt(0).toUpperCase() + tier.slice(1),
+            price: tier === 'free' ? '$0/month' : tier === 'standard' ? '$29/month' : '$99/month',
             nextBillingDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toLocaleDateString(),
-            paymentMethod: "None",
+            paymentMethod: tier === 'free' ? 'None' : 'Credit Card',
             invoices: []
           },
           subscription: {
-            plan: "Free Trial",
+            plan: tier === 'free' ? 'Free Trial' : tier.charAt(0).toUpperCase() + tier.slice(1),
             status: "Active",
             startDate: new Date(user.created_at || Date.now()).toLocaleDateString(),
             nextRenewalDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toLocaleDateString(),
-            features: ["5 searches per day", "Limited data enrichment", "Basic filters", "Export up to 50 contacts"],
-            creditUsage: 0,
-            creditTotal: 50
+            features: tier === 'free' 
+              ? ["5 searches per day", "Limited data enrichment", "Basic filters", "Export up to 50 contacts"]
+              : tier === 'standard'
+              ? ["50 searches per day", "Enhanced data enrichment", "Advanced filters", "Export up to 500 contacts"]
+              : ["Unlimited searches", "Premium data enrichment", "All filters", "Unlimited exports"],
+            creditUsage: Math.max(0, (tier === 'free' ? 50 : tier === 'standard' ? 500 : 2000) - credits),
+            creditTotal: tier === 'free' ? 50 : tier === 'standard' ? 500 : 2000
           }
         };
         
@@ -120,7 +126,7 @@ const UserProfile = () => {
     };
 
     fetchUserProfile();
-  }, [user?.id]); // Only depend on user.id, not the entire user object
+  }, [user?.id, credits, tier]); // Include credits and tier in dependencies
 
   const handleTabChange = (tab: TabType) => {
     setActiveTab(tab);
@@ -153,6 +159,9 @@ const UserProfile = () => {
         role: data.role
       };
       setUserData(updatedUserData);
+      
+      // Refresh credits in case they changed
+      await refreshCredits();
       
       toast.success("Profile updated", {
         description: "Your profile information has been updated successfully."
