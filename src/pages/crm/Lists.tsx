@@ -1,345 +1,350 @@
-import React, { useState, useEffect } from "react";
-import CrmLayout from "@/components/CrmLayout";
-import { Button } from "@/components/ui/button";
-import { Plus, List as ListIcon, MoreHorizontal, Eye, Edit, Trash } from "lucide-react";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/components/ui/card";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  DropdownMenuSeparator,
-} from "@/components/ui/dropdown-menu";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+
+import React, { useState } from "react";
+import CrmLayout from "@/components/crm/CrmLayout";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import { PlusCircle, Trash2, Users, Edit } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import ContactsView from "@/components/database/ContactsView";
-import { Badge } from "@/components/ui/badge";
 
 interface List {
   id: string;
   name: string;
-  description?: string;
+  description: string | null;
   created_at: string;
-  updated_at: string;
-  contact_count?: number;
+  profile_id: string;
+}
+
+interface Contact {
+  id: string;
+  name: string;
+  email: string | null;
+  phone: string | null;
+  linkedin: string | null;
+  role: string | null;
+  position: string;
+  team: string;
+  teamId: number;
+  verified?: boolean;
+  activeReplier?: boolean;
+  email_credits_consumed: number;
+  phone_credits_consumed: number;
+  linkedin_credits_consumed: number;
 }
 
 const Lists = () => {
-  const [showCreateDialog, setShowCreateDialog] = useState(false);
-  const [showListDetails, setShowListDetails] = useState(false);
-  const [editingList, setEditingList] = useState<List | null>(null);
-  const [selectedList, setSelectedList] = useState<List | null>(null);
-  const [listName, setListName] = useState("");
-  const [listDescription, setListDescription] = useState("");
-  const [listContacts, setListContacts] = useState([]);
-
+  const [newListName, setNewListName] = useState("");
+  const [newListDescription, setNewListDescription] = useState("");
+  const [selectedListId, setSelectedListId] = useState<string | null>(null);
+  const [revealedEmails, setRevealedEmails] = useState<Record<string, boolean>>({});
+  const [revealedPhones, setRevealedPhones] = useState<Record<string, boolean>>({});
+  const [revealedLinkedIns, setRevealedLinkedIns] = useState<Record<string, boolean>>({});
+  
   const queryClient = useQueryClient();
 
-  // Fetch lists
-  const { data: lists = [], isLoading: isListsLoading } = useQuery({
-    queryKey: ["lists"],
+  // Fetch user's lists
+  const { data: lists = [], isLoading: listsLoading } = useQuery({
+    queryKey: ['lists'],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("lists")
-        .select("*")
-        .order("created_at", { ascending: false });
-      if (error) {
-        toast.error(error.message);
-        throw error;
-      }
+        .from('lists')
+        .select('*')
+        .order('created_at', { ascending: false });
+      
+      if (error) throw error;
       return data as List[];
     },
   });
 
-  // Create or update list mutation
-  const createOrUpdateListMutation = useMutation(
-    async () => {
-      if (editingList) {
-        // Update list
-        const { data, error } = await supabase
-          .from("lists")
-          .update({ name: listName, description: listDescription })
-          .eq("id", editingList.id);
-        if (error) {
-          toast.error(error.message);
-          throw error;
-        }
-        return data;
-      } else {
-        // Create list
-        const { data, error } = await supabase.from("lists").insert([
-          {
-            name: listName,
-            description: listDescription,
-          },
-        ]);
-        if (error) {
-          toast.error(error.message);
-          throw error;
-        }
-        return data;
-      }
-    },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["lists"] });
-        setShowCreateDialog(false);
-        setEditingList(null);
-        setListName("");
-        setListDescription("");
-        toast.success(editingList ? "List updated!" : "List created!");
-      },
-    }
-  );
+  // Create new list mutation
+  const createListMutation = useMutation({
+    mutationFn: async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('Not authenticated');
 
-  // Delete list mutation
-  const deleteListMutation = useMutation(
-    async (id: string) => {
-      const { data, error } = await supabase.from("lists").delete().eq("id", id);
-      if (error) {
-        toast.error(error.message);
-        throw error;
-      }
+      const { data, error } = await supabase
+        .from('lists')
+        .insert({
+          name: newListName,
+          description: newListDescription,
+          profile_id: user.id
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
       return data;
     },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["lists"] });
-        toast.success("List deleted!");
-      },
-    }
-  );
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['lists'] });
+      setNewListName("");
+      setNewListDescription("");
+      toast.success("List created successfully!");
+    },
+    onError: (error) => {
+      toast.error("Failed to create list: " + error.message);
+    },
+  });
 
-  const handleCreateList = () => {
-    setEditingList(null);
-    setListName("");
-    setListDescription("");
-    setShowCreateDialog(true);
+  // Delete list mutation
+  const deleteListMutation = useMutation({
+    mutationFn: async (listId: string) => {
+      const { error } = await supabase
+        .from('lists')
+        .delete()
+        .eq('id', listId);
+
+      if (error) throw error;
+      return null;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['lists'] });
+      queryClient.invalidateQueries({ queryKey: ['listContacts'] });
+      setSelectedListId(null);
+      toast.success("List deleted successfully!");
+    },
+    onError: (error) => {
+      toast.error("Failed to delete list: " + error.message);
+    },
+  });
+
+  // Fetch contacts for selected list
+  const { data: listContacts = [], isLoading: contactsLoading } = useQuery({
+    queryKey: ['listContacts', selectedListId],
+    queryFn: async () => {
+      if (!selectedListId) return [];
+      
+      const { data, error } = await supabase
+        .from('list_items')
+        .select(`
+          contact_id,
+          contacts (
+            id,
+            name,
+            email,
+            phone,
+            linkedin,
+            role,
+            email_credits_consumed,
+            phone_credits_consumed,
+            linkedin_credits_consumed,
+            team_id,
+            teams (
+              name
+            )
+          )
+        `)
+        .eq('list_id', selectedListId);
+      
+      if (error) throw error;
+      
+      return data.map((item: any) => ({
+        id: item.contacts.id,
+        name: item.contacts.name,
+        email: item.contacts.email,
+        phone: item.contacts.phone,
+        linkedin: item.contacts.linkedin,
+        position: item.contacts.role || 'N/A',
+        team: item.contacts.teams?.name || 'Unknown',
+        teamId: item.contacts.team_id,
+        email_credits_consumed: item.contacts.email_credits_consumed || 1,
+        phone_credits_consumed: item.contacts.phone_credits_consumed || 2,
+        linkedin_credits_consumed: item.contacts.linkedin_credits_consumed || 0,
+      })) as Contact[];
+    },
+    enabled: !!selectedListId,
+  });
+
+  // Remove contact from list mutation
+  const removeContactMutation = useMutation({
+    mutationFn: async (contactId: string) => {
+      const { error } = await supabase
+        .from('list_items')
+        .delete()
+        .eq('list_id', selectedListId)
+        .eq('contact_id', contactId);
+
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['listContacts', selectedListId] });
+      toast.success("Contact removed from list!");
+    },
+    onError: (error) => {
+      toast.error("Failed to remove contact: " + error.message);
+    },
+  });
+
+  const handleRevealEmail = (email: string, credits: number) => {
+    setRevealedEmails(prev => ({ ...prev, [email]: true }));
+    toast.success(`Email revealed! ${credits} credits used.`);
   };
 
-  const handleViewList = async (list: List) => {
-    setSelectedList(list);
-    setShowListDetails(true);
-
-    // Fetch contacts for the selected list
-    const { data, error } = await supabase
-      .from("list_contacts")
-      .select("contact_id")
-      .eq("list_id", list.id);
-
-    if (error) {
-      toast.error(error.message);
-      return;
-    }
-
-    // Fetch contact details for each contact_id
-    if (data && data.length > 0) {
-      const contactIds = data.map((item) => item.contact_id);
-
-      // Fetch contacts from the "contacts" table based on contactIds
-      const { data: contactsData, error: contactsError } = await supabase
-        .from("contacts")
-        .select("*")
-        .in("id", contactIds);
-
-      if (contactsError) {
-        toast.error(contactsError.message);
-        return;
-      }
-
-      setListContacts(contactsData || []);
-    } else {
-      setListContacts([]);
-    }
+  const handleRevealPhone = (phone: string, credits: number) => {
+    setRevealedPhones(prev => ({ ...prev, [phone]: true }));
+    toast.success(`Phone revealed! ${credits} credits used.`);
   };
 
-  const handleSaveList = async () => {
-    createOrUpdateListMutation.mutate();
+  const handleRevealLinkedIn = (linkedin: string, credits: number) => {
+    setRevealedLinkedIns(prev => ({ ...prev, [linkedin]: true }));
+    toast.success(`LinkedIn revealed! ${credits} credits used.`);
   };
 
-  const handleDeleteList = async (id: string) => {
-    deleteListMutation.mutate(id);
+  const handleViewTeam = (teamId: number) => {
+    toast.info(`Viewing team ID: ${teamId}`);
   };
 
-  const handleRemoveFromList = (contactId: string) => {
-    setListContacts((prevContacts) =>
-      prevContacts.filter((contact) => contact.id !== contactId)
+  const handleAddToList = (contact: Contact, listId: string, listName: string) => {
+    toast.info("Contact is already in a list");
+  };
+
+  if (listsLoading) {
+    return (
+      <CrmLayout>
+        <div className="flex items-center justify-center h-64">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+        </div>
+      </CrmLayout>
     );
-    toast.info("Contact removed from your list.");
-  };
+  }
 
   return (
     <CrmLayout>
       <div className="p-6">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Contact Lists</h1>
-          <Button onClick={() => setShowCreateDialog(true)}>
-            <Plus className="h-4 w-4 mr-2" />
-            New List
-          </Button>
+          <h1 className="text-2xl font-bold">My Lists</h1>
+          
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button className="flex items-center gap-1">
+                <PlusCircle className="h-4 w-4" /> Create List
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Create New List</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4">
+                <div>
+                  <label className="text-sm font-medium">Name</label>
+                  <Input
+                    value={newListName}
+                    onChange={(e) => setNewListName(e.target.value)}
+                    placeholder="Enter list name"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium">Description (optional)</label>
+                  <Textarea
+                    value={newListDescription}
+                    onChange={(e) => setNewListDescription(e.target.value)}
+                    placeholder="Enter list description"
+                  />
+                </div>
+                <Button 
+                  onClick={() => createListMutation.mutate()}
+                  disabled={!newListName.trim() || createListMutation.isPending}
+                  className="w-full"
+                >
+                  {createListMutation.isPending ? "Creating..." : "Create List"}
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
 
-        {/* My Lists Section */}
-        <div className="mb-8">
-          <h2 className="text-lg font-semibold mb-4 flex items-center">
-            <ListIcon className="h-5 w-5 mr-2" />
-            My Lists ({lists.length})
-          </h2>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid md:grid-cols-3 gap-6">
+          {/* Lists sidebar */}
+          <div className="space-y-4">
+            <h2 className="text-lg font-semibold">Lists ({lists.length})</h2>
             {lists.map((list) => (
-              <Card key={list.id} className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => handleViewList(list)}>
-                <CardHeader className="pb-2">
+              <Card 
+                key={list.id} 
+                className={`cursor-pointer transition-colors ${
+                  selectedListId === list.id ? 'ring-2 ring-blue-500' : ''
+                }`}
+                onClick={() => setSelectedListId(list.id)}
+              >
+                <CardHeader className="pb-3">
                   <div className="flex justify-between items-start">
-                    <CardTitle className="text-lg">{list.name}</CardTitle>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-                        <Button variant="ghost" size="sm">
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={(e) => {
-                          e.stopPropagation();
-                          handleViewList(list);
-                        }}>
-                          <Eye className="h-4 w-4 mr-2" />
-                          View
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={(e) => {
-                          e.stopPropagation();
-                          setEditingList(list);
-                          setShowCreateDialog(true);
-                        }}>
-                          <Edit className="h-4 w-4 mr-2" />
-                          Edit
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem 
-                          className="text-red-600"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleDeleteList(list.id);
-                          }}
-                        >
-                          <Trash className="h-4 w-4 mr-2" />
-                          Delete
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                    <CardTitle className="text-base">{list.name}</CardTitle>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        deleteListMutation.mutate(list.id);
+                      }}
+                      disabled={deleteListMutation.isPending}
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
                   </div>
                   {list.description && (
                     <p className="text-sm text-muted-foreground">{list.description}</p>
                   )}
                 </CardHeader>
-                <CardContent>
-                  <div className="flex items-center justify-between text-sm text-muted-foreground">
-                    <span>{list.contact_count || 0} contacts</span>
-                    <span>Updated {new Date(list.updated_at).toLocaleDateString()}</span>
-                  </div>
-                </CardContent>
               </Card>
             ))}
+            
+            {lists.length === 0 && (
+              <Card>
+                <CardContent className="py-8 text-center text-muted-foreground">
+                  No lists created yet. Create your first list to get started!
+                </CardContent>
+              </Card>
+            )}
+          </div>
+
+          {/* Contacts view */}
+          <div className="md:col-span-2">
+            {selectedListId ? (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Users className="h-5 w-5" />
+                    Contacts ({listContacts.length})
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-0">
+                  {contactsLoading ? (
+                    <div className="flex items-center justify-center h-32">
+                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-gray-900"></div>
+                    </div>
+                  ) : (
+                    <ContactsView
+                      data={listContacts}
+                      revealedEmails={revealedEmails}
+                      revealedPhones={revealedPhones}
+                      revealedLinkedIns={revealedLinkedIns}
+                      onRevealEmail={handleRevealEmail}
+                      onRevealPhone={handleRevealPhone}
+                      onRevealLinkedIn={handleRevealLinkedIn}
+                      onViewTeam={handleViewTeam}
+                      onAddToList={handleAddToList}
+                      onRemoveFromList={(contactId) => removeContactMutation.mutate(contactId)}
+                      isSavedList={true}
+                    />
+                  )}
+                </CardContent>
+              </Card>
+            ) : (
+              <Card>
+                <CardContent className="py-12 text-center text-muted-foreground">
+                  <Users className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                  <p>Select a list to view its contacts</p>
+                </CardContent>
+              </Card>
+            )}
           </div>
         </div>
-
-        {/* List Details Modal */}
-        {selectedList && (
-          <Dialog open={showListDetails} onOpenChange={setShowListDetails}>
-            <DialogContent className="max-w-6xl max-h-[80vh]">
-              <DialogHeader>
-                <DialogTitle className="flex items-center justify-between">
-                  <span>{selectedList.name}</span>
-                  <Badge variant="secondary">{listContacts.length} contacts</Badge>
-                </DialogTitle>
-                {selectedList.description && (
-                  <DialogDescription>{selectedList.description}</DialogDescription>
-                )}
-              </DialogHeader>
-              
-              <div className="flex-1 overflow-hidden">
-                <ContactsView
-                  data={listContacts}
-                  revealedEmails={{}}
-                  revealedPhones={{}}
-                  revealedLinkedIns={{}}
-                  onRevealEmail={() => {}}
-                  onRevealPhone={() => {}}
-                  onRevealLinkedIn={() => {}}
-                  onViewTeam={() => {}}
-                  onAddToList={() => {}}
-                  onRemoveFromList={handleRemoveFromList}
-                  isSavedList={true}
-                />
-              </div>
-            </DialogContent>
-          </Dialog>
-        )}
-
-        {/* Create List Dialog */}
-        <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
-          <DialogContent className="max-w-md">
-            <DialogHeader>
-              <DialogTitle>{editingList ? "Edit List" : "Create New List"}</DialogTitle>
-              <DialogDescription>
-                {editingList ? "Update your list details." : "Enter a name and description for your new list."}
-              </DialogDescription>
-            </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <div className="grid gap-2">
-                <Label htmlFor="name">List Name</Label>
-                <Input
-                  id="name"
-                  placeholder="Marketing Leads"
-                  value={listName}
-                  onChange={(e) => setListName(e.target.value)}
-                />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="description">Description</Label>
-                <Textarea
-                  id="description"
-                  placeholder="A list of potential marketing leads"
-                  value={listDescription}
-                  onChange={(e) => setListDescription(e.target.value)}
-                />
-              </div>
-            </div>
-            <div className="flex justify-end">
-              <Button variant="secondary" onClick={() => setShowCreateDialog(false)}>
-                Cancel
-              </Button>
-              <Button
-                onClick={handleSaveList}
-                disabled={createOrUpdateListMutation.isLoading}
-              >
-                {createOrUpdateListMutation.isLoading ? (
-                  "Saving..."
-                ) : editingList ? (
-                  "Update List"
-                ) : (
-                  "Create List"
-                )}
-              </Button>
-            </div>
-          </DialogContent>
-        </Dialog>
       </div>
     </CrmLayout>
   );
