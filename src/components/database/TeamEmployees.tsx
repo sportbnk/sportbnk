@@ -54,7 +54,7 @@ const TeamEmployees = ({
     return null;
   }
 
-  const handleAddToList = (employee: Employee, listId: string, listName: string) => {
+  const handleAddToList = (employee: Employee, listId: number, listName: string) => {
     toast.success(`Added ${employee.name} to ${listName}`, {
       description: "You can manage all your lists in the Lists section"
     });
