@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/components/auth/AuthContext";
@@ -15,6 +14,9 @@ interface Contact {
   linkedin?: string;
   verified?: boolean;
   activeReplier?: boolean;
+  email_credits_consumed?: number;
+  phone_credits_consumed?: number;
+  linkedin_credits_consumed?: number;
 }
 
 interface ContactList {
@@ -118,7 +120,10 @@ export const ListsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           teamId: item.contacts.teams?.id,
           linkedin: item.contacts.linkedin,
           verified: false,
-          activeReplier: false
+          activeReplier: false,
+          email_credits_consumed: 0,
+          phone_credits_consumed: 0,
+          linkedin_credits_consumed: 0
         })) || []
       })) || [];
 
