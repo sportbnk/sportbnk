@@ -13,11 +13,18 @@ import {
   Users, 
   Calendar,
   DollarSign,
-  Clock
+  Clock,
+  ShieldCheck,
+  Flame,
+  Linkedin
 } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { useState } from "react";
 
 const TeamDetails = () => {
   const { teamId } = useParams();
+  const [revealedEmails, setRevealedEmails] = useState<Record<string, boolean>>({});
+  const [revealedPhones, setRevealedPhones] = useState<Record<string, boolean>>({});
 
   const { data: team, isLoading } = useQuery({
     queryKey: ['team', teamId],
@@ -71,6 +78,14 @@ const TeamDetails = () => {
     if (url) {
       window.open(url, '_blank', 'noopener,noreferrer');
     }
+  };
+
+  const handleRevealEmail = (email: string) => {
+    setRevealedEmails(prev => ({ ...prev, [email]: true }));
+  };
+
+  const handleRevealPhone = (phone: string) => {
+    setRevealedPhones(prev => ({ ...prev, [phone]: true }));
   };
 
   if (isLoading) {
@@ -230,23 +245,95 @@ const TeamDetails = () => {
             <div className="space-y-3">
               {team.contacts.map((contact) => (
                 <div key={contact.id} className="flex items-center justify-between p-3 border rounded-lg">
-                  <div>
-                    <h4 className="font-medium">{contact.name}</h4>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1">
+                      <h4 className="font-medium text-sm">{contact.name}</h4>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <Flame className="h-4 w-4 text-orange-500" />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p className="text-xs">Active replier - high response rate</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div>
                     {contact.role && (
                       <p className="text-sm text-gray-600">{contact.role}</p>
                     )}
-                  </div>
-                  <div className="flex space-x-2">
-                    {contact.email && (
-                      <Button variant="outline" size="sm">
-                        <Mail className="h-4 w-4" />
-                      </Button>
-                    )}
-                    {contact.phone && (
-                      <Button variant="outline" size="sm">
-                        <Phone className="h-4 w-4" />
-                      </Button>
-                    )}
+                    <div className="flex items-center gap-4 mt-2">
+                      {contact.email ? (
+                        revealedEmails[contact.email] ? (
+                          <div className="flex items-center gap-1">
+                            <span className="text-xs font-mono overflow-hidden text-ellipsis">{contact.email}</span>
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger>
+                                  <ShieldCheck className="h-3.5 w-3.5 text-green-500 flex-shrink-0" />
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  <p className="text-xs">Verified email address</p>
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                          </div>
+                        ) : (
+                          <div className="flex items-center gap-1">
+                            <Mail className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
+                            <Button 
+                              size="sm" 
+                              variant="outline"
+                              onClick={() => handleRevealEmail(contact.email)}
+                              className="h-6 text-xs px-2"
+                            >
+                              Reveal (2)
+                            </Button>
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger>
+                                  <ShieldCheck className="h-3.5 w-3.5 text-green-500 flex-shrink-0" />
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  <p className="text-xs">Verified email address</p>
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                          </div>
+                        )
+                      ) : (
+                        <span className="text-xs text-muted-foreground">Email not available</span>
+                      )}
+                      
+                      {contact.phone ? (
+                        revealedPhones[contact.phone] ? (
+                          <span className="text-xs font-mono">{contact.phone}</span>
+                        ) : (
+                          <div className="flex items-center gap-1">
+                            <Phone className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
+                            <Button 
+                              size="sm" 
+                              variant="outline"
+                              onClick={() => handleRevealPhone(contact.phone!)}
+                              className="h-6 text-xs px-2"
+                            >
+                              Reveal (3)
+                            </Button>
+                          </div>
+                        )
+                      ) : (
+                        <span className="text-xs text-muted-foreground">Phone not available</span>
+                      )}
+                      
+                      <a 
+                        href="#" 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="flex items-center text-blue-700 hover:underline"
+                      >
+                        <Linkedin className="h-4 w-4" />
+                      </a>
+                    </div>
                   </div>
                 </div>
               ))}
