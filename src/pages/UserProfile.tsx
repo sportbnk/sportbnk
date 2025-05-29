@@ -1,17 +1,15 @@
-
 import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import PageLayout from "@/components/PageLayout";
 import ProfileHeader from "@/components/profile/ProfileHeader";
 import ProfileTabs from "@/components/profile/ProfileTabs";
 import PersonalInfo from "@/components/profile/PersonalInfo";
-import CompanyInfo from "@/components/profile/CompanyInfo";
 import BillingInfo from "@/components/profile/BillingInfo";
 import SubscriptionPlan from "@/components/profile/SubscriptionPlan";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 
-type TabType = "personal" | "company" | "billing" | "subscription";
+type TabType = "personal" | "billing" | "subscription";
 
 interface UserData {
   name: string;
@@ -241,20 +239,6 @@ const UserProfile = () => {
         <div className="mt-6 bg-white p-6 rounded-lg border">
           {activeTab === "personal" && (
             <PersonalInfo userData={userData} onUpdate={handleProfileUpdate} />
-          )}
-          
-          {activeTab === "company" && (
-            <CompanyInfo 
-              companyData={userData.company || {
-                name: "",
-                position: "",
-                website: "",
-                size: "",
-                industry: "",
-                address: ""
-              }} 
-              onUpdate={handleCompanyUpdate} 
-            />
           )}
           
           {activeTab === "billing" && (
