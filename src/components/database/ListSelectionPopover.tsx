@@ -50,6 +50,20 @@ const ListSelectionPopover = ({ onAddToList, contact }: ListSelectionPopoverProp
     }
   };
 
+  // Sort lists so that already added lists appear at the bottom
+  const sortedLists = [...lists].sort((a, b) => {
+    const aHasContact = isContactInList(a.id, contact.id);
+    const bHasContact = isContactInList(b.id, contact.id);
+    
+    // If one has contact and other doesn't, put the one without contact first
+    if (aHasContact !== bHasContact) {
+      return aHasContact ? 1 : -1;
+    }
+    
+    // If both have same status, sort alphabetically
+    return a.name.localeCompare(b.name);
+  });
+
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
@@ -92,15 +106,17 @@ const ListSelectionPopover = ({ onAddToList, contact }: ListSelectionPopoverProp
             <div className="text-xs text-muted-foreground text-center py-2">
               Loading lists...
             </div>
-          ) : lists.length > 0 ? (
+          ) : sortedLists.length > 0 ? (
             <div className="border-t pt-2">
               <p className="text-xs text-muted-foreground mb-2">Or select existing list:</p>
               <div className="space-y-1 max-h-40 overflow-y-auto">
-                {lists.map((list) => {
+                {sortedLists.map((list) => {
                   const contactInList = isContactInList(list.id, contact.id);
                   return (
                     <div key={list.id} className="flex justify-between items-center">
-                      <span className="text-sm truncate">{list.name}</span>
+                      <span className={`text-sm truncate ${contactInList ? 'text-muted-foreground' : ''}`}>
+                        {list.name}
+                      </span>
                       <Button 
                         size="sm" 
                         variant="ghost" 
