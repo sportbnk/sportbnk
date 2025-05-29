@@ -1,5 +1,15 @@
-
 import React from "react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -8,193 +18,176 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Mail, Phone, Linkedin, ShieldCheck, Flame, UserPlus } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import ListSelectionPopover from "./ListSelectionPopover";
-import { toast } from "sonner";
-
-interface Employee {
-  id: number;
-  name: string;
-  position: string;
-  email: string;
-  phone?: string;
-  linkedin?: string;
-  verified?: boolean;
-  activeReplier?: boolean;
-}
-
-interface TeamEmployee {
-  id: number;
-  team: string;
-  teamLogo: string;
-  employees: Employee[];
-}
+import { Mail, Phone, Linkedin } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import ListSelectionPopover from "@/components/database/ListSelectionPopover";
 
 interface TeamEmployeesProps {
-  selectedTeam: TeamEmployee | null;
-  revealedEmails: Record<string, boolean>;
-  revealedPhones: Record<string, boolean>;
-  onRevealEmail: (email: string) => void;
-  onRevealPhone: (phone: string) => void;
-  onCloseEmployees?: () => void;
+  teamId: string;
 }
 
-const TeamEmployees = ({
-  selectedTeam,
-  revealedEmails,
-  revealedPhones,
-  onRevealEmail,
-  onRevealPhone,
-  onCloseEmployees
-}: TeamEmployeesProps) => {
-  if (!selectedTeam) {
-    return null;
-  }
+interface Contact {
+  id: string;
+  name: string;
+  email?: string;
+  phone?: string;
+  linkedin?: string;
+  role?: string;
+  avatar_url?: string;
+}
 
-  const handleAddToList = (employee: Employee, listId: number, listName: string) => {
-    toast.success(`Added ${employee.name} to ${listName}`, {
-      description: "You can manage all your lists in the Lists section"
+const TeamEmployees = ({ teamId }: TeamEmployeesProps) => {
+  const { toast } = useToast();
+
+  const { data: employees, isLoading } = useQuery({
+    queryKey: ["team-employees", teamId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("contacts")
+        .select("*")
+        .eq("team_id", teamId);
+
+      if (error) {
+        console.error("Error fetching team employees:", error);
+        throw error;
+      }
+
+      return data as Contact[];
+    },
+  });
+
+  const handleRevealContact = async (
+    contactId: string,
+    field: "email" | "phone" | "linkedin"
+  ) => {
+    try {
+      // This would normally involve credit checking and user authentication
+      toast({
+        title: "Contact Revealed",
+        description: `${field} details revealed for this contact.`,
+      });
+    } catch (error) {
+      console.error("Error revealing contact:", error);
+      toast({
+        title: "Error",
+        description: "Failed to reveal contact details",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleAddToList = (contact: any, listId: string, listName: string) => {
+    toast({
+      title: "Contact Added",
+      description: `${contact.name} has been added to ${listName}`,
     });
   };
 
+  if (isLoading) {
+    return <p>Loading employees...</p>;
+  }
+
   return (
-    <div className="overflow-x-auto">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead>Position</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead className="hidden md:table-cell">Phone</TableHead>
-            <TableHead className="hidden md:table-cell">LinkedIn</TableHead>
-            <TableHead className="w-16 text-right">Action</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {!selectedTeam.employees || selectedTeam.employees.length === 0 ? (
+    <Card>
+      <CardHeader>
+        <CardTitle>Team Employees</CardTitle>
+        <CardDescription>
+          A list of all employees currently assigned to this team.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Table>
+          <TableHeader>
             <TableRow>
-              <TableCell colSpan={6} className="text-center py-10 text-muted-foreground">
-                No employee data available for this team.
-              </TableCell>
+              <TableHead>Name</TableHead>
+              <TableHead>Role</TableHead>
+              <TableHead>Email</TableHead>
+              <TableHead>Phone</TableHead>
+              <TableHead>LinkedIn</TableHead>
+              <TableHead>Actions</TableHead>
             </TableRow>
-          ) : (
-            selectedTeam.employees.map((employee) => (
+          </TableHeader>
+          <TableBody>
+            {employees?.map((employee) => (
               <TableRow key={employee.id}>
-                <TableCell>
-                  <div className="font-medium flex items-center gap-1 text-sm">
-                    {employee.name}
-                    {employee.activeReplier && (
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger>
-                            <Flame className="h-4 w-4 text-orange-500" />
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p className="text-xs">Active replier - high response rate</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                    )}
+                <TableCell className="font-medium">
+                  <div className="flex items-center space-x-2">
+                    <Avatar>
+                      <AvatarImage src={employee.avatar_url} />
+                      <AvatarFallback>{employee.name[0]}</AvatarFallback>
+                    </Avatar>
+                    <span>{employee.name}</span>
                   </div>
                 </TableCell>
-                <TableCell className="text-sm">{employee.position}</TableCell>
+                <TableCell>{employee.role || "-"}</TableCell>
                 <TableCell>
                   {employee.email ? (
-                    revealedEmails[employee.email] ? (
-                      <div className="flex items-center gap-1">
-                        <span className="text-xs font-mono overflow-hidden text-ellipsis">{employee.email}</span>
-                        {employee.verified && (
-                          <TooltipProvider>
-                            <Tooltip>
-                              <TooltipTrigger>
-                                <ShieldCheck className="h-3.5 w-3.5 text-green-500 flex-shrink-0" />
-                              </TooltipTrigger>
-                              <TooltipContent>
-                                <p className="text-xs">Verified email address</p>
-                              </TooltipContent>
-                            </Tooltip>
-                          </TooltipProvider>
-                        )}
-                      </div>
-                    ) : (
-                      <div className="flex items-center gap-1">
-                        <Mail className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
-                        <Button 
-                          size="sm" 
-                          variant="outline"
-                          onClick={() => onRevealEmail(employee.email)}
-                          className="h-6 text-xs px-2"
-                        >
-                          Reveal (2)
-                        </Button>
-                        {employee.verified && (
-                          <TooltipProvider>
-                            <Tooltip>
-                              <TooltipTrigger>
-                                <ShieldCheck className="h-3.5 w-3.5 text-green-500 flex-shrink-0" />
-                              </TooltipTrigger>
-                              <TooltipContent>
-                                <p className="text-xs">Verified email address</p>
-                              </TooltipContent>
-                            </Tooltip>
-                          </TooltipProvider>
-                        )}
-                      </div>
-                    )
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleRevealContact(employee.id, "email")}
+                      className="flex items-center space-x-1"
+                    >
+                      <Mail className="h-4 w-4" />
+                      <span className="text-sm">{employee.email}</span>
+                    </Button>
                   ) : (
-                    <span className="text-xs text-muted-foreground">Not available</span>
+                    "-"
                   )}
                 </TableCell>
-                <TableCell className="hidden md:table-cell">
+                <TableCell>
                   {employee.phone ? (
-                    revealedPhones[employee.phone] ? (
-                      <span className="text-xs font-mono">{employee.phone}</span>
-                    ) : (
-                      <div className="flex items-center gap-1">
-                        <Phone className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
-                        <Button 
-                          size="sm" 
-                          variant="outline"
-                          onClick={() => onRevealPhone(employee.phone!)}
-                          className="h-6 text-xs px-2"
-                        >
-                          Reveal (3)
-                        </Button>
-                      </div>
-                    )
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleRevealContact(employee.id, "phone")}
+                      className="flex items-center space-x-1"
+                    >
+                      <Phone className="h-4 w-4" />
+                      <span className="text-sm">{employee.phone}</span>
+                    </Button>
                   ) : (
-                    <span className="text-xs text-muted-foreground">Not available</span>
+                    "-"
                   )}
                 </TableCell>
-                <TableCell className="hidden md:table-cell">
+                <TableCell>
                   {employee.linkedin ? (
-                    <a 
-                      href={employee.linkedin} 
-                      target="_blank" 
-                      rel="noopener noreferrer" 
-                      className="flex items-center text-blue-700 hover:underline"
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleRevealContact(employee.id, "linkedin")}
+                      className="flex items-center space-x-1"
                     >
                       <Linkedin className="h-4 w-4" />
-                    </a>
+                      <span className="text-sm">View Profile</span>
+                    </Button>
                   ) : (
-                    <span className="text-xs text-muted-foreground">N/A</span>
+                    "-"
                   )}
                 </TableCell>
-                <TableCell className="text-right">
+                <TableCell>
                   <ListSelectionPopover
-                    onAddToList={(_, listId, listName) => handleAddToList(employee, listId, listName)}
-                    contact={employee}
+                    contact={{
+                      id: employee.id,
+                      name: employee.name,
+                      email: employee.email,
+                      phone: employee.phone,
+                      position: employee.role,
+                      team: "", // Team name not directly available here
+                      teamId: teamId,
+                      linkedin: employee.linkedin,
+                      verified: false,
+                      activeReplier: false,
+                    }}
+                    onAddToList={handleAddToList}
                   />
                 </TableCell>
               </TableRow>
-            ))
-          )}
-        </TableBody>
-      </Table>
-    </div>
+            ))}
+          </TableBody>
+        </Table>
+      </CardContent>
+    </Card>
   );
 };
 

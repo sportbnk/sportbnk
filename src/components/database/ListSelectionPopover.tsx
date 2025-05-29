@@ -27,7 +27,7 @@ const ListSelectionPopover = ({ onAddToList, contact }: ListSelectionPopoverProp
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
 
-  // Load lists and check which ones contain this contact
+  // Load all lists and check which ones contain this contact
   useEffect(() => {
     if (isOpen && user) {
       loadListsWithContactStatus();
@@ -49,30 +49,38 @@ const ListSelectionPopover = ({ onAddToList, contact }: ListSelectionPopoverProp
         return;
       }
 
-      // Get all lists for this user with contact status
-      const { data: listsData, error: listsError } = await supabase
+      // Get all lists for this user
+      const { data: allLists, error: listsError } = await supabase
         .from('lists')
-        .select(`
-          id,
-          name,
-          description,
-          list_items!inner (
-            contact_id
-          )
-        `)
-        .eq('profile_id', profile.id);
+        .select('id, name, description')
+        .eq('profile_id', profile.id)
+        .order('created_at', { ascending: false });
 
       if (listsError) {
         console.error('Error fetching lists:', listsError);
         return;
       }
 
+      // Get all list items for this contact across all lists
+      const { data: contactListItems, error: itemsError } = await supabase
+        .from('list_items')
+        .select('list_id')
+        .eq('contact_id', contact.id);
+
+      if (itemsError) {
+        console.error('Error fetching list items:', itemsError);
+        return;
+      }
+
+      // Create a set of list IDs that contain this contact
+      const contactListIds = new Set(contactListItems?.map(item => item.list_id) || []);
+
       // Process lists to check if contact is already in each list
-      const listsWithStatus = listsData?.map(list => ({
+      const listsWithStatus = allLists?.map(list => ({
         id: list.id,
         name: list.name,
         description: list.description,
-        isContactInList: list.list_items?.some((item: any) => item.contact_id === contact.id) || false
+        isContactInList: contactListIds.has(list.id)
       })) || [];
 
       setLists(listsWithStatus);
@@ -92,7 +100,7 @@ const ListSelectionPopover = ({ onAddToList, contact }: ListSelectionPopoverProp
         .select('id')
         .eq('list_id', listId)
         .eq('contact_id', contact.id)
-        .single();
+        .maybeSingle();
 
       if (existingItem) {
         toast.info(`${contact.name} is already in ${listName}`);
@@ -113,7 +121,13 @@ const ListSelectionPopover = ({ onAddToList, contact }: ListSelectionPopoverProp
         return;
       }
 
-      setIsOpen(false);
+      // Update the local state to show the contact is now in this list
+      setLists(prevLists => 
+        prevLists.map(list => 
+          list.id === listId ? { ...list, isContactInList: true } : list
+        )
+      );
+
       toast.success(`Added ${contact.name} to ${listName}`);
       onAddToList(contact, listId, listName);
     } catch (error) {

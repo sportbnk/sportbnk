@@ -1,300 +1,118 @@
-
-import React, { useState, useEffect, useCallback } from 'react';
-import { Plus, Trash2, Download } from 'lucide-react';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import { Textarea } from "@/components/ui/textarea"
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { z } from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { toast } from "sonner";
-import { useLocation } from 'react-router-dom';
-import ContactsView from "@/components/database/ContactsView";
+import React, { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { 
+  Table, 
+  TableBody, 
+  TableCell, 
+  TableHead, 
+  TableHeader, 
+  TableRow 
+} from "@/components/ui/table";
+import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/components/auth/AuthContext";
-
-// Define the schema for the form
-const formSchema = z.object({
-  listName: z.string().min(2, {
-    message: "List name must be at least 2 characters.",
-  }),
-  description: z.string().optional(),
-})
+import { Plus, X } from "lucide-react";
 
 interface Contact {
   id: string;
   name: string;
-  email: string;
+  email?: string;
   phone?: string;
-  position?: string;
-  team: string;
-  teamId?: number;
+  role?: string;
+  team?: string;
   linkedin?: string;
-  verified?: boolean;
-  activeReplier?: boolean;
 }
 
-interface ContactList {
+interface List {
   id: string;
   name: string;
   description?: string;
-  contacts: Contact[];
 }
 
 const Lists = () => {
-  const location = useLocation();
-  const [isCreateListOpen, setIsCreateListOpen] = useState(false);
-  const [lists, setLists] = useState<ContactList[]>([]);
-  const [activeList, setActiveList] = useState<ContactList | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedList, setSelectedList] = useState<List | null>(null);
   const { user } = useAuth();
+  const { toast } = useToast();
 
-  // Form logic
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      listName: "",
-      description: "",
+  // Fetch lists for the current user
+  const { data: lists } = useQuery({
+    queryKey: ['lists'],
+    queryFn: async () => {
+      if (!user) return [];
+
+      const { data, error } = await supabase
+        .from('lists')
+        .select('*')
+        .eq('profile_id', user.id);
+
+      if (error) {
+        console.error('Error fetching lists:', error);
+        toast.error('Failed to load lists');
+        return [];
+      }
+
+      return data as List[];
     },
   });
 
-  // Load lists from database
-  const loadLists = useCallback(async () => {
-    if (!user) return;
-    
-    setLoading(true);
-    try {
-      // Get user's profile
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('id')
-        .eq('user_id', user.id)
-        .single();
+  // Fetch contacts for the selected list
+  const { data: contacts, refetch: refetchContacts } = useQuery({
+    queryKey: ['list-contacts', selectedList?.id],
+    queryFn: async () => {
+      if (!selectedList) return [];
 
-      if (!profile) {
-        console.error('No profile found for user');
-        return;
-      }
-
-      // Get all lists for this user with their contacts
-      const { data: listsData, error } = await supabase
-        .from('lists')
+      const { data, error } = await supabase
+        .from('list_items')
         .select(`
-          id,
-          name,
-          description,
-          created_at,
-          list_items (
-            contacts (
-              id,
-              name,
-              email,
-              phone,
-              role,
-              linkedin,
-              teams (
-                id,
-                name
-              )
+          contacts (
+            id,
+            name,
+            email,
+            phone,
+            role,
+            linkedin,
+            teams (
+              name
             )
           )
         `)
-        .eq('profile_id', profile.id)
-        .order('created_at', { ascending: false });
+        .eq('list_id', selectedList.id);
 
       if (error) {
-        console.error('Error loading lists:', error);
-        toast.error('Failed to load lists');
-        return;
+        console.error('Error fetching contacts:', error);
+        toast.error('Failed to load contacts');
+        return [];
       }
 
-      // Transform the data to match our interface
-      const transformedLists: ContactList[] = listsData?.map(list => ({
-        id: list.id,
-        name: list.name,
-        description: list.description,
-        contacts: list.list_items?.map((item: any) => ({
-          id: item.contacts.id,
-          name: item.contacts.name,
-          email: item.contacts.email,
-          phone: item.contacts.phone,
-          position: item.contacts.role,
-          team: item.contacts.teams?.name || '',
-          teamId: item.contacts.teams?.id,
-          linkedin: item.contacts.linkedin,
-          verified: false,
-          activeReplier: false
-        })) || []
-      })) || [];
+      return data?.map(item => item.contacts) as Contact[];
+    },
+    enabled: !!selectedList, // Only run query when a list is selected
+  });
 
-      setLists(transformedLists);
-      if (transformedLists.length > 0 && !activeList) {
-        setActiveList(transformedLists[0]);
-      }
-    } catch (error) {
-      console.error('Error loading lists:', error);
-      toast.error('Failed to load lists');
-    } finally {
-      setLoading(false);
-    }
-  }, [user, activeList]);
-
-  useEffect(() => {
-    loadLists();
-  }, [loadLists]);
-
-  // Handle contact passed from People or Teams page
-  useEffect(() => {
-    if (location.state?.contactToAdd && activeList) {
-      const contactToAdd = location.state.contactToAdd as Contact;
-      
-      // Check if contact is already in the active list
-      const isAlreadyInList = activeList.contacts.some(c => c.id === contactToAdd.id);
-      
-      if (!isAlreadyInList) {
-        // This will be handled by the database operations in ListSelectionPopover
-        toast.info(`Please use the + button to add ${contactToAdd.name} to a list`);
-      } else {
-        toast.info(`${contactToAdd.name} is already in ${activeList.name}`);
-      }
-      
-      // Clear the location state
-      window.history.replaceState({}, document.title);
-    }
-  }, [location.state, activeList]);
-
-  // Function to handle form submission
-  const onSubmit = useCallback(async (values: z.infer<typeof formSchema>) => {
-    if (!user) {
-      toast.error("You must be logged in to create lists");
-      return;
-    }
-
-    try {
-      // Get user's profile
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('id')
-        .eq('user_id', user.id)
-        .single();
-
-      if (!profile) {
-        toast.error("Profile not found");
-        return;
-      }
-
-      // Create new list
-      const { data: newList, error } = await supabase
-        .from('lists')
-        .insert({
-          profile_id: profile.id,
-          name: values.listName,
-          description: values.description
-        })
-        .select()
-        .single();
-
-      if (error) {
-        console.error('Error creating list:', error);
-        toast.error('Failed to create list');
-        return;
-      }
-
-      toast.success("List created successfully", {
-        description: `Your new list "${values.listName}" has been created.`
-      });
-
-      setIsCreateListOpen(false);
-      form.reset();
-      
-      // Reload lists and set the new list as active
-      await loadLists();
-      const newListWithContacts: ContactList = {
-        id: newList.id,
-        name: newList.name,
-        description: newList.description,
-        contacts: []
-      };
-      setActiveList(newListWithContacts);
-    } catch (error) {
-      console.error('Error creating list:', error);
-      toast.error('Failed to create list');
-    }
-  }, [user, form, loadLists]);
-
-  // Function to delete list
-  const handleDeleteList = async () => {
-    if (!activeList) return;
+  const filteredContacts = contacts?.filter(contact => {
+    if (!searchTerm) return true;
     
-    if (lists.length <= 1) {
-      toast.error("Cannot delete the last list");
-      return;
-    }
-    
-    try {
-      const { error } = await supabase
-        .from('lists')
-        .delete()
-        .eq('id', activeList.id);
+    const searchLower = searchTerm.toLowerCase();
+    return (
+      contact.name.toLowerCase().includes(searchLower) ||
+      contact.email?.toLowerCase().includes(searchLower) ||
+      contact.role?.toLowerCase().includes(searchLower) ||
+      contact.team?.toLowerCase().includes(searchLower)
+    );
+  });
 
-      if (error) {
-        console.error('Error deleting list:', error);
-        toast.error('Failed to delete list');
-        return;
-      }
-
-      toast.success(`Deleted list "${activeList.name}"`);
-      await loadLists();
-    } catch (error) {
-      console.error('Error deleting list:', error);
-      toast.error('Failed to delete list');
-    }
-  };
-
-  // Function to remove contact from list
   const handleRemoveFromList = async (contactId: string) => {
-    if (!activeList) return;
+    if (!selectedList) return;
 
     try {
       const { error } = await supabase
         .from('list_items')
         .delete()
-        .eq('list_id', activeList.id)
+        .eq('list_id', selectedList.id)
         .eq('contact_id', contactId);
 
       if (error) {
@@ -303,228 +121,114 @@ const Lists = () => {
         return;
       }
 
-      toast.info("Contact removed from list");
-      await loadLists();
+      toast.success('Contact removed from list');
+      // Refresh contacts
+      refetchContacts();
     } catch (error) {
       console.error('Error removing contact from list:', error);
       toast.error('Failed to remove contact from list');
     }
   };
 
-  // Function to export to CSV
-  const handleExportCSV = () => {
-    if (!activeList || activeList.contacts.length === 0) {
-      toast.error("No contacts to export");
-      return;
-    }
-
-    const headers = ['Name', 'Position', 'Team', 'Email', 'Phone', 'LinkedIn'];
-    const csvContent = [
-      headers.join(','),
-      ...activeList.contacts.map(contact => [
-        `"${contact.name || ''}"`,
-        `"${contact.position || ''}"`,
-        `"${contact.team || ''}"`,
-        `"${contact.email || ''}"`,
-        `"${contact.phone || ''}"`,
-        `"${contact.linkedin || ''}"`
-      ].join(','))
-    ].join('\n');
-
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    const url = URL.createObjectURL(blob);
-    link.setAttribute('href', url);
-    link.setAttribute('download', `${activeList.name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_contacts.csv`);
-    link.style.visibility = 'hidden';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    
-    toast.success(`Exported ${activeList.contacts.length} contacts to CSV`);
-  };
-
-  if (loading) {
-    return (
-      <div className="container mx-auto py-8">
-        <div className="flex justify-center items-center py-10">
-          <p className="text-muted-foreground">Loading lists...</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="container mx-auto py-8">
+    <div className="container mx-auto px-4">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Lists</h1>
-        <div className="flex gap-2">
-          <Button 
-            variant="outline" 
-            onClick={handleExportCSV}
-            disabled={!activeList || activeList.contacts.length === 0}
-          >
-            <Download className="w-4 h-4 mr-2" /> Export CSV
-          </Button>
-          <Dialog open={isCreateListOpen} onOpenChange={setIsCreateListOpen}>
-            <DialogTrigger asChild>
-              <Button variant="outline">
-                <Plus className="w-4 h-4 mr-2" /> Create List
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Create a new list</DialogTitle>
-                <DialogDescription>
-                  Give your list a name and description.
-                </DialogDescription>
-              </DialogHeader>
-              <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                  <FormField
-                    control={form.control}
-                    name="listName"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>List Name</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Marketing Leads" {...field} />
-                        </FormControl>
-                        <FormDescription>
-                          This is the name of your list.
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="description"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Description</FormLabel>
-                        <FormControl>
-                          <Textarea
-                            placeholder="A brief description of the list."
-                            className="resize-none"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormDescription>
-                          Describe the purpose of this list.
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <div className="flex justify-end space-x-2">
-                    <Button type="button" variant="outline" onClick={() => setIsCreateListOpen(false)}>
-                      Cancel
-                    </Button>
-                    <Button type="submit">Create</Button>
-                  </div>
-                </form>
-              </Form>
-            </DialogContent>
-          </Dialog>
-        </div>
+        <h1 className="text-2xl font-bold">Your Lists</h1>
       </div>
 
-      <div className="mb-6 flex flex-wrap justify-between items-center gap-4">
-        <div className="flex items-center gap-4">
-          {lists.length > 0 ? (
-            <Select
-              value={activeList?.id || ''}
-              onValueChange={(value) => {
-                const selected = lists.find(list => list.id === value);
-                if (selected) setActiveList(selected);
-              }}
-            >
-              <SelectTrigger className="w-[280px]">
-                <SelectValue placeholder="Select a list" />
-              </SelectTrigger>
-              <SelectContent>
-                {lists.map(list => (
-                  <SelectItem key={list.id} value={list.id}>
-                    {list.name} ({list.contacts.length} contacts)
-                  </SelectItem>
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        {/* Lists Sidebar */}
+        <div className="md:col-span-1">
+          <Card className="shadow-md">
+            <CardHeader className="pb-2 pt-4 px-4">
+              <CardTitle className="text-base font-semibold">Your Lists</CardTitle>
+            </CardHeader>
+            <CardContent className="p-3">
+              <div className="space-y-2">
+                {lists?.map((list) => (
+                  <Button
+                    key={list.id}
+                    variant="outline"
+                    className={`w-full justify-start text-sm ${selectedList?.id === list.id ? 'bg-accent text-accent-foreground' : ''}`}
+                    onClick={() => setSelectedList(list)}
+                  >
+                    {list.name}
+                  </Button>
                 ))}
-              </SelectContent>
-            </Select>
-          ) : (
-            <p className="text-muted-foreground">No lists found. Create your first list.</p>
-          )}
-          
-          {activeList?.description && (
-            <span className="text-sm text-muted-foreground">
-              {activeList.description}
-            </span>
-          )}
+                {lists?.length === 0 && (
+                  <p className="text-sm text-muted-foreground">No lists found. Create some lists to organize your contacts.</p>
+                )}
+              </div>
+            </CardContent>
+          </Card>
         </div>
-        
-        {activeList && (
-          <div className="flex gap-2">
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button 
-                  variant="outline" 
-                  className="text-red-600 hover:text-red-700"
-                  disabled={lists.length <= 1}
-                >
-                  <Trash2 className="h-4 w-4 mr-2" />
-                  Delete List
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    This will permanently delete the list "{activeList.name}" and all its contacts. This action cannot be undone.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction onClick={handleDeleteList} className="bg-red-600 hover:bg-red-700">
-                    Delete
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          </div>
-        )}
-      </div>
 
-      {/* List Content */}
-      <div className="bg-white rounded-lg border">
-        {activeList && activeList.contacts.length > 0 ? (
-          <ContactsView 
-            data={activeList.contacts}
-            revealedEmails={{}}
-            revealedPhones={{}}
-            onRevealEmail={() => {}}
-            onRevealPhone={() => {}}
-            onViewTeam={() => {}}
-            onAddToList={() => {}}
-            onRemoveFromList={handleRemoveFromList}
-            isSavedList={true}
-          />
-        ) : activeList ? (
-          <div className="text-center py-12">
-            <h3 className="text-lg font-medium mb-2">{activeList.name}</h3>
-            {activeList.description && (
-              <p className="text-muted-foreground mb-4">{activeList.description}</p>
-            )}
-            <p className="text-muted-foreground">
-              No contacts in this list yet. Add contacts from the People page using the + button.
-            </p>
-          </div>
-        ) : (
-          <div className="text-center py-12">
-            <p className="text-muted-foreground">
-              Create your first list to get started.
-            </p>
-          </div>
-        )}
+        {/* Contacts Table */}
+        <div className="md:col-span-3">
+          <Card>
+            <CardHeader>
+              <CardTitle>
+                {selectedList ? selectedList.name : 'Select a List'}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {selectedList ? (
+                <>
+                  <div className="relative mb-4">
+                    <Input
+                      placeholder="Search contacts..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="pl-10 w-full"
+                    />
+                    <Plus className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  </div>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Name</TableHead>
+                        <TableHead>Email</TableHead>
+                        <TableHead>Role</TableHead>
+                        <TableHead>Team</TableHead>
+                        <TableHead className="text-right">Actions</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {filteredContacts?.map((contact) => (
+                        <TableRow key={contact.id}>
+                          <TableCell className="font-medium">{contact.name}</TableCell>
+                          <TableCell>{contact.email}</TableCell>
+                          <TableCell>{contact.role}</TableCell>
+                          <TableCell>{contact.team}</TableCell>
+                          <TableCell className="text-right">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleRemoveFromList(contact.id)}
+                            >
+                              <X className="h-4 w-4" />
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                      {filteredContacts?.length === 0 && (
+                        <TableRow>
+                          <TableCell colSpan={5} className="text-center py-4">
+                            No contacts found in this list.
+                          </TableCell>
+                        </TableRow>
+                      )}
+                    </TableBody>
+                  </Table>
+                </>
+              ) : (
+                <div className="text-center py-10">
+                  <p className="text-muted-foreground">Select a list to view its contacts.</p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );
