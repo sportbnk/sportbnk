@@ -20,10 +20,11 @@ const ProfileHeader = ({ name, email, role, avatarUrl: initialAvatarUrl }: Profi
   useEffect(() => {
     const fetchLatestAvatar = async () => {
       console.log('ProfileHeader: User object from auth:', user);
+      console.log('ProfileHeader: User ID:', user?.id);
       console.log('ProfileHeader: Initial avatar URL prop:', initialAvatarUrl);
       
       if (user) {
-        console.log('ProfileHeader: Fetching profile for user ID:', user.id);
+        console.log('ProfileHeader: About to fetch profile for user ID:', user.id);
         
         // Add a fresh query with no cache
         const { data: profile, error } = await supabase
@@ -34,9 +35,22 @@ const ProfileHeader = ({ name, email, role, avatarUrl: initialAvatarUrl }: Profi
         
         console.log('ProfileHeader: RAW Profile data from database:', profile);
         console.log('ProfileHeader: Database query error:', error);
-        console.log('ProfileHeader: Profile avatar_url specifically:', profile?.avatar_url);
-        console.log('ProfileHeader: Profile avatar_url type:', typeof profile?.avatar_url);
-        console.log('ProfileHeader: Profile avatar_url length:', profile?.avatar_url?.length);
+        
+        if (error) {
+          console.error('ProfileHeader: Database error:', error);
+        }
+        
+        if (profile) {
+          console.log('ProfileHeader: Profile found!');
+          console.log('ProfileHeader: Profile avatar_url specifically:', profile.avatar_url);
+          console.log('ProfileHeader: Profile avatar_url type:', typeof profile.avatar_url);
+          console.log('ProfileHeader: Profile avatar_url length:', profile.avatar_url?.length);
+          console.log('ProfileHeader: Profile avatar_url is null?', profile.avatar_url === null);
+          console.log('ProfileHeader: Profile avatar_url is undefined?', profile.avatar_url === undefined);
+          console.log('ProfileHeader: Profile avatar_url is empty string?', profile.avatar_url === '');
+        } else {
+          console.log('ProfileHeader: NO PROFILE FOUND for user ID:', user.id);
+        }
         
         if (profile?.avatar_url) {
           console.log('ProfileHeader: Setting avatar URL from database:', profile.avatar_url);
@@ -45,6 +59,8 @@ const ProfileHeader = ({ name, email, role, avatarUrl: initialAvatarUrl }: Profi
           console.log('ProfileHeader: No avatar in database, using initial prop:', initialAvatarUrl);
           setAvatarUrl(initialAvatarUrl);
         }
+      } else {
+        console.log('ProfileHeader: No user object available');
       }
     };
 

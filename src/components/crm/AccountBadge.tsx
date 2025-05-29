@@ -35,10 +35,11 @@ const AccountBadge = ({ name: propName, email: propEmail, avatarUrl: propAvatarU
   useEffect(() => {
     const fetchLatestAvatar = async () => {
       console.log('AccountBadge: User object from auth:', user);
+      console.log('AccountBadge: User ID:', user?.id);
       console.log('AccountBadge: Prop avatar URL:', propAvatarUrl);
       
       if (user) {
-        console.log('AccountBadge: Fetching profile for user ID:', user.id);
+        console.log('AccountBadge: About to fetch profile for user ID:', user.id);
         
         // Add a fresh query with no cache and select all fields
         const { data: profile, error } = await supabase
@@ -49,9 +50,22 @@ const AccountBadge = ({ name: propName, email: propEmail, avatarUrl: propAvatarU
         
         console.log('AccountBadge: RAW Profile data from database:', profile);
         console.log('AccountBadge: Database query error:', error);
-        console.log('AccountBadge: Profile avatar_url specifically:', profile?.avatar_url);
-        console.log('AccountBadge: Profile avatar_url type:', typeof profile?.avatar_url);
-        console.log('AccountBadge: Profile avatar_url length:', profile?.avatar_url?.length);
+        
+        if (error) {
+          console.error('AccountBadge: Database error:', error);
+        }
+        
+        if (profile) {
+          console.log('AccountBadge: Profile found!');
+          console.log('AccountBadge: Profile avatar_url specifically:', profile.avatar_url);
+          console.log('AccountBadge: Profile avatar_url type:', typeof profile.avatar_url);
+          console.log('AccountBadge: Profile avatar_url length:', profile.avatar_url?.length);
+          console.log('AccountBadge: Profile avatar_url is null?', profile.avatar_url === null);
+          console.log('AccountBadge: Profile avatar_url is undefined?', profile.avatar_url === undefined);
+          console.log('AccountBadge: Profile avatar_url is empty string?', profile.avatar_url === '');
+        } else {
+          console.log('AccountBadge: NO PROFILE FOUND for user ID:', user.id);
+        }
         
         if (profile?.avatar_url) {
           console.log('AccountBadge: Setting avatar URL from database:', profile.avatar_url);
@@ -59,7 +73,11 @@ const AccountBadge = ({ name: propName, email: propEmail, avatarUrl: propAvatarU
         } else if (propAvatarUrl) {
           console.log('AccountBadge: No avatar in database, using prop:', propAvatarUrl);
           setAvatarUrl(propAvatarUrl);
+        } else {
+          console.log('AccountBadge: No avatar found anywhere');
         }
+      } else {
+        console.log('AccountBadge: No user object available');
       }
     };
 
