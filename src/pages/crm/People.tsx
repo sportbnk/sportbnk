@@ -17,6 +17,7 @@ import {
 import { Search, Mail, Phone, Linkedin, Building2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import ContactsFilters from "@/components/database/ContactsFilters";
+import ListSelectionPopover from "@/components/database/ListSelectionPopover";
 
 const People = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -134,6 +135,13 @@ const People = () => {
         variant: "destructive",
       });
     }
+  };
+
+  const handleAddToList = (contact: any, listId: number, listName: string) => {
+    toast({
+      title: "Contact Added",
+      description: `${contact.name} has been added to ${listName}`,
+    });
   };
 
   if (isLoading) {
@@ -286,9 +294,21 @@ const People = () => {
                         )}
                       </TableCell>
                       <TableCell>
-                        <Button variant="outline" size="sm">
-                          View Details
-                        </Button>
+                        <ListSelectionPopover
+                          contact={{
+                            id: contact.id,
+                            name: contact.name,
+                            email: contact.email,
+                            phone: contact.phone,
+                            position: contact.role,
+                            team: contact.teams?.name,
+                            teamId: contact.teams?.id,
+                            linkedin: contact.linkedin,
+                            verified: false,
+                            activeReplier: false
+                          }}
+                          onAddToList={handleAddToList}
+                        />
                       </TableCell>
                     </TableRow>
                   ))}
