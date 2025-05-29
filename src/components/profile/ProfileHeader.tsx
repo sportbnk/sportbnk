@@ -19,6 +19,7 @@ const ProfileHeader = ({ name, email, role, avatarUrl: initialAvatarUrl }: Profi
   // Fetch latest avatar from database on mount
   useEffect(() => {
     const fetchLatestAvatar = async () => {
+      console.log('=== ProfileHeader Debug Start ===');
       console.log('ProfileHeader: User object from auth:', user);
       console.log('ProfileHeader: User ID:', user?.id);
       console.log('ProfileHeader: Initial avatar URL prop:', initialAvatarUrl);
@@ -26,42 +27,60 @@ const ProfileHeader = ({ name, email, role, avatarUrl: initialAvatarUrl }: Profi
       if (user) {
         console.log('ProfileHeader: About to fetch profile for user ID:', user.id);
         
-        // Add a fresh query with no cache
-        const { data: profile, error } = await supabase
-          .from('profiles')
-          .select('*')  // Select all fields to see what's there
-          .eq('user_id', user.id)
-          .maybeSingle();
-        
-        console.log('ProfileHeader: RAW Profile data from database:', profile);
-        console.log('ProfileHeader: Database query error:', error);
-        
-        if (error) {
-          console.error('ProfileHeader: Database error:', error);
-        }
-        
-        if (profile) {
-          console.log('ProfileHeader: Profile found!');
-          console.log('ProfileHeader: Profile avatar_url specifically:', profile.avatar_url);
-          console.log('ProfileHeader: Profile avatar_url type:', typeof profile.avatar_url);
-          console.log('ProfileHeader: Profile avatar_url length:', profile.avatar_url?.length);
-          console.log('ProfileHeader: Profile avatar_url is null?', profile.avatar_url === null);
-          console.log('ProfileHeader: Profile avatar_url is undefined?', profile.avatar_url === undefined);
-          console.log('ProfileHeader: Profile avatar_url is empty string?', profile.avatar_url === '');
-        } else {
-          console.log('ProfileHeader: NO PROFILE FOUND for user ID:', user.id);
-        }
-        
-        if (profile?.avatar_url) {
-          console.log('ProfileHeader: Setting avatar URL from database:', profile.avatar_url);
-          setAvatarUrl(profile.avatar_url);
-        } else {
-          console.log('ProfileHeader: No avatar in database, using initial prop:', initialAvatarUrl);
+        try {
+          // Add a fresh query with no cache and select all fields
+          const { data: profile, error, status, statusText } = await supabase
+            .from('profiles')
+            .select('*')  // Select all fields to see what's there
+            .eq('user_id', user.id)
+            .maybeSingle();
+          
+          console.log('ProfileHeader: Database query status:', status);
+          console.log('ProfileHeader: Database query statusText:', statusText);
+          console.log('ProfileHeader: Database query error:', error);
+          console.log('ProfileHeader: RAW Profile data from database:', profile);
+          
+          if (error) {
+            console.error('ProfileHeader: Database error details:', {
+              message: error.message,
+              details: error.details,
+              hint: error.hint,
+              code: error.code
+            });
+          }
+          
+          if (profile) {
+            console.log('ProfileHeader: Profile found!');
+            console.log('ProfileHeader: Profile keys:', Object.keys(profile));
+            console.log('ProfileHeader: Profile avatar_url specifically:', profile.avatar_url);
+            console.log('ProfileHeader: Profile avatar_url type:', typeof profile.avatar_url);
+            console.log('ProfileHeader: Profile avatar_url length:', profile.avatar_url?.length);
+            console.log('ProfileHeader: Profile avatar_url is null?', profile.avatar_url === null);
+            console.log('ProfileHeader: Profile avatar_url is undefined?', profile.avatar_url === undefined);
+            console.log('ProfileHeader: Profile avatar_url is empty string?', profile.avatar_url === '');
+            console.log('ProfileHeader: Profile avatar_url truthy?', !!profile.avatar_url);
+            
+            if (profile.avatar_url) {
+              console.log('ProfileHeader: Setting avatar URL from database:', profile.avatar_url);
+              setAvatarUrl(profile.avatar_url);
+            } else {
+              console.log('ProfileHeader: No avatar in database, using initial prop:', initialAvatarUrl);
+              setAvatarUrl(initialAvatarUrl);
+            }
+          } else {
+            console.log('ProfileHeader: NO PROFILE FOUND for user ID:', user.id);
+            console.log('ProfileHeader: Using initial avatar prop:', initialAvatarUrl);
+            setAvatarUrl(initialAvatarUrl);
+          }
+        } catch (fetchError) {
+          console.error('ProfileHeader: Fetch error:', fetchError);
           setAvatarUrl(initialAvatarUrl);
         }
       } else {
         console.log('ProfileHeader: No user object available');
       }
+      
+      console.log('=== ProfileHeader Debug End ===');
     };
 
     fetchLatestAvatar();
@@ -81,10 +100,7 @@ const ProfileHeader = ({ name, email, role, avatarUrl: initialAvatarUrl }: Profi
     };
   }, []);
 
-  console.log('ProfileHeader: Current avatar URL being displayed:', avatarUrl);
-  console.log('ProfileHeader: Avatar URL is empty?', !avatarUrl);
-  console.log('ProfileHeader: Avatar URL is undefined?', avatarUrl === undefined);
-  console.log('ProfileHeader: Avatar URL is null?', avatarUrl === null);
+  console.log('ProfileHeader: Final avatar URL being displayed:', avatarUrl);
 
   return (
     <Card className="mb-6">
