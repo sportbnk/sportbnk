@@ -40,7 +40,6 @@ const ContactsView = ({
   onRemoveFromList = () => {},
   isSavedList = false
 }: ContactsViewProps) => {
-  console.log("data", data)
   return (
     <div className="w-full overflow-auto">
       <Table>
