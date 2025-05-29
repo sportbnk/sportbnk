@@ -1,19 +1,11 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Plus, Check } from "lucide-react";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
-import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/components/auth/AuthContext";
-
-interface ContactList {
-  id: string;
-  name: string;
-  description?: string;
-  isContactInList?: boolean;
-}
+import { useListsContext } from "@/contexts/ListsContext";
 
 interface ListSelectionPopoverProps {
   onAddToList: (contact: any, listId: string, listName: string) => void;
@@ -21,98 +13,13 @@ interface ListSelectionPopoverProps {
 }
 
 const ListSelectionPopover = ({ onAddToList, contact }: ListSelectionPopoverProps) => {
-  const [lists, setLists] = useState<ContactList[]>([]);
   const [newListName, setNewListName] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const { user } = useAuth();
-
-  // Load lists and check which ones contain this contact
-  useEffect(() => {
-    if (isOpen && user) {
-      loadListsWithContactStatus();
-    }
-  }, [isOpen, user, contact.id]);
-
-  const loadListsWithContactStatus = async () => {
-    setLoading(true);
-    try {
-      // Get user's profile
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('id')
-        .eq('user_id', user.id)
-        .single();
-
-      if (!profile) {
-        console.error('No profile found for user');
-        return;
-      }
-
-      // Get all lists for this user with contact status
-      const { data: listsData, error: listsError } = await supabase
-        .from('lists')
-        .select(`
-          id,
-          name,
-          description,
-          list_items!inner (
-            contact_id
-          )
-        `)
-        .eq('profile_id', profile.id);
-
-      if (listsError) {
-        console.error('Error fetching lists:', listsError);
-        return;
-      }
-
-      // Process lists to check if contact is already in each list
-      const listsWithStatus = listsData?.map(list => ({
-        id: list.id,
-        name: list.name,
-        description: list.description,
-        isContactInList: list.list_items?.some((item: any) => item.contact_id === contact.id) || false
-      })) || [];
-
-      setLists(listsWithStatus);
-    } catch (error) {
-      console.error('Error loading lists:', error);
-      toast.error('Failed to load lists');
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { lists, loading, addContactToList, createList, isContactInList } = useListsContext();
 
   const handleAddToList = async (listId: string, listName: string) => {
     try {
-      // Check if contact is already in this list
-      const { data: existingItem } = await supabase
-        .from('list_items')
-        .select('id')
-        .eq('list_id', listId)
-        .eq('contact_id', contact.id)
-        .single();
-
-      if (existingItem) {
-        toast.info(`${contact.name} is already in ${listName}`);
-        return;
-      }
-
-      // Add contact to list
-      const { error } = await supabase
-        .from('list_items')
-        .insert({
-          list_id: listId,
-          contact_id: contact.id
-        });
-
-      if (error) {
-        console.error('Error adding contact to list:', error);
-        toast.error('Failed to add contact to list');
-        return;
-      }
-
+      await addContactToList(listId, contact.id);
       setIsOpen(false);
       toast.success(`Added ${contact.name} to ${listName}`);
       onAddToList(contact, listId, listName);
@@ -127,59 +34,16 @@ const ListSelectionPopover = ({ onAddToList, contact }: ListSelectionPopoverProp
       toast.error("Please enter a list name");
       return;
     }
-    
-    if (!user) {
-      toast.error("You must be logged in to create lists");
-      return;
-    }
 
     try {
-      // Get user's profile
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('id')
-        .eq('user_id', user.id)
-        .single();
-
-      if (!profile) {
-        toast.error("Profile not found");
-        return;
+      const newListId = await createList(newListName.trim());
+      if (newListId) {
+        await addContactToList(newListId, contact.id);
+        setNewListName("");
+        setIsOpen(false);
+        toast.success(`Created "${newListName}" and added ${contact.name}`);
+        onAddToList(contact, newListId, newListName);
       }
-
-      // Create new list
-      const { data: newList, error: listError } = await supabase
-        .from('lists')
-        .insert({
-          profile_id: profile.id,
-          name: newListName.trim()
-        })
-        .select()
-        .single();
-
-      if (listError) {
-        console.error('Error creating list:', listError);
-        toast.error('Failed to create list');
-        return;
-      }
-
-      // Add contact to the new list
-      const { error: itemError } = await supabase
-        .from('list_items')
-        .insert({
-          list_id: newList.id,
-          contact_id: contact.id
-        });
-
-      if (itemError) {
-        console.error('Error adding contact to new list:', itemError);
-        toast.error('List created but failed to add contact');
-        return;
-      }
-
-      setNewListName("");
-      setIsOpen(false);
-      toast.success(`Created "${newList.name}" and added ${contact.name}`);
-      onAddToList(contact, newList.id, newList.name);
     } catch (error) {
       console.error('Error creating list:', error);
       toast.error('Failed to create list');
@@ -232,24 +96,27 @@ const ListSelectionPopover = ({ onAddToList, contact }: ListSelectionPopoverProp
             <div className="border-t pt-2">
               <p className="text-xs text-muted-foreground mb-2">Or select existing list:</p>
               <div className="space-y-1 max-h-40 overflow-y-auto">
-                {lists.map((list) => (
-                  <div key={list.id} className="flex justify-between items-center">
-                    <span className="text-sm truncate">{list.name}</span>
-                    <Button 
-                      size="sm" 
-                      variant="ghost" 
-                      onClick={() => handleAddToList(list.id, list.name)}
-                      className="h-6 w-6 p-0"
-                      disabled={list.isContactInList}
-                    >
-                      {list.isContactInList ? (
-                        <Check className="h-4 w-4 text-green-500" />
-                      ) : (
-                        <Plus className="h-4 w-4" />
-                      )}
-                    </Button>
-                  </div>
-                ))}
+                {lists.map((list) => {
+                  const contactInList = isContactInList(list.id, contact.id);
+                  return (
+                    <div key={list.id} className="flex justify-between items-center">
+                      <span className="text-sm truncate">{list.name}</span>
+                      <Button 
+                        size="sm" 
+                        variant="ghost" 
+                        onClick={() => handleAddToList(list.id, list.name)}
+                        className="h-6 w-6 p-0"
+                        disabled={contactInList}
+                      >
+                        {contactInList ? (
+                          <Check className="h-4 w-4 text-green-500" />
+                        ) : (
+                          <Plus className="h-4 w-4" />
+                        )}
+                      </Button>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           ) : (

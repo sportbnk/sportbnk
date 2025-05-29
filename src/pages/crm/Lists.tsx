@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Plus, Trash2, Download } from 'lucide-react';
 import {
   AlertDialog,
@@ -45,8 +45,7 @@ import { useForm } from "react-hook-form"
 import { toast } from "sonner";
 import { useLocation } from 'react-router-dom';
 import ContactsView from "@/components/database/ContactsView";
-import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/components/auth/AuthContext";
+import { useListsContext } from "@/contexts/ListsContext";
 
 // Define the schema for the form
 const formSchema = z.object({
@@ -56,33 +55,20 @@ const formSchema = z.object({
   description: z.string().optional(),
 })
 
-interface Contact {
-  id: string;
-  name: string;
-  email: string;
-  phone?: string;
-  position?: string;
-  team: string;
-  teamId?: number;
-  linkedin?: string;
-  verified?: boolean;
-  activeReplier?: boolean;
-}
-
-interface ContactList {
-  id: string;
-  name: string;
-  description?: string;
-  contacts: Contact[];
-}
-
 const Lists = () => {
   const location = useLocation();
   const [isCreateListOpen, setIsCreateListOpen] = useState(false);
-  const [lists, setLists] = useState<ContactList[]>([]);
-  const [activeList, setActiveList] = useState<ContactList | null>(null);
-  const [loading, setLoading] = useState(true);
-  const { user } = useAuth();
+  const [activeListId, setActiveListId] = useState<string | null>(null);
+  
+  const { 
+    lists, 
+    loading, 
+    createList, 
+    deleteList, 
+    removeContactFromList 
+  } = useListsContext();
+
+  const activeList = lists.find(list => list.id === activeListId) || null;
 
   // Form logic
   const form = useForm<z.infer<typeof formSchema>>({
@@ -93,101 +79,22 @@ const Lists = () => {
     },
   });
 
-  // Load lists from database
-  const loadLists = useCallback(async () => {
-    if (!user) return;
-    
-    setLoading(true);
-    try {
-      // Get user's profile
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('id')
-        .eq('user_id', user.id)
-        .single();
-
-      if (!profile) {
-        console.error('No profile found for user');
-        return;
-      }
-
-      // Get all lists for this user with their contacts
-      const { data: listsData, error } = await supabase
-        .from('lists')
-        .select(`
-          id,
-          name,
-          description,
-          created_at,
-          list_items (
-            contacts (
-              id,
-              name,
-              email,
-              phone,
-              role,
-              linkedin,
-              teams (
-                id,
-                name
-              )
-            )
-          )
-        `)
-        .eq('profile_id', profile.id)
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        console.error('Error loading lists:', error);
-        toast.error('Failed to load lists');
-        return;
-      }
-
-      // Transform the data to match our interface
-      const transformedLists: ContactList[] = listsData?.map(list => ({
-        id: list.id,
-        name: list.name,
-        description: list.description,
-        contacts: list.list_items?.map((item: any) => ({
-          id: item.contacts.id,
-          name: item.contacts.name,
-          email: item.contacts.email,
-          phone: item.contacts.phone,
-          position: item.contacts.role,
-          team: item.contacts.teams?.name || '',
-          teamId: item.contacts.teams?.id,
-          linkedin: item.contacts.linkedin,
-          verified: false,
-          activeReplier: false
-        })) || []
-      })) || [];
-
-      setLists(transformedLists);
-      if (transformedLists.length > 0 && !activeList) {
-        setActiveList(transformedLists[0]);
-      }
-    } catch (error) {
-      console.error('Error loading lists:', error);
-      toast.error('Failed to load lists');
-    } finally {
-      setLoading(false);
-    }
-  }, [user, activeList]);
-
+  // Set the first list as active when lists are loaded
   useEffect(() => {
-    loadLists();
-  }, [loadLists]);
+    if (lists.length > 0 && !activeListId) {
+      setActiveListId(lists[0].id);
+    }
+  }, [lists, activeListId]);
 
   // Handle contact passed from People or Teams page
   useEffect(() => {
     if (location.state?.contactToAdd && activeList) {
-      const contactToAdd = location.state.contactToAdd as Contact;
+      const contactToAdd = location.state.contactToAdd;
       
       // Check if contact is already in the active list
       const isAlreadyInList = activeList.contacts.some(c => c.id === contactToAdd.id);
       
       if (!isAlreadyInList) {
-        // This will be handled by the database operations in ListSelectionPopover
         toast.info(`Please use the + button to add ${contactToAdd.name} to a list`);
       } else {
         toast.info(`${contactToAdd.name} is already in ${activeList.name}`);
@@ -199,63 +106,24 @@ const Lists = () => {
   }, [location.state, activeList]);
 
   // Function to handle form submission
-  const onSubmit = useCallback(async (values: z.infer<typeof formSchema>) => {
-    if (!user) {
-      toast.error("You must be logged in to create lists");
-      return;
-    }
-
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      // Get user's profile
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('id')
-        .eq('user_id', user.id)
-        .single();
-
-      if (!profile) {
-        toast.error("Profile not found");
-        return;
-      }
-
-      // Create new list
-      const { data: newList, error } = await supabase
-        .from('lists')
-        .insert({
-          profile_id: profile.id,
-          name: values.listName,
-          description: values.description
-        })
-        .select()
-        .single();
-
-      if (error) {
-        console.error('Error creating list:', error);
-        toast.error('Failed to create list');
-        return;
-      }
-
-      toast.success("List created successfully", {
-        description: `Your new list "${values.listName}" has been created.`
-      });
-
-      setIsCreateListOpen(false);
-      form.reset();
+      const newListId = await createList(values.listName, values.description);
       
-      // Reload lists and set the new list as active
-      await loadLists();
-      const newListWithContacts: ContactList = {
-        id: newList.id,
-        name: newList.name,
-        description: newList.description,
-        contacts: []
-      };
-      setActiveList(newListWithContacts);
+      if (newListId) {
+        toast.success("List created successfully", {
+          description: `Your new list "${values.listName}" has been created.`
+        });
+
+        setIsCreateListOpen(false);
+        form.reset();
+        setActiveListId(newListId);
+      }
     } catch (error) {
       console.error('Error creating list:', error);
       toast.error('Failed to create list');
     }
-  }, [user, form, loadLists]);
+  };
 
   // Function to delete list
   const handleDeleteList = async () => {
@@ -267,19 +135,16 @@ const Lists = () => {
     }
     
     try {
-      const { error } = await supabase
-        .from('lists')
-        .delete()
-        .eq('id', activeList.id);
-
-      if (error) {
-        console.error('Error deleting list:', error);
-        toast.error('Failed to delete list');
-        return;
-      }
-
+      await deleteList(activeList.id);
       toast.success(`Deleted list "${activeList.name}"`);
-      await loadLists();
+      
+      // Set the first available list as active
+      const remainingLists = lists.filter(l => l.id !== activeList.id);
+      if (remainingLists.length > 0) {
+        setActiveListId(remainingLists[0].id);
+      } else {
+        setActiveListId(null);
+      }
     } catch (error) {
       console.error('Error deleting list:', error);
       toast.error('Failed to delete list');
@@ -291,20 +156,8 @@ const Lists = () => {
     if (!activeList) return;
 
     try {
-      const { error } = await supabase
-        .from('list_items')
-        .delete()
-        .eq('list_id', activeList.id)
-        .eq('contact_id', contactId);
-
-      if (error) {
-        console.error('Error removing contact from list:', error);
-        toast.error('Failed to remove contact from list');
-        return;
-      }
-
+      await removeContactFromList(activeList.id, contactId);
       toast.info("Contact removed from list");
-      await loadLists();
     } catch (error) {
       console.error('Error removing contact from list:', error);
       toast.error('Failed to remove contact from list');
@@ -434,11 +287,8 @@ const Lists = () => {
         <div className="flex items-center gap-4">
           {lists.length > 0 ? (
             <Select
-              value={activeList?.id || ''}
-              onValueChange={(value) => {
-                const selected = lists.find(list => list.id === value);
-                if (selected) setActiveList(selected);
-              }}
+              value={activeListId || ''}
+              onValueChange={(value) => setActiveListId(value)}
             >
               <SelectTrigger className="w-[280px]">
                 <SelectValue placeholder="Select a list" />
