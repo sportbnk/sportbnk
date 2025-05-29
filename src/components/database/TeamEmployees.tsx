@@ -16,7 +16,7 @@ import ListSelectionPopover from "./ListSelectionPopover";
 import { toast } from "sonner";
 
 interface Employee {
-  id: number;
+  id: string;
   name: string;
   position: string;
   email: string;
@@ -27,7 +27,7 @@ interface Employee {
 }
 
 interface TeamEmployee {
-  id: number;
+  id: string;
   team: string;
   teamLogo: string;
   employees: Employee[];
