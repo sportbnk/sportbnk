@@ -79,6 +79,12 @@ const PersonalInfo = ({ userData, onUpdate, onAvatarUpdate }: PersonalInfoProps)
 
         // Call the callback to update the parent component
         onAvatarUpdate?.(avatarUrl);
+        
+        // Trigger a custom event to notify other components
+        window.dispatchEvent(new CustomEvent('avatarUpdated', { 
+          detail: { avatarUrl } 
+        }));
+        
         toast.success('Profile picture updated successfully');
       }
     } catch (error) {

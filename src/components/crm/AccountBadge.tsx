@@ -49,6 +49,20 @@ const AccountBadge = ({ name: propName, email: propEmail, avatarUrl: propAvatarU
       fetchAvatar();
     }
   }, [user, propAvatarUrl]);
+
+  // Listen for avatar updates from other components
+  useEffect(() => {
+    const handleAvatarUpdate = (event: CustomEvent) => {
+      console.log('Avatar update received:', event.detail.avatarUrl);
+      setAvatarUrl(event.detail.avatarUrl);
+    };
+
+    window.addEventListener('avatarUpdated', handleAvatarUpdate as EventListener);
+    
+    return () => {
+      window.removeEventListener('avatarUpdated', handleAvatarUpdate as EventListener);
+    };
+  }, []);
   
   // Handle logout
   const handleLogout = async () => {

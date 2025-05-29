@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -10,7 +10,28 @@ interface ProfileHeaderProps {
   avatarUrl?: string;
 }
 
-const ProfileHeader = ({ name, email, role, avatarUrl }: ProfileHeaderProps) => {
+const ProfileHeader = ({ name, email, role, avatarUrl: initialAvatarUrl }: ProfileHeaderProps) => {
+  const [avatarUrl, setAvatarUrl] = useState<string | undefined>(initialAvatarUrl);
+
+  // Update avatar when prop changes
+  useEffect(() => {
+    setAvatarUrl(initialAvatarUrl);
+  }, [initialAvatarUrl]);
+
+  // Listen for avatar updates from other components
+  useEffect(() => {
+    const handleAvatarUpdate = (event: CustomEvent) => {
+      console.log('ProfileHeader: Avatar update received:', event.detail.avatarUrl);
+      setAvatarUrl(event.detail.avatarUrl);
+    };
+
+    window.addEventListener('avatarUpdated', handleAvatarUpdate as EventListener);
+    
+    return () => {
+      window.removeEventListener('avatarUpdated', handleAvatarUpdate as EventListener);
+    };
+  }, []);
+
   return (
     <Card className="mb-6">
       <CardContent className="p-6 flex flex-col sm:flex-row items-center gap-4">
