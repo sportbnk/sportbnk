@@ -14,8 +14,13 @@ export interface BatchProcessResult {
 export class CsvUploadService {
   private static async processBatch(
     functionName: string,
-    payload: any
+    payload: any,
+    signal?: AbortSignal
   ): Promise<BatchProcessResult> {
+    if (signal?.aborted) {
+      throw new DOMException('Operation was aborted', 'AbortError');
+    }
+
     const { data, error } = await supabase.functions.invoke(functionName, {
       body: payload,
     });
@@ -31,7 +36,8 @@ export class CsvUploadService {
     csvData: string,
     fileType: 'csv' | 'xlsx' = 'csv',
     batchSize: number = 100,
-    onProgress?: (result: BatchProcessResult) => void
+    onProgress?: (result: BatchProcessResult) => void,
+    signal?: AbortSignal
   ): Promise<BatchProcessResult> {
     let startRow = 1; // Skip header
     let totalProcessed = 0;
@@ -41,12 +47,17 @@ export class CsvUploadService {
     let isComplete = false;
 
     while (!isComplete) {
+      // Check if operation was aborted
+      if (signal?.aborted) {
+        throw new DOMException('Operation was aborted', 'AbortError');
+      }
+
       const result = await this.processBatch('process-teams-csv', {
         csvData,
         fileType,
         startRow,
         batchSize,
-      });
+      }, signal);
 
       totalProcessed += result.processed;
       totalSuccessful += result.successful;
@@ -71,6 +82,11 @@ export class CsvUploadService {
       }
 
       if (!isComplete) {
+        // Check again before delay
+        if (signal?.aborted) {
+          throw new DOMException('Operation was aborted', 'AbortError');
+        }
+        
         // Small delay between batches to prevent overwhelming the edge function
         await new Promise(resolve => setTimeout(resolve, 100));
       }
@@ -91,7 +107,8 @@ export class CsvUploadService {
     csvData: string,
     conflictResolutions: any[] = [],
     batchSize: number = 50,
-    onProgress?: (result: BatchProcessResult) => void
+    onProgress?: (result: BatchProcessResult) => void,
+    signal?: AbortSignal
   ): Promise<BatchProcessResult> {
     let startRow = 1; // Skip header
     let totalProcessed = 0;
@@ -100,12 +117,17 @@ export class CsvUploadService {
     let isComplete = false;
 
     while (!isComplete) {
+      // Check if operation was aborted
+      if (signal?.aborted) {
+        throw new DOMException('Operation was aborted', 'AbortError');
+      }
+
       const result = await this.processBatch('process-contacts-csv', {
         csvData,
         conflictResolutions,
         startRow,
         batchSize,
-      });
+      }, signal);
 
       totalProcessed += result.processed;
       totalSuccessful += result.successful;
@@ -128,6 +150,11 @@ export class CsvUploadService {
       }
 
       if (!isComplete) {
+        // Check again before delay
+        if (signal?.aborted) {
+          throw new DOMException('Operation was aborted', 'AbortError');
+        }
+        
         // Small delay between batches to prevent overwhelming the edge function
         await new Promise(resolve => setTimeout(resolve, 100));
       }

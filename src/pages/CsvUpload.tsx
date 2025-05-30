@@ -249,7 +249,8 @@ const CsvUpload = () => {
         100, // batch size
         (progress) => {
           setTeamsProgress(progress);
-        }
+        },
+        abortController.signal
       );
 
       toast({
@@ -294,7 +295,8 @@ const CsvUpload = () => {
         50, // batch size
         (progress) => {
           setContactsProgress(progress);
-        }
+        },
+        abortController.signal
       );
 
       toast({
