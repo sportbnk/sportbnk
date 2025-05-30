@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import PageLayout from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
@@ -750,6 +751,7 @@ const CsvUpload = () => {
                             <TableHead>Name</TableHead>
                             <TableHead>Sport</TableHead>
                             <TableHead>Level</TableHead>
+                            <TableHead>Street</TableHead>
                             <TableHead>City</TableHead>
                             <TableHead>Country</TableHead>
                             <TableHead>Social Links</TableHead>
@@ -762,6 +764,7 @@ const CsvUpload = () => {
                               <TableCell className="font-medium">{team.name}</TableCell>
                               <TableCell>{team.sport || 'N/A'}</TableCell>
                               <TableCell className="capitalize">{team.level || 'N/A'}</TableCell>
+                              <TableCell>{team.street || 'N/A'}</TableCell>
                               <TableCell>{team.city || 'N/A'}</TableCell>
                               <TableCell>{team.country || 'N/A'}</TableCell>
                               <TableCell>
