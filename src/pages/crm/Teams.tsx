@@ -1,11 +1,14 @@
+
 import React, { useState, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import ContactsFilters from "@/components/database/ContactsFilters";
 import ContactsTable from "@/components/database/ContactsTable";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { useCredits } from "@/contexts/CreditsContext";
+import { Search } from "lucide-react";
 
 // DTO interfaces for proper typing
 interface SportDTO {
@@ -43,12 +46,60 @@ export default function Teams() {
     team: "all"
   });
 
+  const [searchTerm, setSearchTerm] = useState("");
   const { credits, tier } = useCredits();
 
+  // Search for specific team function
+  const searchSpecificTeam = async () => {
+    console.log('=== SEARCHING FOR "FORE" Business ===');
+    
+    try {
+      // Search with exact match
+      const { data: exactMatch, error: exactError } = await supabase
+        .from('teams')
+        .select('*')
+        .eq('name', '"FORE" Business');
+      
+      console.log('Exact match search results:', exactMatch);
+      console.log('Exact match error:', exactError);
+
+      // Search with ILIKE for partial matches
+      const { data: partialMatch, error: partialError } = await supabase
+        .from('teams')
+        .select('*')
+        .ilike('name', '%FORE%');
+      
+      console.log('Partial match (FORE) results:', partialMatch);
+      console.log('Partial match error:', partialError);
+
+      // Search with ILIKE for Business
+      const { data: businessMatch, error: businessError } = await supabase
+        .from('teams')
+        .select('*')
+        .ilike('name', '%Business%');
+      
+      console.log('Business match results:', businessMatch);
+      console.log('Business match error:', businessError);
+
+      // Get all teams to see what's in the database
+      const { data: allTeams, error: allError } = await supabase
+        .from('teams')
+        .select('name')
+        .order('name');
+      
+      console.log('All team names in database:', allTeams?.map(t => t.name));
+      console.log('Total teams:', allTeams?.length);
+      
+    } catch (error) {
+      console.error('Search error:', error);
+    }
+  };
+
   const { data: organizationsData, isLoading } = useQuery({
-    queryKey: ['organizations', filters],
+    queryKey: ['organizations', filters, searchTerm],
     queryFn: async () => {
       console.log('Fetching organizations with filters:', filters);
+      console.log('Search term:', searchTerm);
       
       let query = supabase
         .from('teams')
@@ -68,6 +119,11 @@ export default function Teams() {
             )
           )
         `);
+
+      // Apply search filter
+      if (searchTerm.trim()) {
+        query = query.ilike('name', `%${searchTerm.trim()}%`);
+      }
 
       // Apply filters
       if (filters.sport !== "all") {
@@ -146,7 +202,7 @@ export default function Teams() {
 
   // Use useCallback to prevent re-rendering of ContactsFilters
   const handleFilterChange = useCallback((newFilters: any) => {
-    console.log('Filter change receivedd:', newFilters);
+    console.log('Filter change received:', newFilters);
     setFilters(newFilters);
   }, []);
 
@@ -194,6 +250,9 @@ export default function Teams() {
     <div className="container mx-auto px-4">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Organizations Database</h1>
+        <Button onClick={searchSpecificTeam} variant="outline">
+          Debug: Search for "FORE" Business
+        </Button>
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
@@ -228,6 +287,20 @@ export default function Teams() {
         </div>
         
         <div className="md:col-span-5">
+          <Card className="shadow-md mb-4">
+            <CardContent className="p-4">
+              <div className="flex items-center space-x-2">
+                <Search className="h-4 w-4 text-gray-400" />
+                <Input
+                  placeholder="Search organizations by name..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="flex-1"
+                />
+              </div>
+            </CardContent>
+          </Card>
+          
           <ContactsTable 
             data={tableData} 
             useCredits={handleUseCredits}
