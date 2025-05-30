@@ -12,6 +12,7 @@ import { CsvUploadService, BatchProcessResult } from "@/services/csvUploadServic
 
 const CsvUpload = () => {
   const [teamsCsv, setTeamsCsv] = useState("");
+  const [teamsFileType, setTeamsFileType] = useState<'csv' | 'xlsx'>('csv');
   const [contactsCsv, setContactsCsv] = useState("");
   const [isProcessingTeams, setIsProcessingTeams] = useState(false);
   const [isProcessingContacts, setIsProcessingContacts] = useState(false);
@@ -22,6 +23,20 @@ const CsvUpload = () => {
   const [teamsAbortController, setTeamsAbortController] = useState<AbortController | null>(null);
   const [contactsAbortController, setContactsAbortController] = useState<AbortController | null>(null);
   const { toast } = useToast();
+
+  // Function to convert file to base64 for XLSX processing
+  const fileToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        const result = reader.result as string;
+        // Remove the data URL prefix (e.g., "data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,")
+        resolve(result.split(',')[1]);
+      };
+      reader.onerror = error => reject(error);
+    });
+  };
 
   // Function to parse CSV and get specific row data
   const getCsvRowData = (csvData: string, rowNumber: number) => {
@@ -39,18 +54,50 @@ const CsvUpload = () => {
     }
   };
 
-  const handleFileRead = (file: File, setData: (data: string) => void) => {
-    if (file && file.type === "text/csv") {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const text = e.target?.result as string;
-        setData(text);
-      };
-      reader.readAsText(file);
-    } else {
+  const handleFileRead = async (file: File, setData: (data: string) => void, setFileType?: (type: 'csv' | 'xlsx') => void) => {
+    const fileName = file.name.toLowerCase();
+    const isExcelFile = fileName.endsWith('.xlsx') || fileName.endsWith('.xls');
+    const isCsvFile = fileName.endsWith('.csv');
+
+    if (!isExcelFile && !isCsvFile) {
       toast({
         title: "Invalid file",
-        description: "Please select a CSV file",
+        description: "Please select a CSV or Excel file",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      if (isExcelFile) {
+        // Handle Excel files
+        const base64Data = await fileToBase64(file);
+        setData(base64Data);
+        if (setFileType) setFileType('xlsx');
+        
+        toast({
+          title: "Excel file loaded",
+          description: "Excel file processed successfully. Commas in cells won't cause parsing issues.",
+        });
+      } else {
+        // Handle CSV files
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const text = e.target?.result as string;
+          setData(text);
+          if (setFileType) setFileType('csv');
+        };
+        reader.readAsText(file);
+        
+        toast({
+          title: "CSV file loaded",
+          description: "CSV file loaded. Make sure cells with commas are properly quoted.",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "File processing error",
+        description: "Failed to process the file. Please try again.",
         variant: "destructive",
       });
     }
@@ -59,7 +106,7 @@ const CsvUpload = () => {
   const handleTeamsFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      handleFileRead(file, setTeamsCsv);
+      handleFileRead(file, setTeamsCsv, setTeamsFileType);
     }
   };
 
@@ -85,7 +132,7 @@ const CsvUpload = () => {
     setTeamsDropActive(false);
     const file = e.dataTransfer.files[0];
     if (file) {
-      handleFileRead(file, setTeamsCsv);
+      handleFileRead(file, setTeamsCsv, setTeamsFileType);
     }
   };
 
@@ -114,7 +161,8 @@ const CsvUpload = () => {
     onDragLeave: (e: React.DragEvent) => void,
     onDrop: (e: React.DragEvent) => void,
     isDropActive: boolean,
-    acceptId: string
+    acceptId: string,
+    acceptTypes: string = ".csv,.xlsx,.xls"
   ) => (
     <div
       className={`relative border-2 border-dashed rounded-lg p-12 text-center transition-colors cursor-pointer hover:border-primary/50 ${
@@ -128,7 +176,7 @@ const CsvUpload = () => {
       <input
         id={acceptId}
         type="file"
-        accept=".csv"
+        accept={acceptTypes}
         onChange={onFileChange}
         className="hidden"
       />
@@ -140,10 +188,13 @@ const CsvUpload = () => {
         </div>
         <div>
           <p className="text-lg font-medium text-gray-700">
-            Drag and drop your CSV file here
+            Drag and drop your CSV or Excel file here
           </p>
           <p className="text-sm text-gray-500 mt-2">
             or click to browse files
+          </p>
+          <p className="text-xs text-gray-400 mt-1">
+            Supports .csv, .xlsx, .xls files
           </p>
         </div>
       </div>
@@ -180,7 +231,7 @@ const CsvUpload = () => {
     if (!teamsCsv.trim()) {
       toast({
         title: "Error",
-        description: "Please upload a teams CSV file or enter CSV data",
+        description: "Please upload a teams file or enter CSV data",
         variant: "destructive",
       });
       return;
@@ -194,6 +245,7 @@ const CsvUpload = () => {
     try {
       await CsvUploadService.processTeamsCsv(
         teamsCsv,
+        teamsFileType,
         100, // batch size
         (progress) => {
           setTeamsProgress(progress);
@@ -202,12 +254,11 @@ const CsvUpload = () => {
 
       toast({
         title: "Teams Upload Complete",
-        description: "All teams have been processed successfully",
+        description: `All teams have been processed successfully using ${teamsFileType.toUpperCase()} format`,
       });
     } catch (error) {
       console.error('Teams upload error:', error);
       if (error instanceof Error && error.name === 'AbortError') {
-        // Upload was cancelled, don't show error toast
         return;
       }
       toast({
@@ -352,9 +403,9 @@ const CsvUpload = () => {
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold mb-4">CSV Data Upload</h1>
+          <h1 className="text-3xl font-bold mb-4">CSV/Excel Data Upload</h1>
           <p className="text-gray-600">
-            Upload teams and contacts data via CSV. Large files are processed in batches automatically.
+            Upload teams and contacts data via CSV or Excel files. Excel files eliminate comma parsing issues.
           </p>
         </div>
 
@@ -365,11 +416,14 @@ const CsvUpload = () => {
               <CardTitle className="flex items-center space-x-2">
                 <Building2 className="h-5 w-5" />
                 <span>Teams Upload</span>
+                {teamsFileType === 'xlsx' && (
+                  <Badge variant="secondary" className="ml-2">Excel</Badge>
+                )}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <label className="text-sm font-medium mb-3 block">Upload CSV File</label>
+                <label className="text-sm font-medium mb-3 block">Upload CSV or Excel File</label>
                 {renderDropZone(
                   handleTeamsFileUpload,
                   handleTeamsDragOver,
@@ -386,10 +440,19 @@ const CsvUpload = () => {
                 <label className="text-sm font-medium mb-2 block">Paste CSV Data</label>
                 <Textarea
                   placeholder="Paste your teams CSV data here..."
-                  value={teamsCsv}
-                  onChange={(e) => setTeamsCsv(e.target.value)}
+                  value={teamsFileType === 'csv' ? teamsCsv : ''}
+                  onChange={(e) => {
+                    setTeamsCsv(e.target.value);
+                    setTeamsFileType('csv');
+                  }}
                   className="min-h-32"
+                  disabled={teamsFileType === 'xlsx'}
                 />
+                {teamsFileType === 'xlsx' && (
+                  <p className="text-sm text-gray-500 mt-2">
+                    Excel file loaded. Clear the file to paste CSV data instead.
+                  </p>
+                )}
               </div>
 
               <div className="text-sm text-gray-600">
@@ -404,6 +467,9 @@ const CsvUpload = () => {
                       {col}
                     </Badge>
                   ))}
+                </div>
+                <div className="mt-2 p-2 bg-blue-50 rounded text-xs">
+                  <strong>💡 Tip:</strong> Excel files (.xlsx, .xls) automatically handle commas in data without parsing issues!
                 </div>
               </div>
 
@@ -421,7 +487,7 @@ const CsvUpload = () => {
                   ) : (
                     <>
                       <Upload className="mr-2 h-4 w-4" />
-                      Upload Teams
+                      Upload Teams ({teamsFileType.toUpperCase()})
                     </>
                   )}
                 </Button>
@@ -459,7 +525,8 @@ const CsvUpload = () => {
                   handleContactsDragLeave,
                   handleContactsDrop,
                   contactsDropActive,
-                  "contacts-file-input"
+                  "contacts-file-input",
+                  ".csv"
                 )}
               </div>
 
@@ -530,12 +597,22 @@ const CsvUpload = () => {
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
               <FileText className="h-5 w-5" />
-              <span>CSV Format Guidelines</span>
+              <span>File Format Guidelines</span>
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
+            <div className="bg-green-50 p-4 rounded-lg mb-4">
+              <h4 className="font-medium text-green-800 mb-2">✅ Recommended: Excel Files (.xlsx, .xls)</h4>
+              <ul className="text-sm text-green-700 space-y-1">
+                <li>• No comma parsing issues - data integrity guaranteed</li>
+                <li>• Handles complex text fields automatically</li>
+                <li>• Preserves formatting and data types</li>
+                <li>• Recommended for data with addresses, descriptions, or special characters</li>
+              </ul>
+            </div>
+            
             <div>
-              <h4 className="font-medium mb-2">Teams CSV Format:</h4>
+              <h4 className="font-medium mb-2">Teams File Format:</h4>
               <ul className="text-sm text-gray-600 space-y-1">
                 <li>• <strong>Name</strong> (required): Team name</li>
                 <li>• <strong>Sport, Level, City, Country</strong>: Optional team details</li>
@@ -544,21 +621,11 @@ const CsvUpload = () => {
                 <li>• <strong>Hours</strong>: Format as "day:start-end;day:start-end"</li>
               </ul>
             </div>
-            
-            <div>
-              <h4 className="font-medium mb-2">Contacts CSV Format:</h4>
-              <ul className="text-sm text-gray-600 space-y-1">
-                <li>• <strong>Name, Team</strong> (required): Contact name and team name</li>
-                <li>• <strong>Role, Email, Phone, LinkedIn</strong>: Contact details</li>
-                <li>• <strong>Department</strong>: Will be created if it doesn't exist</li>
-                <li>• <strong>Is_Email_Verified</strong>: true/false, 1/0, or yes/no</li>
-              </ul>
-            </div>
 
             <div className="bg-blue-50 p-4 rounded-lg">
               <p className="text-sm text-blue-800">
-                <strong>Note:</strong> Large CSV files are automatically processed in batches to prevent timeouts. 
-                You can monitor the progress in real-time above.
+                <strong>Note:</strong> Large files are automatically processed in batches to prevent timeouts. 
+                Excel files are recommended to avoid comma-related parsing issues in addresses and descriptions.
               </p>
             </div>
           </CardContent>

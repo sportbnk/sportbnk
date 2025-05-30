@@ -29,6 +29,7 @@ export class CsvUploadService {
 
   static async processTeamsCsv(
     csvData: string,
+    fileType: 'csv' | 'xlsx' = 'csv',
     batchSize: number = 100,
     onProgress?: (result: BatchProcessResult) => void
   ): Promise<BatchProcessResult> {
@@ -42,6 +43,7 @@ export class CsvUploadService {
     while (!isComplete) {
       const result = await this.processBatch('process-teams-csv', {
         csvData,
+        fileType,
         startRow,
         batchSize,
       });

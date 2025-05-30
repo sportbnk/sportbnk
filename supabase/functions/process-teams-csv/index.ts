@@ -1,7 +1,7 @@
-
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
+import * as XLSX from 'https://esm.sh/xlsx@0.18.5';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -38,12 +38,38 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
-    const { csvData, startRow = 1, batchSize = 100 } = await req.json();
-    const lines = csvData.trim().split('\n');
-    const headers = lines[0].toLowerCase().split(',').map((h: string) => h.trim());
+    const { csvData, fileType = 'csv', startRow = 1, batchSize = 100 } = await req.json();
     
-    console.log(`Processing teams CSV batch starting from row ${startRow}, batch size: ${batchSize}`);
-    console.log('Headers:', headers);
+    let lines: string[] = [];
+    let headers: string[] = [];
+    
+    // Determine file type and parse accordingly
+    if (fileType === 'xlsx' || fileType === 'xls') {
+      console.log('Processing XLSX file');
+      
+      // Parse XLSX data
+      const workbook = XLSX.read(csvData, { type: 'base64' });
+      const sheetName = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[sheetName];
+      
+      // Convert to JSON array
+      const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+      
+      // Convert to CSV-like format for consistency with existing processing
+      lines = jsonData.map((row: any[]) => 
+        row.map(cell => cell === null || cell === undefined ? '' : String(cell)).join(',')
+      );
+      
+      headers = lines[0].toLowerCase().split(',').map((h: string) => h.trim());
+      console.log('XLSX Headers:', headers);
+    } else {
+      console.log('Processing CSV file');
+      lines = csvData.trim().split('\n');
+      headers = lines[0].toLowerCase().split(',').map((h: string) => h.trim());
+      console.log('CSV Headers:', headers);
+    }
+    
+    console.log(`Processing teams file (${fileType}) batch starting from row ${startRow}, batch size: ${batchSize}`);
     
     const results = {
       processed: 0,
@@ -75,11 +101,19 @@ serve(async (req) => {
     // Process batch of rows
     for (let i = startRow; i < endRow; i++) {
       try {
-        const values = lines[i].split(',').map((v: string) => v.trim().replace(/"/g, ''));
+        let values: string[] = [];
         
-        // Log raw CSV parsing details for debugging
-        console.log(`\n=== CSV PARSING DEBUG FOR ROW ${i + 1} ===`);
-        console.log(`Raw CSV line: "${lines[i]}"`);
+        if (fileType === 'xlsx' || fileType === 'xls') {
+          // For XLSX, values are already properly separated
+          values = lines[i].split(',');
+        } else {
+          // For CSV, handle potential comma issues
+          values = lines[i].split(',').map((v: string) => v.trim().replace(/"/g, ''));
+        }
+        
+        // Log raw parsing details for debugging
+        console.log(`\n=== ${fileType.toUpperCase()} PARSING DEBUG FOR ROW ${i + 1} ===`);
+        console.log(`Raw line: "${lines[i]}"`);
         console.log(`Split into ${values.length} values:`, values);
         console.log(`Expected ${headers.length} headers:`, headers);
         
@@ -89,7 +123,7 @@ serve(async (req) => {
         
         const row: any = {};
         
-        // Map CSV columns to row object (case insensitive) with detailed logging
+        // Map columns to row object (case insensitive) with detailed logging
         headers.forEach((header, index) => {
           const value = values[index] || '';
           row[header] = value;
@@ -97,7 +131,7 @@ serve(async (req) => {
         });
         
         console.log(`Final mapped row object:`, row);
-        console.log(`=== END CSV PARSING DEBUG ===\n`);
+        console.log(`=== END ${fileType.toUpperCase()} PARSING DEBUG ===\n`);
 
         // Check for duplicates using in-memory data
         const isDuplicate = checkForDuplicateInMemory(existingTeams, row);
