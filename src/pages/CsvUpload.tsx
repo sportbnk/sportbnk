@@ -540,7 +540,7 @@ const CsvUpload = () => {
   ];
 
   const contactsColumns = [
-    "Name", "Role", "Email", "Phone", "LinkedIn", "Team", "Department"
+    "Name", "Role", "Email", "Phone", "LinkedIn", "Team", "Department", "Is_Email_Verified (Optional)"
   ];
 
   return (
@@ -682,7 +682,7 @@ const CsvUpload = () => {
                         <p className="mb-2">Required columns (case insensitive):</p>
                         <div className="grid grid-cols-3 gap-2">
                           {contactsColumns.map((col) => (
-                            <span key={col} className="bg-white px-2 py-1 rounded border text-xs">
+                            <span key={col} className={`px-2 py-1 rounded border text-xs ${col.includes('Optional') ? 'bg-blue-100 border-blue-300' : 'bg-white'}`}>
                               {col}
                             </span>
                           ))}
@@ -691,6 +691,7 @@ const CsvUpload = () => {
                         <ul className="mt-2 text-xs space-y-1">
                           <li>• <strong>Team:</strong> Must match existing team name exactly (case insensitive)</li>
                           <li>• <strong>Department:</strong> Will be created if it doesn't exist</li>
+                          <li>• <strong>Is_Email_Verified:</strong> Optional field (true/false, 1/0, yes/no) - shows guard icon for verified emails</li>
                           <li>• If multiple teams have the same name, you'll be prompted to choose</li>
                         </ul>
                       </div>

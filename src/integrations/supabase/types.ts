@@ -45,6 +45,7 @@ export type Database = {
           email: string | null
           email_credits_consumed: number
           id: string
+          is_email_verified: boolean
           linkedin: string | null
           linkedin_credits_consumed: number
           name: string
@@ -60,6 +61,7 @@ export type Database = {
           email?: string | null
           email_credits_consumed?: number
           id?: string
+          is_email_verified?: boolean
           linkedin?: string | null
           linkedin_credits_consumed?: number
           name: string
@@ -75,6 +77,7 @@ export type Database = {
           email?: string | null
           email_credits_consumed?: number
           id?: string
+          is_email_verified?: boolean
           linkedin?: string | null
           linkedin_credits_consumed?: number
           name?: string

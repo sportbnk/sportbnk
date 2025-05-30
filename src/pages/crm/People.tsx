@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -13,7 +14,7 @@ import {
   TableHeader, 
   TableRow 
 } from "@/components/ui/table";
-import { Search, Mail, Phone, Linkedin, Building2, ShieldCheck } from "lucide-react";
+import { Search, Mail, Phone, Linkedin, Building2, Shield } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import ContactsFilters from "@/components/database/ContactsFilters";
@@ -253,16 +254,18 @@ const People = () => {
                             <div className="flex items-center gap-1">
                               <Mail className="h-3.5 w-3.5 text-blue-500 flex-shrink-0" />
                               <span className="text-xs font-mono overflow-hidden text-ellipsis">{contact.email}</span>
-                              <TooltipProvider>
-                                <Tooltip>
-                                  <TooltipTrigger>
-                                    <ShieldCheck className="h-3.5 w-3.5 text-green-500 flex-shrink-0" />
-                                  </TooltipTrigger>
-                                  <TooltipContent>
-                                    <p className="text-xs">Verified email address</p>
-                                  </TooltipContent>
-                                </Tooltip>
-                              </TooltipProvider>
+                              {contact.is_email_verified && (
+                                <TooltipProvider>
+                                  <Tooltip>
+                                    <TooltipTrigger>
+                                      <Shield className="h-3.5 w-3.5 text-green-500 flex-shrink-0" />
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                      <p className="text-xs">Verified email address</p>
+                                    </TooltipContent>
+                                  </Tooltip>
+                                </TooltipProvider>
+                              )}
                             </div>
                           ) : shouldShowRevealButton(contact, 'email') ? (
                             <div className="flex items-center gap-1">
@@ -276,16 +279,18 @@ const People = () => {
                               >
                                 Reveal ({contact.email_credits_consumed})
                               </Button>
-                              <TooltipProvider>
-                                <Tooltip>
-                                  <TooltipTrigger>
-                                    <ShieldCheck className="h-3.5 w-3.5 text-green-500 flex-shrink-0" />
-                                  </TooltipTrigger>
-                                  <TooltipContent>
-                                    <p className="text-xs">Verified email address</p>
-                                  </TooltipContent>
-                                </Tooltip>
-                              </TooltipProvider>
+                              {contact.is_email_verified && (
+                                <TooltipProvider>
+                                  <Tooltip>
+                                    <TooltipTrigger>
+                                      <Shield className="h-3.5 w-3.5 text-green-500 flex-shrink-0" />
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                      <p className="text-xs">Verified email address</p>
+                                    </TooltipContent>
+                                  </Tooltip>
+                                </TooltipProvider>
+                              )}
                             </div>
                           ) : null
                         ) : (

@@ -1,4 +1,3 @@
-
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
@@ -16,6 +15,7 @@ interface ContactCsvRow {
   linkedin: string;
   team: string;
   department: string;
+  is_email_verified?: string;
 }
 
 interface TeamConflictResolution {
@@ -161,6 +161,13 @@ async function processContactRow(
     departmentId = department.id;
   }
 
+  // Parse is_email_verified field
+  let isEmailVerified = false;
+  if (row.is_email_verified?.trim()) {
+    const verifiedValue = row.is_email_verified.trim().toLowerCase();
+    isEmailVerified = verifiedValue === 'true' || verifiedValue === '1' || verifiedValue === 'yes';
+  }
+
   // Clean and prepare contact data
   const contactData = {
     name: contactName,
@@ -170,6 +177,7 @@ async function processContactRow(
     linkedin: row.linkedin?.trim() || null,
     team_id: teamId,
     department_id: departmentId,
+    is_email_verified: isEmailVerified,
     // Credit consumption fields will use their defaults (1, 2, 0)
   };
 
