@@ -36,21 +36,28 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
-    const { csvData, conflictResolutions } = await req.json();
+    const { csvData, conflictResolutions, startRow = 1, batchSize = 50 } = await req.json();
     const lines = csvData.trim().split('\n');
     const headers = lines[0].toLowerCase().split(',').map((h: string) => h.trim());
     
-    console.log('Processing contacts CSV with headers:', headers);
+    console.log(`Processing contacts CSV batch starting from row ${startRow}, batch size: ${batchSize}`);
+    console.log('Headers:', headers);
     console.log('Conflict resolutions:', conflictResolutions);
     
     const results = {
       processed: 0,
       errors: [] as string[],
-      successful: 0
+      successful: 0,
+      totalRows: lines.length - 1, // Exclude header
+      nextStartRow: startRow,
+      isComplete: false
     };
 
-    // Process each row (skip header)
-    for (let i = 1; i < lines.length; i++) {
+    // Calculate the actual batch end
+    const endRow = Math.min(startRow + batchSize, lines.length);
+
+    // Process batch of rows
+    for (let i = startRow; i < endRow; i++) {
       try {
         const values = lines[i].split(',').map((v: string) => v.trim().replace(/"/g, ''));
         const row: any = {};
@@ -77,6 +84,10 @@ serve(async (req) => {
       results.processed++;
     }
 
+    // Determine if processing is complete
+    results.isComplete = endRow >= lines.length;
+    results.nextStartRow = endRow;
+
     return new Response(JSON.stringify(results), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
@@ -87,7 +98,8 @@ serve(async (req) => {
       error: error.message,
       processed: 0,
       successful: 0,
-      errors: [error.message]
+      errors: [error.message],
+      isComplete: false
     }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },

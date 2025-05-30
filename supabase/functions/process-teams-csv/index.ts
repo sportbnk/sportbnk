@@ -1,4 +1,3 @@
-
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
@@ -38,21 +37,42 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
-    const { csvData } = await req.json();
+    const { csvData, startRow = 1, batchSize = 100 } = await req.json();
     const lines = csvData.trim().split('\n');
     const headers = lines[0].toLowerCase().split(',').map((h: string) => h.trim());
     
-    console.log('Processing teams CSV with headers:', headers);
+    console.log(`Processing teams CSV batch starting from row ${startRow}, batch size: ${batchSize}`);
+    console.log('Headers:', headers);
     
     const results = {
       processed: 0,
       errors: [] as string[],
       successful: 0,
-      skipped: 0
+      skipped: 0,
+      totalRows: lines.length - 1, // Exclude header
+      nextStartRow: startRow,
+      isComplete: false
     };
 
-    // Process each row (skip header)
-    for (let i = 1; i < lines.length; i++) {
+    // Calculate the actual batch end
+    const endRow = Math.min(startRow + batchSize, lines.length);
+    
+    // Load existing teams once for efficient duplicate checking
+    const { data: existingTeams } = await supabase
+      .from('teams')
+      .select(`
+        id,
+        name,
+        cities (
+          name,
+          countries (
+            name
+          )
+        )
+      `);
+
+    // Process batch of rows
+    for (let i = startRow; i < endRow; i++) {
       try {
         const values = lines[i].split(',').map((v: string) => v.trim().replace(/"/g, ''));
         const row: any = {};
@@ -62,8 +82,8 @@ serve(async (req) => {
           row[header] = values[index] || '';
         });
 
-        // Check for duplicates before processing
-        const isDuplicate = await checkForDuplicate(supabase, row);
+        // Check for duplicates using in-memory data
+        const isDuplicate = checkForDuplicateInMemory(existingTeams, row);
         if (isDuplicate) {
           console.log(`Skipping duplicate team: ${row.name} (row ${i + 1})`);
           results.skipped++;
@@ -71,6 +91,20 @@ serve(async (req) => {
           // Process the team data
           await processTeamRow(supabase, row, i + 1);
           results.successful++;
+          
+          // Add to existing teams list to avoid duplicates within the same batch
+          if (existingTeams) {
+            existingTeams.push({
+              id: 'temp',
+              name: row.name?.trim(),
+              cities: row.city?.trim() ? {
+                name: row.city.trim(),
+                countries: row.country?.trim() ? {
+                  name: row.country.trim()
+                } : null
+              } : null
+            });
+          }
         }
         
       } catch (error) {
@@ -80,6 +114,10 @@ serve(async (req) => {
       
       results.processed++;
     }
+
+    // Determine if processing is complete
+    results.isComplete = endRow >= lines.length;
+    results.nextStartRow = endRow;
 
     return new Response(JSON.stringify(results), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -92,7 +130,8 @@ serve(async (req) => {
       processed: 0,
       successful: 0,
       skipped: 0,
-      errors: [error.message]
+      errors: [error.message],
+      isComplete: false
     }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -100,71 +139,32 @@ serve(async (req) => {
   }
 });
 
-async function checkForDuplicate(supabase: any, row: any) {
-  if (!row.name?.trim()) {
-    return false; // Can't check duplicates without a name
-  }
-
-  const teamName = row.name.trim();
-  
-  // If no city is provided, check for teams with same name and no city
-  if (!row.city?.trim()) {
-    const { data: existingTeams, error } = await supabase
-      .from('teams')
-      .select('id')
-      .ilike('name', teamName)
-      .is('city_id', null);
-    
-    if (error) {
-      console.error('Error checking for duplicates (no city):', error);
-      return false;
-    }
-    
-    return existingTeams && existingTeams.length > 0;
-  }
-
-  // If city is provided, check for teams with same name in same city/country
-  const cityName = row.city.trim();
-  const countryName = row.country?.trim();
-
-  let query = supabase
-    .from('teams')
-    .select(`
-      id,
-      name,
-      cities (
-        name,
-        countries (
-          name
-        )
-      )
-    `)
-    .ilike('name', teamName);
-
-  const { data: existingTeams, error } = await query;
-
-  if (error) {
-    console.error('Error checking for duplicates (with city):', error);
+function checkForDuplicateInMemory(existingTeams: any[], row: any) {
+  if (!row.name?.trim() || !existingTeams) {
     return false;
   }
 
-  if (!existingTeams || existingTeams.length === 0) {
-    return false;
-  }
+  const teamName = row.name.trim().toLowerCase();
+  const cityName = row.city?.trim()?.toLowerCase();
+  const countryName = row.country?.trim()?.toLowerCase();
 
-  // Check if any existing team matches the city and country criteria
   for (const team of existingTeams) {
-    if (team.cities) {
-      const teamCityName = team.cities.name?.toLowerCase();
-      const teamCountryName = team.cities.countries?.name?.toLowerCase();
+    if (team.name?.toLowerCase() === teamName) {
+      // If no city provided in CSV, match teams with same name and no city
+      if (!cityName && !team.cities) {
+        return true;
+      }
       
-      const csvCityName = cityName.toLowerCase();
-      const csvCountryName = countryName?.toLowerCase();
-      
-      // Match if city names are the same and countries match (if provided)
-      if (teamCityName === csvCityName) {
-        if (!csvCountryName || !teamCountryName || teamCountryName === csvCountryName) {
-          return true; // Duplicate found
+      // If city provided, check for exact match
+      if (cityName && team.cities) {
+        const teamCityName = team.cities.name?.toLowerCase();
+        const teamCountryName = team.cities.countries?.name?.toLowerCase();
+        
+        if (teamCityName === cityName) {
+          // Match if countries are the same or one is missing
+          if (!countryName || !teamCountryName || teamCountryName === countryName) {
+            return true;
+          }
         }
       }
     }
