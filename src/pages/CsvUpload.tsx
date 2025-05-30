@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,6 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Upload, FileText, Users, Building2, AlertCircle, CheckCircle, Clock, Plus, StopCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { CsvUploadService, BatchProcessResult } from "@/services/csvUploadService";
@@ -22,6 +22,22 @@ const CsvUpload = () => {
   const [teamsAbortController, setTeamsAbortController] = useState<AbortController | null>(null);
   const [contactsAbortController, setContactsAbortController] = useState<AbortController | null>(null);
   const { toast } = useToast();
+
+  // Function to parse CSV and get specific row data
+  const getCsvRowData = (csvData: string, rowNumber: number) => {
+    try {
+      const lines = csvData.split('\n');
+      if (rowNumber >= lines.length) return null;
+      
+      const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
+      const rowData = lines[rowNumber].split(',').map(cell => cell.trim().replace(/"/g, ''));
+      
+      return { headers, rowData };
+    } catch (error) {
+      console.error('Error parsing CSV row:', error);
+      return null;
+    }
+  };
 
   const handleFileRead = (file: File, setData: (data: string) => void) => {
     if (file && file.type === "text/csv") {
@@ -251,7 +267,7 @@ const CsvUpload = () => {
     }
   };
 
-  const renderProgress = (progress: BatchProcessResult | null, type: string) => {
+  const renderProgress = (progress: BatchProcessResult | null, type: string, csvData: string) => {
     if (!progress) return null;
 
     const progressPercentage = progress.totalRows > 0 
@@ -291,12 +307,40 @@ const CsvUpload = () => {
             <summary className="cursor-pointer text-red-600 hover:text-red-800">
               View errors ({progress.errors.length})
             </summary>
-            <div className="mt-2 space-y-1 max-h-32 overflow-y-auto">
-              {progress.errors.map((error, index) => (
-                <div key={index} className="text-red-600 text-xs">
-                  {error}
-                </div>
-              ))}
+            <div className="mt-2 space-y-3 max-h-64 overflow-y-auto">
+              {progress.errors.map((error, index) => {
+                // Extract row number from error message
+                const rowMatch = error.match(/Row (\d+):/);
+                const rowNumber = rowMatch ? parseInt(rowMatch[1]) : null;
+                const rowData = rowNumber ? getCsvRowData(csvData, rowNumber) : null;
+                
+                return (
+                  <div key={index} className="border border-red-200 rounded-lg p-3 bg-red-50">
+                    <div className="text-red-600 text-xs font-medium mb-2">
+                      {error}
+                    </div>
+                    {rowData && (
+                      <div className="mt-2">
+                        <div className="text-xs text-gray-600 mb-1">CSV Row Preview:</div>
+                        <ScrollArea className="w-full">
+                          <div className="flex space-x-2 pb-2" style={{ minWidth: 'max-content' }}>
+                            {rowData.headers.map((header, idx) => (
+                              <div key={idx} className="flex-shrink-0 min-w-24 p-2 border border-gray-200 rounded bg-white">
+                                <div className="text-xs font-medium text-gray-700 mb-1 truncate">
+                                  {header}
+                                </div>
+                                <div className="text-xs text-gray-900 break-all">
+                                  {rowData.rowData[idx] || ''}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </ScrollArea>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </details>
         )}
@@ -394,7 +438,7 @@ const CsvUpload = () => {
                 )}
               </div>
 
-              {renderProgress(teamsProgress, "teams")}
+              {renderProgress(teamsProgress, "teams", teamsCsv)}
             </CardContent>
           </Card>
 
@@ -476,7 +520,7 @@ const CsvUpload = () => {
                 )}
               </div>
 
-              {renderProgress(contactsProgress, "contacts")}
+              {renderProgress(contactsProgress, "contacts", contactsCsv)}
             </CardContent>
           </Card>
         </div>
