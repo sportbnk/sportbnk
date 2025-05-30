@@ -1,3 +1,4 @@
+
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
@@ -271,12 +272,30 @@ async function processTeamRow(supabase: any, row: any, rowNumber: number) {
     employees = parseInt(row.employees) || null;
   }
 
-  // Create team with only provided data
+  // Create team with only provided data and validate field lengths
   const teamData: any = {
     name: row.name.trim()
   };
 
-  // Only add fields if they have values
+  // Validate and log field lengths before adding to teamData
+  const fieldValidations = [
+    { field: 'level', value: row.level?.toLowerCase().trim(), maxLength: 20 },
+    { field: 'website', value: row.website?.trim(), maxLength: null }, // text field, no limit
+    { field: 'email', value: row.email?.trim(), maxLength: 255 }, // assuming varchar(255)
+    { field: 'phone', value: row.phone?.trim(), maxLength: 20 },
+    { field: 'founded', value: row.founded?.trim(), maxLength: 20 },
+    { field: 'postal_code', value: row.postal?.trim(), maxLength: 20 },
+    { field: 'street', value: row.street?.trim(), maxLength: null } // text field, no limit
+  ];
+
+  for (const validation of fieldValidations) {
+    if (validation.value && validation.maxLength && validation.value.length > validation.maxLength) {
+      console.error(`Field '${validation.field}' value too long: "${validation.value}" (${validation.value.length} chars, max ${validation.maxLength})`);
+      throw new Error(`Field '${validation.field}' value too long: "${validation.value}" (${validation.value.length} characters, maximum ${validation.maxLength} allowed)`);
+    }
+  }
+
+  // Only add fields if they have values and pass validation
   if (row.level?.trim()) teamData.level = row.level.toLowerCase().trim();
   if (row.website?.trim()) teamData.website = row.website.trim();
   if (row.email?.trim()) teamData.email = row.email.trim();
@@ -289,13 +308,18 @@ async function processTeamRow(supabase: any, row: any, rowNumber: number) {
   if (cityId) teamData.city_id = cityId;
   if (sportId) teamData.sport_id = sportId;
 
+  console.log(`About to insert team data:`, teamData);
+
   const { data: team, error: teamError } = await supabase
     .from('teams')
     .insert(teamData)
     .select('id')
     .single();
 
-  if (teamError) throw new Error(`Failed to create team: ${teamError.message}`);
+  if (teamError) {
+    console.error(`Database error for team insertion:`, teamError);
+    throw new Error(`Failed to create team: ${teamError.message}`);
+  }
 
   // Process social links with semicolon separator (if provided)
   if (row.socials?.trim()) {
