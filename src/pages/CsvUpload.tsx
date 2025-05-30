@@ -322,7 +322,7 @@ const CsvUpload = () => {
                     {rowData && (
                       <div className="mt-2">
                         <div className="text-xs text-gray-600 mb-1">CSV Row Preview:</div>
-                        <ScrollArea className="w-full">
+                        <div className="w-full overflow-x-auto">
                           <div className="flex space-x-2 pb-2" style={{ minWidth: 'max-content' }}>
                             {rowData.headers.map((header, idx) => (
                               <div key={idx} className="flex-shrink-0 min-w-24 p-2 border border-gray-200 rounded bg-white">
@@ -335,7 +335,7 @@ const CsvUpload = () => {
                               </div>
                             ))}
                           </div>
-                        </ScrollArea>
+                        </div>
                       </div>
                     )}
                   </div>
