@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,7 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
-import { Upload, FileText, Users, Building2, AlertCircle, CheckCircle, Clock } from "lucide-react";
+import { Upload, FileText, Users, Building2, AlertCircle, CheckCircle, Clock, Plus } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { CsvUploadService, BatchProcessResult } from "@/services/csvUploadService";
 
@@ -17,15 +16,16 @@ const CsvUpload = () => {
   const [isProcessingContacts, setIsProcessingContacts] = useState(false);
   const [teamsProgress, setTeamsProgress] = useState<BatchProcessResult | null>(null);
   const [contactsProgress, setContactsProgress] = useState<BatchProcessResult | null>(null);
+  const [teamsDropActive, setTeamsDropActive] = useState(false);
+  const [contactsDropActive, setContactsDropActive] = useState(false);
   const { toast } = useToast();
 
-  const handleTeamsFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
+  const handleFileRead = (file: File, setData: (data: string) => void) => {
     if (file && file.type === "text/csv") {
       const reader = new FileReader();
       reader.onload = (e) => {
         const text = e.target?.result as string;
-        setTeamsCsv(text);
+        setData(text);
       };
       reader.readAsText(file);
     } else {
@@ -34,26 +34,102 @@ const CsvUpload = () => {
         description: "Please select a CSV file",
         variant: "destructive",
       });
+    }
+  };
+
+  const handleTeamsFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      handleFileRead(file, setTeamsCsv);
     }
   };
 
   const handleContactsFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file && file.type === "text/csv") {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const text = e.target?.result as string;
-        setContactsCsv(text);
-      };
-      reader.readAsText(file);
-    } else {
-      toast({
-        title: "Invalid file",
-        description: "Please select a CSV file",
-        variant: "destructive",
-      });
+    if (file) {
+      handleFileRead(file, setContactsCsv);
     }
   };
+
+  const handleTeamsDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setTeamsDropActive(true);
+  };
+
+  const handleTeamsDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    setTeamsDropActive(false);
+  };
+
+  const handleTeamsDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setTeamsDropActive(false);
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      handleFileRead(file, setTeamsCsv);
+    }
+  };
+
+  const handleContactsDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setContactsDropActive(true);
+  };
+
+  const handleContactsDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    setContactsDropActive(false);
+  };
+
+  const handleContactsDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setContactsDropActive(false);
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      handleFileRead(file, setContactsCsv);
+    }
+  };
+
+  const renderDropZone = (
+    onFileChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
+    onDragOver: (e: React.DragEvent) => void,
+    onDragLeave: (e: React.DragEvent) => void,
+    onDrop: (e: React.DragEvent) => void,
+    isDropActive: boolean,
+    acceptId: string
+  ) => (
+    <div
+      className={`relative border-2 border-dashed rounded-lg p-8 text-center transition-colors cursor-pointer hover:border-primary/50 ${
+        isDropActive ? 'border-primary bg-primary/5' : 'border-gray-300'
+      }`}
+      onDragOver={onDragOver}
+      onDragLeave={onDragLeave}
+      onDrop={onDrop}
+      onClick={() => document.getElementById(acceptId)?.click()}
+    >
+      <input
+        id={acceptId}
+        type="file"
+        accept=".csv"
+        onChange={onFileChange}
+        className="hidden"
+      />
+      <div className="flex flex-col items-center space-y-3">
+        <div className={`w-12 h-12 rounded-full border-2 border-dashed flex items-center justify-center transition-colors ${
+          isDropActive ? 'border-primary text-primary' : 'border-gray-400 text-gray-400'
+        }`}>
+          <Plus className="h-6 w-6" />
+        </div>
+        <div>
+          <p className="text-sm font-medium text-gray-700">
+            Drag and drop your CSV file here
+          </p>
+          <p className="text-xs text-gray-500 mt-1">
+            or click to browse files
+          </p>
+        </div>
+      </div>
+    </div>
+  );
 
   const handleTeamsUpload = async () => {
     if (!teamsCsv.trim()) {
@@ -206,13 +282,15 @@ const CsvUpload = () => {
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <label className="text-sm font-medium mb-2 block">Upload CSV File</label>
-                <Input
-                  type="file"
-                  accept=".csv"
-                  onChange={handleTeamsFileUpload}
-                  className="cursor-pointer"
-                />
+                <label className="text-sm font-medium mb-3 block">Upload CSV File</label>
+                {renderDropZone(
+                  handleTeamsFileUpload,
+                  handleTeamsDragOver,
+                  handleTeamsDragLeave,
+                  handleTeamsDrop,
+                  teamsDropActive,
+                  "teams-file-input"
+                )}
               </div>
 
               <div className="text-center text-gray-500">or</div>
@@ -274,13 +352,15 @@ const CsvUpload = () => {
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <label className="text-sm font-medium mb-2 block">Upload CSV File</label>
-                <Input
-                  type="file"
-                  accept=".csv"
-                  onChange={handleContactsFileUpload}
-                  className="cursor-pointer"
-                />
+                <label className="text-sm font-medium mb-3 block">Upload CSV File</label>
+                {renderDropZone(
+                  handleContactsFileUpload,
+                  handleContactsDragOver,
+                  handleContactsDragLeave,
+                  handleContactsDrop,
+                  contactsDropActive,
+                  "contacts-file-input"
+                )}
               </div>
 
               <div className="text-center text-gray-500">or</div>
