@@ -177,6 +177,25 @@ function checkForDuplicateInMemory(existingTeams: any[], row: any) {
 async function processTeamRow(supabase: any, row: any, rowNumber: number) {
   console.log(`Processing team row ${rowNumber}:`, row);
   
+  // Log all raw field values for debugging
+  console.log(`Raw field values for row ${rowNumber}:`, {
+    name: row.name,
+    sport: row.sport || row.sports,
+    level: row.level,
+    street: row.street,
+    postal: row.postal,
+    city: row.city,
+    country: row.country,
+    website: row.website,
+    phone: row.phone,
+    email: row.email,
+    founded: row.founded,
+    revenue: row.revenue,
+    employees: row.employees,
+    socials: row.socials,
+    hours: row.hours
+  });
+  
   // Only team name is required
   if (!row.name?.trim()) {
     throw new Error('Team name is required');
@@ -291,6 +310,23 @@ async function processTeamRow(supabase: any, row: any, rowNumber: number) {
   for (const validation of fieldValidations) {
     if (validation.value && validation.maxLength && validation.value.length > validation.maxLength) {
       console.error(`Field '${validation.field}' value too long: "${validation.value}" (${validation.value.length} chars, max ${validation.maxLength})`);
+      console.error(`All field values for failing row ${rowNumber}:`, {
+        name: row.name,
+        sport: row.sport || row.sports,
+        level: row.level,
+        street: row.street,
+        postal: row.postal,
+        city: row.city,
+        country: row.country,
+        website: row.website,
+        phone: row.phone,
+        email: row.email,
+        founded: row.founded,
+        revenue: row.revenue,
+        employees: row.employees,
+        socials: row.socials,
+        hours: row.hours
+      });
       throw new Error(`Field '${validation.field}' value too long: "${validation.value}" (${validation.value.length} characters, maximum ${validation.maxLength} allowed)`);
     }
   }
