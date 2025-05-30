@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -5,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
-import { Upload, FileText, Users, Building2, AlertCircle, CheckCircle, Clock, Plus } from "lucide-react";
+import { Upload, FileText, Users, Building2, AlertCircle, CheckCircle, Clock, Plus, StopCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { CsvUploadService, BatchProcessResult } from "@/services/csvUploadService";
 
@@ -18,6 +19,8 @@ const CsvUpload = () => {
   const [contactsProgress, setContactsProgress] = useState<BatchProcessResult | null>(null);
   const [teamsDropActive, setTeamsDropActive] = useState(false);
   const [contactsDropActive, setContactsDropActive] = useState(false);
+  const [teamsAbortController, setTeamsAbortController] = useState<AbortController | null>(null);
+  const [contactsAbortController, setContactsAbortController] = useState<AbortController | null>(null);
   const { toast } = useToast();
 
   const handleFileRead = (file: File, setData: (data: string) => void) => {
@@ -98,7 +101,7 @@ const CsvUpload = () => {
     acceptId: string
   ) => (
     <div
-      className={`relative border-2 border-dashed rounded-lg p-8 text-center transition-colors cursor-pointer hover:border-primary/50 ${
+      className={`relative border-2 border-dashed rounded-lg p-12 text-center transition-colors cursor-pointer hover:border-primary/50 ${
         isDropActive ? 'border-primary bg-primary/5' : 'border-gray-300'
       }`}
       onDragOver={onDragOver}
@@ -113,23 +116,49 @@ const CsvUpload = () => {
         onChange={onFileChange}
         className="hidden"
       />
-      <div className="flex flex-col items-center space-y-3">
-        <div className={`w-12 h-12 rounded-full border-2 border-dashed flex items-center justify-center transition-colors ${
+      <div className="flex flex-col items-center space-y-4">
+        <div className={`w-16 h-16 rounded-full border-2 border-dashed flex items-center justify-center transition-colors ${
           isDropActive ? 'border-primary text-primary' : 'border-gray-400 text-gray-400'
         }`}>
-          <Plus className="h-6 w-6" />
+          <Plus className="h-8 w-8" />
         </div>
         <div>
-          <p className="text-sm font-medium text-gray-700">
+          <p className="text-lg font-medium text-gray-700">
             Drag and drop your CSV file here
           </p>
-          <p className="text-xs text-gray-500 mt-1">
+          <p className="text-sm text-gray-500 mt-2">
             or click to browse files
           </p>
         </div>
       </div>
     </div>
   );
+
+  const handleStopTeamsUpload = () => {
+    if (teamsAbortController) {
+      teamsAbortController.abort();
+      setTeamsAbortController(null);
+      setIsProcessingTeams(false);
+      toast({
+        title: "Upload Stopped",
+        description: "Teams upload has been cancelled",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleStopContactsUpload = () => {
+    if (contactsAbortController) {
+      contactsAbortController.abort();
+      setContactsAbortController(null);
+      setIsProcessingContacts(false);
+      toast({
+        title: "Upload Stopped",
+        description: "Contacts upload has been cancelled",
+        variant: "destructive",
+      });
+    }
+  };
 
   const handleTeamsUpload = async () => {
     if (!teamsCsv.trim()) {
@@ -141,6 +170,8 @@ const CsvUpload = () => {
       return;
     }
 
+    const abortController = new AbortController();
+    setTeamsAbortController(abortController);
     setIsProcessingTeams(true);
     setTeamsProgress(null);
 
@@ -159,6 +190,10 @@ const CsvUpload = () => {
       });
     } catch (error) {
       console.error('Teams upload error:', error);
+      if (error instanceof Error && error.name === 'AbortError') {
+        // Upload was cancelled, don't show error toast
+        return;
+      }
       toast({
         title: "Upload Failed",
         description: error instanceof Error ? error.message : "Failed to upload teams",
@@ -166,6 +201,7 @@ const CsvUpload = () => {
       });
     } finally {
       setIsProcessingTeams(false);
+      setTeamsAbortController(null);
     }
   };
 
@@ -179,6 +215,8 @@ const CsvUpload = () => {
       return;
     }
 
+    const abortController = new AbortController();
+    setContactsAbortController(abortController);
     setIsProcessingContacts(true);
     setContactsProgress(null);
 
@@ -198,6 +236,10 @@ const CsvUpload = () => {
       });
     } catch (error) {
       console.error('Contacts upload error:', error);
+      if (error instanceof Error && error.name === 'AbortError') {
+        // Upload was cancelled, don't show error toast
+        return;
+      }
       toast({
         title: "Upload Failed",
         description: error instanceof Error ? error.message : "Failed to upload contacts",
@@ -205,6 +247,7 @@ const CsvUpload = () => {
       });
     } finally {
       setIsProcessingContacts(false);
+      setContactsAbortController(null);
     }
   };
 
@@ -320,23 +363,36 @@ const CsvUpload = () => {
                 </div>
               </div>
 
-              <Button
-                onClick={handleTeamsUpload}
-                disabled={isProcessingTeams || !teamsCsv.trim()}
-                className="w-full"
-              >
-                {isProcessingTeams ? (
-                  <>
-                    <Upload className="mr-2 h-4 w-4 animate-spin" />
-                    Processing...
-                  </>
-                ) : (
-                  <>
-                    <Upload className="mr-2 h-4 w-4" />
-                    Upload Teams
-                  </>
+              <div className="flex space-x-2">
+                <Button
+                  onClick={handleTeamsUpload}
+                  disabled={isProcessingTeams || !teamsCsv.trim()}
+                  className="flex-1"
+                >
+                  {isProcessingTeams ? (
+                    <>
+                      <Upload className="mr-2 h-4 w-4 animate-spin" />
+                      Processing...
+                    </>
+                  ) : (
+                    <>
+                      <Upload className="mr-2 h-4 w-4" />
+                      Upload Teams
+                    </>
+                  )}
+                </Button>
+
+                {isProcessingTeams && (
+                  <Button
+                    onClick={handleStopTeamsUpload}
+                    variant="destructive"
+                    size="sm"
+                  >
+                    <StopCircle className="h-4 w-4 mr-1" />
+                    Stop
+                  </Button>
                 )}
-              </Button>
+              </div>
 
               {renderProgress(teamsProgress, "teams")}
             </CardContent>
@@ -389,23 +445,36 @@ const CsvUpload = () => {
                 </div>
               </div>
 
-              <Button
-                onClick={handleContactsUpload}
-                disabled={isProcessingContacts || !contactsCsv.trim()}
-                className="w-full"
-              >
-                {isProcessingContacts ? (
-                  <>
-                    <Upload className="mr-2 h-4 w-4 animate-spin" />
-                    Processing...
-                  </>
-                ) : (
-                  <>
-                    <Upload className="mr-2 h-4 w-4" />
-                    Upload Contacts
-                  </>
+              <div className="flex space-x-2">
+                <Button
+                  onClick={handleContactsUpload}
+                  disabled={isProcessingContacts || !contactsCsv.trim()}
+                  className="flex-1"
+                >
+                  {isProcessingContacts ? (
+                    <>
+                      <Upload className="mr-2 h-4 w-4 animate-spin" />
+                      Processing...
+                    </>
+                  ) : (
+                    <>
+                      <Upload className="mr-2 h-4 w-4" />
+                      Upload Contacts
+                    </>
+                  )}
+                </Button>
+
+                {isProcessingContacts && (
+                  <Button
+                    onClick={handleStopContactsUpload}
+                    variant="destructive"
+                    size="sm"
+                  >
+                    <StopCircle className="h-4 w-4 mr-1" />
+                    Stop
+                  </Button>
                 )}
-              </Button>
+              </div>
 
               {renderProgress(contactsProgress, "contacts")}
             </CardContent>
