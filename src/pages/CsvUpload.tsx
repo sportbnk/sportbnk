@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { Input } from "@/components/ui/input";
 import { Upload, FileText, Users, Building2, AlertCircle, CheckCircle, Clock } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { CsvUploadService, BatchProcessResult } from "@/services/csvUploadService";
@@ -18,11 +19,47 @@ const CsvUpload = () => {
   const [contactsProgress, setContactsProgress] = useState<BatchProcessResult | null>(null);
   const { toast } = useToast();
 
+  const handleTeamsFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file && file.type === "text/csv") {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const text = e.target?.result as string;
+        setTeamsCsv(text);
+      };
+      reader.readAsText(file);
+    } else {
+      toast({
+        title: "Invalid file",
+        description: "Please select a CSV file",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleContactsFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file && file.type === "text/csv") {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const text = e.target?.result as string;
+        setContactsCsv(text);
+      };
+      reader.readAsText(file);
+    } else {
+      toast({
+        title: "Invalid file",
+        description: "Please select a CSV file",
+        variant: "destructive",
+      });
+    }
+  };
+
   const handleTeamsUpload = async () => {
     if (!teamsCsv.trim()) {
       toast({
         title: "Error",
-        description: "Please enter teams CSV data",
+        description: "Please upload a teams CSV file or enter CSV data",
         variant: "destructive",
       });
       return;
@@ -60,7 +97,7 @@ const CsvUpload = () => {
     if (!contactsCsv.trim()) {
       toast({
         title: "Error",
-        description: "Please enter contacts CSV data",
+        description: "Please upload a contacts CSV file or enter CSV data",
         variant: "destructive",
       });
       return;
@@ -169,7 +206,19 @@ const CsvUpload = () => {
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <label className="text-sm font-medium mb-2 block">CSV Data</label>
+                <label className="text-sm font-medium mb-2 block">Upload CSV File</label>
+                <Input
+                  type="file"
+                  accept=".csv"
+                  onChange={handleTeamsFileUpload}
+                  className="cursor-pointer"
+                />
+              </div>
+
+              <div className="text-center text-gray-500">or</div>
+
+              <div>
+                <label className="text-sm font-medium mb-2 block">Paste CSV Data</label>
                 <Textarea
                   placeholder="Paste your teams CSV data here..."
                   value={teamsCsv}
@@ -225,7 +274,19 @@ const CsvUpload = () => {
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <label className="text-sm font-medium mb-2 block">CSV Data</label>
+                <label className="text-sm font-medium mb-2 block">Upload CSV File</label>
+                <Input
+                  type="file"
+                  accept=".csv"
+                  onChange={handleContactsFileUpload}
+                  className="cursor-pointer"
+                />
+              </div>
+
+              <div className="text-center text-gray-500">or</div>
+
+              <div>
+                <label className="text-sm font-medium mb-2 block">Paste CSV Data</label>
                 <Textarea
                   placeholder="Paste your contacts CSV data here..."
                   value={contactsCsv}
