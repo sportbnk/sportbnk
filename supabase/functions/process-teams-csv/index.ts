@@ -76,12 +76,28 @@ serve(async (req) => {
     for (let i = startRow; i < endRow; i++) {
       try {
         const values = lines[i].split(',').map((v: string) => v.trim().replace(/"/g, ''));
+        
+        // Log raw CSV parsing details for debugging
+        console.log(`\n=== CSV PARSING DEBUG FOR ROW ${i + 1} ===`);
+        console.log(`Raw CSV line: "${lines[i]}"`);
+        console.log(`Split into ${values.length} values:`, values);
+        console.log(`Expected ${headers.length} headers:`, headers);
+        
+        if (values.length !== headers.length) {
+          console.warn(`⚠️  MISMATCH: Row ${i + 1} has ${values.length} values but ${headers.length} headers!`);
+        }
+        
         const row: any = {};
         
-        // Map CSV columns to row object (case insensitive)
+        // Map CSV columns to row object (case insensitive) with detailed logging
         headers.forEach((header, index) => {
-          row[header] = values[index] || '';
+          const value = values[index] || '';
+          row[header] = value;
+          console.log(`  ${header} (index ${index}) = "${value}"`);
         });
+        
+        console.log(`Final mapped row object:`, row);
+        console.log(`=== END CSV PARSING DEBUG ===\n`);
 
         // Check for duplicates using in-memory data
         const isDuplicate = checkForDuplicateInMemory(existingTeams, row);
@@ -175,26 +191,25 @@ function checkForDuplicateInMemory(existingTeams: any[], row: any) {
 }
 
 async function processTeamRow(supabase: any, row: any, rowNumber: number) {
-  console.log(`Processing team row ${rowNumber}:`, row);
+  console.log(`\n=== PROCESSING TEAM ROW ${rowNumber} ===`);
   
-  // Log all raw field values for debugging
-  console.log(`Raw field values for row ${rowNumber}:`, {
-    name: row.name,
-    sport: row.sport || row.sports,
-    level: row.level,
-    street: row.street,
-    postal: row.postal,
-    city: row.city,
-    country: row.country,
-    website: row.website,
-    phone: row.phone,
-    email: row.email,
-    founded: row.founded,
-    revenue: row.revenue,
-    employees: row.employees,
-    socials: row.socials,
-    hours: row.hours
-  });
+  // Log all field mappings that will be sent to database
+  console.log(`Database field mappings for row ${rowNumber}:`);
+  console.log(`  name: "${row.name}"`);
+  console.log(`  sport/sports: "${row.sport || row.sports}"`);
+  console.log(`  level: "${row.level}"`);
+  console.log(`  street: "${row.street}"`);
+  console.log(`  postal: "${row.postal}"`);
+  console.log(`  city: "${row.city}"`);
+  console.log(`  country: "${row.country}"`);
+  console.log(`  website: "${row.website}"`);
+  console.log(`  phone: "${row.phone}"`);
+  console.log(`  email: "${row.email}"`);
+  console.log(`  founded: "${row.founded}"`);
+  console.log(`  revenue: "${row.revenue}"`);
+  console.log(`  employees: "${row.employees}"`);
+  console.log(`  socials: "${row.socials}"`);
+  console.log(`  hours: "${row.hours}"`);
   
   // Only team name is required
   if (!row.name?.trim()) {
@@ -307,26 +322,16 @@ async function processTeamRow(supabase: any, row: any, rowNumber: number) {
     { field: 'street', value: row.street?.trim(), maxLength: null } // text field, no limit
   ];
 
+  console.log(`\n=== FIELD VALIDATION FOR ROW ${rowNumber} ===`);
   for (const validation of fieldValidations) {
+    const length = validation.value?.length || 0;
+    const status = validation.maxLength && length > validation.maxLength ? '❌ TOO LONG' : '✅ OK';
+    console.log(`  ${validation.field}: "${validation.value}" (${length} chars, max: ${validation.maxLength || 'unlimited'}) ${status}`);
+    
     if (validation.value && validation.maxLength && validation.value.length > validation.maxLength) {
+      console.error(`\n🚨 FIELD LENGTH ERROR 🚨`);
       console.error(`Field '${validation.field}' value too long: "${validation.value}" (${validation.value.length} chars, max ${validation.maxLength})`);
-      console.error(`All field values for failing row ${rowNumber}:`, {
-        name: row.name,
-        sport: row.sport || row.sports,
-        level: row.level,
-        street: row.street,
-        postal: row.postal,
-        city: row.city,
-        country: row.country,
-        website: row.website,
-        phone: row.phone,
-        email: row.email,
-        founded: row.founded,
-        revenue: row.revenue,
-        employees: row.employees,
-        socials: row.socials,
-        hours: row.hours
-      });
+      console.error(`This suggests CSV field misalignment - check for extra commas in the source data!`);
       throw new Error(`Field '${validation.field}' value too long: "${validation.value}" (${validation.value.length} characters, maximum ${validation.maxLength} allowed)`);
     }
   }
@@ -344,7 +349,8 @@ async function processTeamRow(supabase: any, row: any, rowNumber: number) {
   if (cityId) teamData.city_id = cityId;
   if (sportId) teamData.sport_id = sportId;
 
-  console.log(`About to insert team data:`, teamData);
+  console.log(`Final team data to insert:`, teamData);
+  console.log(`=== END PROCESSING ROW ${rowNumber} ===\n`);
 
   const { data: team, error: teamError } = await supabase
     .from('teams')
