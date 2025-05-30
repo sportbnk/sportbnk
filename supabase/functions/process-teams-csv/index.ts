@@ -47,7 +47,8 @@ serve(async (req) => {
     const results = {
       processed: 0,
       errors: [] as string[],
-      successful: 0
+      successful: 0,
+      skipped: 0
     };
 
     // Process each row (skip header)
@@ -61,9 +62,16 @@ serve(async (req) => {
           row[header] = values[index] || '';
         });
 
-        // Process the team data
-        await processTeamRow(supabase, row, i + 1);
-        results.successful++;
+        // Check for duplicates before processing
+        const isDuplicate = await checkForDuplicate(supabase, row);
+        if (isDuplicate) {
+          console.log(`Skipping duplicate team: ${row.name} (row ${i + 1})`);
+          results.skipped++;
+        } else {
+          // Process the team data
+          await processTeamRow(supabase, row, i + 1);
+          results.successful++;
+        }
         
       } catch (error) {
         console.error(`Error processing row ${i + 1}:`, error);
@@ -83,6 +91,7 @@ serve(async (req) => {
       error: error.message,
       processed: 0,
       successful: 0,
+      skipped: 0,
       errors: [error.message]
     }), {
       status: 500,
@@ -90,6 +99,79 @@ serve(async (req) => {
     });
   }
 });
+
+async function checkForDuplicate(supabase: any, row: any) {
+  if (!row.name?.trim()) {
+    return false; // Can't check duplicates without a name
+  }
+
+  const teamName = row.name.trim();
+  
+  // If no city is provided, check for teams with same name and no city
+  if (!row.city?.trim()) {
+    const { data: existingTeams, error } = await supabase
+      .from('teams')
+      .select('id')
+      .ilike('name', teamName)
+      .is('city_id', null);
+    
+    if (error) {
+      console.error('Error checking for duplicates (no city):', error);
+      return false;
+    }
+    
+    return existingTeams && existingTeams.length > 0;
+  }
+
+  // If city is provided, check for teams with same name in same city/country
+  const cityName = row.city.trim();
+  const countryName = row.country?.trim();
+
+  let query = supabase
+    .from('teams')
+    .select(`
+      id,
+      name,
+      cities (
+        name,
+        countries (
+          name
+        )
+      )
+    `)
+    .ilike('name', teamName);
+
+  const { data: existingTeams, error } = await query;
+
+  if (error) {
+    console.error('Error checking for duplicates (with city):', error);
+    return false;
+  }
+
+  if (!existingTeams || existingTeams.length === 0) {
+    return false;
+  }
+
+  // Check if any existing team matches the city and country criteria
+  for (const team of existingTeams) {
+    if (team.cities) {
+      const teamCityName = team.cities.name?.toLowerCase();
+      const teamCountryName = team.cities.countries?.name?.toLowerCase();
+      
+      const csvCityName = cityName.toLowerCase();
+      const csvCountryName = countryName?.toLowerCase();
+      
+      // Match if city names are the same and countries match (if provided)
+      if (teamCityName === csvCityName) {
+        if (!csvCountryName || !teamCountryName || teamCountryName === csvCountryName) {
+          return true; // Duplicate found
+        }
+      }
+    }
+  }
+
+  return false;
+}
 
 async function processTeamRow(supabase: any, row: any, rowNumber: number) {
   console.log(`Processing team row ${rowNumber}:`, row);
