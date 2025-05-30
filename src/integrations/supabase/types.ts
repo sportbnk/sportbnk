@@ -14,19 +14,19 @@ export type Database = {
           country_id: string
           created_at: string
           id: string
-          name: string
+          name: string | null
         }
         Insert: {
           country_id: string
           created_at?: string
           id?: string
-          name: string
+          name?: string | null
         }
         Update: {
           country_id?: string
           created_at?: string
           id?: string
-          name?: string
+          name?: string | null
         }
         Relationships: [
           {
@@ -105,17 +105,17 @@ export type Database = {
         Row: {
           created_at: string
           id: string
-          name: string
+          name: string | null
         }
         Insert: {
           created_at?: string
           id?: string
-          name: string
+          name?: string | null
         }
         Update: {
           created_at?: string
           id?: string
-          name?: string
+          name?: string | null
         }
         Relationships: []
       }
@@ -318,17 +318,17 @@ export type Database = {
         Row: {
           created_at: string
           id: string
-          name: string
+          name: string | null
         }
         Insert: {
           created_at?: string
           id?: string
-          name: string
+          name?: string | null
         }
         Update: {
           created_at?: string
           id?: string
-          name?: string
+          name?: string | null
         }
         Relationships: []
       }

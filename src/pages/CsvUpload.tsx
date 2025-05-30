@@ -14,18 +14,18 @@ import { supabase } from "@/integrations/supabase/client";
 
 interface ParsedTeam {
   name: string;
-  sport: string;
-  level: string;
-  street: string;
-  postal: string;
-  city: string;
-  country: string;
-  website: string;
-  phone: string;
-  email: string;
-  founded: string;
-  revenue: string;
-  employees: string;
+  sport?: string;
+  level?: string;
+  street?: string;
+  postal?: string;
+  city?: string;
+  country?: string;
+  website?: string;
+  phone?: string;
+  email?: string;
+  founded?: string;
+  revenue?: string;
+  employees?: string;
   socials: Array<{ platform: string; url: string }>;
   hours: Array<{ day: string; startHour: string; endHour: string }>;
 }
@@ -349,11 +349,12 @@ const CsvUpload = () => {
     console.log('CSV headers:', headers);
 
     if (uploadType === "teams") {
-      const requiredColumns = ['name', 'sport', 'level', 'street', 'postal', 'city', 'country', 'website', 'phone', 'email', 'founded', 'revenue', 'employees', 'socials', 'hours'];
+      // Only require 'name' field for teams
+      const requiredColumns = ['name'];
       const missingColumns = requiredColumns.filter(col => !headers.includes(col));
       
       if (missingColumns.length > 0) {
-        setErrors([`Missing required columns: ${missingColumns.join(', ')}`]);
+        setErrors([`Missing required column: ${missingColumns.join(', ')}`]);
         return;
       }
 
@@ -376,28 +377,28 @@ const CsvUpload = () => {
           console.log('Raw socials from CSV:', row.socials);
           console.log('Raw hours from CSV:', row.hours);
 
-          if (!row.name) {
+          if (!row.name?.trim()) {
             newErrors.push(`Row ${i}: Team name is required`);
             continue;
           }
 
-          const socials = parseSocials(row.socials);
-          const hours = parseHours(row.hours);
+          const socials = parseSocials(row.socials || '');
+          const hours = parseHours(row.hours || '');
 
-          const parsedTeam = {
+          const parsedTeam: ParsedTeam = {
             name: row.name,
-            sport: row.sport,
-            level: row.level,
-            street: row.street,
-            postal: row.postal,
-            city: row.city,
-            country: row.country,
-            website: row.website,
-            phone: row.phone,
-            email: row.email,
-            founded: row.founded,
-            revenue: row.revenue,
-            employees: row.employees,
+            sport: row.sport || undefined,
+            level: row.level || undefined,
+            street: row.street || undefined,
+            postal: row.postal || undefined,
+            city: row.city || undefined,
+            country: row.country || undefined,
+            website: row.website || undefined,
+            phone: row.phone || undefined,
+            email: row.email || undefined,
+            founded: row.founded || undefined,
+            revenue: row.revenue || undefined,
+            employees: row.employees || undefined,
             socials,
             hours
           };
@@ -533,7 +534,7 @@ const CsvUpload = () => {
   };
 
   const teamsColumns = [
-    "Name", "Sport", "Level", "Street", "Postal", "City", "Country", 
+    "Name (Required)", "Sport", "Level", "Street", "Postal", "City", "Country", 
     "Website", "Phone", "Email", "Founded", "Revenue", "Employees", "Socials", "Hours"
   ];
 
@@ -659,10 +660,10 @@ const CsvUpload = () => {
                   <div className="text-sm text-gray-600">
                     {uploadType === "teams" ? (
                       <div>
-                        <p className="mb-2">Required columns (case insensitive):</p>
+                        <p className="mb-2">Required columns: <strong>Name</strong> (all others are optional, case insensitive):</p>
                         <div className="grid grid-cols-3 gap-2">
                           {teamsColumns.map((col) => (
-                            <span key={col} className="bg-white px-2 py-1 rounded border text-xs">
+                            <span key={col} className={`px-2 py-1 rounded border text-xs ${col.includes('Required') ? 'bg-red-100 border-red-300 font-semibold' : 'bg-white'}`}>
                               {col}
                             </span>
                           ))}
@@ -672,6 +673,7 @@ const CsvUpload = () => {
                           <li>• <strong>Socials:</strong> platform:url;platform2:url2 (use semicolons to separate multiple entries)</li>
                           <li>• <strong>Hours:</strong> day:start-end;day2:start-end (use semicolons to separate multiple entries)</li>
                           <li>• Example: facebook:https://facebook.com/team;twitter:https://twitter.com/team</li>
+                          <li>• <strong>Note:</strong> Only team name is required, all other fields can be empty</li>
                         </ul>
                       </div>
                     ) : (
@@ -758,10 +760,10 @@ const CsvUpload = () => {
                           {parsedData.map((team, index) => (
                             <TableRow key={index}>
                               <TableCell className="font-medium">{team.name}</TableCell>
-                              <TableCell>{team.sport}</TableCell>
-                              <TableCell className="capitalize">{team.level}</TableCell>
-                              <TableCell>{team.city}</TableCell>
-                              <TableCell>{team.country}</TableCell>
+                              <TableCell>{team.sport || 'N/A'}</TableCell>
+                              <TableCell className="capitalize">{team.level || 'N/A'}</TableCell>
+                              <TableCell>{team.city || 'N/A'}</TableCell>
+                              <TableCell>{team.country || 'N/A'}</TableCell>
                               <TableCell>
                                 {team.socials.length > 0 ? (
                                   <Select>

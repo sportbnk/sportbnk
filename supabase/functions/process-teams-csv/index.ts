@@ -1,3 +1,4 @@
+
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
@@ -9,20 +10,20 @@ const corsHeaders = {
 
 interface TeamCsvRow {
   name: string;
-  sport: string;
-  level: string;
-  street: string;
-  postal: string;
-  city: string;
-  country: string;
-  website: string;
-  phone: string;
-  email: string;
-  founded: string;
-  revenue: string;
-  employees: string;
-  socials: string;
-  hours: string;
+  sport?: string;
+  level?: string;
+  street?: string;
+  postal?: string;
+  city?: string;
+  country?: string;
+  website?: string;
+  phone?: string;
+  email?: string;
+  founded?: string;
+  revenue?: string;
+  employees?: string;
+  socials?: string;
+  hours?: string;
 }
 
 serve(async (req) => {
@@ -93,110 +94,129 @@ serve(async (req) => {
 async function processTeamRow(supabase: any, row: any, rowNumber: number) {
   console.log(`Processing team row ${rowNumber}:`, row);
   
-  // Get or create country - preserve original case but match case-insensitively
-  const countryName = row.country?.trim();
-  if (!countryName) throw new Error('Country is required');
-  
-  let { data: country, error: countryError } = await supabase
-    .from('countries')
-    .select('id, name')
-    .ilike('name', countryName)
-    .single();
+  // Only team name is required
+  if (!row.name?.trim()) {
+    throw new Error('Team name is required');
+  }
 
-  if (!country) {
-    const { data: newCountry, error: createCountryError } = await supabase
+  let countryId = null;
+  let cityId = null;
+  let sportId = null;
+
+  // Get or create country if provided
+  if (row.country?.trim()) {
+    const countryName = row.country.trim();
+    
+    let { data: country, error: countryError } = await supabase
       .from('countries')
-      .insert({ name: countryName })
-      .select('id')
+      .select('id, name')
+      .ilike('name', countryName)
       .single();
-    
-    if (createCountryError) throw new Error(`Failed to create country: ${createCountryError.message}`);
-    country = newCountry;
+
+    if (!country) {
+      const { data: newCountry, error: createCountryError } = await supabase
+        .from('countries')
+        .insert({ name: countryName })
+        .select('id')
+        .single();
+      
+      if (createCountryError) throw new Error(`Failed to create country: ${createCountryError.message}`);
+      country = newCountry;
+    }
+    countryId = country.id;
   }
 
-  // Get or create city - preserve original case but match case-insensitively
-  const cityName = row.city?.trim();
-  if (!cityName) throw new Error('City is required');
-  
-  let { data: city, error: cityError } = await supabase
-    .from('cities')
-    .select('id, name')
-    .ilike('name', cityName)
-    .eq('country_id', country.id)
-    .single();
-
-  if (!city) {
-    const { data: newCity, error: createCityError } = await supabase
+  // Get or create city if provided (and country exists)
+  if (row.city?.trim() && countryId) {
+    const cityName = row.city.trim();
+    
+    let { data: city, error: cityError } = await supabase
       .from('cities')
-      .insert({ 
-        name: cityName,
-        country_id: country.id
-      })
-      .select('id')
+      .select('id, name')
+      .ilike('name', cityName)
+      .eq('country_id', countryId)
       .single();
-    
-    if (createCityError) throw new Error(`Failed to create city: ${createCityError.message}`);
-    city = newCity;
+
+    if (!city) {
+      const { data: newCity, error: createCityError } = await supabase
+        .from('cities')
+        .insert({ 
+          name: cityName,
+          country_id: countryId
+        })
+        .select('id')
+        .single();
+      
+      if (createCityError) throw new Error(`Failed to create city: ${createCityError.message}`);
+      city = newCity;
+    }
+    cityId = city.id;
   }
 
-  // Get or create sport - preserve original case but match case-insensitively
-  const sportName = row.sport?.trim();
-  if (!sportName) throw new Error('Sport is required');
-  
-  let { data: sport, error: sportError } = await supabase
-    .from('sports')
-    .select('id')
-    .ilike('name', sportName)
-    .single();
-
-  if (!sport) {
-    const { data: newSport, error: createSportError } = await supabase
-      .from('sports')
-      .insert({ name: sportName })
-      .select('id')
-      .single();
+  // Get or create sport if provided
+  if (row.sport?.trim()) {
+    const sportName = row.sport.trim();
     
-    if (createSportError) throw new Error(`Failed to create sport: ${createSportError.message}`);
-    sport = newSport;
+    let { data: sport, error: sportError } = await supabase
+      .from('sports')
+      .select('id')
+      .ilike('name', sportName)
+      .single();
+
+    if (!sport) {
+      const { data: newSport, error: createSportError } = await supabase
+        .from('sports')
+        .insert({ name: sportName })
+        .select('id')
+        .single();
+      
+      if (createSportError) throw new Error(`Failed to create sport: ${createSportError.message}`);
+      sport = newSport;
+    }
+    sportId = sport.id;
   }
 
   // Clean revenue data
   let revenue = null;
-  if (row.revenue) {
+  if (row.revenue?.trim()) {
     const cleanRevenue = row.revenue.replace(/,/g, '').split('.')[0];
     revenue = parseInt(cleanRevenue) || null;
   }
 
   // Clean employees data
   let employees = null;
-  if (row.employees) {
+  if (row.employees?.trim()) {
     employees = parseInt(row.employees) || null;
   }
 
-  // Create team
+  // Create team with only provided data
+  const teamData: any = {
+    name: row.name.trim()
+  };
+
+  // Only add fields if they have values
+  if (row.level?.trim()) teamData.level = row.level.toLowerCase().trim();
+  if (row.website?.trim()) teamData.website = row.website.trim();
+  if (row.email?.trim()) teamData.email = row.email.trim();
+  if (row.phone?.trim()) teamData.phone = row.phone.trim();
+  if (employees !== null) teamData.employees = employees;
+  if (row.founded?.trim()) teamData.founded = row.founded.trim();
+  if (revenue !== null) teamData.revenue = revenue;
+  if (row.postal?.trim()) teamData.postal_code = row.postal.trim();
+  if (row.street?.trim()) teamData.street = row.street.trim();
+  if (cityId) teamData.city_id = cityId;
+  if (sportId) teamData.sport_id = sportId;
+
   const { data: team, error: teamError } = await supabase
     .from('teams')
-    .insert({
-      name: row.name?.trim(),
-      level: row.level?.toLowerCase().trim(),
-      website: row.website?.trim(),
-      email: row.email?.trim(),
-      phone: row.phone?.trim(),
-      employees: employees,
-      founded: row.founded?.trim(),
-      revenue: revenue,
-      postal_code: row.postal?.trim(),
-      street: row.street?.trim(),
-      city_id: city.id,
-      sport_id: sport.id
-    })
+    .insert(teamData)
     .select('id')
     .single();
 
   if (teamError) throw new Error(`Failed to create team: ${teamError.message}`);
 
-  // Process social links with semicolon separator
-  if (row.socials) {
+  // Process social links with semicolon separator (if provided)
+  if (row.socials?.trim()) {
     const socialPairs = row.socials.split(';');
     for (const pair of socialPairs) {
       const [platform, url] = pair.split(':').map(s => s.trim());
@@ -212,8 +232,8 @@ async function processTeamRow(supabase: any, row: any, rowNumber: number) {
     }
   }
 
-  // Process opening hours with semicolon separator
-  if (row.hours) {
+  // Process opening hours with semicolon separator (if provided)
+  if (row.hours?.trim()) {
     const hourPairs = row.hours.split(';');
     for (const pair of hourPairs) {
       const [day, timeRange] = pair.split(':').map(s => s.trim());
