@@ -184,17 +184,8 @@ const People = () => {
     enabled: !!allDepartments && !!allCountries, // Only run query when lookups are loaded
   });
 
-  const filteredContacts = contacts?.filter(contact => {
-    if (!searchTerm) return true;
-    
-    const searchLower = searchTerm.toLowerCase();
-    return (
-      contact.name.toLowerCase().includes(searchLower) ||
-      contact.email?.toLowerCase().includes(searchLower) ||
-      contact.teams?.name?.toLowerCase().includes(searchLower) ||
-      contact.role?.toLowerCase().includes(searchLower)
-    );
-  });
+  // Define filteredContacts properly
+  const filteredContacts = contacts || [];
 
   const handleRevealClick = async (contact: any, type: 'email' | 'phone' | 'linkedin') => {
     await revealContact(contact, type);
