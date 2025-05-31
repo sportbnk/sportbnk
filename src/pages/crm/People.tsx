@@ -167,29 +167,29 @@ const People = () => {
       // This allows showing all contacts from all teams in the selected location
       console.log("filters ", filters)
       if (filters.team === "all") {
-  let teamIds = [];
+        // Apply city filter first (most specific)
+        if (filters.city !== "all" && citiesForCountry) {
+          const selectedCity = citiesForCountry.find(city => city.name === filters.city);
+          if (selectedCity) {
+            console.log("selected city", selectedCity.id)
+              query = query.eq('team.city_id', selectedCity.id);
+      
+          }
+        } else if (filters.country !== "all" && allCountries) {
+          const selectedCountry = allCountries.find(country => country.name === filters.country);
+          if (selectedCountry) {
+            console.log("selected country", selectedCountry.id)
+            query = query
+            .select('*')
+            .eq('team.city.country_id', selectedCountry.id)
+            .join('team', 'team.id', 'some_table.team_id')  // pseudo code: Supabase client doesn't support explicit joins
+      
+          }
 
-  // Apply city filter first (most specific)
-  if (filters.city !== "all" && citiesForCountry) {
-    const selectedCity = citiesForCountry.find(city => city.name === filters.city);
-    if (selectedCity) {
-        query = query.eq('team.city_id', selectedCity.id);
-
-    }
-  } else if (filters.country !== "all" && allCountries) {
-    const selectedCountry = allCountries.find(country => country.name === filters.country);
-    if (selectedCountry) {
-      query = query
-      .select('*')
-      .eq('team.city.country_id', selectedCountry.id)
-      .join('team', 'team.id', 'some_table.team_id')  // pseudo code: Supabase client doesn't support explicit joins
-
-    }
-
-  }
-
-
-}
+        }
+      
+      
+      }
 
 
       const { data, error } = await query;
