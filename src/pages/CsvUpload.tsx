@@ -10,6 +10,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Upload, FileText, Users, Building2, AlertCircle, CheckCircle, Clock, Plus, StopCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { CsvUploadService, BatchProcessResult } from "@/services/csvUploadService";
+import * as XLSX from 'xlsx';
 
 const CsvUpload = () => {
   const [teamsCsv, setTeamsCsv] = useState("");
@@ -39,6 +40,27 @@ const CsvUpload = () => {
         resolve(result.split(',')[1]);
       };
       reader.onerror = error => reject(error);
+    });
+  };
+
+  // Function to convert Excel to CSV
+  const convertExcelToCsv = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const data = new Uint8Array(e.target?.result as ArrayBuffer);
+          const workbook = XLSX.read(data, { type: 'array' });
+          const firstSheetName = workbook.SheetNames[0];
+          const worksheet = workbook.Sheets[firstSheetName];
+          const csv = XLSX.utils.sheet_to_csv(worksheet);
+          resolve(csv);
+        } catch (error) {
+          reject(error);
+        }
+      };
+      reader.onerror = reject;
+      reader.readAsArrayBuffer(file);
     });
   };
 
@@ -74,14 +96,14 @@ const CsvUpload = () => {
 
     try {
       if (isExcelFile) {
-        // Handle Excel files
-        const base64Data = await fileToBase64(file);
-        setData(base64Data);
-        if (setFileType) setFileType('xlsx');
+        // Convert Excel to CSV
+        const csvData = await convertExcelToCsv(file);
+        setData(csvData);
+        if (setFileType) setFileType('csv'); // Always convert to CSV
         
         toast({
-          title: "Excel file loaded",
-          description: "Excel file processed successfully. Commas in cells won't cause parsing issues.",
+          title: "Excel file converted",
+          description: "Excel file converted to CSV format successfully.",
         });
       } else {
         // Handle CSV files
@@ -95,7 +117,7 @@ const CsvUpload = () => {
         
         toast({
           title: "CSV file loaded",
-          description: "CSV file loaded. Make sure cells with commas are properly quoted.",
+          description: "CSV file loaded successfully.",
         });
       }
     } catch (error) {
@@ -260,7 +282,7 @@ const CsvUpload = () => {
 
       toast({
         title: "Teams Upload Complete",
-        description: `All teams have been processed successfully using ${teamsFileType.toUpperCase()} format`,
+        description: `All teams have been processed successfully`,
       });
     } catch (error) {
       console.error('Teams upload error:', error);
@@ -307,7 +329,7 @@ const CsvUpload = () => {
 
       toast({
         title: "Contacts Upload Complete",
-        description: `All contacts have been processed successfully using ${contactsFileType.toUpperCase()} format`,
+        description: `All contacts have been processed successfully`,
       });
     } catch (error) {
       console.error('Contacts upload error:', error);
@@ -413,7 +435,7 @@ const CsvUpload = () => {
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold mb-4">CSV/Excel Data Upload</h1>
           <p className="text-gray-600">
-            Upload teams and contacts data via CSV or Excel files. Excel files eliminate comma parsing issues.
+            Upload teams and contacts data via CSV or Excel files. Excel files are automatically converted to CSV format.
           </p>
         </div>
 
@@ -425,7 +447,7 @@ const CsvUpload = () => {
                 <Building2 className="h-5 w-5" />
                 <span>Teams Upload</span>
                 {teamsFileType === 'xlsx' && (
-                  <Badge variant="secondary" className="ml-2">Excel</Badge>
+                  <Badge variant="secondary" className="ml-2">Excel → CSV</Badge>
                 )}
               </CardTitle>
             </CardHeader>
@@ -448,19 +470,13 @@ const CsvUpload = () => {
                 <label className="text-sm font-medium mb-2 block">Paste CSV Data</label>
                 <Textarea
                   placeholder="Paste your teams CSV data here..."
-                  value={teamsFileType === 'csv' ? teamsCsv : ''}
+                  value={teamsCsv}
                   onChange={(e) => {
                     setTeamsCsv(e.target.value);
                     setTeamsFileType('csv');
                   }}
                   className="min-h-32"
-                  disabled={teamsFileType === 'xlsx'}
                 />
-                {teamsFileType === 'xlsx' && (
-                  <p className="text-sm text-gray-500 mt-2">
-                    Excel file loaded. Clear the file to paste CSV data instead.
-                  </p>
-                )}
               </div>
 
               <div className="text-sm text-gray-600">
@@ -504,7 +520,7 @@ const CsvUpload = () => {
                   ) : (
                     <>
                       <Upload className="mr-2 h-4 w-4" />
-                      Upload Teams ({teamsFileType.toUpperCase()})
+                      Upload Teams
                     </>
                   )}
                 </Button>
@@ -532,7 +548,7 @@ const CsvUpload = () => {
                 <Users className="h-5 w-5" />
                 <span>Contacts Upload</span>
                 {contactsFileType === 'xlsx' && (
-                  <Badge variant="secondary" className="ml-2">Excel</Badge>
+                  <Badge variant="secondary" className="ml-2">Excel → CSV</Badge>
                 )}
               </CardTitle>
             </CardHeader>
@@ -555,19 +571,13 @@ const CsvUpload = () => {
                 <label className="text-sm font-medium mb-2 block">Paste CSV Data</label>
                 <Textarea
                   placeholder="Paste your contacts CSV data here..."
-                  value={contactsFileType === 'csv' ? contactsCsv : ''}
+                  value={contactsCsv}
                   onChange={(e) => {
                     setContactsCsv(e.target.value);
                     setContactsFileType('csv');
                   }}
                   className="min-h-32"
-                  disabled={contactsFileType === 'xlsx'}
                 />
-                {contactsFileType === 'xlsx' && (
-                  <p className="text-sm text-gray-500 mt-2">
-                    Excel file loaded. Clear the file to paste CSV data instead.
-                  </p>
-                )}
               </div>
 
               <div className="text-sm text-gray-600">
@@ -610,7 +620,7 @@ const CsvUpload = () => {
                   ) : (
                     <>
                       <Upload className="mr-2 h-4 w-4" />
-                      Upload Contacts ({contactsFileType.toUpperCase()})
+                      Upload Contacts
                     </>
                   )}
                 </Button>
@@ -646,6 +656,7 @@ const CsvUpload = () => {
               <ul className="text-sm text-green-700 space-y-1">
                 <li>• Handles complex text fields automatically</li>
                 <li>• Preserves formatting and data types</li>
+                <li>• Automatically converted to CSV format for processing</li>
                 <li>• Recommended for data with addresses, descriptions, or special characters</li>
               </ul>
             </div>
@@ -801,6 +812,7 @@ const CsvUpload = () => {
               <p className="text-sm text-blue-800">
                 <strong>Note:</strong> Large files are automatically processed in batches to prevent timeouts. 
                 Use the "Starting Row" field to resume uploads from a specific row after refreshing the page.
+                Excel files are automatically converted to CSV format in the browser before processing.
               </p>
             </div>
           </CardContent>
