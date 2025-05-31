@@ -116,92 +116,71 @@ const People = () => {
 
   const { data: contacts, isLoading } = useQuery({
     queryKey: ['contacts', filters, searchTerm],
-    queryFn: async () => {
-      console.log('Fetching contacts with filters:', filters);
-      
-      let query = supabase
-        .from('contacts')
-        .select(`
-          *,
-          teams (
-            id,
-            name,
-            cities (
-              id,
-              name,
-              countries (
-                id,
-                name
-              )
-            )
-          ),
-          departments (
+    queryFn:  async () => {
+  console.log('Fetching contacts with filters:', filters);
+
+  const query = supabase
+    .from('contacts')
+    .select(`
+      *,
+      teams (
+        id,
+        name,
+        cities (
+          id,
+          name,
+          countries (
             id,
             name
           )
-        `);
+        )
+      ),
+      departments (
+        id,
+        name
+      )
+    `);
 
-      // Apply search filter first
-      if (searchTerm.trim()) {
-        query = query.or(`name.ilike.%${searchTerm.trim()}%,email.ilike.%${searchTerm.trim()}%,role.ilike.%${searchTerm.trim()}%`);
-      }
+  // Apply search term (optional)
+  if (searchTerm.trim()) {
+    query.or(`name.ilike.%${searchTerm.trim()}%,email.ilike.%${searchTerm.trim()}%,role.ilike.%${searchTerm.trim()}%`);
+  }
 
-      // Apply department filter using department ID
-      if (filters.position !== "all" && allDepartments) {
-        const selectedDepartment = allDepartments.find(dept => dept.name === filters.position);
-        if (selectedDepartment) {
-          query = query.eq('department_id', selectedDepartment.id);
-        }
-      }
+  // Filter by department if selected
+  if (filters.position !== "all" && allDepartments) {
+    const selectedDepartment = allDepartments.find(dept => dept.name === filters.position);
+    if (selectedDepartment) {
+      query.eq('department_id', selectedDepartment.id);
+    }
+  }
 
-      // Only apply specific team filter if a specific team is selected (not "all")
-      if (filters.team !== "all" && teamsForCity) {
-        const selectedTeam = teamsForCity.find(team => team.name === filters.team);
-        if (selectedTeam) {
-          query = query.eq('team_id', selectedTeam.id);
-        }
-      }
-      // If "all teams" is selected, don't apply any team filtering - let location filtering work
+  // Team filter
+  if (filters.team !== "all" && teamsForCity) {
+    const selectedTeam = teamsForCity.find(team => team.name === filters.team);
+    if (selectedTeam) {
+      query.eq('team_id', selectedTeam.id);
+    }
+  } else {
+    // City filter
+    if (filters.city !== "all") {
+      query.eq('teams.cities.name', filters.city);
+    }
+    // Country filter
+    else if (filters.country !== "all") {
+      query.eq('teams.cities.countries.name', filters.country);
+    }
+  }
 
-      // Apply location filtering only if no specific team is selected
-      // This allows showing all contacts from all teams in the selected location
-      console.log("filters ", filters)
-      if (filters.team === "all") {
-        // Apply city filter first (most specific)
-        if (filters.city !== "all" && citiesForCountry) {
-          const selectedCity = citiesForCountry.find(city => city.name === filters.city);
-          if (selectedCity) {
-            console.log("selected city", selectedCity.id)
-              query = query.eq('team.city_id', selectedCity.id);
-      
-          }
-        } else if (filters.country !== "all" && allCountries) {
-          const selectedCountry = allCountries.find(country => country.name === filters.country);
-          if (selectedCountry) {
-            console.log("selected country", selectedCountry.id)
-            query = query
-            .select('*')
-            .eq('team.city.country_id', selectedCountry.id)
-            .join('team', 'team.id', 'some_table.team_id')  // pseudo code: Supabase client doesn't support explicit joins
-      
-          }
+  const { data, error } = await query;
 
-        }
-      
-      
-      }
+  if (error) {
+    console.error('Error fetching contacts:', error);
+    throw error;
+  }
 
-
-      const { data, error } = await query;
-      
-      if (error) {
-        console.error('Error fetching contacts:', error);
-        throw error;
-      }
-      
-      console.log('Raw contacts data:', data);
-      return data || [];
-    },
+  console.log('Raw contacts data:', data);
+  return data || [];
+}, 
     enabled: !!allDepartments && !!allCountries, // Only run query when lookups are loaded
   });
 
