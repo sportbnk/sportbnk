@@ -180,7 +180,7 @@ const People = () => {
 
   console.log('Raw contacts data:', data);
   return data || [];
-};
+}
 
   });
 
