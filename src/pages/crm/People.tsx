@@ -173,7 +173,8 @@ const People = () => {
   if (filters.city !== "all" && citiesForCountry) {
     const selectedCity = citiesForCountry.find(city => city.name === filters.city);
     if (selectedCity) {
-      query = query.eq('team.city_id', selectedCity.id);
+        query = query.eq('team.city_id', selectedCity.id);
+
     }
   }
   console.log("after city, team ids", teamIds)
@@ -191,6 +192,8 @@ const People = () => {
 
   }
 
+
+}
 
 
       const { data, error } = await query;
