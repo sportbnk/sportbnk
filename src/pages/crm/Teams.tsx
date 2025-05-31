@@ -272,6 +272,7 @@ export default function Teams() {
               <ContactsFilters 
                 onFilterChange={handleFilterChange} 
                 showTeamFilters={true}
+                showPeopleFilters={false}
                 totalResults={organizationsData?.length || 0}
                 filters={filters}
               />

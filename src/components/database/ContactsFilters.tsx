@@ -1,4 +1,3 @@
-
 import React, { useEffect } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
@@ -11,6 +10,7 @@ import { useQuery } from "@tanstack/react-query";
 interface ContactsFiltersProps {
   onFilterChange: (filters: any) => void;
   showTeamFilters?: boolean;
+  showPeopleFilters?: boolean;
   totalResults?: number;
   filters: {
     position: string;
@@ -24,7 +24,13 @@ interface ContactsFiltersProps {
   };
 }
 
-const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults = 0, filters }: ContactsFiltersProps) => {
+const ContactsFilters = ({ 
+  onFilterChange, 
+  showTeamFilters = false, 
+  showPeopleFilters = true,
+  totalResults = 0, 
+  filters 
+}: ContactsFiltersProps) => {
   // Fetch all departments for position filter
   const { data: allDepartments } = useQuery({
     queryKey: ['all-departments'],
@@ -37,6 +43,7 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
       if (error) throw error;
       return data;
     },
+    enabled: showPeopleFilters,
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000
   });
@@ -194,26 +201,28 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
           {totalResults} result{totalResults !== 1 ? 's' : ''} found
         </div>
 
-        {/* Position Filter (Departments) - Always shown for People page */}
-        <div className="space-y-1">
-          <Label htmlFor="position" className="text-xs">Position</Label>
-          <Select 
-            value={filters.position}
-            onValueChange={(value) => handleFilterChange("position", value)}
-          >
-            <SelectTrigger id="position" className="h-8 text-xs">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent className="bg-white z-50">
-              <SelectItem value="all">All positions</SelectItem>
-              {allDepartments?.map((department) => (
-                <SelectItem key={department.id} value={department.name}>
-                  {department.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+        {/* Position Filter (Departments) - Only shown for People page */}
+        {showPeopleFilters && (
+          <div className="space-y-1">
+            <Label htmlFor="position" className="text-xs">Position</Label>
+            <Select 
+              value={filters.position}
+              onValueChange={(value) => handleFilterChange("position", value)}
+            >
+              <SelectTrigger id="position" className="h-8 text-xs">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="bg-white z-50">
+                <SelectItem value="all">All positions</SelectItem>
+                {allDepartments?.map((department) => (
+                  <SelectItem key={department.id} value={department.name}>
+                    {department.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        )}
 
         {/* Country Filter */}
         <div className="space-y-1">
@@ -272,41 +281,43 @@ const ContactsFilters = ({ onFilterChange, showTeamFilters = false, totalResults
           </Tooltip>
         </div>
 
-        {/* Team Filter */}
-        <div className="space-y-1">
-          <Label htmlFor="team" className="text-xs">Team</Label>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <div>
-                <Select 
-                  value={filters.team}
-                  onValueChange={(value) => handleFilterChange("team", value)}
-                  disabled={isTeamDisabled}
-                >
-                  <SelectTrigger 
-                    id="team" 
-                    className={`h-8 text-xs ${isTeamDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+        {/* Team Filter - Only shown for People page */}
+        {showPeopleFilters && (
+          <div className="space-y-1">
+            <Label htmlFor="team" className="text-xs">Team</Label>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div>
+                  <Select 
+                    value={filters.team}
+                    onValueChange={(value) => handleFilterChange("team", value)}
+                    disabled={isTeamDisabled}
                   >
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="bg-white z-50">
-                    <SelectItem value="all">All teams</SelectItem>
-                    {teamsForCity?.map((team) => (
-                      <SelectItem key={team.id} value={team.name}>
-                        {team.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </TooltipTrigger>
-            {isTeamDisabled && (
-              <TooltipContent className="bg-white border shadow-md">
-                <p>Please select a city first</p>
-              </TooltipContent>
-            )}
-          </Tooltip>
-        </div>
+                    <SelectTrigger 
+                      id="team" 
+                      className={`h-8 text-xs ${isTeamDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    >
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent className="bg-white z-50">
+                      <SelectItem value="all">All teams</SelectItem>
+                      {teamsForCity?.map((team) => (
+                        <SelectItem key={team.id} value={team.name}>
+                          {team.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </TooltipTrigger>
+              {isTeamDisabled && (
+                <TooltipContent className="bg-white border shadow-md">
+                  <p>Please select a city first</p>
+                </TooltipContent>
+              )}
+            </Tooltip>
+          </div>
+        )}
 
         {showTeamFilters && (
           <>
