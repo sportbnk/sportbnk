@@ -1,4 +1,5 @@
 
+
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -155,6 +156,14 @@ const People = () => {
         }
       }
 
+      // Only apply team filter if a specific team is selected
+      if (filters.team !== "all" && teamsForCity) {
+        const selectedTeam = teamsForCity.find(team => team.name === filters.team);
+        if (selectedTeam) {
+          query = query.eq('team_id', selectedTeam.id);
+        }
+      }
+
       const { data, error } = await query;
       
       if (error) {
@@ -164,36 +173,29 @@ const People = () => {
       
       console.log('Raw contacts data:', data);
       
-      // Apply location-based filtering in JavaScript
+      // Apply location-based filtering in JavaScript only when no specific team is selected
       let filteredData = data || [];
 
-      // Apply country filter - include all teams in the selected country
-      if (filters.country !== "all" && allCountries) {
-        const selectedCountry = allCountries.find(country => country.name === filters.country);
-        if (selectedCountry) {
-          filteredData = filteredData.filter(contact => 
-            contact.teams?.cities?.countries?.id === selectedCountry.id
-          );
+      // Only apply location filters if no specific team is selected
+      if (filters.team === "all") {
+        // Apply country filter - include all teams in the selected country
+        if (filters.country !== "all" && allCountries) {
+          const selectedCountry = allCountries.find(country => country.name === filters.country);
+          if (selectedCountry) {
+            filteredData = filteredData.filter(contact => 
+              contact.teams?.cities?.countries?.id === selectedCountry.id
+            );
+          }
         }
-      }
 
-      // Apply city filter - include all teams in the selected city
-      if (filters.city !== "all" && citiesForCountry) {
-        const selectedCity = citiesForCountry.find(city => city.name === filters.city);
-        if (selectedCity) {
-          filteredData = filteredData.filter(contact => 
-            contact.teams?.cities?.id === selectedCity.id
-          );
-        }
-      }
-
-      // Apply team filter only if a specific team is selected
-      if (filters.team !== "all" && teamsForCity) {
-        const selectedTeam = teamsForCity.find(team => team.name === filters.team);
-        if (selectedTeam) {
-          filteredData = filteredData.filter(contact => 
-            contact.teams?.id === selectedTeam.id
-          );
+        // Apply city filter - include all teams in the selected city
+        if (filters.city !== "all" && citiesForCountry) {
+          const selectedCity = citiesForCountry.find(city => city.name === filters.city);
+          if (selectedCity) {
+            filteredData = filteredData.filter(contact => 
+              contact.teams?.cities?.id === selectedCity.id
+            );
+          }
         }
       }
 
@@ -472,3 +474,4 @@ const People = () => {
 };
 
 export default People;
+
