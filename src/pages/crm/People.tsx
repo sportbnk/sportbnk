@@ -56,6 +56,8 @@ const People = () => {
   const { data: contacts, isLoading } = useQuery({
     queryKey: ['contacts', filters, searchTerm],
     queryFn: async () => {
+      console.log('Fetching contacts with filters:', filters);
+      
       let query = supabase
         .from('contacts')
         .select(`
@@ -78,26 +80,22 @@ const People = () => {
           )
         `);
 
+      // Apply search filter first
+      if (searchTerm.trim()) {
+        query = query.or(`name.ilike.%${searchTerm.trim()}%,email.ilike.%${searchTerm.trim()}%,role.ilike.%${searchTerm.trim()}%`);
+      }
+
       // Apply department filter using department ID
-      if (filters.position !== "all") {
-        const selectedDepartment = allDepartments?.find(dept => dept.name === filters.position);
+      if (filters.position !== "all" && allDepartments) {
+        const selectedDepartment = allDepartments.find(dept => dept.name === filters.position);
         if (selectedDepartment) {
           query = query.eq('department_id', selectedDepartment.id);
         }
       }
 
-      // Apply team filters
+      // Apply team filter by name
       if (filters.team !== "all") {
-        query = query.eq('teams.name', filters.team);
-      }
-
-      // Apply location filters through team relationships
-      if (filters.country !== "all") {
-        query = query.eq('teams.cities.countries.name', filters.country);
-      }
-
-      if (filters.city !== "all") {
-        query = query.eq('teams.cities.name', filters.city);
+        query = query.not('teams', 'is', null).eq('teams.name', filters.team);
       }
 
       const { data, error } = await query;
@@ -107,7 +105,25 @@ const People = () => {
         throw error;
       }
       
-      return data;
+      console.log('Raw contacts data:', data);
+      
+      // Apply location filters in JavaScript after fetching
+      let filteredData = data || [];
+      
+      if (filters.country !== "all") {
+        filteredData = filteredData.filter(contact => 
+          contact.teams?.cities?.countries?.name === filters.country
+        );
+      }
+      
+      if (filters.city !== "all") {
+        filteredData = filteredData.filter(contact => 
+          contact.teams?.cities?.name === filters.city
+        );
+      }
+      
+      console.log('Filtered contacts data:', filteredData);
+      return filteredData;
     },
     enabled: !!allDepartments, // Only run query when departments are loaded
   });
