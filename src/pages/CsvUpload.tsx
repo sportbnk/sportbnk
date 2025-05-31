@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -22,6 +23,8 @@ const CsvUpload = () => {
   const [contactsDropActive, setContactsDropActive] = useState(false);
   const [teamsAbortController, setTeamsAbortController] = useState<AbortController | null>(null);
   const [contactsAbortController, setContactsAbortController] = useState<AbortController | null>(null);
+  const [teamsStartingRow, setTeamsStartingRow] = useState(1);
+  const [contactsStartingRow, setContactsStartingRow] = useState(1);
   const { toast } = useToast();
 
   // Function to convert file to base64 for XLSX processing
@@ -250,7 +253,8 @@ const CsvUpload = () => {
         (progress) => {
           setTeamsProgress(progress);
         },
-        abortController.signal
+        abortController.signal,
+        teamsStartingRow
       );
 
       toast({
@@ -296,7 +300,8 @@ const CsvUpload = () => {
         (progress) => {
           setContactsProgress(progress);
         },
-        abortController.signal
+        abortController.signal,
+        contactsStartingRow
       );
 
       toast({
@@ -475,6 +480,18 @@ const CsvUpload = () => {
                 </div>
               </div>
 
+              <div className="flex items-center space-x-2">
+                <label className="text-sm font-medium">Starting Row:</label>
+                <Input
+                  type="number"
+                  min="1"
+                  value={teamsStartingRow}
+                  onChange={(e) => setTeamsStartingRow(parseInt(e.target.value) || 1)}
+                  className="w-20"
+                />
+                <span className="text-xs text-gray-500">(1 = header, 2 = first data row)</span>
+              </div>
+
               <div className="flex space-x-2">
                 <Button
                   onClick={handleTeamsUpload}
@@ -558,6 +575,18 @@ const CsvUpload = () => {
                 </div>
               </div>
 
+              <div className="flex items-center space-x-2">
+                <label className="text-sm font-medium">Starting Row:</label>
+                <Input
+                  type="number"
+                  min="1"
+                  value={contactsStartingRow}
+                  onChange={(e) => setContactsStartingRow(parseInt(e.target.value) || 1)}
+                  className="w-20"
+                />
+                <span className="text-xs text-gray-500">(1 = header, 2 = first data row)</span>
+              </div>
+
               <div className="flex space-x-2">
                 <Button
                   onClick={handleContactsUpload}
@@ -628,6 +657,7 @@ const CsvUpload = () => {
               <p className="text-sm text-blue-800">
                 <strong>Note:</strong> Large files are automatically processed in batches to prevent timeouts. 
                 Excel files are recommended to avoid comma-related parsing issues in addresses and descriptions.
+                Use the "Starting Row" field to resume uploads from a specific row after refreshing the page.
               </p>
             </div>
           </CardContent>

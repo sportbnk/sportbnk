@@ -37,9 +37,10 @@ export class CsvUploadService {
     fileType: 'csv' | 'xlsx' = 'csv',
     batchSize: number = 100,
     onProgress?: (result: BatchProcessResult) => void,
-    signal?: AbortSignal
+    signal?: AbortSignal,
+    startingRow: number = 1
   ): Promise<BatchProcessResult> {
-    let startRow = 1; // Skip header
+    let startRow = startingRow;
     let totalProcessed = 0;
     let totalSuccessful = 0;
     let totalSkipped = 0;
@@ -108,9 +109,10 @@ export class CsvUploadService {
     conflictResolutions: any[] = [],
     batchSize: number = 50,
     onProgress?: (result: BatchProcessResult) => void,
-    signal?: AbortSignal
+    signal?: AbortSignal,
+    startingRow: number = 1
   ): Promise<BatchProcessResult> {
-    let startRow = 1; // Skip header
+    let startRow = startingRow;
     let totalProcessed = 0;
     let totalSuccessful = 0;
     let allErrors: string[] = [];
