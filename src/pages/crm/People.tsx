@@ -175,14 +175,12 @@ const People = () => {
               .select('id')
               .in('city_id', cityIds);
             
-            if (filters.team !== "all") {
-              if (countryTeams && countryTeams.length > 0) {
-                const teamIds = countryTeams.map(team => team.id);
-                query = query.in('team_id', teamIds);
-              } else {
-                // No teams in this country, return empty results
-                query = query.eq('team_id', '00000000-0000-0000-0000-000000000000');
-              }
+            if (countryTeams && countryTeams.length > 0) {
+              const teamIds = countryTeams.map(team => team.id);
+              query = query.in('team_id', teamIds);
+            } else {
+              // No teams in this country, return empty results
+              query = query.eq('team_id', '00000000-0000-0000-0000-000000000000');
             }
           } else {
             // No cities in this country, return empty results
