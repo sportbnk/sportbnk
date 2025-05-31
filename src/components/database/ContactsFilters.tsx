@@ -202,19 +202,6 @@ const ContactsFilters = ({
           {totalResults} result{totalResults !== 1 ? 's' : ''} found
         </div>
 
-        {/* People filtering disclaimer */}
-        {showPeopleFilters && (
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
-            <div className="flex items-start gap-2">
-              <Info className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
-              <div className="text-xs text-blue-800">
-                <p className="font-medium mb-1">Location Filtering</p>
-                <p>Country and city selections only populate team options. To filter contacts, you must select a specific team.</p>
-              </div>
-            </div>
-          </div>
-        )}
-
         {/* Position Filter (Departments) - Only shown for People page */}
         {showPeopleFilters && (
           <div className="space-y-1">
@@ -413,6 +400,19 @@ const ContactsFilters = ({
               </Select>
             </div>
           </>
+        )}
+
+        {/* People filtering disclaimer - moved to bottom */}
+        {showPeopleFilters && (
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mt-4">
+            <div className="flex items-start gap-2">
+              <Info className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
+              <div className="text-xs text-blue-800">
+                <p className="font-medium mb-1">Location Filtering</p>
+                <p>Country and city selections only populate team options. To filter contacts, you must select a specific team.</p>
+              </div>
+            </div>
+          </div>
         )}
       </div>
     </TooltipProvider>
