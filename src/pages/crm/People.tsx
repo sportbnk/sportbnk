@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -14,6 +13,15 @@ import {
   TableHeader, 
   TableRow 
 } from "@/components/ui/table";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import { Search, Mail, Phone, Linkedin, Building2, Shield } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -23,6 +31,7 @@ import { useReveal } from "@/contexts/RevealContext";
 
 const People = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
   const [filters, setFilters] = useState({
     position: "all",
     team: "all",
@@ -36,6 +45,52 @@ const People = () => {
   
   const { toast } = useToast();
   const { isRevealed, canReveal, revealContact, loading: revealLoading } = useReveal();
+
+  const pageSize = 50;
+
+  // Format numbers with commas
+  const formatNumber = (num: number) => {
+    return new Intl.NumberFormat('en-US').format(num);
+  };
+
+  // Calculate pagination range
+  const getPaginationRange = (currentPage: number, totalPages: number) => {
+    const delta = 2;
+    const range = [];
+    const rangeWithDots = [];
+
+    for (let i = Math.max(2, currentPage - delta); i <= Math.min(totalPages - 1, currentPage + delta); i++) {
+      range.push(i);
+    }
+
+    if (currentPage - delta > 2) {
+      rangeWithDots.push(1, '...');
+    } else {
+      rangeWithDots.push(1);
+    }
+
+    rangeWithDots.push(...range);
+
+    if (currentPage + delta < totalPages - 1) {
+      rangeWithDots.push('...', totalPages);
+    } else if (totalPages > 1) {
+      rangeWithDots.push(totalPages);
+    }
+
+    return rangeWithDots;
+  };
+
+  // Reset to first page when filters change
+  const handleFilterChange = (newFilters: any) => {
+    setFilters(newFilters);
+    setCurrentPage(1);
+  };
+
+  // Reset to first page when search changes
+  const handleSearchChange = (value: string) => {
+    setSearchTerm(value);
+    setCurrentPage(1);
+  };
 
   // Fetch all departments to get ID for the selected position
   const { data: allDepartments } = useQuery({
@@ -160,9 +215,9 @@ const People = () => {
   });
 
   const { data: contacts, isLoading } = useQuery({
-    queryKey: ['contacts', filters.position, filters.team, searchTerm],
+    queryKey: ['contacts', filters.position, filters.team, searchTerm, currentPage],
     queryFn: async () => {
-      console.log('Fetching contacts with position filter:', filters.position, 'and team filter:', filters.team);
+      console.log('Fetching contacts with position filter:', filters.position, 'and team filter:', filters.team, 'page:', currentPage);
       
       let query = supabase
         .from('contacts')
@@ -184,7 +239,8 @@ const People = () => {
             id,
             name
           )
-        `);
+        `)
+        .range((currentPage - 1) * pageSize, currentPage * pageSize - 1);
 
       // Apply search filter first
       if (searchTerm.trim()) {
@@ -228,6 +284,10 @@ const People = () => {
     },
     enabled: !!allDepartments, // Only run query when departments are loaded
   });
+
+  // Calculate total pages
+  const totalPages = Math.ceil((totalCount || 0) / pageSize);
+  const paginationRange = getPaginationRange(currentPage, totalPages);
 
   const filteredContacts = contacts?.filter(contact => {
     if (!searchTerm) return true;
@@ -284,7 +344,7 @@ const People = () => {
             <Input
               placeholder="Search contacts..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => handleSearchChange(e.target.value)}
               className="pl-10 w-64"
             />
           </div>
@@ -299,7 +359,7 @@ const People = () => {
             </CardHeader>
             <CardContent className="p-3">
               <ContactsFilters 
-                onFilterChange={setFilters}
+                onFilterChange={handleFilterChange}
                 showTeamFilters={false}
                 totalResults={totalCount || 0}
                 filters={filters}
@@ -311,7 +371,15 @@ const People = () => {
         <div className="md:col-span-5">
           <Card>
             <CardHeader>
-              <CardTitle>Contact Database</CardTitle>
+              <CardTitle className="flex items-center justify-between">
+                <span>Contact Database</span>
+                <span className="text-sm font-normal text-muted-foreground">
+                  {formatNumber(totalCount || 0)} total results
+                  {totalPages > 1 && (
+                    <span> • Page {currentPage} of {totalPages}</span>
+                  )}
+                </span>
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <Table>
@@ -489,6 +557,44 @@ const People = () => {
                   ))}
                 </TableBody>
               </Table>
+
+              {totalPages > 1 && (
+                <div className="mt-6 flex justify-center">
+                  <Pagination>
+                    <PaginationContent>
+                      <PaginationItem>
+                        <PaginationPrevious 
+                          onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                          className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                        />
+                      </PaginationItem>
+                      
+                      {paginationRange.map((page, index) => (
+                        <PaginationItem key={index}>
+                          {page === '...' ? (
+                            <PaginationEllipsis />
+                          ) : (
+                            <PaginationLink
+                              onClick={() => setCurrentPage(page as number)}
+                              isActive={currentPage === page}
+                              className="cursor-pointer"
+                            >
+                              {page}
+                            </PaginationLink>
+                          )}
+                        </PaginationItem>
+                      ))}
+                      
+                      <PaginationItem>
+                        <PaginationNext 
+                          onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                          className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                        />
+                      </PaginationItem>
+                    </PaginationContent>
+                  </Pagination>
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>
