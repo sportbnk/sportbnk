@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -120,7 +119,7 @@ const People = () => {
     queryFn: async () => {
       console.log('Fetching contacts with filters:', filters);
 
-      const query = supabase
+      let query = supabase
         .from('contacts')
         .select(`
           *,
@@ -144,14 +143,14 @@ const People = () => {
 
       // Apply search term (optional)
       if (searchTerm.trim()) {
-        query.or(`name.ilike.%${searchTerm.trim()}%,email.ilike.%${searchTerm.trim()}%,role.ilike.%${searchTerm.trim()}%`);
+        query = query.or(`name.ilike.%${searchTerm.trim()}%,email.ilike.%${searchTerm.trim()}%,role.ilike.%${searchTerm.trim()}%`);
       }
 
       // Filter by department if selected
       if (filters.position !== "all" && allDepartments) {
         const selectedDepartment = allDepartments.find(dept => dept.name === filters.position);
         if (selectedDepartment) {
-          query.eq('department_id', selectedDepartment.id);
+          query = query.eq('department_id', selectedDepartment.id);
         }
       }
 
@@ -159,16 +158,16 @@ const People = () => {
       if (filters.team !== "all" && teamsForCity) {
         const selectedTeam = teamsForCity.find(team => team.name === filters.team);
         if (selectedTeam) {
-          query.eq('team_id', selectedTeam.id);
+          query = query.eq('team_id', selectedTeam.id);
         }
       } else {
         // City filter
         if (filters.city !== "all") {
-          query.eq('teams.cities.name', filters.city);
+          query = query.eq('teams.cities.name', filters.city);
         }
         // Country filter
         else if (filters.country !== "all") {
-          query.eq('teams.cities.countries.name', filters.country);
+          query = query.eq('teams.cities.countries.name', filters.country);
         }
       }
 
