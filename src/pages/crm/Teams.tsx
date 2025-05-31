@@ -130,9 +130,13 @@ export default function Teams() {
         query = query.eq('sports.name', filters.sport);
       }
       
-      // Apply country filter - only filter if not "all" and ensure we only get teams from that country
+      // Apply country filter - when country is selected, we need to ensure we only get teams from that country
       if (filters.country !== "all") {
-        query = query.eq('cities.countries.name', filters.country);
+        // First, we need to join with cities and countries, then filter
+        query = query
+          .not('cities', 'is', null)
+          .not('cities.countries', 'is', null)
+          .eq('cities.countries.name', filters.country);
       }
       
       if (filters.level !== "all") {
