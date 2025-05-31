@@ -155,7 +155,7 @@ const CsvUpload = () => {
     setContactsDropActive(false);
     const file = e.dataTransfer.files[0];
     if (file) {
-      handleFileRead(file, setContactsCsv);
+      handleFileRead(file, setContactsCsv, setContactsFileType);
     }
   };
 
