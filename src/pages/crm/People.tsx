@@ -186,8 +186,6 @@ const People = () => {
                 .in('city_id', cityIds);
               
               if (countryTeams && countryTeams.length > 0) {
-                const teamIds = countryTeams.map(team => team.id);
-                query = query.in('team_id', teamIds);
               } else {
                 // No teams in this country, return empty results
                 query = query.eq('team_id', '00000000-0000-0000-0000-000000000000');
@@ -210,8 +208,6 @@ const People = () => {
               .eq('city_id', selectedCity.id);
             
             if (cityTeams && cityTeams.length > 0) {
-              const teamIds = cityTeams.map(team => team.id);
-              query = query.in('team_id', teamIds);
             } else {
               // No teams in this city, return empty results
               query = query.eq('team_id', '00000000-0000-0000-0000-000000000000');
