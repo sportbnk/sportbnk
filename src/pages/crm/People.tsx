@@ -116,9 +116,9 @@ const People = () => {
   });
 
   const { data: contacts, isLoading } = useQuery({
-    queryKey: ['contacts', filters, searchTerm],
+    queryKey: ['contacts', filters.position, filters.team, searchTerm],
     queryFn: async () => {
-      console.log('Fetching contacts with filters:', filters);
+      console.log('Fetching contacts with position filter:', filters.position, 'and team filter:', filters.team);
       
       let query = supabase
         .from('contacts')
@@ -155,6 +155,14 @@ const People = () => {
         }
       }
 
+      // Apply team filter only if a specific team is selected
+      if (filters.team !== "all" && teamsForCity) {
+        const selectedTeam = teamsForCity.find(team => team.name === filters.team);
+        if (selectedTeam) {
+          query = query.eq('team_id', selectedTeam.id);
+        }
+      }
+
       const { data, error } = await query;
       
       if (error) {
@@ -162,45 +170,10 @@ const People = () => {
         throw error;
       }
       
-      console.log('Raw contacts data:', data);
-      
-      // Apply location-based filtering in JavaScript
-      let filteredData = data || [];
-
-      // Apply country filter - include all teams in the selected country
-      if (filters.country !== "all" && allCountries) {
-        const selectedCountry = allCountries.find(country => country.name === filters.country);
-        if (selectedCountry) {
-          filteredData = filteredData.filter(contact => 
-            contact.teams?.cities?.countries?.id === selectedCountry.id
-          );
-        }
-      }
-
-      // Apply city filter - include all teams in the selected city
-      if (filters.city !== "all" && citiesForCountry) {
-        const selectedCity = citiesForCountry.find(city => city.name === filters.city);
-        if (selectedCity) {
-          filteredData = filteredData.filter(contact => 
-            contact.teams?.cities?.id === selectedCity.id
-          );
-        }
-      }
-
-      // Apply team filter only if a specific team is selected
-      if (filters.team !== "all" && teamsForCity) {
-        const selectedTeam = teamsForCity.find(team => team.name === filters.team);
-        if (selectedTeam) {
-          filteredData = filteredData.filter(contact => 
-            contact.teams?.id === selectedTeam.id
-          );
-        }
-      }
-
-      console.log('Filtered contacts data:', filteredData);
-      return filteredData;
+      console.log('Fetched contacts data:', data);
+      return data || [];
     },
-    enabled: !!allDepartments && !!allCountries, // Only run query when lookups are loaded
+    enabled: !!allDepartments, // Only run query when departments are loaded
   });
 
   const filteredContacts = contacts?.filter(contact => {
