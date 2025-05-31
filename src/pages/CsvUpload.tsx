@@ -483,9 +483,8 @@ const CsvUpload = () => {
                 <p className="font-medium mb-2">Expected columns:</p>
                 <div className="flex flex-wrap gap-1">
                   {[
-                    "Name", "Sport", "Level", "Street", "Postal", "City", 
-                    "Country", "Website", "Phone", "Email", "Founded", 
-                    "Revenue", "Employees", "Socials", "Hours"
+                    "Name", "Team", "Role", "Email", "Phone", 
+                    "LinkedIn", "Department", "Is_Email_Verified"
                   ].map((col) => (
                     <Badge key={col} variant="outline" className="text-xs">
                       {col}
@@ -584,8 +583,8 @@ const CsvUpload = () => {
                 <p className="font-medium mb-2">Expected columns:</p>
                 <div className="flex flex-wrap gap-1">
                   {[
-                    "Name", "Role", "Email", "Phone", 
-                    "LinkedIn", "Team", "Department", "Is_Email_Verified"
+                    "Name", "Team", "Role", "Email", "Phone", 
+                    "LinkedIn", "Department", "Is_Email_Verified"
                   ].map((col) => (
                     <Badge key={col} variant="outline" className="text-xs">
                       {col}
@@ -672,8 +671,18 @@ const CsvUpload = () => {
               <h4 className="font-medium mb-2">Teams File Format:</h4>
               <ul className="text-sm text-gray-600 space-y-1">
                 <li>• <strong>Name</strong> (required): Team name</li>
-                <li>• <strong>Sport, Level, City, Country</strong>: Optional team details</li>
-                <li>• <strong>Revenue, Employees</strong>: Numeric values</li>
+                <li>• <strong>Sport</strong>: Sport type</li>
+                <li>• <strong>Level</strong>: Competition level</li>
+                <li>• <strong>Street</strong>: Street address</li>
+                <li>• <strong>Postal</strong>: Postal code</li>
+                <li>• <strong>City</strong>: City name</li>
+                <li>• <strong>Country</strong>: Country name</li>
+                <li>• <strong>Website</strong>: Team website URL</li>
+                <li>• <strong>Phone</strong>: Contact phone number</li>
+                <li>• <strong>Email</strong>: Contact email address</li>
+                <li>• <strong>Founded</strong>: Year founded</li>
+                <li>• <strong>Revenue</strong>: Annual revenue (numeric)</li>
+                <li>• <strong>Employees</strong>: Number of employees (numeric)</li>
                 <li>• <strong>Socials</strong>: Format as "platform:url;platform:url"</li>
                 <li>• <strong>Hours</strong>: Format as "day:start-end;day:start-end"</li>
               </ul>
@@ -746,11 +755,11 @@ const CsvUpload = () => {
               <h4 className="font-medium mb-2">Contacts File Format:</h4>
               <ul className="text-sm text-gray-600 space-y-1">
                 <li>• <strong>Name</strong> (required): Contact full name</li>
+                <li>• <strong>Team</strong>: Associated team name</li>
                 <li>• <strong>Role</strong>: Job title or position</li>
                 <li>• <strong>Email</strong>: Contact email address</li>
                 <li>• <strong>Phone</strong>: Contact phone number</li>
                 <li>• <strong>LinkedIn</strong>: LinkedIn profile URL</li>
-                <li>• <strong>Team</strong>: Associated team name</li>
                 <li>• <strong>Department</strong>: Department or division</li>
                 <li>• <strong>Is_Email_Verified</strong>: Boolean (true/false)</li>
               </ul>
@@ -762,11 +771,11 @@ const CsvUpload = () => {
                     <TableHeader>
                       <TableRow>
                         <TableHead>Name</TableHead>
+                        <TableHead>Team</TableHead>
                         <TableHead>Role</TableHead>
                         <TableHead>Email</TableHead>
                         <TableHead>Phone</TableHead>
                         <TableHead>LinkedIn</TableHead>
-                        <TableHead>Team</TableHead>
                         <TableHead>Department</TableHead>
                         <TableHead>Is_Email_Verified</TableHead>
                       </TableRow>
@@ -774,31 +783,31 @@ const CsvUpload = () => {
                     <TableBody>
                       <TableRow>
                         <TableCell>Erik ten Hag</TableCell>
+                        <TableCell>Manchester United</TableCell>
                         <TableCell>Manager</TableCell>
                         <TableCell>e.tenhag@manutd.com</TableCell>
                         <TableCell>+44 161 868 8001</TableCell>
                         <TableCell>https://linkedin.com/in/eriktenhag</TableCell>
-                        <TableCell>Manchester United</TableCell>
                         <TableCell>Coaching</TableCell>
                         <TableCell>true</TableCell>
                       </TableRow>
                       <TableRow>
                         <TableCell>Xavi Hernandez</TableCell>
+                        <TableCell>Barcelona FC</TableCell>
                         <TableCell>Head Coach</TableCell>
                         <TableCell>xavi@fcbarcelona.cat</TableCell>
                         <TableCell>+34 902 189 901</TableCell>
                         <TableCell>https://linkedin.com/in/xavihernandez</TableCell>
-                        <TableCell>Barcelona FC</TableCell>
                         <TableCell>Technical Staff</TableCell>
                         <TableCell>false</TableCell>
                       </TableRow>
                       <TableRow>
                         <TableCell>Sarah Johnson</TableCell>
+                        <TableCell>Manchester United</TableCell>
                         <TableCell>Marketing Director</TableCell>
                         <TableCell>s.johnson@manutd.com</TableCell>
                         <TableCell></TableCell>
                         <TableCell>https://linkedin.com/in/sarahjohnsonmktg</TableCell>
-                        <TableCell>Manchester United</TableCell>
                         <TableCell>Marketing</TableCell>
                         <TableCell>true</TableCell>
                       </TableRow>
