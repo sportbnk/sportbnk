@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Upload, FileText, Users, Building2, AlertCircle, CheckCircle, Clock, Plus, StopCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { CsvUploadService, BatchProcessResult } from "@/services/csvUploadService";
@@ -562,8 +562,8 @@ const CsvUpload = () => {
                 <p className="font-medium mb-2">Expected columns:</p>
                 <div className="flex flex-wrap gap-1">
                   {[
-                    "Name", "Role", "Email", "Is_Email_Verified", "Phone", 
-                    "LinkedIn", "Team", "Department"
+                    "Name", "Role", "Email", "Phone", 
+                    "LinkedIn", "Team", "Department", "Is_Email_Verified"
                   ].map((col) => (
                     <Badge key={col} variant="outline" className="text-xs">
                       {col}
@@ -637,6 +637,13 @@ const CsvUpload = () => {
                 <li>• Recommended for data with addresses, descriptions, or special characters</li>
               </ul>
             </div>
+
+            <div className="bg-orange-50 p-4 rounded-lg mb-6">
+              <p className="text-sm text-orange-800">
+                <strong>Important:</strong> All columns must be present in the correct order, even if empty. 
+                If you don't have data for a specific column, include an empty column in that position.
+              </p>
+            </div>
             
             <div>
               <h4 className="font-medium mb-2">Teams File Format:</h4>
@@ -647,6 +654,69 @@ const CsvUpload = () => {
                 <li>• <strong>Socials</strong>: Format as "platform:url;platform:url"</li>
                 <li>• <strong>Hours</strong>: Format as "day:start-end;day:start-end"</li>
               </ul>
+
+              <div className="mt-3">
+                <h5 className="font-medium text-sm mb-2">Preview Example:</h5>
+                <div className="overflow-x-auto">
+                  <Table className="text-xs">
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Name</TableHead>
+                        <TableHead>Sport</TableHead>
+                        <TableHead>Level</TableHead>
+                        <TableHead>Street</TableHead>
+                        <TableHead>Postal</TableHead>
+                        <TableHead>City</TableHead>
+                        <TableHead>Country</TableHead>
+                        <TableHead>Website</TableHead>
+                        <TableHead>Phone</TableHead>
+                        <TableHead>Email</TableHead>
+                        <TableHead>Founded</TableHead>
+                        <TableHead>Revenue</TableHead>
+                        <TableHead>Employees</TableHead>
+                        <TableHead>Socials</TableHead>
+                        <TableHead>Hours</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      <TableRow>
+                        <TableCell>Manchester United</TableCell>
+                        <TableCell>Football</TableCell>
+                        <TableCell>Professional</TableCell>
+                        <TableCell>Sir Matt Busby Way</TableCell>
+                        <TableCell>M16 0RA</TableCell>
+                        <TableCell>Manchester</TableCell>
+                        <TableCell>England</TableCell>
+                        <TableCell>https://www.manutd.com</TableCell>
+                        <TableCell>+44 161 868 8000</TableCell>
+                        <TableCell>info@manutd.com</TableCell>
+                        <TableCell>1878</TableCell>
+                        <TableCell>580000000</TableCell>
+                        <TableCell>1000</TableCell>
+                        <TableCell>twitter:https://twitter.com/ManUtd;instagram:https://instagram.com/manchesterunited</TableCell>
+                        <TableCell>monday:09:00-17:00;friday:09:00-17:00</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell>Barcelona FC</TableCell>
+                        <TableCell>Football</TableCell>
+                        <TableCell>Professional</TableCell>
+                        <TableCell>Camp Nou</TableCell>
+                        <TableCell>08028</TableCell>
+                        <TableCell>Barcelona</TableCell>
+                        <TableCell>Spain</TableCell>
+                        <TableCell>https://www.fcbarcelona.com</TableCell>
+                        <TableCell>+34 902 189 900</TableCell>
+                        <TableCell>oab@fcbarcelona.cat</TableCell>
+                        <TableCell>1899</TableCell>
+                        <TableCell>840000000</TableCell>
+                        <TableCell>540</TableCell>
+                        <TableCell>twitter:https://twitter.com/FCBarcelona;facebook:https://facebook.com/fcbarcelona</TableCell>
+                        <TableCell>monday:10:00-18:00;saturday:10:00-14:00</TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </div>
+              </div>
             </div>
 
             <div>
@@ -655,12 +725,64 @@ const CsvUpload = () => {
                 <li>• <strong>Name</strong> (required): Contact full name</li>
                 <li>• <strong>Role</strong>: Job title or position</li>
                 <li>• <strong>Email</strong>: Contact email address</li>
-                <li>• <strong>Is_Email_Verified</strong>: Boolean (true/false)</li>
                 <li>• <strong>Phone</strong>: Contact phone number</li>
                 <li>• <strong>LinkedIn</strong>: LinkedIn profile URL</li>
                 <li>• <strong>Team</strong>: Associated team name</li>
                 <li>• <strong>Department</strong>: Department or division</li>
+                <li>• <strong>Is_Email_Verified</strong>: Boolean (true/false)</li>
               </ul>
+
+              <div className="mt-3">
+                <h5 className="font-medium text-sm mb-2">Preview Example:</h5>
+                <div className="overflow-x-auto">
+                  <Table className="text-xs">
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Name</TableHead>
+                        <TableHead>Role</TableHead>
+                        <TableHead>Email</TableHead>
+                        <TableHead>Phone</TableHead>
+                        <TableHead>LinkedIn</TableHead>
+                        <TableHead>Team</TableHead>
+                        <TableHead>Department</TableHead>
+                        <TableHead>Is_Email_Verified</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      <TableRow>
+                        <TableCell>Erik ten Hag</TableCell>
+                        <TableCell>Manager</TableCell>
+                        <TableCell>e.tenhag@manutd.com</TableCell>
+                        <TableCell>+44 161 868 8001</TableCell>
+                        <TableCell>https://linkedin.com/in/eriktenhag</TableCell>
+                        <TableCell>Manchester United</TableCell>
+                        <TableCell>Coaching</TableCell>
+                        <TableCell>true</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell>Xavi Hernandez</TableCell>
+                        <TableCell>Head Coach</TableCell>
+                        <TableCell>xavi@fcbarcelona.cat</TableCell>
+                        <TableCell>+34 902 189 901</TableCell>
+                        <TableCell>https://linkedin.com/in/xavihernandez</TableCell>
+                        <TableCell>Barcelona FC</TableCell>
+                        <TableCell>Technical Staff</TableCell>
+                        <TableCell>false</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell>Sarah Johnson</TableCell>
+                        <TableCell>Marketing Director</TableCell>
+                        <TableCell>s.johnson@manutd.com</TableCell>
+                        <TableCell></TableCell>
+                        <TableCell>https://linkedin.com/in/sarahjohnsonmktg</TableCell>
+                        <TableCell>Manchester United</TableCell>
+                        <TableCell>Marketing</TableCell>
+                        <TableCell>true</TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </div>
+              </div>
             </div>
 
             <div className="bg-blue-50 p-4 rounded-lg">
