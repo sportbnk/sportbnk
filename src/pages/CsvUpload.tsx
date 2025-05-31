@@ -15,6 +15,7 @@ const CsvUpload = () => {
   const [teamsCsv, setTeamsCsv] = useState("");
   const [teamsFileType, setTeamsFileType] = useState<'csv' | 'xlsx'>('csv');
   const [contactsCsv, setContactsCsv] = useState("");
+  const [contactsFileType, setContactsFileType] = useState<'csv' | 'xlsx'>('csv');
   const [isProcessingTeams, setIsProcessingTeams] = useState(false);
   const [isProcessingContacts, setIsProcessingContacts] = useState(false);
   const [teamsProgress, setTeamsProgress] = useState<BatchProcessResult | null>(null);
@@ -116,7 +117,7 @@ const CsvUpload = () => {
   const handleContactsFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      handleFileRead(file, setContactsCsv);
+      handleFileRead(file, setContactsCsv, setContactsFileType);
     }
   };
 
@@ -281,7 +282,7 @@ const CsvUpload = () => {
     if (!contactsCsv.trim()) {
       toast({
         title: "Error",
-        description: "Please upload a contacts CSV file or enter CSV data",
+        description: "Please upload a contacts file or enter CSV data",
         variant: "destructive",
       });
       return;
@@ -306,7 +307,7 @@ const CsvUpload = () => {
 
       toast({
         title: "Contacts Upload Complete",
-        description: "All contacts have been processed successfully",
+        description: `All contacts have been processed successfully using ${contactsFileType.toUpperCase()} format`,
       });
     } catch (error) {
       console.error('Contacts upload error:', error);
@@ -530,19 +531,21 @@ const CsvUpload = () => {
               <CardTitle className="flex items-center space-x-2">
                 <Users className="h-5 w-5" />
                 <span>Contacts Upload</span>
+                {contactsFileType === 'xlsx' && (
+                  <Badge variant="secondary" className="ml-2">Excel</Badge>
+                )}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <label className="text-sm font-medium mb-3 block">Upload CSV File</label>
+                <label className="text-sm font-medium mb-3 block">Upload CSV or Excel File</label>
                 {renderDropZone(
                   handleContactsFileUpload,
                   handleContactsDragOver,
                   handleContactsDragLeave,
                   handleContactsDrop,
                   contactsDropActive,
-                  "contacts-file-input",
-                  ".csv"
+                  "contacts-file-input"
                 )}
               </div>
 
@@ -552,10 +555,19 @@ const CsvUpload = () => {
                 <label className="text-sm font-medium mb-2 block">Paste CSV Data</label>
                 <Textarea
                   placeholder="Paste your contacts CSV data here..."
-                  value={contactsCsv}
-                  onChange={(e) => setContactsCsv(e.target.value)}
+                  value={contactsFileType === 'csv' ? contactsCsv : ''}
+                  onChange={(e) => {
+                    setContactsCsv(e.target.value);
+                    setContactsFileType('csv');
+                  }}
                   className="min-h-32"
+                  disabled={contactsFileType === 'xlsx'}
                 />
+                {contactsFileType === 'xlsx' && (
+                  <p className="text-sm text-gray-500 mt-2">
+                    Excel file loaded. Clear the file to paste CSV data instead.
+                  </p>
+                )}
               </div>
 
               <div className="text-sm text-gray-600">
@@ -598,7 +610,7 @@ const CsvUpload = () => {
                   ) : (
                     <>
                       <Upload className="mr-2 h-4 w-4" />
-                      Upload Contacts
+                      Upload Contacts ({contactsFileType.toUpperCase()})
                     </>
                   )}
                 </Button>
