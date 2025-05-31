@@ -114,7 +114,8 @@ export class CsvUploadService {
     batchSize: number = 50,
     onProgress?: (result: BatchProcessResult) => void,
     signal?: AbortSignal,
-    startingRow: number = 1
+    startingRow: number = 1,
+    fileType: 'csv' | 'xlsx' = 'csv'
   ): Promise<BatchProcessResult> {
     let startRow = startingRow;
     let totalProcessed = 0;
@@ -131,6 +132,7 @@ export class CsvUploadService {
 
       const result = await this.processBatch('process-contacts-csv', {
         csvData,
+        fileType,
         conflictResolutions,
         startRow,
         batchSize,

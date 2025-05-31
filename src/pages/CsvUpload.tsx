@@ -302,7 +302,8 @@ const CsvUpload = () => {
           setContactsProgress(progress);
         },
         abortController.signal,
-        contactsStartingRow
+        contactsStartingRow,
+        contactsFileType // Pass the file type
       );
 
       toast({
