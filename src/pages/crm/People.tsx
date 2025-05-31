@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -114,7 +115,7 @@ const People = () => {
     gcTime: 10 * 60 * 1000
   });
 
-  const { data: contacts, isLoading } = useQuery({
+  const { data: contacts, isLoading, error } = useQuery({
     queryKey: ['contacts', filters, searchTerm],
     queryFn: async () => {
       console.log('Fetching contacts with filters:', filters);
@@ -154,21 +155,54 @@ const People = () => {
         }
       }
 
-      // Team filter
+      // Apply geographic filters
+      let teamIds: string[] = [];
+      
       if (filters.team !== "all" && teamsForCity) {
+        // Specific team selected
         const selectedTeam = teamsForCity.find(team => team.name === filters.team);
         if (selectedTeam) {
-          query = query.eq('team_id', selectedTeam.id);
+          teamIds = [selectedTeam.id];
         }
-      } else {
-        // City filter
-        if (filters.city !== "all") {
-          query = query.eq('teams.cities.name', filters.city);
+      } else if (filters.city !== "all" && citiesForCountry) {
+        // City selected, get all teams in that city
+        const selectedCity = citiesForCountry.find(city => city.name === filters.city);
+        if (selectedCity) {
+          const { data: cityTeams } = await supabase
+            .from('teams')
+            .select('id')
+            .eq('city_id', selectedCity.id);
+          
+          teamIds = cityTeams?.map(team => team.id) || [];
         }
-        // Country filter
-        else if (filters.country !== "all") {
-          query = query.eq('teams.cities.countries.name', filters.country);
+      } else if (filters.country !== "all" && allCountries) {
+        // Country selected, get all teams in that country
+        const selectedCountry = allCountries.find(country => country.name === filters.country);
+        if (selectedCountry) {
+          const { data: countryCities } = await supabase
+            .from('cities')
+            .select('id')
+            .eq('country_id', selectedCountry.id);
+          
+          const cityIds = countryCities?.map(city => city.id) || [];
+          
+          if (cityIds.length > 0) {
+            const { data: countryTeams } = await supabase
+              .from('teams')
+              .select('id')
+              .in('city_id', cityIds);
+            
+            teamIds = countryTeams?.map(team => team.id) || [];
+          }
         }
+      }
+
+      // Apply team filter if we have specific team IDs
+      if (teamIds.length > 0) {
+        query = query.in('team_id', teamIds);
+      } else if (filters.country !== "all" || filters.city !== "all" || filters.team !== "all") {
+        // If we have geographic filters but no matching teams, return empty result
+        query = query.eq('team_id', 'no-matches');
       }
 
       const { data, error } = await query;
@@ -206,6 +240,21 @@ const People = () => {
       description: `${contact.name} has been added to ${listName}`,
     });
   };
+
+  // Show error state
+  if (error) {
+    console.error('Query error:', error);
+    return (
+      <div className="container mx-auto px-4">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold">People Database</h1>
+        </div>
+        <div className="flex justify-center items-center py-10">
+          <p className="text-red-500">Error loading contacts: {error.message}</p>
+        </div>
+      </div>
+    );
+  }
 
   if (isLoading) {
     return (
