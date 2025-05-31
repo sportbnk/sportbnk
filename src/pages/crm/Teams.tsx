@@ -9,6 +9,15 @@ import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { useCredits } from "@/contexts/CreditsContext";
 import { Search } from "lucide-react";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 // DTO interfaces for proper typing
 interface SportDTO {
@@ -47,7 +56,55 @@ export default function Teams() {
   });
 
   const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
   const { credits, tier } = useCredits();
+
+  const pageSize = 50;
+
+  // Format numbers with commas
+  const formatNumber = (num: number) => {
+    return new Intl.NumberFormat('en-US').format(num);
+  };
+
+  // Calculate pagination range
+  const getPaginationRange = (currentPage: number, totalPages: number) => {
+    const delta = 2;
+    const range = [];
+    const rangeWithDots = [];
+
+    for (let i = Math.max(2, currentPage - delta); i <= Math.min(totalPages - 1, currentPage + delta); i++) {
+      range.push(i);
+    }
+
+    if (currentPage - delta > 2) {
+      rangeWithDots.push(1, '...');
+    } else {
+      rangeWithDots.push(1);
+    }
+
+    rangeWithDots.push(...range);
+
+    if (currentPage + delta < totalPages - 1) {
+      rangeWithDots.push('...', totalPages);
+    } else if (totalPages > 1) {
+      rangeWithDots.push(totalPages);
+    }
+
+    return rangeWithDots;
+  };
+
+  // Reset to first page when filters change
+  const handleFilterChange = useCallback((newFilters: any) => {
+    console.log('Filter change received:', newFilters);
+    setFilters(newFilters);
+    setCurrentPage(1);
+  }, []);
+
+  // Reset to first page when search changes
+  const handleSearchChange = (value: string) => {
+    setSearchTerm(value);
+    setCurrentPage(1);
+  };
 
   // Search for specific team function
   const searchSpecificTeam = async () => {
@@ -95,11 +152,80 @@ export default function Teams() {
     }
   };
 
-  const { data: organizationsData, isLoading } = useQuery({
-    queryKey: ['organizations', filters, searchTerm],
+  // Separate count query to get accurate total results
+  const { data: totalCount } = useQuery({
+    queryKey: ['teams-count', filters, searchTerm],
     queryFn: async () => {
-      console.log('Fetching organizations with filters:', filters);
-      console.log('Search term:', searchTerm);
+      console.log('Fetching teams count with filters:', filters);
+      
+      let query = supabase
+        .from('teams')
+        .select('*', { count: 'exact', head: true });
+
+      // Apply search filter
+      if (searchTerm.trim()) {
+        query = query.ilike('name', `%${searchTerm.trim()}%`);
+      }
+
+      // Apply sport filter - only filter if not "all"
+      if (filters.sport !== "all") {
+        query = query.eq('sports.name', filters.sport);
+      }
+      
+      // Apply country filter - when country is selected, we need to ensure we only get teams from that country
+      if (filters.country !== "all") {
+        // First, we need to join with cities and countries, then filter
+        query = query
+          .not('cities', 'is', null)
+          .not('cities.countries', 'is', null)
+          .eq('cities.countries.name', filters.country);
+      }
+      
+      if (filters.level !== "all") {
+        query = query.eq('level', filters.level);
+      }
+      if (filters.city !== "all") {
+        query = query.eq('cities.name', filters.city);
+      }
+      if (filters.revenue !== "all") {
+        if (filters.revenue === "less1m") {
+          query = query.lt('revenue', 1000000);
+        } else if (filters.revenue === "1m-10m") {
+          query = query.gte('revenue', 1000000).lte('revenue', 10000000);
+        } else if (filters.revenue === "10m-50m") {
+          query = query.gte('revenue', 10000000).lte('revenue', 50000000);
+        } else if (filters.revenue === "more50m") {
+          query = query.gt('revenue', 50000000);
+        }
+      }
+      if (filters.employees !== "all") {
+        if (filters.employees === "less50") {
+          query = query.lt('employees', 50);
+        } else if (filters.employees === "50-200") {
+          query = query.gte('employees', 50).lte('employees', 200);
+        } else if (filters.employees === "200-1000") {
+          query = query.gte('employees', 200).lte('employees', 1000);
+        } else if (filters.employees === "more1000") {
+          query = query.gt('employees', 1000);
+        }
+      }
+
+      const { count, error } = await query;
+      
+      if (error) {
+        console.error('Error fetching teams count:', error);
+        throw error;
+      }
+      
+      console.log('Total teams count:', count);
+      return count || 0;
+    },
+  });
+
+  const { data: organizationsData, isLoading } = useQuery({
+    queryKey: ['organizations', filters, searchTerm, currentPage],
+    queryFn: async () => {
+      console.log('Fetching organizations with filters:', filters, 'page:', currentPage);
       
       let query = supabase
         .from('teams')
@@ -118,7 +244,8 @@ export default function Teams() {
               name
             )
           )
-        `);
+        `)
+        .range((currentPage - 1) * pageSize, currentPage * pageSize - 1);
 
       // Apply search filter
       if (searchTerm.trim()) {
@@ -207,11 +334,9 @@ export default function Teams() {
     }
   });
 
-  // Use useCallback to prevent re-rendering of ContactsFilters
-  const handleFilterChange = useCallback((newFilters: any) => {
-    console.log('Filter change received:', newFilters);
-    setFilters(newFilters);
-  }, []);
+  // Calculate total pages
+  const totalPages = Math.ceil((totalCount || 0) / pageSize);
+  const paginationRange = getPaginationRange(currentPage, totalPages);
 
   const handleUseCredits = (amount: number) => {
     // This will be handled by the credits context in the future
@@ -273,7 +398,7 @@ export default function Teams() {
                 onFilterChange={handleFilterChange} 
                 showTeamFilters={true}
                 showPeopleFilters={false}
-                totalResults={organizationsData?.length || 0}
+                totalResults={totalCount || 0}
                 filters={filters}
               />
             </CardContent>
@@ -302,17 +427,70 @@ export default function Teams() {
                 <Input
                   placeholder="Search organizations by name..."
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={(e) => handleSearchChange(e.target.value)}
                   className="flex-1"
                 />
               </div>
             </CardContent>
           </Card>
           
-          <ContactsTable 
-            data={tableData} 
-            useCredits={handleUseCredits}
-          />
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center justify-between">
+                <span>Organization Database</span>
+                <span className="text-sm font-normal text-muted-foreground">
+                  {formatNumber(totalCount || 0)} total results
+                  {totalPages > 1 && (
+                    <span> • Page {currentPage} of {totalPages}</span>
+                  )}
+                </span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ContactsTable 
+                data={tableData} 
+                useCredits={handleUseCredits}
+              />
+
+              {totalPages > 1 && (
+                <div className="mt-6 flex justify-center">
+                  <Pagination>
+                    <PaginationContent>
+                      <PaginationItem>
+                        <PaginationPrevious 
+                          onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                          className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                        />
+                      </PaginationItem>
+                      
+                      {paginationRange.map((page, index) => (
+                        <PaginationItem key={index}>
+                          {page === '...' ? (
+                            <PaginationEllipsis />
+                          ) : (
+                            <PaginationLink
+                              onClick={() => setCurrentPage(page as number)}
+                              isActive={currentPage === page}
+                              className="cursor-pointer"
+                            >
+                              {page}
+                            </PaginationLink>
+                          )}
+                        </PaginationItem>
+                      ))}
+                      
+                      <PaginationItem>
+                        <PaginationNext 
+                          onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                          className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                        />
+                      </PaginationItem>
+                    </PaginationContent>
+                  </Pagination>
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>

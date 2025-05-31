@@ -1,4 +1,3 @@
-
 import React, { useEffect } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
@@ -32,6 +31,11 @@ const ContactsFilters = ({
   totalResults = 0, 
   filters 
 }: ContactsFiltersProps) => {
+  // Format numbers with commas
+  const formatNumber = (num: number) => {
+    return new Intl.NumberFormat('en-US').format(num);
+  };
+
   // Fetch all departments for position filter
   const { data: allDepartments } = useQuery({
     queryKey: ['all-departments'],
@@ -199,7 +203,7 @@ const ContactsFilters = ({
         </div>
 
         <div className="text-sm text-muted-foreground mb-4">
-          {totalResults} result{totalResults !== 1 ? 's' : ''} found
+          {formatNumber(totalResults)} result{totalResults !== 1 ? 's' : ''} found
         </div>
 
         {/* Position Filter (Departments) - Only shown for People page */}
