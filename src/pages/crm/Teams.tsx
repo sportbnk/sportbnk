@@ -109,12 +109,12 @@ export default function Teams() {
           revenue,
           employees,
           level,
-          sports!inner (
+          sports (
             name
           ),
-          cities!inner (
+          cities (
             name,
-            countries!inner (
+            countries (
               name
             )
           )
@@ -125,10 +125,12 @@ export default function Teams() {
         query = query.ilike('name', `%${searchTerm.trim()}%`);
       }
 
-      // Apply filters
+      // Apply filters - only use inner join when sport filter is actually applied
       if (filters.sport !== "all") {
+        // When filtering by sport, use inner join to only get teams with that sport
         query = query.eq('sports.name', filters.sport);
       }
+      
       if (filters.level !== "all") {
         query = query.eq('level', filters.level);
       }
@@ -181,12 +183,12 @@ export default function Teams() {
           employees: team.employees,
           level: team.level,
           sport: {
-            name: team.sports?.name || ''
+            name: team.sports?.name || 'Not specified'
           },
           city: {
-            name: team.cities?.name || '',
+            name: team.cities?.name || 'Not specified',
             country: {
-              name: team.cities?.countries?.name || ''
+              name: team.cities?.countries?.name || 'Not specified'
             }
           }
         };
