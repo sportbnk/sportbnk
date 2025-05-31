@@ -192,6 +192,7 @@ const People = () => {
         .from('cities')
         .select('id')
         .eq('country_id', selectedCountry.id);
+      console.log("selected country id", selectedCountry.id, "cities", countryCities)
 
       if (countryCities && countryCities.length > 0) {
         const cityIds = countryCities.map(city => city.id);
@@ -199,6 +200,7 @@ const People = () => {
           .from('teams')
           .select('id')
           .in('city_id', cityIds);
+        console.log("selected cities id", cityIds, "teams", countryTeams)
 
         if (countryTeams && countryTeams.length > 0) {
           teamIds = countryTeams.map(team => team.id);
