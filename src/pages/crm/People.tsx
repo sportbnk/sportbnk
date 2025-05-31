@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -154,67 +155,6 @@ const People = () => {
         }
       }
 
-      // Apply team filter using team ID
-      if (filters.team !== "all" && teamsForCity) {
-        const selectedTeam = teamsForCity.find(team => team.name === filters.team);
-        if (selectedTeam) {
-          query = query.eq('team_id', selectedTeam.id);
-        }
-      }
-
-      // Apply city filter using city ID through team relationship
-      if (filters.city !== "all" && citiesForCountry) {
-        const selectedCity = citiesForCountry.find(city => city.name === filters.city);
-        if (selectedCity) {
-          // Filter teams that belong to this city, then filter contacts by those teams
-          const teamsInCity = await supabase
-            .from('teams')
-            .select('id')
-            .eq('city_id', selectedCity.id);
-          
-          if (teamsInCity.data && teamsInCity.data.length > 0) {
-            const teamIds = teamsInCity.data.map(team => team.id);
-            query = query.in('team_id', teamIds);
-          } else {
-            // No teams in this city, return empty result
-            return [];
-          }
-        }
-      }
-
-      // Apply country filter using country ID through team->city relationship  
-      if (filters.country !== "all" && filters.city === "all" && allCountries) {
-        const selectedCountry = allCountries.find(country => country.name === filters.country);
-        if (selectedCountry) {
-          // Get cities in this country
-          const citiesInCountry = await supabase
-            .from('cities')
-            .select('id')
-            .eq('country_id', selectedCountry.id);
-          
-          if (citiesInCountry.data && citiesInCountry.data.length > 0) {
-            const cityIds = citiesInCountry.data.map(city => city.id);
-            
-            // Get teams in these cities
-            const teamsInCountry = await supabase
-              .from('teams')
-              .select('id')
-              .in('city_id', cityIds);
-            
-            if (teamsInCountry.data && teamsInCountry.data.length > 0) {
-              const teamIds = teamsInCountry.data.map(team => team.id);
-              query = query.in('team_id', teamIds);
-            } else {
-              // No teams in this country, return empty result
-              return [];
-            }
-          } else {
-            // No cities in this country, return empty result
-            return [];
-          }
-        }
-      }
-
       const { data, error } = await query;
       
       if (error) {
@@ -222,8 +162,43 @@ const People = () => {
         throw error;
       }
       
-      console.log('Filtered contacts data:', data);
-      return data || [];
+      console.log('Raw contacts data:', data);
+      
+      // Apply location-based filtering in JavaScript
+      let filteredData = data || [];
+
+      // Apply country filter - include all teams in the selected country
+      if (filters.country !== "all" && allCountries) {
+        const selectedCountry = allCountries.find(country => country.name === filters.country);
+        if (selectedCountry) {
+          filteredData = filteredData.filter(contact => 
+            contact.teams?.cities?.countries?.id === selectedCountry.id
+          );
+        }
+      }
+
+      // Apply city filter - include all teams in the selected city
+      if (filters.city !== "all" && citiesForCountry) {
+        const selectedCity = citiesForCountry.find(city => city.name === filters.city);
+        if (selectedCity) {
+          filteredData = filteredData.filter(contact => 
+            contact.teams?.cities?.id === selectedCity.id
+          );
+        }
+      }
+
+      // Apply team filter only if a specific team is selected
+      if (filters.team !== "all" && teamsForCity) {
+        const selectedTeam = teamsForCity.find(team => team.name === filters.team);
+        if (selectedTeam) {
+          filteredData = filteredData.filter(contact => 
+            contact.teams?.id === selectedTeam.id
+          );
+        }
+      }
+
+      console.log('Filtered contacts data:', filteredData);
+      return filteredData;
     },
     enabled: !!allDepartments && !!allCountries, // Only run query when lookups are loaded
   });
