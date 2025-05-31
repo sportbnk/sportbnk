@@ -1,3 +1,5 @@
+
+
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -154,65 +156,65 @@ const People = () => {
         }
       }
 
-      // Apply location filtering based on team selection
+      // Apply location filtering at database level using team relationships
+      if (filters.country !== "all" && allCountries) {
+        const selectedCountry = allCountries.find(country => country.name === filters.country);
+        if (selectedCountry) {
+          // Get all cities in the selected country
+          const { data: countryCities } = await supabase
+            .from('cities')
+            .select('id')
+            .eq('country_id', selectedCountry.id);
+          
+          if (countryCities && countryCities.length > 0) {
+            const cityIds = countryCities.map(city => city.id);
+            
+            // Get all teams in those cities
+            const { data: countryTeams } = await supabase
+              .from('teams')
+              .select('id')
+              .in('city_id', cityIds);
+            
+            if (countryTeams && countryTeams.length > 0) {
+              const teamIds = countryTeams.map(team => team.id);
+              query = query.in('team_id', teamIds);
+            } else {
+              // No teams in this country, return empty results
+              query = query.eq('team_id', '00000000-0000-0000-0000-000000000000');
+            }
+          } else {
+            // No cities in this country, return empty results
+            query = query.eq('team_id', '00000000-0000-0000-0000-000000000000');
+          }
+        }
+      }
+
+      // Apply city filtering at database level
+      if (filters.city !== "all" && citiesForCountry) {
+        const selectedCity = citiesForCountry.find(city => city.name === filters.city);
+        if (selectedCity) {
+          // Get all teams in the selected city
+          const { data: cityTeams } = await supabase
+            .from('teams')
+            .select('id')
+            .eq('city_id', selectedCity.id);
+          
+          if (cityTeams && cityTeams.length > 0) {
+            const teamIds = cityTeams.map(team => team.id);
+            query = query.in('team_id', teamIds);
+          } else {
+            // No teams in this city, return empty results
+            query = query.eq('team_id', '00000000-0000-0000-0000-000000000000');
+          }
+        }
+      }
+
+      // Only apply specific team filter if a team is selected
       if (filters.team !== "all" && teamsForCity) {
-        // Specific team selected - only show contacts from that team
         const selectedTeam = teamsForCity.find(team => team.name === filters.team);
         if (selectedTeam) {
           query = query.eq('team_id', selectedTeam.id);
         }
-      } else {
-        // No specific team selected - apply location filters to show all teams in the location
-        
-        if (filters.city !== "all" && allCountries && citiesForCountry) {
-          // City is selected - show all teams in that city
-          const selectedCity = citiesForCountry.find(city => city.name === filters.city);
-          if (selectedCity) {
-            const { data: cityTeams } = await supabase
-              .from('teams')
-              .select('id')
-              .eq('city_id', selectedCity.id);
-            
-            if (cityTeams && cityTeams.length > 0) {
-              const teamIds = cityTeams.map(team => team.id);
-              query = query.in('team_id', teamIds);
-            } else {
-              // No teams in this city, return empty results
-              query = query.eq('team_id', '00000000-0000-0000-0000-000000000000');
-            }
-          }
-        } else if (filters.country !== "all" && allCountries) {
-          // Country is selected but no city - show all teams in that country
-          const selectedCountry = allCountries.find(country => country.name === filters.country);
-          if (selectedCountry) {
-            const { data: countryCities } = await supabase
-              .from('cities')
-              .select('id')
-              .eq('country_id', selectedCountry.id);
-            
-            if (countryCities && countryCities.length > 0) {
-              const cityIds = countryCities.map(city => city.id);
-              
-              const { data: countryTeams } = await supabase
-                .from('teams')
-                .select('id')
-                .in('city_id', cityIds);
-              
-              if (countryTeams && countryTeams.length > 0) {
-                const teamIds = countryTeams.map(team => team.id);
-                query = query.in('team_id', teamIds);
-              } else {
-                // No teams in this country, return empty results
-                query = query.eq('team_id', '00000000-0000-0000-0000-000000000000');
-              }
-            } else {
-              // No cities in this country, return empty results
-              query = query.eq('team_id', '00000000-0000-0000-0000-000000000000');
-            }
-          }
-        }
-        // If no location filters are applied (all countries, all cities, all teams), 
-        // don't add any team_id filters - show all contacts
       }
 
       const { data, error } = await query;
@@ -497,3 +499,4 @@ const People = () => {
 };
 
 export default People;
+
