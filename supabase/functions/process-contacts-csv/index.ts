@@ -25,33 +25,6 @@ interface TeamConflictResolution {
   selectedTeamId: string;
 }
 
-// Function to parse Excel data
-async function parseExcelData(base64Data: string): Promise<string[]> {
-  try {
-    // Import XLSX library
-    const XLSX = await import('https://esm.sh/xlsx@0.18.5');
-    
-    // Convert base64 to buffer
-    const binaryString = atob(base64Data);
-    const bytes = new Uint8Array(binaryString.length);
-    for (let i = 0; i < binaryString.length; i++) {
-      bytes[i] = binaryString.charCodeAt(i);
-    }
-    
-    // Parse workbook
-    const workbook = XLSX.read(bytes, { type: 'array' });
-    const firstSheetName = workbook.SheetNames[0];
-    const worksheet = workbook.Sheets[firstSheetName];
-    
-    // Convert to CSV
-    const csvString = XLSX.utils.sheet_to_csv(worksheet);
-    return csvString.split('\n');
-  } catch (error) {
-    console.error('Error parsing Excel data:', error);
-    throw new Error(`Failed to parse Excel file: ${error.message}`);
-  }
-}
-
 serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
@@ -64,18 +37,8 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
-    const { csvData, fileType = 'csv', conflictResolutions, startRow = 1, batchSize = 50 } = await req.json();
-    
-    let lines: string[];
-    
-    if (fileType === 'xlsx') {
-      console.log('Processing Excel file for contacts');
-      lines = await parseExcelData(csvData);
-    } else {
-      console.log('Processing CSV file for contacts');
-      lines = csvData.trim().split('\n');
-    }
-    
+    const { csvData, conflictResolutions, startRow = 1, batchSize = 50 } = await req.json();
+    const lines = csvData.trim().split('\n');
     const headers = lines[0].toLowerCase().split(',').map((h: string) => h.trim());
     
     console.log(`Processing contacts CSV batch starting from row ${startRow}, batch size: ${batchSize}`);
