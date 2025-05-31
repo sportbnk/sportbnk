@@ -92,96 +92,87 @@ const People = () => {
   });
 
   // Fetch teams for the selected city
-  const { data: teamsForCity } = useQuery({
-    queryKey: ['teams-for-city', filters.city],
-    queryFn: async () => {
-      if (filters.city === "all") return [];
-      
-      const selectedCity = citiesForCountry?.find(c => c.name === filters.city);
-      if (!selectedCity) return [];
-
-      const { data, error } = await supabase
-        .from('teams')
-        .select('id, name')
-        .eq('city_id', selectedCity.id)
-        .order('name');
-      
-      if (error) throw error;
-      return data;
-    },
-    enabled: filters.city !== "all" && !!citiesForCountry,
-    staleTime: 5 * 60 * 1000,
-    gcTime: 10 * 60 * 1000
-  });
-
   const { data: contacts, isLoading } = useQuery({
-    queryKey: ['contacts', filters, searchTerm],
-    queryFn: async () => {
-  console.log('Fetching contacts with filters:', filters);
+  queryKey: ['contacts', filters, searchTerm],
+  queryFn: async () => {
+    console.log('Fetching contacts with filters:', filters);
 
-  const query = supabase
-    .from('contacts')
-    .select(`
-      *,
-      teams (
-        id,
-        name,
-        cities (
+    let query = supabase
+      .from('contacts')
+      .select(`
+        *,
+        teams (
           id,
           name,
-          countries (
+          cities (
             id,
-            name
+            name,
+            countries (
+              id,
+              name
+            )
           )
+        ),
+        departments (
+          id,
+          name
         )
-      ),
-      departments (
-        id,
-        name
-      )
-    `);
+      `);
 
-  // Apply search term (optional)
-  if (searchTerm.trim()) {
-    query.or(`name.ilike.%${searchTerm.trim()}%,email.ilike.%${searchTerm.trim()}%,role.ilike.%${searchTerm.trim()}%`);
-  }
-
-  // Filter by department if selected
-  if (filters.position !== "all" && allDepartments) {
-    const selectedDepartment = allDepartments.find(dept => dept.name === filters.position);
-    if (selectedDepartment) {
-      query.eq('department_id', selectedDepartment.id);
+    // Apply search term
+    if (searchTerm.trim()) {
+      query = query.or(`name.ilike.%${searchTerm.trim()}%,email.ilike.%${searchTerm.trim()}%,role.ilike.%${searchTerm.trim()}%`);
     }
-  }
 
-  // Team filter
-  if (filters.team !== "all" && teamsForCity) {
-    const selectedTeam = teamsForCity.find(team => team.name === filters.team);
-    if (selectedTeam) {
-      query.eq('team_id', selectedTeam.id);
+    // Department filter
+    if (filters.position !== 'all' && allDepartments) {
+      const selectedDepartment = allDepartments.find(dept => dept.name === filters.position);
+      if (selectedDepartment) {
+        query = query.eq('department_id', selectedDepartment.id);
+      }
     }
-  } else {
-    // City filter
-    if (filters.city !== "all") {
-      query.eq('teams.cities.name', filters.city);
+
+    // Team filter
+    if (filters.team !== 'all' && teamsForCity) {
+      const selectedTeam = teamsForCity.find(team => team.name === filters.team);
+      if (selectedTeam) {
+        query = query.eq('team_id', selectedTeam.id);
+      }
+    } else {
+      // City filter
+      if (filters.city !== 'all') {
+        query = query.eq('teams.cities.name', filters.city);
+      }
+      // Country filter
+      else if (filters.country !== 'all') {
+        query = query.eq('teams.cities.countries.name', filters.country);
+      }
     }
-    // Country filter
-    else if (filters.country !== "all") {
-      query.eq('teams.cities.countries.name', filters.country);
+
+    const { data, error } = await query;
+
+    if (error) {
+      console.error('Error fetching contacts:', error);
+      throw error;
     }
-  }
 
-  const { data, error } = await query;
+    console.log('Raw contacts data:', data);
+    return data || [];
+  },
+  enabled: !!allDepartments && !!allCountries,
+});
 
-  if (error) {
-    console.error('Error fetching contacts:', error);
-    throw error;
-  }
 
-  console.log('Raw contacts data:', data);
-  return data || [];
-}
-
+  const filteredContacts = contacts?.filter(contact => {
+    if (!searchTerm) return true;
+    
+    const searchLower = searchTerm.toLowerCase();
+    return (
+      contact.name.toLowerCase().includes(searchLower) ||
+      contact.email?.toLowerCase().includes(searchLower) ||
+      contact.teams?.name?.toLowerCase().includes(searchLower) ||
+      contact.role?.toLowerCase().includes(searchLower)
+    );
   });
 
   const handleRevealClick = async (contact: any, type: 'email' | 'phone' | 'linkedin') => {
