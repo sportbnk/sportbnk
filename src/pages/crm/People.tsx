@@ -176,11 +176,7 @@ const People = () => {
         query = query.eq('team.city_id', selectedCity.id);
 
     }
-  }
-  console.log("after city, team ids", teamIds)
-
-  // If no city selected or no teams found in city, try country filter
-  if (teamIds.length === 0 && filters.country !== "all" && allCountries) {
+  } else if (filters.country !== "all" && allCountries) {
     const selectedCountry = allCountries.find(country => country.name === filters.country);
     if (selectedCountry) {
       query = query
