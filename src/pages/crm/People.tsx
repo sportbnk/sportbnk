@@ -176,6 +176,7 @@ const People = () => {
         .from('teams')
         .select('id')
         .eq('city_id', selectedCity.id);
+      console.log("selected id", selectedCity.id, "teams", cityTeams)
 
       if (cityTeams && cityTeams.length > 0) {
         teamIds = cityTeams.map(team => team.id);
