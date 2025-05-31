@@ -693,8 +693,8 @@ const CsvUpload = () => {
                         <TableCell>1878</TableCell>
                         <TableCell>580000000</TableCell>
                         <TableCell>1000</TableCell>
-                        <TableCell>twitter:https://twitter.com/ManUtd;instagram:https://instagram.com/manchesterunited</TableCell>
-                        <TableCell>monday:09:00-17:00;friday:09:00-17:00</TableCell>
+                        <TableCell>twitter:https://twitter.com/ManUtd; instagram:https://instagram.com/manchesterunited</TableCell>
+                        <TableCell>monday:09:00-17:00; friday:09:00-17:00</TableCell>
                       </TableRow>
                       <TableRow>
                         <TableCell>Barcelona FC</TableCell>
@@ -710,8 +710,8 @@ const CsvUpload = () => {
                         <TableCell>1899</TableCell>
                         <TableCell>840000000</TableCell>
                         <TableCell>540</TableCell>
-                        <TableCell>twitter:https://twitter.com/FCBarcelona;facebook:https://facebook.com/fcbarcelona</TableCell>
-                        <TableCell>monday:10:00-18:00;saturday:10:00-14:00</TableCell>
+                        <TableCell>twitter:https://twitter.com/FCBarcelona; facebook:https://facebook.com/fcbarcelona</TableCell>
+                        <TableCell>monday:10:00-18:00; saturday:10:00-14:00</TableCell>
                       </TableRow>
                     </TableBody>
                   </Table>
