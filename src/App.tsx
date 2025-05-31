@@ -9,6 +9,7 @@ import { AuthProvider } from "./components/auth/AuthContext";
 import { CreditsProvider } from "./contexts/CreditsContext";
 import { ListsProvider } from "./contexts/ListsContext";
 import { PricingProvider } from "./contexts/PricingContext";
+import { RevealProvider } from '@/contexts/RevealContext';
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
@@ -69,9 +70,9 @@ function App() {
         <Toaster />
         <AuthProvider>
           <CreditsProvider>
-            <RevealProvider>
-              <ListsProvider>
-                <PricingProvider>
+            <ListsProvider>
+              <PricingProvider>
+                <RevealProvider>
                   <HelmetProvider>
                     <Routes>
                       <Route path="/" element={<Index />} />
@@ -138,9 +139,9 @@ function App() {
                       <Route path="*" element={<NotFound />} />
                     </Routes>
                   </HelmetProvider>
-                </PricingProvider>
-              </ListsProvider>
-            </RevealProvider>
+                </RevealProvider>
+              </PricingProvider>
+            </ListsProvider>
           </CreditsProvider>
         </AuthProvider>
       </BrowserRouter>
