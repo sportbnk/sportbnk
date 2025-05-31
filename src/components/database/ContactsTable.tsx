@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -9,7 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ArrowDown, ArrowUp, Plus } from "lucide-react";
+import { ArrowDown, ArrowUp, Eye } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import TeamProfile from "./TeamProfile";
 import { Button } from "@/components/ui/button";
@@ -65,20 +64,8 @@ const ContactsTable = ({ data, useCredits, onTeamSelect }: ContactsTableProps) =
     navigate(`/crm/teams/${team.id}`);
   };
 
-  const handleAddToList = (team: TeamData) => {
-    // Navigate to Lists page with team data formatted as a contact
-    navigate('/database/lists', { 
-      state: { 
-        contactToAdd: {
-          id: team.id.toString(),
-          name: team.team,
-          email: team.email || 'No email available',
-          company: team.team,
-          mobile: team.phone || 'No phone available',
-          role: 'Organisation',
-        }
-      }
-    });
+  const handleViewOrganization = (team: TeamData) => {
+    navigate(`/crm/teams/${team.id}`);
   };
 
   const revealEmail = (email: string) => {
@@ -199,9 +186,9 @@ const ContactsTable = ({ data, useCredits, onTeamSelect }: ContactsTableProps) =
                       variant="ghost" 
                       size="sm" 
                       className="text-blue-600" 
-                      onClick={() => handleAddToList(team)}
+                      onClick={() => handleViewOrganization(team)}
                     >
-                      <Plus className="h-4 w-4" />
+                      <Eye className="h-4 w-4" />
                     </Button>
                   </TableCell>
                 </TableRow>
