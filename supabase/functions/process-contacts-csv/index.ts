@@ -157,18 +157,19 @@ async function processContactRow(
   }
 
   // Check if contact already exists in this team
-  const { data: existingContact, error: checkError } = await supabase
+  // Use .select().limit(1) instead of .maybeSingle() to handle cases where there might be multiple existing duplicates
+  const { data: existingContacts, error: checkError } = await supabase
     .from('contacts')
     .select('id')
     .eq('team_id', teamId)
     .ilike('name', contactName)
-    .maybeSingle();
+    .limit(1);
 
   if (checkError) {
     throw new Error(`Failed to check for existing contact: ${checkError.message}`);
   }
 
-  if (existingContact) {
+  if (existingContacts && existingContacts.length > 0) {
     console.log(`Skipping duplicate contact "${contactName}" in team "${teamName}"`);
     return { skipped: true };
   }
