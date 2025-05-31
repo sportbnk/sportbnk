@@ -68,14 +68,18 @@ export class CsvUploadService {
       startRow = result.nextStartRow;
       isComplete = result.isComplete;
 
+      // Calculate offset-adjusted progress
+      const adjustedProcessed = (startingRow - 1) + totalProcessed;
+      const adjustedTotalRows = Math.max(result.totalRows, adjustedProcessed);
+
       const progressResult: BatchProcessResult = {
-        processed: totalProcessed,
+        processed: adjustedProcessed,
         successful: totalSuccessful,
         skipped: totalSkipped,
         errors: allErrors,
         isComplete,
         nextStartRow: startRow,
-        totalRows: result.totalRows,
+        totalRows: adjustedTotalRows,
       };
 
       if (onProgress) {
@@ -94,13 +98,13 @@ export class CsvUploadService {
     }
 
     return {
-      processed: totalProcessed,
+      processed: (startingRow - 1) + totalProcessed,
       successful: totalSuccessful,
       skipped: totalSkipped,
       errors: allErrors,
       isComplete: true,
       nextStartRow: startRow,
-      totalRows: totalProcessed,
+      totalRows: Math.max(totalProcessed, (startingRow - 1) + totalProcessed),
     };
   }
 
@@ -138,13 +142,17 @@ export class CsvUploadService {
       startRow = result.nextStartRow;
       isComplete = result.isComplete;
 
+      // Calculate offset-adjusted progress
+      const adjustedProcessed = (startingRow - 1) + totalProcessed;
+      const adjustedTotalRows = Math.max(result.totalRows, adjustedProcessed);
+
       const progressResult: BatchProcessResult = {
-        processed: totalProcessed,
+        processed: adjustedProcessed,
         successful: totalSuccessful,
         errors: allErrors,
         isComplete,
         nextStartRow: startRow,
-        totalRows: result.totalRows,
+        totalRows: adjustedTotalRows,
       };
 
       if (onProgress) {
@@ -163,12 +171,12 @@ export class CsvUploadService {
     }
 
     return {
-      processed: totalProcessed,
+      processed: (startingRow - 1) + totalProcessed,
       successful: totalSuccessful,
       errors: allErrors,
       isComplete: true,
       nextStartRow: startRow,
-      totalRows: totalProcessed,
+      totalRows: Math.max(totalProcessed, (startingRow - 1) + totalProcessed),
     };
   }
 }
