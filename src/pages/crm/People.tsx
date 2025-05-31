@@ -165,6 +165,7 @@ const People = () => {
 
       // Apply location filtering only if no specific team is selected
       // This allows showing all contacts from all teams in the selected location
+      console.log("filters ", filters)
       if (filters.team === "all") {
   let teamIds = [];
 
