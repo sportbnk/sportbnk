@@ -190,25 +190,22 @@ const People = () => {
   if (teamIds.length === 0 && filters.country !== "all" && allCountries) {
     const selectedCountry = allCountries.find(country => country.name === filters.country);
     if (selectedCountry) {
-      const { data: countryCities } = await supabase
-        .from('cities')
-        .select('id')
-        .eq('country_id', selectedCountry.id);
-      console.log("selected country id", selectedCountry.id, "cities", countryCities)
-
-      if (countryCities && countryCities.length > 0) {
-        const cityIds = countryCities.map(city => city.id);
-        const { data: countryTeams } = await supabase
-          .from('teams')
-          .select('id')
-          .in('city_id', cityIds);
-        console.log("selected cities id", cityIds, "teams", countryTeams)
-
-        if (countryTeams && countryTeams.length > 0) {
-          teamIds = countryTeams.map(team => team.id);
-        }
+      const { data: countryTeams, error } = await supabase
+        .from('teams')
+        .select('id, city:city_id(country_id)')
+        .eq('city.country_id', selectedCountry.id);
+    
+      if (error) {
+        console.error('Error fetching teams:', error);
+      }
+    
+      console.log("selected country id", selectedCountry.id, "teams", countryTeams);
+    
+      if (countryTeams && countryTeams.length > 0) {
+        teamIds = countryTeams.map(team => team.id);
       }
     }
+
   }
 
   // If we collected any team IDs, apply filter
