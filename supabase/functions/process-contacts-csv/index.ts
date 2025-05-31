@@ -1,3 +1,4 @@
+
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
@@ -48,6 +49,7 @@ serve(async (req) => {
       processed: 0,
       errors: [] as string[],
       successful: 0,
+      skipped: 0,
       totalRows: lines.length - 1, // Exclude header
       nextStartRow: startRow,
       isComplete: false
@@ -73,8 +75,13 @@ serve(async (req) => {
         );
 
         // Process the contact data
-        await processContactRow(supabase, row, i + 1, conflictResolution);
-        results.successful++;
+        const processResult = await processContactRow(supabase, row, i + 1, conflictResolution);
+        
+        if (processResult.skipped) {
+          results.skipped++;
+        } else {
+          results.successful++;
+        }
         
       } catch (error) {
         console.error(`Error processing row ${i + 1}:`, error);
@@ -98,6 +105,7 @@ serve(async (req) => {
       error: error.message,
       processed: 0,
       successful: 0,
+      skipped: 0,
       errors: [error.message],
       isComplete: false
     }), {
@@ -112,7 +120,7 @@ async function processContactRow(
   row: any, 
   rowNumber: number, 
   conflictResolution?: TeamConflictResolution
-) {
+): Promise<{ skipped: boolean }> {
   console.log(`Processing contact row ${rowNumber}:`, row);
   
   // Validate required fields
@@ -146,6 +154,23 @@ async function processContactRow(
     }
     
     teamId = teams[0].id;
+  }
+
+  // Check if contact already exists in this team
+  const { data: existingContact, error: checkError } = await supabase
+    .from('contacts')
+    .select('id')
+    .eq('team_id', teamId)
+    .ilike('name', contactName)
+    .maybeSingle();
+
+  if (checkError) {
+    throw new Error(`Failed to check for existing contact: ${checkError.message}`);
+  }
+
+  if (existingContact) {
+    console.log(`Skipping duplicate contact "${contactName}" in team "${teamName}"`);
+    return { skipped: true };
   }
 
   // Get or create department
@@ -205,4 +230,5 @@ async function processContactRow(
   if (contactError) throw new Error(`Failed to create contact: ${contactError.message}`);
   
   console.log(`Successfully created contact with ID: ${contact.id}`);
+  return { skipped: false };
 }

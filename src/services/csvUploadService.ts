@@ -119,6 +119,7 @@ export class CsvUploadService {
     let startRow = startingRow;
     let totalProcessed = 0;
     let totalSuccessful = 0;
+    let totalSkipped = 0;
     let allErrors: string[] = [];
     let isComplete = false;
 
@@ -137,6 +138,7 @@ export class CsvUploadService {
 
       totalProcessed += result.processed;
       totalSuccessful += result.successful;
+      totalSkipped += (result.skipped || 0);
       allErrors = [...allErrors, ...result.errors];
       
       startRow = result.nextStartRow;
@@ -149,6 +151,7 @@ export class CsvUploadService {
       const progressResult: BatchProcessResult = {
         processed: adjustedProcessed,
         successful: totalSuccessful,
+        skipped: totalSkipped,
         errors: allErrors,
         isComplete,
         nextStartRow: startRow,
@@ -173,6 +176,7 @@ export class CsvUploadService {
     return {
       processed: (startingRow - 1) + totalProcessed,
       successful: totalSuccessful,
+      skipped: totalSkipped,
       errors: allErrors,
       isComplete: true,
       nextStartRow: startRow,
