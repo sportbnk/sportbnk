@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -474,9 +473,6 @@ const CsvUpload = () => {
                       {col}
                     </Badge>
                   ))}
-                </div>
-                <div className="mt-2 p-2 bg-blue-50 rounded text-xs">
-                  <strong>💡 Tip:</strong> Excel files (.xlsx, .xls) automatically handle commas in data without parsing issues!
                 </div>
               </div>
 
