@@ -135,6 +135,7 @@ export default function Teams() {
         query = query.eq('level', filters.level);
       }
       if (filters.country !== "all") {
+        // When filtering by country, exclude teams where country is null
         query = query.eq('cities.countries.name', filters.country);
       }
       if (filters.city !== "all") {
