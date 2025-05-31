@@ -173,15 +173,7 @@ const People = () => {
   if (filters.city !== "all" && citiesForCountry) {
     const selectedCity = citiesForCountry.find(city => city.name === filters.city);
     if (selectedCity) {
-      const { data: cityTeams } = await supabase
-        .from('teams')
-        .select('id')
-        .eq('city_id', selectedCity.id);
-      console.log("selected id", selectedCity.id, "teams", cityTeams)
-
-      if (cityTeams && cityTeams.length > 0) {
-        teamIds = cityTeams.map(team => team.id);
-      }
+      query = query.eq('team.city_id', selectedCity.id);
     }
   }
   console.log("after city, team ids", teamIds)
@@ -190,32 +182,15 @@ const People = () => {
   if (teamIds.length === 0 && filters.country !== "all" && allCountries) {
     const selectedCountry = allCountries.find(country => country.name === filters.country);
     if (selectedCountry) {
-      const { data: countryTeams, error } = await supabase
-        .from('teams')
-        .select('id, city:city_id(country_id)')
-        .eq('city.country_id', selectedCountry.id);
-    
-      if (error) {
-        console.error('Error fetching teams:', error);
-      }
-    
-      console.log("selected country id", selectedCountry.id, "teams", countryTeams);
-    
-      if (countryTeams && countryTeams.length > 0) {
-        teamIds = countryTeams.map(team => team.id);
-      }
+      query = query
+      .select('*')
+      .eq('team.city.country_id', selectedCountry.id)
+      .join('team', 'team.id', 'some_table.team_id')  // pseudo code: Supabase client doesn't support explicit joins
+
     }
 
   }
 
-  // If we collected any team IDs, apply filter
-  if (teamIds.length > 0) {
-    query = query.in('team_id', teamIds);
-  } else {
-    // No teams matched filter, return empty result
-    query = query.eq('team_id', '00000000-0000-0000-0000-000000000000');
-  }
-}
 
 
       const { data, error } = await query;
