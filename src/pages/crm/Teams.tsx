@@ -125,17 +125,18 @@ export default function Teams() {
         query = query.ilike('name', `%${searchTerm.trim()}%`);
       }
 
-      // Apply filters - only use inner join when sport filter is actually applied
+      // Apply sport filter - only filter if not "all"
       if (filters.sport !== "all") {
-        // When filtering by sport, use inner join to only get teams with that sport
         query = query.eq('sports.name', filters.sport);
+      }
+      
+      // Apply country filter - only filter if not "all" and ensure we only get teams from that country
+      if (filters.country !== "all") {
+        query = query.eq('cities.countries.name', filters.country);
       }
       
       if (filters.level !== "all") {
         query = query.eq('level', filters.level);
-      }
-      if (filters.country !== "all") {
-        query = query.eq('cities.countries.name', filters.country);
       }
       if (filters.city !== "all") {
         query = query.eq('cities.name', filters.city);
