@@ -115,6 +115,50 @@ const People = () => {
     gcTime: 10 * 60 * 1000
   });
 
+  // Separate count query to get accurate total results
+  const { data: totalCount } = useQuery({
+    queryKey: ['contacts-count', filters.position, filters.team, searchTerm],
+    queryFn: async () => {
+      console.log('Fetching contacts count with position filter:', filters.position, 'and team filter:', filters.team);
+      
+      let query = supabase
+        .from('contacts')
+        .select('*', { count: 'exact', head: true });
+
+      // Apply search filter first
+      if (searchTerm.trim()) {
+        query = query.or(`name.ilike.%${searchTerm.trim()}%,email.ilike.%${searchTerm.trim()}%,role.ilike.%${searchTerm.trim()}%`);
+      }
+
+      // Apply department filter using department ID
+      if (filters.position !== "all" && allDepartments) {
+        const selectedDepartment = allDepartments.find(dept => dept.name === filters.position);
+        if (selectedDepartment) {
+          query = query.eq('department_id', selectedDepartment.id);
+        }
+      }
+
+      // Apply team filter only if a specific team is selected
+      if (filters.team !== "all" && teamsForCity) {
+        const selectedTeam = teamsForCity.find(team => team.name === filters.team);
+        if (selectedTeam) {
+          query = query.eq('team_id', selectedTeam.id);
+        }
+      }
+
+      const { count, error } = await query;
+      
+      if (error) {
+        console.error('Error fetching contacts count:', error);
+        throw error;
+      }
+      
+      console.log('Total contacts count:', count);
+      return count || 0;
+    },
+    enabled: !!allDepartments, // Only run query when departments are loaded
+  });
+
   const { data: contacts, isLoading } = useQuery({
     queryKey: ['contacts', filters.position, filters.team, searchTerm],
     queryFn: async () => {
@@ -257,7 +301,7 @@ const People = () => {
               <ContactsFilters 
                 onFilterChange={setFilters}
                 showTeamFilters={false}
-                totalResults={filteredContacts?.length || 0}
+                totalResults={totalCount || 0}
                 filters={filters}
               />
             </CardContent>
