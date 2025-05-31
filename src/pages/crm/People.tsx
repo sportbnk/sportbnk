@@ -116,7 +116,7 @@ const People = () => {
 
   const { data: contacts, isLoading } = useQuery({
     queryKey: ['contacts', filters, searchTerm],
-    const queryFn = async () => {
+    queryFn = async () => {
   console.log('Fetching contacts with filters:', filters);
 
   const query = supabase
