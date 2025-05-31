@@ -146,21 +146,30 @@ const People = () => {
       if (searchTerm.trim()) {
         query = query.or(`name.ilike.%${searchTerm.trim()}%,email.ilike.%${searchTerm.trim()}%,role.ilike.%${searchTerm.trim()}%`);
       }
+      console.log("filters", filters)
 
       // Apply department filter using department ID
       if (filters.position !== "all" && allDepartments) {
         const selectedDepartment = allDepartments.find(dept => dept.name === filters.position);
+        console.log("detp not all")
         if (selectedDepartment) {
+          console.log("selected filters dept", selectedDepartment)
           query = query.eq('department_id', selectedDepartment.id);
         }
+      } else {
+        console.log("all dept filters")
       }
 
       // Apply team filter only if a specific team is selected
       if (filters.team !== "all" && teamsForCity) {
+        console.log("team not all")
         const selectedTeam = teamsForCity.find(team => team.name === filters.team);
         if (selectedTeam) {
+          console.log("selected filters team", selectedTeam)
           query = query.eq('team_id', selectedTeam.id);
         }
+      } else {
+        console.log("all team filters")
       }
 
       const { data, error } = await query;
