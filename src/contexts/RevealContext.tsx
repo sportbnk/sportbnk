@@ -1,9 +1,9 @@
-
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/components/auth/AuthContext";
 import { useCredits } from "@/contexts/CreditsContext";
 import { toast } from "sonner";
+import InsufficientCreditsDialog from "@/components/database/InsufficientCreditsDialog";
 
 type RevealType = 'email' | 'phone' | 'linkedin';
 
@@ -48,6 +48,13 @@ export const useReveal = () => {
 export const RevealProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [revealedDetails, setRevealedDetails] = useState<Record<string, RevealedDetail>>({});
   const [loading, setLoading] = useState(false);
+  const [showInsufficientCreditsDialog, setShowInsufficientCreditsDialog] = useState(false);
+  const [pendingReveal, setPendingReveal] = useState<{
+    contact: Contact;
+    type: RevealType;
+    creditsRequired: number;
+  } | null>(null);
+  
   const { user } = useAuth();
   const { credits, refreshCredits } = useCredits();
 
@@ -137,7 +144,8 @@ export const RevealProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     // Check if user has enough credits
     if (credits < creditsRequired) {
-      toast.error(`Insufficient credits. You need ${creditsRequired} credits to reveal this ${type}.`);
+      setPendingReveal({ contact, type, creditsRequired });
+      setShowInsufficientCreditsDialog(true);
       return false;
     }
 
@@ -242,6 +250,13 @@ export const RevealProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   return (
     <RevealContext.Provider value={value}>
       {children}
+      <InsufficientCreditsDialog
+        open={showInsufficientCreditsDialog}
+        onOpenChange={setShowInsufficientCreditsDialog}
+        creditsRequired={pendingReveal?.creditsRequired || 0}
+        creditsAvailable={credits}
+        actionType={pendingReveal?.type || 'email'}
+      />
     </RevealContext.Provider>
   );
 };
