@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -631,7 +632,6 @@ const CsvUpload = () => {
             <div className="bg-green-50 p-4 rounded-lg mb-4">
               <h4 className="font-medium text-green-800 mb-2">✅ Recommended: Excel Files (.xlsx, .xls)</h4>
               <ul className="text-sm text-green-700 space-y-1">
-                <li>• No comma parsing issues - data integrity guaranteed</li>
                 <li>• Handles complex text fields automatically</li>
                 <li>• Preserves formatting and data types</li>
                 <li>• Recommended for data with addresses, descriptions, or special characters</li>
@@ -649,10 +649,23 @@ const CsvUpload = () => {
               </ul>
             </div>
 
+            <div>
+              <h4 className="font-medium mb-2">Contacts File Format:</h4>
+              <ul className="text-sm text-gray-600 space-y-1">
+                <li>• <strong>Name</strong> (required): Contact full name</li>
+                <li>• <strong>Role</strong>: Job title or position</li>
+                <li>• <strong>Email</strong>: Contact email address</li>
+                <li>• <strong>Is_Email_Verified</strong>: Boolean (true/false)</li>
+                <li>• <strong>Phone</strong>: Contact phone number</li>
+                <li>• <strong>LinkedIn</strong>: LinkedIn profile URL</li>
+                <li>• <strong>Team</strong>: Associated team name</li>
+                <li>• <strong>Department</strong>: Department or division</li>
+              </ul>
+            </div>
+
             <div className="bg-blue-50 p-4 rounded-lg">
               <p className="text-sm text-blue-800">
                 <strong>Note:</strong> Large files are automatically processed in batches to prevent timeouts. 
-                Excel files are recommended to avoid comma-related parsing issues in addresses and descriptions.
                 Use the "Starting Row" field to resume uploads from a specific row after refreshing the page.
               </p>
             </div>
