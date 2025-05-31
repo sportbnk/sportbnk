@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -61,8 +62,6 @@ import Cookies from "./pages/legal/Cookies";
 
 const queryClient = new QueryClient();
 
-import { RevealProvider } from '@/contexts/RevealContext';
-
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
@@ -112,7 +111,6 @@ function App() {
                       {/* Company sub-pages */}
                       <Route path="/company/about" element={<About />} />
                       <Route path="/company/careers" element={<Careers />} />
-                      <Route path="/company/partner-program" element={<PartnerProgram />} />
                       <Route path="/company/latest-news" element={<LatestNews />} />
                       <Route path="/company/news/scott-mckecknie-advisory-shareholder" element={<ScottMcKecknieArticle />} />
                       
