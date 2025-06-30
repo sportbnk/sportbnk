@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -33,6 +32,7 @@ import UserProfile from "./pages/UserProfile";
 import Settings from "./pages/Settings";
 import SearchResults from "./pages/SearchResults";
 import CsvUpload from "./pages/CsvUpload";
+import CsvUpdate from "./pages/CsvUpdate";
 
 // Product pages
 import Discover from "./pages/products/Discover";
@@ -92,6 +92,7 @@ function App() {
                       <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
                       <Route path="/search" element={<ProtectedRoute><SearchResults /></ProtectedRoute>} />
                       <Route path="/csv-upload" element={<ProtectedRoute><CsvUpload /></ProtectedRoute>} />
+                      <Route path="/csv-update" element={<ProtectedRoute><CsvUpdate /></ProtectedRoute>} />
                       
                       {/* CRM System with sidebar layout - Protected */}
                       <Route element={<ProtectedRoute><CrmLayout /></ProtectedRoute>}>
