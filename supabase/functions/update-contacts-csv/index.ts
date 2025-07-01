@@ -40,6 +40,7 @@ serve(async (req) => {
       processed: 0,
       successful: 0,
       notFound: 0,
+      notFoundNames: [] as string[],
       errors: [] as string[],
       isComplete: endRow >= totalRows,
       nextStartRow: endRow + 1,
@@ -60,15 +61,16 @@ serve(async (req) => {
           continue
         }
 
-        // Find existing contact by name
+        // Find existing contact by name (case insensitive)
         const { data: existingContact, error: findError } = await supabaseClient
           .from('contacts')
           .select('id')
-          .eq('name', contactName)
+          .ilike('name', contactName)
           .single()
 
-        if (findError) {
+        if (findError || !existingContact) {
           results.notFound++
+          results.notFoundNames.push(contactName)
           results.processed++
           continue
         }
@@ -99,7 +101,7 @@ serve(async (req) => {
                 const { data: team } = await supabaseClient
                   .from('teams')
                   .select('id')
-                  .eq('name', value)
+                  .ilike('name', value)
                   .single()
                 
                 if (team) {
@@ -113,7 +115,7 @@ serve(async (req) => {
                 const { data: department } = await supabaseClient
                   .from('departments')
                   .select('id')
-                  .eq('name', value)
+                  .ilike('name', value)
                   .single()
                 
                 if (department) {

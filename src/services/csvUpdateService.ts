@@ -5,6 +5,7 @@ export interface BatchUpdateResult {
   processed: number;
   successful: number;
   notFound?: number;
+  notFoundNames?: string[];
   errors: string[];
   isComplete: boolean;
   nextStartRow: number;
@@ -45,6 +46,7 @@ export class CsvUpdateService {
     let totalProcessed = 0;
     let totalSuccessful = 0;
     let totalNotFound = 0;
+    let allNotFoundNames: string[] = [];
     let allErrors: string[] = [];
     let isComplete = false;
 
@@ -64,6 +66,7 @@ export class CsvUpdateService {
       totalProcessed += result.processed;
       totalSuccessful += result.successful;
       totalNotFound += (result.notFound || 0);
+      allNotFoundNames = [...allNotFoundNames, ...(result.notFoundNames || [])];
       allErrors = [...allErrors, ...result.errors];
       
       startRow = result.nextStartRow;
@@ -76,6 +79,7 @@ export class CsvUpdateService {
         processed: adjustedProcessed,
         successful: totalSuccessful,
         notFound: totalNotFound,
+        notFoundNames: allNotFoundNames,
         errors: allErrors,
         isComplete,
         nextStartRow: startRow,
@@ -99,6 +103,7 @@ export class CsvUpdateService {
       processed: (startingRow - 1) + totalProcessed,
       successful: totalSuccessful,
       notFound: totalNotFound,
+      notFoundNames: allNotFoundNames,
       errors: allErrors,
       isComplete: true,
       nextStartRow: startRow,
@@ -119,6 +124,7 @@ export class CsvUpdateService {
     let totalProcessed = 0;
     let totalSuccessful = 0;
     let totalNotFound = 0;
+    let allNotFoundNames: string[] = [];
     let allErrors: string[] = [];
     let isComplete = false;
 
@@ -138,6 +144,7 @@ export class CsvUpdateService {
       totalProcessed += result.processed;
       totalSuccessful += result.successful;
       totalNotFound += (result.notFound || 0);
+      allNotFoundNames = [...allNotFoundNames, ...(result.notFoundNames || [])];
       allErrors = [...allErrors, ...result.errors];
       
       startRow = result.nextStartRow;
@@ -150,6 +157,7 @@ export class CsvUpdateService {
         processed: adjustedProcessed,
         successful: totalSuccessful,
         notFound: totalNotFound,
+        notFoundNames: allNotFoundNames,
         errors: allErrors,
         isComplete,
         nextStartRow: startRow,
@@ -173,6 +181,7 @@ export class CsvUpdateService {
       processed: (startingRow - 1) + totalProcessed,
       successful: totalSuccessful,
       notFound: totalNotFound,
+      notFoundNames: allNotFoundNames,
       errors: allErrors,
       isComplete: true,
       nextStartRow: startRow,

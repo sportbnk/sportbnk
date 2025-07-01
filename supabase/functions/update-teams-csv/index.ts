@@ -40,6 +40,7 @@ serve(async (req) => {
       processed: 0,
       successful: 0,
       notFound: 0,
+      notFoundNames: [] as string[],
       errors: [] as string[],
       isComplete: endRow >= totalRows,
       nextStartRow: endRow + 1,
@@ -60,15 +61,16 @@ serve(async (req) => {
           continue
         }
 
-        // Find existing team by name
+        // Find existing team by name (case insensitive)
         const { data: existingTeam, error: findError } = await supabaseClient
           .from('teams')
           .select('id')
-          .eq('name', teamName)
+          .ilike('name', teamName)
           .single()
 
-        if (findError) {
+        if (findError || !existingTeam) {
           results.notFound++
+          results.notFoundNames.push(teamName)
           results.processed++
           continue
         }
@@ -99,7 +101,7 @@ serve(async (req) => {
                 const { data: sport } = await supabaseClient
                   .from('sports')
                   .select('id')
-                  .eq('name', value)
+                  .ilike('name', value)
                   .single()
                 
                 if (sport) {
@@ -123,7 +125,7 @@ serve(async (req) => {
                 const { data: city } = await supabaseClient
                   .from('cities')
                   .select('id')
-                  .eq('name', value)
+                  .ilike('name', value)
                   .single()
                 
                 if (city) {

@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -445,6 +444,21 @@ const CsvUpdate = () => {
           </div>
         </div>
 
+        {progress.notFoundNames && progress.notFoundNames.length > 0 && (
+          <details className="text-sm">
+            <summary className="cursor-pointer text-yellow-600 hover:text-yellow-800">
+              View not found names ({progress.notFoundNames.length})
+            </summary>
+            <div className="mt-2 space-y-1 max-h-32 overflow-y-auto">
+              {progress.notFoundNames.map((name, index) => (
+                <div key={index} className="text-yellow-600 text-xs">
+                  {name}
+                </div>
+              ))}
+            </div>
+          </details>
+        )}
+
         {progress.errors.length > 0 && (
           <details className="text-sm">
             <summary className="cursor-pointer text-red-600 hover:text-red-800">
@@ -687,7 +701,7 @@ const CsvUpdate = () => {
             <div className="bg-blue-50 p-4 rounded-lg">
               <h4 className="font-medium text-blue-800 mb-2">📝 How Updates Work</h4>
               <ul className="text-sm text-blue-700 space-y-1">
-                <li>• Records are matched by the <strong>Name</strong> field (case-sensitive)</li>
+                <li>• Records are matched by the <strong>Name</strong> field (case-insensitive)</li>
                 <li>• Only selected columns will be updated in the database</li>
                 <li>• The <strong>Name</strong> field cannot be updated (acts as primary key)</li>
                 <li>• Use "Nullify if empty" to control how empty CSV fields are handled</li>
@@ -698,7 +712,7 @@ const CsvUpdate = () => {
             <div className="bg-green-50 p-4 rounded-lg">
               <h4 className="font-medium text-green-800 mb-2">✅ Best Practices</h4>
               <ul className="text-sm text-green-700 space-y-1">
-                <li>• Ensure exact name matches between CSV and database</li>
+                <li>• Name matching is case-insensitive for better flexibility</li>
                 <li>• Select only the columns you want to modify</li>
                 <li>• Use Excel files for data with special characters or complex formatting</li>
                 <li>• Review the "Not Found" count to identify missing records</li>
