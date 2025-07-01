@@ -73,8 +73,10 @@ const CsvUpdate = () => {
     const headers = getCsvHeaders(csvData);
     const initialSelection: Record<string, boolean> = {};
     headers.forEach(header => {
-      // Enable all columns except 'Name' which acts as primary key
-      initialSelection[header] = header.toLowerCase() !== 'name';
+      // Enable all columns except 'Name' and 'Team' which act as primary/match keys
+      const isNameColumn = header.toLowerCase() === 'name';
+      const isTeamColumn = header.toLowerCase() === 'team';
+      initialSelection[header] = !isNameColumn && !isTeamColumn;
     });
     setSelectedColumns(initialSelection);
   };
