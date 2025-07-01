@@ -236,12 +236,15 @@ const CsvUpdate = () => {
         <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
           {headers.map((header) => {
             const isNameColumn = header.toLowerCase() === 'name';
+            const isTeamColumn = header.toLowerCase() === 'team';
+            const isDisabled = isNameColumn || isTeamColumn;
+            
             return (
               <div key={header} className="flex items-center space-x-2">
                 <Checkbox
                   id={header}
                   checked={selectedColumns[header] || false}
-                  disabled={isNameColumn}
+                  disabled={isDisabled}
                   onCheckedChange={(checked) => {
                     setSelectedColumns({
                       ...selectedColumns,
@@ -251,9 +254,9 @@ const CsvUpdate = () => {
                 />
                 <label 
                   htmlFor={header} 
-                  className={`text-sm ${isNameColumn ? 'text-gray-400' : 'text-gray-700'}`}
+                  className={`text-sm ${isDisabled ? 'text-gray-400' : 'text-gray-700'}`}
                 >
-                  {header} {isNameColumn && '(Primary Key)'}
+                  {header} {isNameColumn && '(Primary Key)'} {isTeamColumn && '(Match Key)'}
                 </label>
               </div>
             );
@@ -701,9 +704,10 @@ const CsvUpdate = () => {
             <div className="bg-blue-50 p-4 rounded-lg">
               <h4 className="font-medium text-blue-800 mb-2">📝 How Updates Work</h4>
               <ul className="text-sm text-blue-700 space-y-1">
-                <li>• Records are matched by the <strong>Name</strong> field (case-insensitive)</li>
+                <li>• <strong>Teams:</strong> Records are matched by the <strong>Name</strong> field (case-insensitive)</li>
+                <li>• <strong>Contacts:</strong> Records are matched by both <strong>Name</strong> and <strong>Team</strong> fields (case-insensitive)</li>
                 <li>• Only selected columns will be updated in the database</li>
-                <li>• The <strong>Name</strong> field cannot be updated (acts as primary key)</li>
+                <li>• The <strong>Name</strong> and <strong>Team</strong> fields cannot be updated (act as match keys)</li>
                 <li>• Use "Nullify if empty" to control how empty CSV fields are handled</li>
                 <li>• Records not found in the database will be reported but skipped</li>
               </ul>
@@ -712,7 +716,7 @@ const CsvUpdate = () => {
             <div className="bg-green-50 p-4 rounded-lg">
               <h4 className="font-medium text-green-800 mb-2">✅ Best Practices</h4>
               <ul className="text-sm text-green-700 space-y-1">
-                <li>• Name matching is case-insensitive for better flexibility</li>
+                <li>• For contacts: Both name and team matching is case-insensitive</li>
                 <li>• Select only the columns you want to modify</li>
                 <li>• Use Excel files for data with special characters or complex formatting</li>
                 <li>• Review the "Not Found" count to identify missing records</li>
@@ -726,6 +730,7 @@ const CsvUpdate = () => {
                 <li>• Test with a small dataset first</li>
                 <li>• Backup your data before large updates</li>
                 <li>• Empty fields behavior depends on "Nullify if empty" setting</li>
+                <li>• For contacts: Team name in CSV must exactly match existing team names</li>
               </ul>
             </div>
           </CardContent>

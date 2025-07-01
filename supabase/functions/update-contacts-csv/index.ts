@@ -27,9 +27,14 @@ serve(async (req) => {
 
     const headers = lines[0].split(',').map((h: string) => h.trim().replace(/"/g, ''))
     const nameIndex = headers.findIndex((h: string) => h.toLowerCase() === 'name')
+    const teamIndex = headers.findIndex((h: string) => h.toLowerCase() === 'team')
     
     if (nameIndex === -1) {
       throw new Error('CSV must contain a "Name" column')
+    }
+
+    if (teamIndex === -1) {
+      throw new Error('CSV must contain a "Team" column')
     }
 
     const totalRows = lines.length - 1
@@ -54,6 +59,7 @@ serve(async (req) => {
       try {
         const values = line.split(',').map((v: string) => v.trim().replace(/"/g, ''))
         const contactName = values[nameIndex]
+        const teamName = values[teamIndex]
 
         if (!contactName) {
           results.errors.push(`Row ${rowNumber}: Contact name is required`)
@@ -61,16 +67,37 @@ serve(async (req) => {
           continue
         }
 
-        // Find existing contact by name (case insensitive)
+        if (!teamName) {
+          results.errors.push(`Row ${rowNumber}: Team name is required`)
+          results.processed++
+          continue
+        }
+
+        // First, find the team by name
+        const { data: team, error: teamError } = await supabaseClient
+          .from('teams')
+          .select('id')
+          .ilike('name', teamName)
+          .single()
+
+        if (teamError || !team) {
+          results.notFound++
+          results.notFoundNames.push(`${contactName} (Team: ${teamName})`)
+          results.processed++
+          continue
+        }
+
+        // Find existing contact by name and team (case insensitive)
         const { data: existingContact, error: findError } = await supabaseClient
           .from('contacts')
           .select('id')
           .ilike('name', contactName)
+          .eq('team_id', team.id)
           .single()
 
         if (findError || !existingContact) {
           results.notFound++
-          results.notFoundNames.push(contactName)
+          results.notFoundNames.push(`${contactName} (Team: ${teamName})`)
           results.processed++
           continue
         }
@@ -79,6 +106,11 @@ serve(async (req) => {
         const updateData: any = {}
         
         for (const column of selectedColumns) {
+          // Skip name and team columns as they are used for matching
+          if (column.toLowerCase() === 'name' || column.toLowerCase() === 'team') {
+            continue
+          }
+
           const columnIndex = headers.findIndex(h => h === column)
           if (columnIndex === -1) continue
           
@@ -95,20 +127,6 @@ serve(async (req) => {
           
           // Map CSV columns to database columns
           switch (column.toLowerCase()) {
-            case 'team':
-              // Handle team by finding team record
-              if (value) {
-                const { data: team } = await supabaseClient
-                  .from('teams')
-                  .select('id')
-                  .ilike('name', value)
-                  .single()
-                
-                if (team) {
-                  updateData.team_id = team.id
-                }
-              }
-              break
             case 'department':
               // Handle department by finding or creating department record
               if (value) {
