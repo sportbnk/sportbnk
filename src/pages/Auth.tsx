@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
@@ -128,6 +129,33 @@ const Auth = () => {
     }
   };
 
+  const checkExistingUser = async (email: string, phone: string) => {
+    // Check if email already exists
+    const { data: emailCheck } = await supabase.auth.signInWithPassword({
+      email: email,
+      password: 'dummy-password-for-check'
+    });
+    
+    // If no error related to invalid credentials, email exists
+    if (emailCheck.user) {
+      return { emailExists: true, phoneExists: false };
+    }
+
+    // Check phone in profiles table if provided
+    let phoneExists = false;
+    if (phone) {
+      const { data: phoneData } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('phone', phone)
+        .maybeSingle();
+      
+      phoneExists = !!phoneData;
+    }
+
+    return { emailExists: false, phoneExists };
+  };
+
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -146,6 +174,21 @@ const Auth = () => {
     }
 
     try {
+      // Check for existing email and phone
+      const { emailExists, phoneExists } = await checkExistingUser(signUpData.email, signUpData.phone);
+      
+      if (emailExists) {
+        setError('An account with this email already exists. Please sign in instead.');
+        setIsLoading(false);
+        return;
+      }
+
+      if (phoneExists) {
+        setError('An account with this phone number already exists. Please use a different phone number.');
+        setIsLoading(false);
+        return;
+      }
+
       const { data, error } = await signUp(signUpData.email, signUpData.password, {
         name: signUpData.name,
         job_title: signUpData.job_title,
@@ -165,7 +208,6 @@ const Auth = () => {
       setMessage('Please check your email for a verification link to complete your registration.');
       toast.success('Registration successful! Please verify your email.');
       
-      // Don't clear form data - keep it visible for user reference
     } catch (err: any) {
       setError('An unexpected error occurred. Please try again.');
       console.error('Sign up error:', err);
@@ -340,114 +382,116 @@ const Auth = () => {
                 </TabsContent>
 
                 <TabsContent value="signup" className="space-y-4">
-                  <form onSubmit={handleSignUp} className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="signup-name">Full Name *</Label>
-                      <div className="relative">
-                        <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 h-4 w-4" />
-                        <Input
-                          id="signup-name"
-                          type="text"
-                          placeholder="John Smith"
-                          className="pl-10"
-                          value={signUpData.name}
-                          onChange={(e) => setSignUpData(prev => ({ ...prev, name: e.target.value }))}
-                          required
-                        />
+                  {!showEmailSuccess ? (
+                    <form onSubmit={handleSignUp} className="space-y-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="signup-name">Full Name *</Label>
+                        <div className="relative">
+                          <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 h-4 w-4" />
+                          <Input
+                            id="signup-name"
+                            type="text"
+                            placeholder="John Smith"
+                            className="pl-10"
+                            value={signUpData.name}
+                            onChange={(e) => setSignUpData(prev => ({ ...prev, name: e.target.value }))}
+                            required
+                          />
+                        </div>
                       </div>
-                    </div>
 
-                    <div className="space-y-2">
-                      <Label htmlFor="signup-email">Email *</Label>
-                      <div className="relative">
-                        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 h-4 w-4" />
-                        <Input
-                          id="signup-email"
-                          type="email"
-                          placeholder="you@example.com"
-                          className="pl-10"
-                          value={signUpData.email}
-                          onChange={(e) => setSignUpData(prev => ({ ...prev, email: e.target.value }))}
-                          required
-                        />
+                      <div className="space-y-2">
+                        <Label htmlFor="signup-email">Email *</Label>
+                        <div className="relative">
+                          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 h-4 w-4" />
+                          <Input
+                            id="signup-email"
+                            type="email"
+                            placeholder="you@example.com"
+                            className="pl-10"
+                            value={signUpData.email}
+                            onChange={(e) => setSignUpData(prev => ({ ...prev, email: e.target.value }))}
+                            required
+                          />
+                        </div>
                       </div>
-                    </div>
 
-                    <div className="space-y-2">
-                      <Label htmlFor="signup-job-title">Job Title</Label>
-                      <div className="relative">
-                        <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 h-4 w-4" />
-                        <Input
-                          id="signup-job-title"
-                          type="text"
-                          placeholder="Marketing Manager"
-                          className="pl-10"
-                          value={signUpData.job_title}
-                          onChange={(e) => setSignUpData(prev => ({ ...prev, job_title: e.target.value }))}
-                        />
+                      <div className="space-y-2">
+                        <Label htmlFor="signup-job-title">Job Title</Label>
+                        <div className="relative">
+                          <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 h-4 w-4" />
+                          <Input
+                            id="signup-job-title"
+                            type="text"
+                            placeholder="Marketing Manager"
+                            className="pl-10"
+                            value={signUpData.job_title}
+                            onChange={(e) => setSignUpData(prev => ({ ...prev, job_title: e.target.value }))}
+                          />
+                        </div>
                       </div>
-                    </div>
 
-                    <div className="space-y-2">
-                      <Label htmlFor="signup-phone">Phone</Label>
-                      <div className="relative">
-                        <Phone className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 h-4 w-4" />
-                        <Input
-                          id="signup-phone"
-                          type="tel"
-                          placeholder="+1 (555) 123-4567"
-                          className="pl-10"
-                          value={signUpData.phone}
-                          onChange={(e) => setSignUpData(prev => ({ ...prev, phone: e.target.value }))}
-                        />
+                      <div className="space-y-2">
+                        <Label htmlFor="signup-phone">Phone</Label>
+                        <div className="relative">
+                          <Phone className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 h-4 w-4" />
+                          <Input
+                            id="signup-phone"
+                            type="tel"
+                            placeholder="+1 (555) 123-4567"
+                            className="pl-10"
+                            value={signUpData.phone}
+                            onChange={(e) => setSignUpData(prev => ({ ...prev, phone: e.target.value }))}
+                          />
+                        </div>
                       </div>
-                    </div>
 
-                    <div className="space-y-2">
-                      <Label htmlFor="signup-password">Password *</Label>
-                      <div className="relative">
-                        <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 h-4 w-4" />
-                        <Input
-                          id="signup-password"
-                          type={showPassword ? "text" : "password"}
-                          className="pl-10 pr-10"
-                          value={signUpData.password}
-                          onChange={(e) => setSignUpData(prev => ({ ...prev, password: e.target.value }))}
-                          required
-                        />
-                        <button
-                          type="button"
-                          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
-                          onClick={() => setShowPassword(!showPassword)}
-                        >
-                          {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                        </button>
+                      <div className="space-y-2">
+                        <Label htmlFor="signup-password">Password *</Label>
+                        <div className="relative">
+                          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 h-4 w-4" />
+                          <Input
+                            id="signup-password"
+                            type={showPassword ? "text" : "password"}
+                            className="pl-10 pr-10"
+                            value={signUpData.password}
+                            onChange={(e) => setSignUpData(prev => ({ ...prev, password: e.target.value }))}
+                            required
+                          />
+                          <button
+                            type="button"
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+                            onClick={() => setShowPassword(!showPassword)}
+                          >
+                            {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                          </button>
+                        </div>
                       </div>
-                    </div>
 
-                    <div className="space-y-2">
-                      <Label htmlFor="signup-confirm-password">Confirm Password *</Label>
-                      <div className="relative">
-                        <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 h-4 w-4" />
-                        <Input
-                          id="signup-confirm-password"
-                          type={showPassword ? "text" : "password"}
-                          className="pl-10"
-                          value={signUpData.confirmPassword}
-                          onChange={(e) => setSignUpData(prev => ({ ...prev, confirmPassword: e.target.value }))}
-                          required
-                        />
+                      <div className="space-y-2">
+                        <Label htmlFor="signup-confirm-password">Confirm Password *</Label>
+                        <div className="relative">
+                          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 h-4 w-4" />
+                          <Input
+                            id="signup-confirm-password"
+                            type={showPassword ? "text" : "password"}
+                            className="pl-10"
+                            value={signUpData.confirmPassword}
+                            onChange={(e) => setSignUpData(prev => ({ ...prev, confirmPassword: e.target.value }))}
+                            required
+                          />
+                        </div>
                       </div>
-                    </div>
 
-                    <Button 
-                      type="submit" 
-                      className="w-full bg-sportbnk-green hover:bg-sportbnk-green/90" 
-                      disabled={isLoading}
-                    >
-                      {isLoading ? 'Creating Account...' : 'Create Account'}
-                    </Button>
-                  </form>
+                      <Button 
+                        type="submit" 
+                        className="w-full bg-sportbnk-green hover:bg-sportbnk-green/90" 
+                        disabled={isLoading}
+                      >
+                        {isLoading ? 'Creating Account...' : 'Create Account'}
+                      </Button>
+                    </form>
+                  ) : null}
                 </TabsContent>
               </Tabs>
             </CardContent>
