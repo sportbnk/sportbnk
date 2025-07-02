@@ -26,20 +26,34 @@ const TrialGuard: React.FC<TrialGuardProps> = ({ children }) => {
   const [isTrialExpired, setIsTrialExpired] = useState(false);
 
   useEffect(() => {
+    console.log('=== TrialGuard Debug Info ===');
+    console.log('Current pathname:', location.pathname);
+    console.log('User:', user);
+    console.log('Tier:', tier);
+    
     if (!user || tier !== 'free') {
+      console.log('Not showing trial guard - no user or not free tier');
       setIsTrialExpired(false);
       return;
     }
 
     const checkTrialExpiry = () => {
-      console.log('checking')
+      console.log('Checking trial expiry...');
       const signupDate = new Date(user.created_at);
       const now = new Date();
       const daysSinceSignup = Math.floor((now.getTime() - signupDate.getTime()) / (1000 * 60 * 60 * 24));
       
-      if (daysSinceSignup >= 14 && 
-      !location.pathname.startsWith('/pricing') && 
-      !location.pathname.startsWith('/auth')) {
+      console.log('Days since signup:', daysSinceSignup);
+      console.log('Is pricing page?', location.pathname.startsWith('/pricing'));
+      console.log('Is auth page?', location.pathname.startsWith('/auth'));
+      
+      const shouldShowPopup = daysSinceSignup >= 14 && 
+        !location.pathname.startsWith('/pricing') && 
+        !location.pathname.startsWith('/auth');
+      
+      console.log('Should show trial popup?', shouldShowPopup);
+      
+      if (shouldShowPopup) {
         setIsTrialExpired(true);
       } else {
         setIsTrialExpired(false);
@@ -47,20 +61,29 @@ const TrialGuard: React.FC<TrialGuardProps> = ({ children }) => {
     };
 
     checkTrialExpiry();
-  }, [user, tier]);
+  }, [user, tier, location.pathname]);
 
   const handleUpgrade = () => {
     navigate('/pricing');
   };
 
   if (!user) {
+    console.log('No user - rendering children');
     return <>{children}</>;
   }
+
+  console.log('Final render decision:');
+  console.log('- tier === free:', tier === 'free');
+  console.log('- isTrialExpired:', isTrialExpired);
+  console.log('- current path:', location.pathname);
+  console.log('- starts with /pricing:', location.pathname.startsWith('/pricing'));
+  console.log('- starts with /auth:', location.pathname.startsWith('/auth'));
 
   // Don't show trial expiry popup on pricing or auth pages
   if (tier === 'free' && isTrialExpired && 
       !location.pathname.startsWith('/pricing') && 
       !location.pathname.startsWith('/auth')) {
+    console.log('SHOWING TRIAL EXPIRED POPUP');
     return (
       <AlertDialog open={true} onOpenChange={() => {}}>
         <AlertDialogContent className="max-w-md">
@@ -97,6 +120,7 @@ const TrialGuard: React.FC<TrialGuardProps> = ({ children }) => {
     );
   }
 
+  console.log('RENDERING CHILDREN - no popup');
   return <>{children}</>;
 };
 
