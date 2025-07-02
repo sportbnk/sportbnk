@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Mail, Lock, User, Phone, Briefcase, Eye, EyeOff, CheckCircle, AlertCircle } from 'lucide-react';
+import { Mail, Lock, User, Phone, Briefcase, Eye, EyeOff, CheckCircle, AlertCircle, ExternalLink } from 'lucide-react';
 import { useAuth } from '@/components/auth/AuthContext';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
@@ -22,6 +22,7 @@ const Auth = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
+  const [showEmailSuccess, setShowEmailSuccess] = useState(false);
   const [activeTab, setActiveTab] = useState(searchParams.get('tab') || 'signin');
 
   // Sign In Form
@@ -160,18 +161,11 @@ const Auth = () => {
         return;
       }
 
+      setShowEmailSuccess(true);
       setMessage('Please check your email for a verification link to complete your registration.');
       toast.success('Registration successful! Please verify your email.');
       
-      // Clear form
-      setSignUpData({
-        name: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
-        job_title: '',
-        phone: '',
-      });
+      // Don't clear form data - keep it visible for user reference
     } catch (err: any) {
       setError('An unexpected error occurred. Please try again.');
       console.error('Sign up error:', err);
@@ -203,6 +197,10 @@ const Auth = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleGoToEmail = () => {
+    window.open('https://gmail.com', '_blank');
   };
 
   // Show loading state during email verification
@@ -255,7 +253,23 @@ const Auth = () => {
                   </Alert>
                 )}
 
-                {message && (
+                {showEmailSuccess && (
+                  <Alert className="mt-4">
+                    <CheckCircle className="h-4 w-4" />
+                    <AlertDescription className="space-y-3">
+                      <p>{message}</p>
+                      <Button 
+                        onClick={handleGoToEmail}
+                        className="w-full bg-sportbnk-green hover:bg-sportbnk-green/90"
+                      >
+                        <ExternalLink className="h-4 w-4 mr-2" />
+                        Go to your email
+                      </Button>
+                    </AlertDescription>
+                  </Alert>
+                )}
+
+                {message && !showEmailSuccess && (
                   <Alert className="mt-4">
                     <CheckCircle className="h-4 w-4" />
                     <AlertDescription>{message}</AlertDescription>
