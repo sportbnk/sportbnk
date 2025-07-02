@@ -86,7 +86,7 @@ const TrialGuard: React.FC<TrialGuardProps> = ({ children }) => {
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <p className="text-sm text-gray-700 font-medium">What you'll get with a paid plan:</p>
                   <ul className="text-sm text-gray-600 mt-2 space-y-1">
-                    <li>• Ayyy searches</li>
+                    <li>• Unlimited searches</li>
                     <li>• Enhanced data enrichment</li>
                     <li>• Advanced filters</li>
                     <li>• Export capabilities</li>
