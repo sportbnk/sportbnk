@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Menu, X, ChevronDown, Package, BarChart3, Building, BookOpen, DollarSign, Calendar, Users, Rocket, Shield, Briefcase, Newspaper, Phone, BookmarkPlus, Users2, FileText, Video, Headphones, Clipboard, MessageSquare, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -6,7 +5,9 @@ import { cn } from '@/lib/utils';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { SignInDialog } from '@/components/SignInDialog';
 import AccountBadge from '@/components/crm/AccountBadge';
+import TrialCountdown from '@/components/TrialCountdown';
 import { useAuth } from '@/components/auth/AuthContext';
+import { useCredits } from '@/contexts/CreditsContext';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -28,6 +29,7 @@ const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { tier } = useCredits();
 
   useEffect(() => {
     setIsMobileMenuOpen(false);
@@ -242,7 +244,12 @@ const Navbar = () => {
                 <Link to="/book-demo">Book A Demo</Link>
               </Button>
 
-              {user && <AccountBadge showEmail={false} />}
+              {user && (
+                <div className="flex items-center space-x-3">
+                  {tier === 'free' ? <TrialCountdown /> : null}
+                  <AccountBadge showEmail={false} />
+                </div>
+              )}
             </div>
 
             <button 
@@ -371,7 +378,12 @@ const Navbar = () => {
               </Button>
 
               {user && (
-                <div className="w-full">
+                <div className="w-full space-y-3">
+                  {tier === 'free' && (
+                    <div className="flex justify-center">
+                      <TrialCountdown />
+                    </div>
+                  )}
                   <AccountBadge showEmail={false} />
                 </div>
               )}

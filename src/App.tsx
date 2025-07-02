@@ -11,6 +11,7 @@ import { ListsProvider } from "./contexts/ListsContext";
 import { PricingProvider } from "./contexts/PricingContext";
 import { RevealProvider } from '@/contexts/RevealContext';
 import ProtectedRoute from "./components/auth/ProtectedRoute";
+import TrialGuard from "./components/auth/TrialGuard";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
@@ -87,15 +88,15 @@ function App() {
                       <Route path="/contact" element={<ContactUs />} />
                       <Route path="/free-trial" element={<Navigate to="/auth?tab=signup" replace />} />
                       
-                      {/* Protected Routes */}
-                      <Route path="/profile" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
-                      <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
-                      <Route path="/search" element={<ProtectedRoute><SearchResults /></ProtectedRoute>} />
-                      <Route path="/csv-upload" element={<ProtectedRoute><CsvUpload /></ProtectedRoute>} />
-                      <Route path="/csv-update" element={<ProtectedRoute><CsvUpdate /></ProtectedRoute>} />
+                      {/* Protected Routes with Trial Guard */}
+                      <Route path="/profile" element={<ProtectedRoute><TrialGuard><UserProfile /></TrialGuard></ProtectedRoute>} />
+                      <Route path="/settings" element={<ProtectedRoute><TrialGuard><Settings /></TrialGuard></ProtectedRoute>} />
+                      <Route path="/search" element={<ProtectedRoute><TrialGuard><SearchResults /></TrialGuard></ProtectedRoute>} />
+                      <Route path="/csv-upload" element={<ProtectedRoute><TrialGuard><CsvUpload /></TrialGuard></ProtectedRoute>} />
+                      <Route path="/csv-update" element={<ProtectedRoute><TrialGuard><CsvUpdate /></TrialGuard></ProtectedRoute>} />
                       
-                      {/* CRM System with sidebar layout - Protected */}
-                      <Route element={<ProtectedRoute><CrmLayout /></ProtectedRoute>}>
+                      {/* CRM System with sidebar layout - Protected with Trial Guard */}
+                      <Route element={<ProtectedRoute><TrialGuard><CrmLayout /></TrialGuard></ProtectedRoute>}>
                         <Route path="/database" element={<Navigate to="/crm/people" replace />} />
                         <Route path="/crm/database" element={<Navigate to="/crm/people" replace />} />
                         <Route path="/database/lists" element={<Lists />} />
