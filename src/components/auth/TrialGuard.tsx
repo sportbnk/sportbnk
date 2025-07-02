@@ -32,6 +32,7 @@ const TrialGuard: React.FC<TrialGuardProps> = ({ children }) => {
     }
 
     const checkTrialExpiry = () => {
+      console.log('checking')
       const signupDate = new Date(user.created_at);
       const now = new Date();
       const daysSinceSignup = Math.floor((now.getTime() - signupDate.getTime()) / (1000 * 60 * 60 * 24));
