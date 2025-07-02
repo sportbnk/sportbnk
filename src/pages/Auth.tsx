@@ -122,13 +122,18 @@ const Auth = () => {
 
       // Check phone in profiles table (if phone is provided)
       if (phone) {
-        const { data: phoneData, error: phoneError } = await supabase
-          .rpc('check_phone_exists', { phone_number: phone });
-        
-        if (phoneError) {
-          console.error('Error checking phone:', phoneError);
-        } else if (phoneData) {
-          return 'phone';
+        try {
+          const { data: phoneResponse, error: phoneError } = await supabase.functions.invoke('check-phone-exists', {
+            body: { phone_number: phone }
+          });
+          
+          if (phoneError) {
+            console.error('Error checking phone:', phoneError);
+          } else if (phoneResponse?.exists) {
+            return 'phone';
+          }
+        } catch (err) {
+          console.error('Error calling phone check function:', err);
         }
       }
 
@@ -235,13 +240,14 @@ const Auth = () => {
   };
 
   const handleResendVerification = async () => {
-    if (!signInData.email && !signUpData.email) {
+    const email = activeTab === 'signin' ? signInData.email : signUpData.email;
+    
+    if (!email) {
       setError('Please enter your email address');
       return;
     }
 
     setIsLoading(true);
-    const email = signInData.email || signUpData.email;
 
     try {
       const { error } = await resendVerification(email);
