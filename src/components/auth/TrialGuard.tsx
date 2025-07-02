@@ -36,7 +36,9 @@ const TrialGuard: React.FC<TrialGuardProps> = ({ children }) => {
       const now = new Date();
       const daysSinceSignup = Math.floor((now.getTime() - signupDate.getTime()) / (1000 * 60 * 60 * 24));
       
-      if (daysSinceSignup >= 14) {
+      if (daysSinceSignup >= 14 && 
+      !location.pathname.startsWith('/pricing') && 
+      !location.pathname.startsWith('/auth')) {
         setIsTrialExpired(true);
       } else {
         setIsTrialExpired(false);
@@ -53,7 +55,7 @@ const TrialGuard: React.FC<TrialGuardProps> = ({ children }) => {
   if (!user) {
     return <>{children}</>;
   }
-console.log('path', location.pathname)
+
   // Don't show trial expiry popup on pricing or auth pages
   if (tier === 'free' && isTrialExpired && 
       !location.pathname.startsWith('/pricing') && 
