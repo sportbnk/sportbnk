@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '@/components/auth/AuthContext';
 import { useCredits } from '@/contexts/CreditsContext';
-import { Navigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import {
   AlertDialog,
   AlertDialogContent,
@@ -22,6 +22,7 @@ const TrialGuard: React.FC<TrialGuardProps> = ({ children }) => {
   const { user } = useAuth();
   const { tier } = useCredits();
   const navigate = useNavigate();
+  const location = useLocation();
   const [isTrialExpired, setIsTrialExpired] = useState(false);
 
   useEffect(() => {
@@ -53,7 +54,8 @@ const TrialGuard: React.FC<TrialGuardProps> = ({ children }) => {
     return <>{children}</>;
   }
 
-  if (tier === 'free' && isTrialExpired) {
+  // Don't show trial expiry popup on pricing page
+  if (tier === 'free' && isTrialExpired && location.pathname !== '/pricing') {
     return (
       <AlertDialog open={true} onOpenChange={() => {}}>
         <AlertDialogContent className="max-w-md">
