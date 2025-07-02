@@ -54,8 +54,8 @@ const TrialGuard: React.FC<TrialGuardProps> = ({ children }) => {
     return <>{children}</>;
   }
 
-  // Don't show trial expiry popup on pricing page
-  if (tier === 'free' && isTrialExpired && location.pathname !== '/pricing') {
+  // Don't show trial expiry popup on pricing page or auth page
+  if (tier === 'free' && isTrialExpired && location.pathname !== '/pricing' && location.pathname !== '/auth') {
     return (
       <AlertDialog open={true} onOpenChange={() => {}}>
         <AlertDialogContent className="max-w-md">
