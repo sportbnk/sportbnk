@@ -26,8 +26,8 @@ const TrialGuard: React.FC<TrialGuardProps> = ({ children }) => {
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    // Don't show anything if no user or not free tier
-    if (!user || tier !== 'free') {
+    // Don't show anything if no user
+    if (!user) {
       setShowModal(false);
       return;
     }
@@ -38,9 +38,8 @@ const TrialGuard: React.FC<TrialGuardProps> = ({ children }) => {
       return;
     }
 
-    // Check if we've already shown the modal this session
-    const modalShownThisSession = sessionStorage.getItem('trialModalShown');
-    if (modalShownThisSession) {
+    // Only show for free tier users
+    if (tier !== 'free') {
       setShowModal(false);
       return;
     }
@@ -52,9 +51,17 @@ const TrialGuard: React.FC<TrialGuardProps> = ({ children }) => {
     
     // Show modal if trial has expired (14+ days)
     if (daysSinceSignup >= 14) {
-      setShowModal(true);
-      // Mark as shown for this session
-      sessionStorage.setItem('trialModalShown', 'true');
+      // Check if we've already shown the modal for this session and path
+      const modalKey = `trialModalShown_${location.pathname}`;
+      const modalShownForThisPath = sessionStorage.getItem(modalKey);
+      
+      if (!modalShownForThisPath) {
+        setShowModal(true);
+        // Mark as shown for this session and path
+        sessionStorage.setItem(modalKey, 'true');
+      }
+    } else {
+      setShowModal(false);
     }
   }, [user, tier, location.pathname]);
 
