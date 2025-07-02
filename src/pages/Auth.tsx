@@ -113,8 +113,8 @@ const Auth = () => {
       }
 
       // Check email in auth users
-      if (existingUsers) {
-        const emailExists = existingUsers.users.some(user => user.email === email);
+      if (existingUsers?.users) {
+        const emailExists = existingUsers.users.some((authUser: any) => authUser.email === email);
         if (emailExists) {
           return 'email';
         }
