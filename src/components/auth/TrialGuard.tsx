@@ -53,7 +53,7 @@ const TrialGuard: React.FC<TrialGuardProps> = ({ children }) => {
   if (!user) {
     return <>{children}</>;
   }
-
+console.log('path', location.pathname)
   // Don't show trial expiry popup on pricing or auth pages
   if (tier === 'free' && isTrialExpired && 
       !location.pathname.startsWith('/pricing') && 
