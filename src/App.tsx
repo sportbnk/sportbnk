@@ -46,7 +46,6 @@ import Recruit from "./pages/products/Recruit";
 // Company sub-pages
 import About from "./pages/company/About";
 import Careers from "./pages/company/Careers";
-import PartnerProgram from "./pages/company/PartnerProgram";
 import LatestNews from "./pages/company/LatestNews";
 import ScottMcKecknieArticle from "./pages/company/ScottMcKecknieArticle";
 

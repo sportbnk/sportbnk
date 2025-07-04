@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Menu, X, ChevronDown, Package, BarChart3, Building, BookOpen, DollarSign, Calendar, Users, Rocket, Shield, Briefcase, Newspaper, Phone, BookmarkPlus, Users2, FileText, Video, Headphones, Clipboard, MessageSquare, HelpCircle } from 'lucide-react';
+import { Menu, X, ChevronDown, Package, BarChart3, Building, BookOpen, DollarSign, Calendar, Users, Rocket, Briefcase, Newspaper, Phone, BookmarkPlus, Users2, FileText, Video, Headphones, Clipboard, MessageSquare, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -124,16 +124,6 @@ const Navbar = () => {
                               <Briefcase className="h-4 w-4 mr-2" /> Careers
                             </div>
                             <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Join our team</p>
-                          </Link>
-                        </NavigationMenuLink>
-                      </li>
-                      <li>
-                        <NavigationMenuLink asChild>
-                          <Link to="/company/partner-program" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
-                            <div className="text-sm font-medium text-sportbnk-navy flex items-center">
-                              <Shield className="h-4 w-4 mr-2" /> Partner Program
-                            </div>
-                            <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Collaborate with us</p>
                           </Link>
                         </NavigationMenuLink>
                       </li>
@@ -308,11 +298,6 @@ const Navbar = () => {
                 <DropdownMenuItem>
                   <Link to="/company/careers" className="w-full flex items-center">
                     <Briefcase className="h-4 w-4 mr-2" />Careers
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Link to="/company/partner-program" className="w-full flex items-center">
-                    <Shield className="h-4 w-4 mr-2" />Partner Program
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
