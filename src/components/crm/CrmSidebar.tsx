@@ -59,173 +59,177 @@ const CrmSidebar = () => {
   const isActive = (path: string) => location.pathname === path;
   
   return (
-    <Sidebar collapsible="none" className="border-r border-gray-200 h-screen flex-shrink-0 bg-white">
-      <SidebarHeader className="p-6 border-b border-gray-100">
+    <Sidebar collapsible="none" className="border-r border-slate-200 bg-white shadow-sm">
+      <SidebarHeader className="p-6 border-b border-slate-100">
         <div className="flex items-center justify-center">
           <img 
             src="/lovable-uploads/49b40e55-1e07-40a4-929b-470e2e85125d.png" 
             alt="Sportbnk Logo" 
-            className="h-15 w-15"
+            className="h-12 w-12"
           />
         </div>
       </SidebarHeader>
       
-      <SidebarContent className="flex-1 flex flex-col justify-between h-full bg-white">
-        {/* Primary Navigation */}
-        <div className="flex-1">
-          <SidebarGroup className="px-4 py-6">
-            <SidebarGroupContent>
-              <SidebarMenu className="space-y-1">
-                <SidebarMenuItem>
-                  <SidebarMenuButton 
-                    asChild 
-                    isActive={isActive("/crm/teams")}
-                    className={`w-full justify-start h-10 px-3 rounded-lg transition-all duration-200 ${
-                      isActive("/crm/teams") 
-                        ? "bg-blue-50 text-blue-700 border border-blue-200 font-medium" 
-                        : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
-                    }`}
-                  >
-                    <Link to="/crm/teams">
-                      <Building2 className="h-4 w-4 mr-3" />
-                      Organisations
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                  <SidebarMenuButton 
-                    asChild 
-                    isActive={isActive("/crm/people")}
-                    className={`w-full justify-start h-10 px-3 rounded-lg transition-all duration-200 ${
-                      isActive("/crm/people") 
-                        ? "bg-blue-50 text-blue-700 border border-blue-200 font-medium" 
-                        : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
-                    }`}
-                  >
-                    <Link to="/crm/people">
-                      <Users className="h-4 w-4 mr-3" />
-                      People
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                  <SidebarMenuButton 
-                    asChild 
-                    isActive={isActive("/database/lists")}
-                    className={`w-full justify-start h-10 px-3 rounded-lg transition-all duration-200 ${
-                      isActive("/database/lists") 
-                        ? "bg-blue-50 text-blue-700 border border-blue-200 font-medium" 
-                        : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
-                    }`}
-                  >
-                    <Link to="/database/lists">
-                      <List className="h-4 w-4 mr-3" />
-                      Lists
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
+      <SidebarContent className="flex-1 bg-white">
+        {/* DATABASE Section */}
+        <SidebarGroup className="px-4 py-3">
+          <SidebarGroupLabel className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2 px-3">
+            DATABASE
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu className="space-y-1">
+              <SidebarMenuItem>
+                <SidebarMenuButton 
+                  asChild 
+                  isActive={isActive("/crm/teams")}
+                  className={`w-full justify-start h-9 px-3 rounded-md transition-all duration-200 ${
+                    isActive("/crm/teams") 
+                      ? "bg-blue-50 text-blue-700 font-medium shadow-sm border border-blue-100" 
+                      : "text-slate-700 hover:bg-slate-50 hover:text-slate-900"
+                  }`}
+                >
+                  <Link to="/crm/teams">
+                    <Building2 className="h-4 w-4 mr-3" />
+                    Organisations
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton 
+                  asChild 
+                  isActive={isActive("/crm/people")}
+                  className={`w-full justify-start h-9 px-3 rounded-md transition-all duration-200 ${
+                    isActive("/crm/people") 
+                      ? "bg-blue-50 text-blue-700 font-medium shadow-sm border border-blue-100" 
+                      : "text-slate-700 hover:bg-slate-50 hover:text-slate-900"
+                  }`}
+                >
+                  <Link to="/crm/people">
+                    <Users className="h-4 w-4 mr-3" />
+                    People
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton 
+                  asChild 
+                  isActive={isActive("/database/lists")}
+                  className={`w-full justify-start h-9 px-3 rounded-md transition-all duration-200 ${
+                    isActive("/database/lists") 
+                      ? "bg-blue-50 text-blue-700 font-medium shadow-sm border border-blue-100" 
+                      : "text-slate-700 hover:bg-slate-50 hover:text-slate-900"
+                  }`}
+                >
+                  <Link to="/database/lists">
+                    <List className="h-4 w-4 mr-3" />
+                    Lists
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
 
-          <SidebarSeparator className="mx-4" />
+        <SidebarSeparator className="mx-4" />
 
-          {/* CRM Section */}
-          <SidebarGroup className="px-4 py-4">
-            <SidebarGroupLabel className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 px-3">
-              CRM
-            </SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu className="space-y-1">
-                <SidebarMenuItem>
-                  <SidebarMenuButton 
-                    asChild 
-                    isActive={isActive("/crm/leads")}
-                    className={`w-full justify-start h-10 px-3 rounded-lg transition-all duration-200 ${
-                      isActive("/crm/leads") 
-                        ? "bg-blue-50 text-blue-700 border border-blue-200 font-medium" 
-                        : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
-                    }`}
-                  >
-                    <Link to="/crm/leads">
-                      <UserRound className="h-4 w-4 mr-3" />
-                      Leads
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                  <SidebarMenuButton 
-                    asChild 
-                    isActive={isActive("/crm/calls")}
-                    className={`w-full justify-start h-10 px-3 rounded-lg transition-all duration-200 ${
-                      isActive("/crm/calls") 
-                        ? "bg-blue-50 text-blue-700 border border-blue-200 font-medium" 
-                        : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
-                    }`}
-                  >
-                    <Link to="/crm/calls">
-                      <Phone className="h-4 w-4 mr-3" />
-                      Calls
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                  <SidebarMenuButton 
-                    asChild 
-                    isActive={isActive("/crm/meetings")}
-                    className={`w-full justify-start h-10 px-3 rounded-lg transition-all duration-200 ${
-                      isActive("/crm/meetings") 
-                        ? "bg-blue-50 text-blue-700 border border-blue-200 font-medium" 
-                        : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
-                    }`}
-                  >
-                    <Link to="/crm/meetings">
-                      <Calendar className="h-4 w-4 mr-3" />
-                      Meetings
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        </div>
+        {/* CRM Section */}
+        <SidebarGroup className="px-4 py-3">
+          <SidebarGroupLabel className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2 px-3">
+            CRM
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu className="space-y-1">
+              <SidebarMenuItem>
+                <SidebarMenuButton 
+                  asChild 
+                  isActive={isActive("/crm/leads")}
+                  className={`w-full justify-start h-9 px-3 rounded-md transition-all duration-200 ${
+                    isActive("/crm/leads") 
+                      ? "bg-blue-50 text-blue-700 font-medium shadow-sm border border-blue-100" 
+                      : "text-slate-700 hover:bg-slate-50 hover:text-slate-900"
+                  }`}
+                >
+                  <Link to="/crm/leads">
+                    <UserRound className="h-4 w-4 mr-3" />
+                    Leads
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton 
+                  asChild 
+                  isActive={isActive("/crm/calls")}
+                  className={`w-full justify-start h-9 px-3 rounded-md transition-all duration-200 ${
+                    isActive("/crm/calls") 
+                      ? "bg-blue-50 text-blue-700 font-medium shadow-sm border border-blue-100" 
+                      : "text-slate-700 hover:bg-slate-50 hover:text-slate-900"
+                  }`}
+                >
+                  <Link to="/crm/calls">
+                    <Phone className="h-4 w-4 mr-3" />
+                    Calls
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton 
+                  asChild 
+                  isActive={isActive("/crm/meetings")}
+                  className={`w-full justify-start h-9 px-3 rounded-md transition-all duration-200 ${
+                    isActive("/crm/meetings") 
+                      ? "bg-blue-50 text-blue-700 font-medium shadow-sm border border-blue-100" 
+                      : "text-slate-700 hover:bg-slate-50 hover:text-slate-900"
+                  }`}
+                >
+                  <Link to="/crm/meetings">
+                    <Calendar className="h-4 w-4 mr-3" />
+                    Meetings
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
         
         {/* Bottom Navigation */}
-        <SidebarFooter className="p-4 border-t border-gray-100">
-          <SidebarGroup>
-            <SidebarGroupContent>
-              <SidebarMenu className="space-y-1">
-                <SidebarMenuItem>
-                  <SidebarMenuButton 
-                    onClick={handleProfileClick}
-                    className="w-full justify-start h-10 px-3 rounded-lg transition-all duration-200 text-gray-700 hover:bg-gray-50 hover:text-gray-900"
-                  >
-                    <User className="h-4 w-4 mr-3" />
-                    My Profile
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                  <SidebarMenuButton 
-                    onClick={handleSettingsClick}
-                    className="w-full justify-start h-10 px-3 rounded-lg transition-all duration-200 text-gray-700 hover:bg-gray-50 hover:text-gray-900"
-                  >
-                    <Settings className="h-4 w-4 mr-3" />
-                    Settings
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                  <SidebarMenuButton 
-                    onClick={handleLogout}
-                    className="w-full justify-start h-10 px-3 rounded-lg transition-all duration-200 text-red-600 hover:text-red-700 hover:bg-red-50"
-                  >
-                    <LogOut className="h-4 w-4 mr-3" />
-                    Log Out
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        </SidebarFooter>
+        <div className="mt-auto">
+          <SidebarSeparator className="mx-4" />
+          <SidebarFooter className="p-4">
+            <SidebarGroup>
+              <SidebarGroupContent>
+                <SidebarMenu className="space-y-1">
+                  <SidebarMenuItem>
+                    <SidebarMenuButton 
+                      onClick={handleProfileClick}
+                      className="w-full justify-start h-9 px-3 rounded-md transition-all duration-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900"
+                    >
+                      <User className="h-4 w-4 mr-3" />
+                      My Profile
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton 
+                      onClick={handleSettingsClick}
+                      className="w-full justify-start h-9 px-3 rounded-md transition-all duration-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900"
+                    >
+                      <Settings className="h-4 w-4 mr-3" />
+                      Settings
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton 
+                      onClick={handleLogout}
+                      className="w-full justify-start h-9 px-3 rounded-md transition-all duration-200 text-red-600 hover:text-red-700 hover:bg-red-50"
+                    >
+                      <LogOut className="h-4 w-4 mr-3" />
+                      Log Out
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+          </SidebarFooter>
+        </div>
       </SidebarContent>
     </Sidebar>
   );
