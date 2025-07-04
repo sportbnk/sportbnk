@@ -8,7 +8,6 @@ import Benefits from "@/components/Benefits";
 import TechnologyStack from "@/components/TechnologyStack";
 import Reviews from "@/components/Reviews";
 import EnhancedCTA from "@/components/EnhancedCTA";
-import ChatPopup from "@/components/ChatPopup";
 import TrustedSection from "@/components/TrustedSection";
 
 const Index = () => {
@@ -26,7 +25,6 @@ const Index = () => {
       <TechnologyStack />
       <Reviews />
       <EnhancedCTA />
-      <ChatPopup />
     </PageLayout>
   );
 };
