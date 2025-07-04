@@ -35,6 +35,7 @@ import Settings from "./pages/Settings";
 import SearchResults from "./pages/SearchResults";
 import CsvUpload from "./pages/CsvUpload";
 import CsvUpdate from "./pages/CsvUpdate";
+import Meetings from "./pages/crm/Meetings";
 
 // Product pages
 import Discover from "./pages/products/Discover";
@@ -105,6 +106,7 @@ function App() {
                         <Route path="/crm/teams/:teamId" element={<TeamDetails />} />
                         <Route path="/crm/people" element={<People />} />
                         <Route path="/crm/leads" element={<Leads />} />
+                        <Route path="/crm/meetings" element={<Meetings />} />
                       </Route>
                       
                       {/* Product sub-pages */}

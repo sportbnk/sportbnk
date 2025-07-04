@@ -1,43 +1,53 @@
 
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Calendar, Plus, Trash2, ExternalLink, Video, Phone } from "lucide-react";
+import { Calendar, Plus, Trash2, ExternalLink, Video, Phone, MapPin, Edit, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Form, FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { Badge } from "@/components/ui/badge";
 
 interface Meeting {
   id: string;
   title: string;
-  participants: string;
+  linkedContact: string;
   date: string;
   time: string;
-  duration: string;
-  type: "In-Person" | "Video Call" | "Phone Call";
+  status: "Scheduled" | "Completed" | "Cancelled" | "Rescheduled";
+  leadLink: string;
+  assignedTo: string;
   location: string;
   notes: string;
+  type: "In-Person" | "Video Call" | "Phone Call";
 }
 
 const Meetings = () => {
   const [meetings, setMeetings] = useState<Meeting[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedMeeting, setSelectedMeeting] = useState<Meeting | null>(null);
+  const [isDetailPanelOpen, setIsDetailPanelOpen] = useState(false);
+  const [filterStatus, setFilterStatus] = useState<string>("All");
+  const [filterTime, setFilterTime] = useState<string>("All");
+  const [searchTerm, setSearchTerm] = useState("");
   
   const form = useForm({
     defaultValues: {
       title: "",
-      participants: "",
+      linkedContact: "",
       date: new Date().toISOString().split('T')[0],
       time: "09:00",
-      duration: "30",
-      type: "Video Call" as const,
+      status: "Scheduled" as const,
+      leadLink: "",
+      assignedTo: "",
       location: "",
-      notes: ""
+      notes: "",
+      type: "Video Call" as const
     }
   });
 
@@ -58,117 +68,259 @@ const Meetings = () => {
 
   const deleteMeeting = (id: string) => {
     setMeetings(meetings.filter(meeting => meeting.id !== id));
+    setIsDetailPanelOpen(false);
     toast.info("Meeting deleted");
   };
 
-  const getMeetingTypeIcon = (type: string) => {
-    switch(type) {
-      case "Video Call":
-        return <Video className="h-4 w-4" />;
-      case "Phone Call":
-        return <Phone className="h-4 w-4" />;
+  const openDetailPanel = (meeting: Meeting) => {
+    setSelectedMeeting(meeting);
+    setIsDetailPanelOpen(true);
+  };
+
+  const getStatusColor = (status: string) => {
+    switch(status) {
+      case "Scheduled":
+        return "bg-blue-100 text-blue-700 border-blue-200";
+      case "Completed":
+        return "bg-green-100 text-green-700 border-green-200";
+      case "Cancelled":
+        return "bg-red-100 text-red-700 border-red-200";
+      case "Rescheduled":
+        return "bg-orange-100 text-orange-700 border-orange-200";
       default:
-        return <Calendar className="h-4 w-4" />;
+        return "bg-gray-100 text-gray-700 border-gray-200";
     }
   };
 
-  const getMeetingTypeColor = (type: string) => {
+  const getTypeIcon = (type: string) => {
     switch(type) {
       case "Video Call":
-        return "bg-blue-100 text-blue-700";
+        return <Video className="h-3 w-3" />;
       case "Phone Call":
-        return "bg-purple-100 text-purple-700";
+        return <Phone className="h-3 w-3" />;
       default:
-        return "bg-green-100 text-green-700";
+        return <MapPin className="h-3 w-3" />;
     }
   };
+
+  // Filter meetings based on status, time, and search
+  const filteredMeetings = meetings.filter(meeting => {
+    const matchesStatus = filterStatus === "All" || meeting.status === filterStatus;
+    const meetingDate = new Date(meeting.date);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    let matchesTime = true;
+    if (filterTime === "Upcoming") {
+      matchesTime = meetingDate >= today;
+    } else if (filterTime === "Past") {
+      matchesTime = meetingDate < today;
+    }
+    
+    const matchesSearch = meeting.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         meeting.linkedContact.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    return matchesStatus && matchesTime && matchesSearch;
+  });
+
+  // Calculate summary stats
+  const upcomingCount = meetings.filter(m => new Date(m.date) >= new Date()).length;
+  const pastCount = meetings.filter(m => new Date(m.date) < new Date()).length;
+  const completedCount = meetings.filter(m => m.status === "Completed").length;
+  const cancelledCount = meetings.filter(m => m.status === "Cancelled").length;
 
   return (
-    <div className="space-y-4">
-      <h1 className="text-2xl font-bold">Meetings & Calls</h1>
-      <div className="flex justify-end">
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <h1 className="text-2xl font-bold">Meeting Tracker</h1>
         <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90" onClick={() => setIsDialogOpen(true)}>
           <Plus className="h-4 w-4 mr-2" />
-          Schedule Meeting
+          Add Meeting
         </Button>
       </div>
+
+      {/* Summary Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Upcoming Meetings</p>
+                <p className="text-2xl font-bold text-blue-600">{upcomingCount}</p>
+              </div>
+              <Calendar className="h-8 w-8 text-blue-600" />
+            </div>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Past Meetings</p>
+                <p className="text-2xl font-bold text-gray-600">{pastCount}</p>
+              </div>
+              <Calendar className="h-8 w-8 text-gray-600" />
+            </div>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Completed</p>
+                <p className="text-2xl font-bold text-green-600">{completedCount}</p>
+              </div>
+              <Calendar className="h-8 w-8 text-green-600" />
+            </div>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Cancelled</p>
+                <p className="text-2xl font-bold text-red-600">{cancelledCount}</p>
+              </div>
+              <Calendar className="h-8 w-8 text-red-600" />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Filters and Search */}
       <Card>
-        <CardHeader className="pb-2">
-          <CardTitle className="text-xl flex items-center gap-2">
+        <CardContent className="p-4">
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex-1">
+              <Input
+                placeholder="Search meetings, contacts, or organizations..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+            <Select value={filterTime} onValueChange={setFilterTime}>
+              <SelectTrigger className="w-full md:w-40">
+                <SelectValue placeholder="Time filter" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="All">All Time</SelectItem>
+                <SelectItem value="Upcoming">Upcoming</SelectItem>
+                <SelectItem value="Past">Past</SelectItem>
+              </SelectContent>
+            </Select>
+            <Select value={filterStatus} onValueChange={setFilterStatus}>
+              <SelectTrigger className="w-full md:w-40">
+                <SelectValue placeholder="Status filter" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="All">All Status</SelectItem>
+                <SelectItem value="Scheduled">Scheduled</SelectItem>
+                <SelectItem value="Completed">Completed</SelectItem>
+                <SelectItem value="Cancelled">Cancelled</SelectItem>
+                <SelectItem value="Rescheduled">Rescheduled</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Meetings Table */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
             <Calendar className="h-5 w-5" />
-            Upcoming Meetings
+            Meetings ({filteredMeetings.length})
           </CardTitle>
         </CardHeader>
         <CardContent>
-          {meetings.length === 0 ? (
+          {filteredMeetings.length === 0 ? (
             <div className="h-64 flex items-center justify-center border rounded-md bg-muted/20">
-              <p className="text-muted-foreground">No upcoming meetings scheduled</p>
+              <p className="text-muted-foreground">No meetings found</p>
             </div>
           ) : (
-            <div className="divide-y">
-              {meetings.map(meeting => (
-                <div key={meeting.id} className="py-3 px-2 hover:bg-muted/30 rounded-md">
-                  <div className="flex justify-between items-start">
-                    <div className="w-full">
-                      <div className="flex justify-between w-full">
-                        <h3 className="font-medium">{meeting.title}</h3>
-                        <Button 
-                          variant="ghost" 
-                          size="icon" 
-                          className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                          onClick={() => deleteMeeting(meeting.id)}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                      <p className="text-sm text-muted-foreground">With: {meeting.participants}</p>
-                      <div className="flex flex-wrap gap-3 mt-2">
-                        <Badge variant="outline" className="bg-gray-100">
-                          <Calendar className="h-3 w-3 mr-1" />
-                          {meeting.date} at {meeting.time}
-                        </Badge>
-                        <Badge variant="outline" className="bg-gray-100">
-                          {meeting.duration} min
-                        </Badge>
-                        <Badge variant="outline" className={getMeetingTypeColor(meeting.type)}>
-                          {getMeetingTypeIcon(meeting.type)}
-                          <span className="ml-1">{meeting.type}</span>
-                        </Badge>
-                      </div>
-                      {meeting.location && (
-                        <div className="flex items-center mt-2 text-sm">
-                          <span className="font-medium mr-2">Location:</span> 
-                          {meeting.location.startsWith('http') ? (
-                            <a 
-                              href={meeting.location} 
-                              target="_blank" 
-                              rel="noopener noreferrer"
-                              className="text-blue-600 hover:underline flex items-center"
-                            >
-                              {meeting.location.substring(0, 30)}...
-                              <ExternalLink className="h-3 w-3 ml-1" />
-                            </a>
-                          ) : (
-                            <span>{meeting.location}</span>
-                          )}
+            <div className="rounded-md border">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Meeting Title</TableHead>
+                    <TableHead>With</TableHead>
+                    <TableHead>Date & Time</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Lead Link</TableHead>
+                    <TableHead>Assigned To</TableHead>
+                    <TableHead>Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {filteredMeetings.map((meeting) => (
+                    <TableRow 
+                      key={meeting.id} 
+                      className="cursor-pointer hover:bg-muted/50"
+                      onClick={() => openDetailPanel(meeting)}
+                    >
+                      <TableCell className="font-medium">
+                        <div className="flex items-center gap-2">
+                          {getTypeIcon(meeting.type)}
+                          {meeting.title}
                         </div>
-                      )}
-                      {meeting.notes && (
-                        <p className="mt-2 text-sm bg-muted/20 p-2 rounded-md">{meeting.notes}</p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ))}
+                      </TableCell>
+                      <TableCell>{meeting.linkedContact || "—"}</TableCell>
+                      <TableCell>
+                        <div className="text-sm">
+                          <div>{meeting.date}</div>
+                          <div className="text-gray-500">{meeting.time}</div>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant="outline" className={getStatusColor(meeting.status)}>
+                          {meeting.status}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>{meeting.leadLink || "—"}</TableCell>
+                      <TableCell>{meeting.assignedTo || "—"}</TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-1">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              openDetailPanel(meeting);
+                            }}
+                            className="h-8 w-8"
+                          >
+                            <Eye className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              deleteMeeting(meeting.id);
+                            }}
+                            className="h-8 w-8 text-red-600 hover:text-red-700 hover:bg-red-50"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             </div>
           )}
         </CardContent>
       </Card>
 
+      {/* Add Meeting Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="sm:max-w-[500px]">
+        <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Schedule a Meeting</DialogTitle>
+            <DialogTitle>Schedule New Meeting</DialogTitle>
           </DialogHeader>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -177,7 +329,7 @@ const Meetings = () => {
                 name="title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Meeting Title</FormLabel>
+                    <FormLabel>Meeting Title *</FormLabel>
                     <FormControl>
                       <Input placeholder="Sales Discussion" {...field} required />
                     </FormControl>
@@ -187,12 +339,12 @@ const Meetings = () => {
               
               <FormField
                 control={form.control}
-                name="participants"
+                name="linkedContact"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Participants</FormLabel>
+                    <FormLabel>Linked Contact/Organization *</FormLabel>
                     <FormControl>
-                      <Input placeholder="John Doe, Jane Smith" {...field} required />
+                      <Input placeholder="John Doe / ABC Sports Club" {...field} required />
                     </FormControl>
                   </FormItem>
                 )}
@@ -204,7 +356,7 @@ const Meetings = () => {
                   name="date"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Date</FormLabel>
+                      <FormLabel>Date *</FormLabel>
                       <FormControl>
                         <Input type="date" {...field} required />
                       </FormControl>
@@ -217,7 +369,7 @@ const Meetings = () => {
                   name="time"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Time</FormLabel>
+                      <FormLabel>Time *</FormLabel>
                       <FormControl>
                         <Input type="time" {...field} required />
                       </FormControl>
@@ -229,13 +381,23 @@ const Meetings = () => {
               <div className="grid grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
-                  name="duration"
+                  name="status"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Duration (minutes)</FormLabel>
-                      <FormControl>
-                        <Input type="number" min="5" placeholder="30" {...field} required />
-                      </FormControl>
+                      <FormLabel>Status</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select status" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="Scheduled">Scheduled</SelectItem>
+                          <SelectItem value="Completed">Completed</SelectItem>
+                          <SelectItem value="Cancelled">Cancelled</SelectItem>
+                          <SelectItem value="Rescheduled">Rescheduled</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </FormItem>
                   )}
                 />
@@ -246,10 +408,7 @@ const Meetings = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Meeting Type</FormLabel>
-                      <Select 
-                        onValueChange={field.onChange} 
-                        defaultValue={field.value}
-                      >
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Select type" />
@@ -268,15 +427,38 @@ const Meetings = () => {
               
               <FormField
                 control={form.control}
+                name="leadLink"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Lead Link</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Link to related lead or opportunity" {...field} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={form.control}
+                name="assignedTo"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Assigned To</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Team member responsible" {...field} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={form.control}
                 name="location"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Location / Meeting Link</FormLabel>
                     <FormControl>
-                      <Input 
-                        placeholder="Office address or video call link" 
-                        {...field} 
-                      />
+                      <Input placeholder="Office address or video call link" {...field} />
                     </FormControl>
                   </FormItem>
                 )}
@@ -290,7 +472,7 @@ const Meetings = () => {
                     <FormLabel>Notes</FormLabel>
                     <FormControl>
                       <Textarea 
-                        placeholder="Any preparation or agenda items..."
+                        placeholder="Meeting agenda, preparation items, or additional notes..."
                         className="min-h-[100px]"
                         {...field}
                       />
@@ -304,11 +486,101 @@ const Meetings = () => {
                   Cancel
                 </Button>
                 <Button type="submit" className="bg-sportbnk-green hover:bg-sportbnk-green/90">
-                  Schedule
+                  Schedule Meeting
                 </Button>
               </DialogFooter>
             </form>
           </Form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Meeting Detail Panel */}
+      <Dialog open={isDetailPanelOpen} onOpenChange={setIsDetailPanelOpen}>
+        <DialogContent className="sm:max-w-[500px] max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Calendar className="h-5 w-5" />
+              Meeting Details
+            </DialogTitle>
+          </DialogHeader>
+          {selectedMeeting && (
+            <div className="space-y-4">
+              <div>
+                <h3 className="font-semibold text-lg">{selectedMeeting.title}</h3>
+                <p className="text-gray-600">with {selectedMeeting.linkedContact}</p>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm font-medium text-gray-600">Date & Time</label>
+                  <p className="font-medium">{selectedMeeting.date} at {selectedMeeting.time}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-600">Status</label>
+                  <div className="mt-1">
+                    <Badge variant="outline" className={getStatusColor(selectedMeeting.status)}>
+                      {selectedMeeting.status}
+                    </Badge>
+                  </div>
+                </div>
+              </div>
+              
+              {selectedMeeting.leadLink && (
+                <div>
+                  <label className="text-sm font-medium text-gray-600">Lead Link</label>
+                  <p className="font-medium">{selectedMeeting.leadLink}</p>
+                </div>
+              )}
+              
+              {selectedMeeting.assignedTo && (
+                <div>
+                  <label className="text-sm font-medium text-gray-600">Assigned To</label>
+                  <p className="font-medium">{selectedMeeting.assignedTo}</p>
+                </div>
+              )}
+              
+              {selectedMeeting.location && (
+                <div>
+                  <label className="text-sm font-medium text-gray-600">Location</label>
+                  {selectedMeeting.location.startsWith('http') ? (
+                    <a 
+                      href={selectedMeeting.location} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:underline flex items-center gap-1"
+                    >
+                      {selectedMeeting.location}
+                      <ExternalLink className="h-3 w-3" />
+                    </a>
+                  ) : (
+                    <p className="font-medium">{selectedMeeting.location}</p>
+                  )}
+                </div>
+              )}
+              
+              {selectedMeeting.notes && (
+                <div>
+                  <label className="text-sm font-medium text-gray-600">Notes</label>
+                  <p className="bg-muted/20 p-3 rounded-md text-sm">{selectedMeeting.notes}</p>
+                </div>
+              )}
+              
+              <div className="flex gap-2 pt-4">
+                <Button variant="outline" className="flex-1">
+                  <Edit className="h-4 w-4 mr-2" />
+                  Edit Meeting
+                </Button>
+                <Button 
+                  variant="outline" 
+                  onClick={() => deleteMeeting(selectedMeeting.id)}
+                  className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                >
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  Delete
+                </Button>
+              </div>
+            </div>
+          )}
         </DialogContent>
       </Dialog>
     </div>
