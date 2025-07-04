@@ -19,7 +19,6 @@ import {
   Users,
   List,
   UserRound,
-  Phone,
   Calendar,
   User,
   Settings,
@@ -152,22 +151,6 @@ const CrmSidebar = () => {
                   <Link to="/crm/leads">
                     <UserRound className="h-4 w-4 mr-3" />
                     Leads
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton 
-                  asChild 
-                  isActive={isActive("/crm/calls")}
-                  className={`w-full justify-start h-9 px-3 rounded-lg transition-all duration-200 ${
-                    isActive("/crm/calls") 
-                      ? "bg-blue-50 text-blue-700 font-medium border border-blue-100" 
-                      : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
-                  }`}
-                >
-                  <Link to="/crm/calls">
-                    <Phone className="h-4 w-4 mr-3" />
-                    Calls
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
