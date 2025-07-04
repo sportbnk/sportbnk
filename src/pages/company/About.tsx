@@ -103,7 +103,7 @@ const About = () => {
             <TeamMember 
               name="Chris Watts" 
               role="CTO" 
-              image="/lovable-uploads/c2bb0cf0-d3be-4e93-b8a7-a21a62fc8171.png"
+              image="/lovable-uploads/42b58d44-dfc2-460a-afcd-df6b898f7824.png"
             />
             <TeamMember 
               name="Scott McKechnie" 
