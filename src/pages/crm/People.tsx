@@ -27,7 +27,9 @@ import { useToast } from "@/hooks/use-toast";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import ContactsFilters from "@/components/database/ContactsFilters";
 import ListSelectionPopover from "@/components/database/ListSelectionPopover";
+import AISearchBar from "@/components/database/AISearchBar";
 import { useReveal } from "@/contexts/RevealContext";
+import { useCredits } from "@/contexts/CreditsContext";
 
 const People = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -42,9 +44,14 @@ const People = () => {
     revenue: "all",
     employees: "all"
   });
+  const [aiResults, setAiResults] = useState<any[]>([]);
+  const [isAiSearchActive, setIsAiSearchActive] = useState(false);
+  const [aiQuery, setAiQuery] = useState('');
+  const [isAiLoading, setIsAiLoading] = useState(false);
   
   const { toast } = useToast();
   const { isRevealed, canReveal, revealContact, loading: revealLoading } = useReveal();
+  const { credits, tier } = useCredits();
 
   const pageSize = 50;
 
@@ -84,12 +91,28 @@ const People = () => {
   const handleFilterChange = (newFilters: any) => {
     setFilters(newFilters);
     setCurrentPage(1);
+    // Clear AI search when using filters
+    setIsAiSearchActive(false);
+    setAiResults([]);
+    setAiQuery('');
   };
 
   // Reset to first page when search changes
   const handleSearchChange = (value: string) => {
     setSearchTerm(value);
     setCurrentPage(1);
+  };
+
+  const handleAiResults = (results: any[], query: string) => {
+    console.log('AI search results received:', results);
+    setAiResults(results);
+    setIsAiSearchActive(results.length > 0 || query.length > 0);
+    setAiQuery(query);
+    setCurrentPage(1);
+  };
+
+  const handleAiLoading = (loading: boolean) => {
+    setIsAiLoading(loading);
   };
 
   // Fetch all departments to get ID for the selected position
@@ -174,6 +197,9 @@ const People = () => {
   const { data: totalCount } = useQuery({
     queryKey: ['contacts-count', filters.position, filters.team, searchTerm],
     queryFn: async () => {
+      // Skip count query if AI search is active
+      if (isAiSearchActive) return aiResults.length;
+      
       console.log('Fetching contacts count with position filter:', filters.position, 'and team filter:', filters.team);
       
       let query = supabase
@@ -211,12 +237,19 @@ const People = () => {
       console.log('Total contacts count:', count);
       return count || 0;
     },
-    enabled: !!allDepartments, // Only run query when departments are loaded
+    enabled: !!allDepartments && !isAiSearchActive, // Only run query when departments are loaded and AI search is not active
   });
 
   const { data: contacts, isLoading } = useQuery({
     queryKey: ['contacts', filters.position, filters.team, searchTerm, currentPage],
     queryFn: async () => {
+      // Return AI results if AI search is active
+      if (isAiSearchActive) {
+        const startIdx = (currentPage - 1) * pageSize;
+        const endIdx = startIdx + pageSize;
+        return aiResults.slice(startIdx, endIdx);
+      }
+
       console.log('Fetching contacts with position filter:', filters.position, 'and team filter:', filters.team, 'page:', currentPage);
       
       let query = supabase
@@ -282,7 +315,7 @@ const People = () => {
       console.log('Fetched contacts data:', data);
       return data || [];
     },
-    enabled: !!allDepartments, // Only run query when departments are loaded
+    enabled: !!allDepartments && !isAiLoading, // Only run query when departments are loaded and AI is not loading
   });
 
   // Calculate total pages
@@ -321,14 +354,16 @@ const People = () => {
     });
   };
 
-  if (isLoading) {
+  if (isLoading || isAiLoading) {
     return (
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">People Database</h1>
         </div>
         <div className="flex justify-center items-center py-10">
-          <p className="text-muted-foreground">Loading contacts...</p>
+          <p className="text-muted-foreground">
+            {isAiLoading ? 'Processing AI search...' : 'Loading contacts...'}
+          </p>
         </div>
       </div>
     );
@@ -338,22 +373,11 @@ const People = () => {
     <div className="container mx-auto px-4">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">People Database</h1>
-        <div className="flex items-center space-x-4">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-            <Input
-              placeholder="Search contacts..."
-              value={searchTerm}
-              onChange={(e) => handleSearchChange(e.target.value)}
-              className="pl-10 w-64"
-            />
-          </div>
-        </div>
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
         <div className="md:col-span-1">
-          <Card className="shadow-md">
+          <Card className="shadow-md mb-4">
             <CardHeader className="pb-2 pt-4 px-4">
               <CardTitle className="text-base font-semibold">Filters</CardTitle>
             </CardHeader>
@@ -366,17 +390,46 @@ const People = () => {
               />
             </CardContent>
           </Card>
+          
+          <Card className="shadow-md">
+            <CardHeader className="pb-2 pt-4 px-4">
+              <CardTitle className="text-base font-semibold">Credits</CardTitle>
+            </CardHeader>
+            <CardContent className="px-4 py-3">
+              <p className="text-2xl font-bold text-green-600">{credits}</p>
+              <p className="text-sm text-muted-foreground">Credits remaining</p>
+              <p className="text-xs text-muted-foreground capitalize mb-4">({tier} plan)</p>
+              <Button className="w-full mt-4 bg-blue-800 hover:bg-blue-900 text-base">
+                Upgrade
+              </Button>
+            </CardContent>
+          </Card>
         </div>
         
         <div className="md:col-span-5">
+          <Card className="shadow-md mb-4">
+            <CardContent className="p-4">
+              <AISearchBar 
+                onResults={handleAiResults}
+                onLoading={handleAiLoading}
+              />
+            </CardContent>
+          </Card>
+          
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center justify-between">
                 <span>Contact Database</span>
                 <span className="text-sm font-normal text-muted-foreground">
-                  {formatNumber(totalCount || 0)} total results
-                  {totalPages > 1 && (
-                    <span> • Page {currentPage} of {totalPages}</span>
+                  {isAiSearchActive && aiQuery ? (
+                    <>AI Search: "{aiQuery}" • {formatNumber(totalCount || 0)} results</>
+                  ) : (
+                    <>
+                      {formatNumber(totalCount || 0)} total results
+                      {totalPages > 1 && (
+                        <span> • Page {currentPage} of {totalPages}</span>
+                      )}
+                    </>
                   )}
                 </span>
               </CardTitle>
