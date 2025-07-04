@@ -1,7 +1,7 @@
 
 import PageLayout from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
-import { Mail } from "lucide-react";
+import { Mail, Users, Award, Globe } from "lucide-react";
 
 const Careers = () => {
   return (
@@ -19,8 +19,9 @@ const Careers = () => {
             </p>
           </div>
           
-          <div className="max-w-2xl mx-auto text-center bg-white p-8 rounded-lg border border-gray-200 shadow-sm">
-            <div className="mb-6">
+          <div className="max-w-2xl mx-auto space-y-12">
+            {/* Currently No Open Positions */}
+            <div className="text-center bg-white p-8 rounded-lg border border-gray-200 shadow-sm">
               <div className="bg-sportbnk-green/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Mail className="w-8 h-8 text-sportbnk-green" />
               </div>
@@ -43,21 +44,19 @@ const Careers = () => {
                 </a>
               </Button>
             </div>
-          </div>
-        </div>
-      </section>
-      
-      <section className="py-16 bg-sportbnk-lightGrey">
-        <div className="container mx-auto px-4 md:px-6">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-3xl font-bold text-sportbnk-navy mb-4">
+
+            {/* Life at Sportsbnk */}
+            <div className="bg-white p-8 rounded-lg border border-gray-200 shadow-sm">
+              <div className="bg-sportbnk-green/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Users className="w-8 h-8 text-sportbnk-green" />
+              </div>
+              <h3 className="text-2xl font-bold text-sportbnk-navy mb-4 text-center">
                 Life at Sportsbnk
-              </h2>
-              <p className="text-lg text-gray-600 mb-6">
+              </h3>
+              <p className="text-lg text-gray-600 mb-6 text-center">
                 We believe in creating a workplace where innovation thrives and everyone can do their best work. Our culture is built on collaboration, continuous learning, and a shared passion for sports and data.
               </p>
-              <div className="space-y-4 mb-8">
+              <div className="space-y-4">
                 <div className="flex items-start">
                   <span className="text-sportbnk-green mr-2 font-bold text-lg">✓</span>
                   <p>Flexible remote-first working environment</p>
@@ -76,12 +75,30 @@ const Careers = () => {
                 </div>
               </div>
             </div>
-            <div>
-              <img 
-                src="/lovable-uploads/c5351de4-d54d-424f-99a5-b07ddc3fcc40.png" 
-                alt="Life at Sportsbnk" 
-                className="rounded-lg shadow-lg"
-              />
+
+            {/* Why Choose Us */}
+            <div className="bg-white p-8 rounded-lg border border-gray-200 shadow-sm">
+              <div className="bg-sportbnk-green/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Award className="w-8 h-8 text-sportbnk-green" />
+              </div>
+              <h3 className="text-2xl font-bold text-sportbnk-navy mb-4 text-center">
+                Why Choose Sportsbnk
+              </h3>
+              <p className="text-lg text-gray-600 mb-6 text-center">
+                Join a company that's making a real difference in the sports industry while building your career with cutting-edge technology and passionate professionals.
+              </p>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="text-center">
+                  <Globe className="w-12 h-12 text-sportbnk-green mx-auto mb-3" />
+                  <h4 className="font-semibold text-sportbnk-navy mb-2">Global Impact</h4>
+                  <p className="text-gray-600">Work on products that connect sports organizations worldwide</p>
+                </div>
+                <div className="text-center">
+                  <Users className="w-12 h-12 text-sportbnk-green mx-auto mb-3" />
+                  <h4 className="font-semibold text-sportbnk-navy mb-2">Amazing Team</h4>
+                  <p className="text-gray-600">Collaborate with industry experts and passionate professionals</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
