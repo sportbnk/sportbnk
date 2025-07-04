@@ -140,6 +140,98 @@ export type Database = {
         }
         Relationships: []
       }
+      lead_activities: {
+        Row: {
+          activity_type: string
+          created_at: string
+          description: string
+          id: string
+          lead_id: string
+          user_id: string
+        }
+        Insert: {
+          activity_type: string
+          created_at?: string
+          description: string
+          id?: string
+          lead_id: string
+          user_id: string
+        }
+        Update: {
+          activity_type?: string
+          created_at?: string
+          description?: string
+          id?: string
+          lead_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lead_activities_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      leads: {
+        Row: {
+          assigned_to: string | null
+          company_name: string
+          contact_person: string
+          created_at: string
+          date_added: string
+          email: string | null
+          id: string
+          last_contacted: string | null
+          lead_source: string | null
+          lead_status: string
+          next_action: string | null
+          notes: string | null
+          phone: string | null
+          tags: string[] | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          assigned_to?: string | null
+          company_name: string
+          contact_person: string
+          created_at?: string
+          date_added?: string
+          email?: string | null
+          id?: string
+          last_contacted?: string | null
+          lead_source?: string | null
+          lead_status?: string
+          next_action?: string | null
+          notes?: string | null
+          phone?: string | null
+          tags?: string[] | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          assigned_to?: string | null
+          company_name?: string
+          contact_person?: string
+          created_at?: string
+          date_added?: string
+          email?: string | null
+          id?: string
+          last_contacted?: string | null
+          lead_source?: string | null
+          lead_status?: string
+          next_action?: string | null
+          notes?: string | null
+          phone?: string | null
+          tags?: string[] | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       list_items: {
         Row: {
           contact_id: string
