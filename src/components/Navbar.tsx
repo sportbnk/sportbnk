@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Menu, X, ChevronDown, Package, BarChart3, Building, BookOpen, DollarSign, Calendar, Users, Rocket, Briefcase, Newspaper, Phone, BookmarkPlus, Users2, FileText, Video, Headphones, Clipboard, MessageSquare, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -106,7 +107,7 @@ const Navbar = () => {
                     Company
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
-                    <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2">
+                    <ul className="grid w-[400px] gap-3 p-4">
                       <li>
                         <NavigationMenuLink asChild>
                           <Link to="/company/about" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
