@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -30,6 +29,7 @@ import Lists from "./pages/crm/Lists";
 import Teams from "./pages/crm/Teams";
 import People from "./pages/crm/People";
 import TeamDetails from "./pages/crm/TeamDetails";
+import Leads from "./pages/crm/Leads";
 import UserProfile from "./pages/UserProfile";
 import Settings from "./pages/Settings";
 import SearchResults from "./pages/SearchResults";
@@ -104,6 +104,7 @@ function App() {
                         <Route path="/crm/teams" element={<Teams />} />
                         <Route path="/crm/teams/:teamId" element={<TeamDetails />} />
                         <Route path="/crm/people" element={<People />} />
+                        <Route path="/crm/leads" element={<Leads />} />
                       </Route>
                       
                       {/* Product sub-pages */}
