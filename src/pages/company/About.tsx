@@ -98,7 +98,7 @@ const About = () => {
             <TeamMember 
               name="Jared Wilson" 
               role="CEO & Founder" 
-              image="/lovable-uploads/096953ad-880b-4459-b15f-df09faedf010.png"
+              image="/lovable-uploads/5fd548ad-aa03-4895-ac96-cdf4cf77704b.png"
             />
             <TeamMember 
               name="Chris Watts" 
