@@ -1,14 +1,12 @@
-
 import React, { useState, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import ContactsFilters from "@/components/database/ContactsFilters";
 import ContactsTable from "@/components/database/ContactsTable";
+import AISearchBar from "@/components/database/AISearchBar";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { useCredits } from "@/contexts/CreditsContext";
-import { Search } from "lucide-react";
 import {
   Pagination,
   PaginationContent,
@@ -18,6 +16,8 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { Search } from "lucide-react";
+import { Input } from "@/components/ui/input";
 
 // DTO interfaces for proper typing
 interface SportDTO {
@@ -57,6 +57,10 @@ export default function Teams() {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [aiResults, setAiResults] = useState<any[]>([]);
+  const [isAiSearchActive, setIsAiSearchActive] = useState(false);
+  const [aiQuery, setAiQuery] = useState('');
+  const [isAiLoading, setIsAiLoading] = useState(false);
   const { credits, tier } = useCredits();
 
   const pageSize = 50;
@@ -98,12 +102,22 @@ export default function Teams() {
     console.log('Filter change received:', newFilters);
     setFilters(newFilters);
     setCurrentPage(1);
+    // Clear AI search when using filters
+    setIsAiSearchActive(false);
+    setAiResults([]);
+    setAiQuery('');
   }, []);
 
-  // Reset to first page when search changes
-  const handleSearchChange = (value: string) => {
-    setSearchTerm(value);
+  const handleAiResults = (results: any[], query: string) => {
+    console.log('AI search results received:', results);
+    setAiResults(results);
+    setIsAiSearchActive(results.length > 0 || query.length > 0);
+    setAiQuery(query);
     setCurrentPage(1);
+  };
+
+  const handleAiLoading = (loading: boolean) => {
+    setIsAiLoading(loading);
   };
 
   // Search for specific team function
@@ -156,6 +170,9 @@ export default function Teams() {
   const { data: totalCount } = useQuery({
     queryKey: ['teams-count', filters, searchTerm],
     queryFn: async () => {
+      // Skip count query if AI search is active
+      if (isAiSearchActive) return aiResults.length;
+      
       console.log('Fetching teams count with filters:', filters);
       
       let query = supabase
@@ -220,11 +237,19 @@ export default function Teams() {
       console.log('Total teams count:', count);
       return count || 0;
     },
+    enabled: !isAiSearchActive, // Only run when AI search is not active
   });
 
   const { data: organizationsData, isLoading } = useQuery({
     queryKey: ['organizations', filters, searchTerm, currentPage],
     queryFn: async () => {
+      // Return AI results if AI search is active
+      if (isAiSearchActive) {
+        const startIdx = (currentPage - 1) * pageSize;
+        const endIdx = startIdx + pageSize;
+        return aiResults.slice(startIdx, endIdx);
+      }
+
       console.log('Fetching organizations with filters:', filters, 'page:', currentPage);
       
       let query = supabase
@@ -331,7 +356,8 @@ export default function Teams() {
       
       console.log('Final transformed data:', transformedData);
       return transformedData;
-    }
+    },
+    enabled: !isAiLoading, // Don't fetch while AI is loading
   });
 
   // Calculate total pages
@@ -343,14 +369,16 @@ export default function Teams() {
     console.log(`Using ${amount} credits`);
   };
 
-  if (isLoading) {
+  if (isLoading || isAiLoading) {
     return (
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">Organisations Database</h1>
         </div>
         <div className="flex justify-center items-center py-10">
-          <p className="text-muted-foreground">Loading organizations...</p>
+          <p className="text-muted-foreground">
+            {isAiLoading ? 'Processing AI search...' : 'Loading organizations...'}
+          </p>
         </div>
       </div>
     );
@@ -360,10 +388,10 @@ export default function Teams() {
   const tableData = (organizationsData || []).map(org => ({
     id: org.id,
     team: org.name, // Map name to team field for table display
-    sport: org.sport.name,
+    sport: org.sport?.name || 'Not specified',
     level: org.level || '',
-    city: org.city.name,
-    country: org.city.country.name,
+    city: org.city?.name || 'Not specified',
+    country: org.city?.country?.name || 'Not specified',
     revenue: org.revenue || 0,
     employees: org.employees || 0,
     logo: '', // No logo in current schema
@@ -422,15 +450,10 @@ export default function Teams() {
         <div className="md:col-span-5">
           <Card className="shadow-md mb-4">
             <CardContent className="p-4">
-              <div className="flex items-center space-x-2">
-                <Search className="h-4 w-4 text-gray-400" />
-                <Input
-                  placeholder="Search organizations by name..."
-                  value={searchTerm}
-                  onChange={(e) => handleSearchChange(e.target.value)}
-                  className="flex-1"
-                />
-              </div>
+              <AISearchBar 
+                onResults={handleAiResults}
+                onLoading={handleAiLoading}
+              />
             </CardContent>
           </Card>
           
@@ -439,9 +462,15 @@ export default function Teams() {
               <CardTitle className="flex items-center justify-between">
                 <span>Organization Database</span>
                 <span className="text-sm font-normal text-muted-foreground">
-                  {formatNumber(totalCount || 0)} total results
-                  {totalPages > 1 && (
-                    <span> • Page {currentPage} of {totalPages}</span>
+                  {isAiSearchActive && aiQuery ? (
+                    <>AI Search: "{aiQuery}" • {formatNumber(totalCount || 0)} results</>
+                  ) : (
+                    <>
+                      {formatNumber(totalCount || 0)} total results
+                      {totalPages > 1 && (
+                        <span> • Page {currentPage} of {totalPages}</span>
+                      )}
+                    </>
                   )}
                 </span>
               </CardTitle>
