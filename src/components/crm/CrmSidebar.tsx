@@ -56,7 +56,7 @@ const CrmSidebar = () => {
           <img 
             src="/lovable-uploads/00378257-509b-45bf-9cf1-c3d95ecb0489.png" 
             alt="SportBnk Logo" 
-            className="h-8 w-auto"
+            className="h-12 w-auto"
           />
         </div>
       </SidebarHeader>

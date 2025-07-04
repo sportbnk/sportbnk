@@ -43,7 +43,7 @@ const Navbar = () => {
             <img 
               src="/lovable-uploads/00378257-509b-45bf-9cf1-c3d95ecb0489.png" 
               alt="Sportbnk Logo" 
-              className="h-10"
+              className="h-14"
             />
           </Link>
 
