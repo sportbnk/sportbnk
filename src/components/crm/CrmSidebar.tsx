@@ -59,33 +59,33 @@ const CrmSidebar = () => {
   const isActive = (path: string) => location.pathname === path;
   
   return (
-    <Sidebar collapsible="none" className="border-r border-slate-200 bg-white shadow-sm">
-      <SidebarHeader className="p-6 border-b border-slate-100">
+    <Sidebar collapsible="none" className="border-r border-gray-200 bg-white">
+      <SidebarHeader className="p-6 border-b border-gray-50">
         <div className="flex items-center justify-center">
           <img 
-            src="/lovable-uploads/49b40e55-1e07-40a4-929b-470e2e85125d.png" 
+            src="/lovable-uploads/49be807e-9d72-4739-9501-f3a01f68b03a.png" 
             alt="Sportbnk Logo" 
-            className="h-12 w-12"
+            className="h-10 w-auto"
           />
         </div>
       </SidebarHeader>
       
       <SidebarContent className="flex-1 bg-white">
         {/* DATABASE Section */}
-        <SidebarGroup className="px-4 py-3">
-          <SidebarGroupLabel className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2 px-3">
+        <SidebarGroup className="px-3 py-2">
+          <SidebarGroupLabel className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 px-3">
             DATABASE
           </SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu className="space-y-1">
+            <SidebarMenu className="space-y-0.5">
               <SidebarMenuItem>
                 <SidebarMenuButton 
                   asChild 
                   isActive={isActive("/crm/teams")}
-                  className={`w-full justify-start h-9 px-3 rounded-md transition-all duration-200 ${
+                  className={`w-full justify-start h-9 px-3 rounded-lg transition-all duration-200 ${
                     isActive("/crm/teams") 
-                      ? "bg-blue-50 text-blue-700 font-medium shadow-sm border border-blue-100" 
-                      : "text-slate-700 hover:bg-slate-50 hover:text-slate-900"
+                      ? "bg-blue-50 text-blue-700 font-medium border border-blue-100" 
+                      : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
                   }`}
                 >
                   <Link to="/crm/teams">
@@ -98,10 +98,10 @@ const CrmSidebar = () => {
                 <SidebarMenuButton 
                   asChild 
                   isActive={isActive("/crm/people")}
-                  className={`w-full justify-start h-9 px-3 rounded-md transition-all duration-200 ${
+                  className={`w-full justify-start h-9 px-3 rounded-lg transition-all duration-200 ${
                     isActive("/crm/people") 
-                      ? "bg-blue-50 text-blue-700 font-medium shadow-sm border border-blue-100" 
-                      : "text-slate-700 hover:bg-slate-50 hover:text-slate-900"
+                      ? "bg-blue-50 text-blue-700 font-medium border border-blue-100" 
+                      : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
                   }`}
                 >
                   <Link to="/crm/people">
@@ -114,10 +114,10 @@ const CrmSidebar = () => {
                 <SidebarMenuButton 
                   asChild 
                   isActive={isActive("/database/lists")}
-                  className={`w-full justify-start h-9 px-3 rounded-md transition-all duration-200 ${
+                  className={`w-full justify-start h-9 px-3 rounded-lg transition-all duration-200 ${
                     isActive("/database/lists") 
-                      ? "bg-blue-50 text-blue-700 font-medium shadow-sm border border-blue-100" 
-                      : "text-slate-700 hover:bg-slate-50 hover:text-slate-900"
+                      ? "bg-blue-50 text-blue-700 font-medium border border-blue-100" 
+                      : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
                   }`}
                 >
                   <Link to="/database/lists">
@@ -133,20 +133,20 @@ const CrmSidebar = () => {
         <SidebarSeparator className="mx-4" />
 
         {/* CRM Section */}
-        <SidebarGroup className="px-4 py-3">
-          <SidebarGroupLabel className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2 px-3">
+        <SidebarGroup className="px-3 py-2">
+          <SidebarGroupLabel className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 px-3">
             CRM
           </SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu className="space-y-1">
+            <SidebarMenu className="space-y-0.5">
               <SidebarMenuItem>
                 <SidebarMenuButton 
                   asChild 
                   isActive={isActive("/crm/leads")}
-                  className={`w-full justify-start h-9 px-3 rounded-md transition-all duration-200 ${
+                  className={`w-full justify-start h-9 px-3 rounded-lg transition-all duration-200 ${
                     isActive("/crm/leads") 
-                      ? "bg-blue-50 text-blue-700 font-medium shadow-sm border border-blue-100" 
-                      : "text-slate-700 hover:bg-slate-50 hover:text-slate-900"
+                      ? "bg-blue-50 text-blue-700 font-medium border border-blue-100" 
+                      : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
                   }`}
                 >
                   <Link to="/crm/leads">
@@ -159,10 +159,10 @@ const CrmSidebar = () => {
                 <SidebarMenuButton 
                   asChild 
                   isActive={isActive("/crm/calls")}
-                  className={`w-full justify-start h-9 px-3 rounded-md transition-all duration-200 ${
+                  className={`w-full justify-start h-9 px-3 rounded-lg transition-all duration-200 ${
                     isActive("/crm/calls") 
-                      ? "bg-blue-50 text-blue-700 font-medium shadow-sm border border-blue-100" 
-                      : "text-slate-700 hover:bg-slate-50 hover:text-slate-900"
+                      ? "bg-blue-50 text-blue-700 font-medium border border-blue-100" 
+                      : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
                   }`}
                 >
                   <Link to="/crm/calls">
@@ -175,10 +175,10 @@ const CrmSidebar = () => {
                 <SidebarMenuButton 
                   asChild 
                   isActive={isActive("/crm/meetings")}
-                  className={`w-full justify-start h-9 px-3 rounded-md transition-all duration-200 ${
+                  className={`w-full justify-start h-9 px-3 rounded-lg transition-all duration-200 ${
                     isActive("/crm/meetings") 
-                      ? "bg-blue-50 text-blue-700 font-medium shadow-sm border border-blue-100" 
-                      : "text-slate-700 hover:bg-slate-50 hover:text-slate-900"
+                      ? "bg-blue-50 text-blue-700 font-medium border border-blue-100" 
+                      : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
                   }`}
                 >
                   <Link to="/crm/meetings">
@@ -194,14 +194,14 @@ const CrmSidebar = () => {
         {/* Bottom Navigation */}
         <div className="mt-auto">
           <SidebarSeparator className="mx-4" />
-          <SidebarFooter className="p-4">
+          <SidebarFooter className="p-3">
             <SidebarGroup>
               <SidebarGroupContent>
-                <SidebarMenu className="space-y-1">
+                <SidebarMenu className="space-y-0.5">
                   <SidebarMenuItem>
                     <SidebarMenuButton 
                       onClick={handleProfileClick}
-                      className="w-full justify-start h-9 px-3 rounded-md transition-all duration-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900"
+                      className="w-full justify-start h-9 px-3 rounded-lg transition-all duration-200 text-gray-700 hover:bg-gray-50 hover:text-gray-900"
                     >
                       <User className="h-4 w-4 mr-3" />
                       My Profile
@@ -210,7 +210,7 @@ const CrmSidebar = () => {
                   <SidebarMenuItem>
                     <SidebarMenuButton 
                       onClick={handleSettingsClick}
-                      className="w-full justify-start h-9 px-3 rounded-md transition-all duration-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900"
+                      className="w-full justify-start h-9 px-3 rounded-lg transition-all duration-200 text-gray-700 hover:bg-gray-50 hover:text-gray-900"
                     >
                       <Settings className="h-4 w-4 mr-3" />
                       Settings
@@ -219,7 +219,7 @@ const CrmSidebar = () => {
                   <SidebarMenuItem>
                     <SidebarMenuButton 
                       onClick={handleLogout}
-                      className="w-full justify-start h-9 px-3 rounded-md transition-all duration-200 text-red-600 hover:text-red-700 hover:bg-red-50"
+                      className="w-full justify-start h-9 px-3 rounded-lg transition-all duration-200 text-red-600 hover:text-red-700 hover:bg-red-50"
                     >
                       <LogOut className="h-4 w-4 mr-3" />
                       Log Out
