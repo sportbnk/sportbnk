@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
@@ -54,7 +53,7 @@ const CrmSidebar = () => {
       <SidebarHeader className="p-4 border-b">
         <div className="flex items-center justify-center">
           <img 
-            src="/lovable-uploads/00378257-509b-45bf-9cf1-c3d95ecb0489.png" 
+            src="/lovable-uploads/49b40e55-1e07-40a4-929b-470e2e85125d.png" 
             alt="SportBnk Logo" 
             className="h-12 w-auto"
           />

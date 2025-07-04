@@ -41,7 +41,7 @@ const Navbar = () => {
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center">
             <img 
-              src="/lovable-uploads/00378257-509b-45bf-9cf1-c3d95ecb0489.png" 
+              src="/lovable-uploads/49b40e55-1e07-40a4-929b-470e2e85125d.png" 
               alt="Sportbnk Logo" 
               className="h-14"
             />
