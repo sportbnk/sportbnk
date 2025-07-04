@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -97,8 +98,8 @@ function App() {
                       
                       {/* CRM System with sidebar layout - Protected with Trial Guard */}
                       <Route element={<ProtectedRoute><TrialGuard><CrmLayout /></TrialGuard></ProtectedRoute>}>
-                        <Route path="/database" element={<Navigate to="/crm/people" replace />} />
-                        <Route path="/crm/database" element={<Navigate to="/crm/people" replace />} />
+                        <Route path="/database" element={<Navigate to="/crm/teams" replace />} />
+                        <Route path="/crm/database" element={<Navigate to="/crm/teams" replace />} />
                         <Route path="/database/lists" element={<Lists />} />
                         <Route path="/crm/teams" element={<Teams />} />
                         <Route path="/crm/teams/:teamId" element={<TeamDetails />} />
