@@ -14,9 +14,9 @@ export const TeamMember: React.FC<TeamMemberProps> = ({ name, role, image }) => 
   <Card className="border-0 shadow-sm overflow-hidden">
     <div className="aspect-square overflow-hidden bg-gray-100 flex items-center justify-center">
       <img 
-        src="/lovable-uploads/b95abe05-7dc8-449e-91a1-c17046b01f5e.png" 
+        src={image} 
         alt={name} 
-        className="w-3/5 h-3/5 object-contain"
+        className="w-full h-full object-cover"
       />
     </div>
     <CardContent className="pt-4">
@@ -43,12 +43,12 @@ const MeetTheTeam = () => {
           <TeamMember 
             name="Jared Wilson" 
             role="CEO & Founder" 
-            image="/lovable-uploads/b95abe05-7dc8-449e-91a1-c17046b01f5e.png"
+            image="/lovable-uploads/096953ad-880b-4459-b15f-df09faedf010.png"
           />
           <TeamMember 
             name="Chris Watts" 
             role="CTO" 
-            image="/lovable-uploads/b95abe05-7dc8-449e-91a1-c17046b01f5e.png"
+            image="/lovable-uploads/c2bb0cf0-d3be-4e93-b8a7-a21a62fc8171.png"
           />
           <TeamMember 
             name="Matthew Price" 
@@ -58,7 +58,7 @@ const MeetTheTeam = () => {
           <TeamMember 
             name="Greg Thomas" 
             role="Director" 
-            image="/lovable-uploads/b95abe05-7dc8-449e-91a1-c17046b01f5e.png"
+            image="/lovable-uploads/f4fa7b98-986a-409d-b134-8812c4fd3677.png"
           />
         </div>
 

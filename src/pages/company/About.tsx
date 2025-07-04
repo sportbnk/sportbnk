@@ -99,12 +99,12 @@ const About = () => {
             <TeamMember 
               name="Jared Wilson" 
               role="CEO & Founder" 
-              image="/lovable-uploads/b95abe05-7dc8-449e-91a1-c17046b01f5e.png"
+              image="/lovable-uploads/096953ad-880b-4459-b15f-df09faedf010.png"
             />
             <TeamMember 
               name="Chris Watts" 
               role="CTO" 
-              image="/lovable-uploads/b95abe05-7dc8-449e-91a1-c17046b01f5e.png"
+              image="/lovable-uploads/c2bb0cf0-d3be-4e93-b8a7-a21a62fc8171.png"
             />
             <TeamMember 
               name="Matthew Price" 
@@ -114,7 +114,7 @@ const About = () => {
             <TeamMember 
               name="Greg Thomas" 
               role="Director" 
-              image="/lovable-uploads/b95abe05-7dc8-449e-91a1-c17046b01f5e.png"
+              image="/lovable-uploads/f4fa7b98-986a-409d-b134-8812c4fd3677.png"
             />
           </div>
         </div>
