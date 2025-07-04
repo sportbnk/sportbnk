@@ -1,4 +1,3 @@
-
 import PageLayout from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
 import { UserCheck, Building, Handshake, Phone } from "lucide-react";

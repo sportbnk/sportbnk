@@ -51,9 +51,9 @@ const MeetTheTeam = () => {
             image="/lovable-uploads/c2bb0cf0-d3be-4e93-b8a7-a21a62fc8171.png"
           />
           <TeamMember 
-            name="Matthew Price" 
-            role="Chief of Sales" 
-            image="/lovable-uploads/b95abe05-7dc8-449e-91a1-c17046b01f5e.png"
+            name="Scott McKechnie" 
+            role="Executive Advisor" 
+            image="/lovable-uploads/e6aa5366-00d7-4f5e-981b-9990f9cfc353.png"
           />
           <TeamMember 
             name="Greg Thomas" 
