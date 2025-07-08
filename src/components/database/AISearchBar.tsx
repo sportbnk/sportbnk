@@ -76,7 +76,7 @@ const AISearchBar: React.FC<AISearchBarProps> = ({ onResults, onLoading }) => {
             onChange={(e) => setQuery(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="Ask anything... (e.g., 'Find cricket clubs in London')"
-            className="pl-10 pr-4 py-3 text-base rounded-lg border-2 border-gray-200 focus:border-blue-500 transition-colors"
+            className="pl-10 pr-4 py-3 text-base rounded-lg border-2 border-gray-200 focus:border-sportbnk-green transition-colors"
             disabled={isSearching}
           />
         </div>
@@ -84,7 +84,7 @@ const AISearchBar: React.FC<AISearchBarProps> = ({ onResults, onLoading }) => {
         <Button
           onClick={handleSearch}
           disabled={isSearching || !query.trim()}
-          className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+          className="px-6 py-3 bg-sportbnk-green hover:bg-sportbnk-green/90 text-white rounded-lg transition-colors"
         >
           {isSearching ? (
             <>
