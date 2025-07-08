@@ -412,7 +412,7 @@ export default function Teams() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center justify-between">
-                <span>Organization Database</span>
+                <span>Organisation Database</span>
                 <span className="text-sm font-normal text-muted-foreground">
                   {isAiSearchActive && aiQuery ? (
                     <>AI Search: "{aiQuery}" • {formatNumber(totalCount || 0)} results</>
