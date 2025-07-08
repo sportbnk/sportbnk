@@ -31,7 +31,6 @@ import Teams from "./pages/crm/Teams";
 import People from "./pages/crm/People";
 import TeamDetails from "./pages/crm/TeamDetails";
 import Leads from "./pages/crm/Leads";
-import UserProfile from "./pages/UserProfile";
 import Settings from "./pages/Settings";
 import SearchResults from "./pages/SearchResults";
 import CsvUpload from "./pages/CsvUpload";
@@ -93,7 +92,7 @@ function App() {
                       <Route path="/free-trial" element={<Navigate to="/auth?tab=signup" replace />} />
                       
                       {/* Protected Routes with Trial Guard */}
-                      <Route path="/profile" element={<ProtectedRoute><TrialGuard><UserProfile /></TrialGuard></ProtectedRoute>} />
+                      <Route path="/profile" element={<ProtectedRoute><TrialGuard><Navigate to="/crm/profile" replace /></TrialGuard></ProtectedRoute>} />
                       <Route path="/settings" element={<ProtectedRoute><TrialGuard><Settings /></TrialGuard></ProtectedRoute>} />
                       <Route path="/search" element={<ProtectedRoute><TrialGuard><SearchResults /></TrialGuard></ProtectedRoute>} />
                       <Route path="/csv-upload" element={<ProtectedRoute><TrialGuard><CsvUpload /></TrialGuard></ProtectedRoute>} />

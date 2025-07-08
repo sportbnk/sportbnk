@@ -137,7 +137,7 @@ const AccountBadge = ({ name: propName, email: propEmail, avatarUrl: propAvatarU
 
   // Handle profile navigation
   const handleProfileClick = () => {
-    navigate("/profile");
+    navigate("/crm/profile");
   };
   
   // Handle settings navigation
