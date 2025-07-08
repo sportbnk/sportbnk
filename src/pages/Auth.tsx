@@ -73,7 +73,7 @@ const Auth = () => {
               // Clear the hash from URL
               window.history.replaceState(null, '', window.location.pathname);
               // Redirect to main app
-              navigate('/crm/people');
+              navigate('/crm/teams');
             }
           } catch (err) {
             console.error('Error handling email confirmation:', err);
@@ -90,7 +90,7 @@ const Auth = () => {
 
   useEffect(() => {
     if (user && user.email_confirmed_at) {
-      navigate('/crm/people');
+      navigate('/crm/teams');
     }
   }, [user, navigate]);
 
