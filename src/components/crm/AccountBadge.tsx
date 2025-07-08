@@ -142,7 +142,7 @@ const AccountBadge = ({ name: propName, email: propEmail, avatarUrl: propAvatarU
   
   // Handle settings navigation
   const handleSettingsClick = () => {
-    navigate("/settings");
+    navigate("/crm/settings");
   };
   
   return (
