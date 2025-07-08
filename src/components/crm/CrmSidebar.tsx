@@ -36,11 +36,14 @@ const CrmSidebar = () => {
   const handleLogout = async () => {
     try {
       await signOut();
-      navigate("/");
       toast.success("Logged out successfully");
+      // Use window.location.href for a complete page refresh to ensure clean state
+      window.location.href = "/";
     } catch (error) {
       console.error("Error logging out:", error);
       toast.error("Error logging out");
+      // Even if signOut fails, redirect to home page
+      window.location.href = "/";
     }
   };
 
