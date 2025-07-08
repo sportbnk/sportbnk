@@ -46,12 +46,12 @@ const CrmSidebar = () => {
 
   // Handle profile navigation
   const handleProfileClick = () => {
-    navigate("/profile");
+    navigate("/crm/profile");
   };
   
   // Handle settings navigation
   const handleSettingsClick = () => {
-    navigate("/settings");
+    navigate("/crm/settings");
   };
 
   // Check if path is active
