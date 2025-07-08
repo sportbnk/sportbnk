@@ -187,7 +187,7 @@ const Pricing = () => {
               title="Enterprise"
               price="Custom"
               period=""
-              description="Tailored solutions for large organizations with custom requirements"
+              description="Tailored solutions for large organisations with custom requirements"
               features={enterpriseFeatures}
               buttonText="Contact Sales"
               isEnterprise={true}

@@ -107,7 +107,7 @@ const Community = () => {
                     <CheckCircle className="h-5 w-5 text-sportbnk-green mt-0.5 flex-shrink-0" />
                     <div>
                       <p className="text-gray-700">
-                        <strong>Networking Opportunities:</strong> Connect with professionals from various sports organizations.
+                        <strong>Networking Opportunities:</strong> Connect with professionals from various sports organisations.
                       </p>
                     </div>
                   </div>

@@ -65,7 +65,7 @@ const Data = () => {
             <DataFeature 
               icon={<Globe size={24} />}
               title="Global Coverage"
-              description="Our database spans across multiple countries and regions, giving you access to sports organizations, teams, and professionals worldwide. This global reach enables you to expand your business beyond geographical boundaries."
+              description="Our database spans across multiple countries and regions, giving you access to sports organisations, teams, and professionals worldwide. This global reach enables you to expand your business beyond geographical boundaries."
             />
           </div>
         </div>

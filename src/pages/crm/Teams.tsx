@@ -195,8 +195,8 @@ export default function Teams() {
     enabled: !isAiSearchActive, // Only run when AI search is not active
   });
 
-  const { data: organizationsData, isLoading } = useQuery({
-    queryKey: ['organizations', filters, searchTerm, currentPage],
+  const { data: organisationsData, isLoading } = useQuery({
+    queryKey: ['organisations', filters, searchTerm, currentPage],
     queryFn: async () => {
       // Return AI results if AI search is active
       if (isAiSearchActive) {
@@ -205,7 +205,7 @@ export default function Teams() {
         return aiResults.slice(startIdx, endIdx);
       }
 
-      console.log('Fetching organizations with filters:', filters, 'page:', currentPage);
+      console.log('Fetching organisations with filters:', filters, 'page:', currentPage);
       
       let query = supabase
         .from('teams')
@@ -278,7 +278,7 @@ export default function Teams() {
       const { data, error } = await query;
       
       if (error) {
-        console.error('Error fetching organizations:', error);
+        console.error('Error fetching organisations:', error);
         throw error;
       }
       
@@ -332,7 +332,7 @@ export default function Teams() {
         </div>
         <div className="flex justify-center items-center py-10">
           <p className="text-muted-foreground">
-            {isAiLoading ? 'Processing AI search...' : 'Loading organizations...'}
+            {isAiLoading ? 'Processing AI search...' : 'Loading organisations...'}
           </p>
         </div>
       </div>
@@ -340,7 +340,7 @@ export default function Teams() {
   }
 
   // Transform DTO data to match ContactsTable expected format
-  const tableData = (organizationsData || []).map(org => ({
+  const tableData = (organisationsData || []).map(org => ({
     id: org.id,
     team: org.name, // Map name to team field for table display
     sport: org.sport?.name || 'Not specified',
@@ -364,7 +364,7 @@ export default function Teams() {
   return (
     <div className="container mx-auto px-4">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Organizations Database</h1>
+        <h1 className="text-2xl font-bold">Organisations Database</h1>
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-6 gap-4">

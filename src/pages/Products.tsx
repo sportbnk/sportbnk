@@ -53,7 +53,7 @@ const Products = () => {
             <ProductCard 
               title="Discover" 
               icon={<Search size={24} />}
-              description="Build highly targeted lists of sports organizations, teams, and professionals with powerful filtering options."
+              description="Build highly targeted lists of sports organisations, teams, and professionals with powerful filtering options."
               features={[
                 "Powerful filtering options",
                 "Sport-specific data fields",
@@ -77,7 +77,7 @@ const Products = () => {
             <ProductCard 
               title="Recruit" 
               icon={<UserPlus size={24} />}
-              description="A streamlined hiring platform specifically designed for organizations in the sports industry."
+              description="A streamlined hiring platform specifically designed for organisations in the sports industry."
               features={[
                 "Direct candidate communication",
                 "Sports industry focus",

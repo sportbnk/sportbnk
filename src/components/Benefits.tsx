@@ -11,7 +11,7 @@ const Benefits = () => {
             "Everything you need to sell, scale, and succeed within the sports industry."
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-            We're on a mission to transform how sports organizations leverage data for strategic advantage.
+            We're on a mission to transform how sports organisations leverage data for strategic advantage.
           </p>
           <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white font-medium rounded-md px-8 py-6 text-lg" asChild>
             <Link to="/book-demo">Book a demo</Link>

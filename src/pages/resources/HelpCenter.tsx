@@ -20,7 +20,7 @@ const HelpCenter = () => {
     },
     {
       question: "What are the different pricing plans available?",
-      answer: "We offer flexible pricing plans to suit different needs - from individual developers to enterprise organizations. Visit our pricing page to see detailed plan comparisons and features included in each tier."
+      answer: "We offer flexible pricing plans to suit different needs - from individual developers to enterprise organisations. Visit our pricing page to see detailed plan comparisons and features included in each tier."
     },
     {
       question: "How accurate and up-to-date is your sports data?",

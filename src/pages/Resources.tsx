@@ -157,7 +157,7 @@ const Resources = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             <ResourceCard 
               title="How Data Intelligence is Transforming Sports Marketing"
-              description="Learn how leading sports organizations are leveraging data to enhance their marketing strategies."
+              description="Learn how leading sports organisations are leveraging data to enhance their marketing strategies."
               image="/lovable-uploads/d09f910d-17b2-4f81-bc3b-66badacf3de2.png"
               category="Article"
               icon={<FileText size={16} />}
@@ -174,8 +174,8 @@ const Resources = () => {
             />
             
             <ResourceCard 
-              title="Building Community in Sports Organizations"
-              description="Learn how to foster strong communities within sports organizations and engage with your audience effectively."
+              title="Building Community in Sports Organisations"
+              description="Learn how to foster strong communities within sports organisations and engage with your audience effectively."
               image="/lovable-uploads/1d95a70d-8230-4647-9c16-d5c94a124864.png"
               category="Article"
               icon={<FileText size={16} />}

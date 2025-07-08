@@ -56,12 +56,12 @@ const SportBnkVsSportBankArticle = () => {
                 </p>
                 
                 <p className="text-gray-700 mb-6 leading-relaxed">
-                  The abbreviated "Bnk" in our name symbolizes our streamlined, efficient approach to data management—just as digital banking revolutionized financial services, we're revolutionizing how sports organizations access and utilize their data.
+                  The abbreviated "Bnk" in our name symbolizes our streamlined, efficient approach to data management—just as digital banking revolutionized financial services, we're revolutionizing how sports organisations access and utilize their data.
                 </p>
                 
                 <h2 className="text-2xl font-bold text-sportbnk-navy mb-4">What Makes SportBnk Unique?</h2>
                 <p className="text-gray-700 mb-6 leading-relaxed">
-                  SportBnk isn't just another sports data platform. We're a comprehensive B2B sports intelligence solution designed specifically for organizations that need reliable, actionable insights from their sports data. Our platform combines:
+                  SportBnk isn't just another sports data platform. We're a comprehensive B2B sports intelligence solution designed specifically for organisations that need reliable, actionable insights from their sports data. Our platform combines:
                 </p>
                 
                 <ul className="list-disc pl-6 mb-6 text-gray-700 space-y-2">
@@ -74,11 +74,11 @@ const SportBnkVsSportBankArticle = () => {
                 
                 <h2 className="text-2xl font-bold text-sportbnk-navy mb-4">The Sports Intelligence Difference</h2>
                 <p className="text-gray-700 mb-6 leading-relaxed">
-                  While there are many sports data providers in the market, SportBnk focuses specifically on intelligence—transforming raw data into strategic insights that drive business decisions. We don't just collect data; we help organizations understand what it means and how to act on it.
+                  While there are many sports data providers in the market, SportBnk focuses specifically on intelligence—transforming raw data into strategic insights that drive business decisions. We don't just collect data; we help organisations understand what it means and how to act on it.
                 </p>
                 
                 <p className="text-gray-700 mb-6 leading-relaxed">
-                  Our three core products—Discover, Boost, and Recruit—are designed to address the most critical needs in modern sports organizations: discovering opportunities, boosting performance, and recruiting the right talent.
+                  Our three core products—Discover, Boost, and Recruit—are designed to address the most critical needs in modern sports organisations: discovering opportunities, boosting performance, and recruiting the right talent.
                 </p>
                 
                 <h2 className="text-2xl font-bold text-sportbnk-navy mb-4">Building Trust Through Transparency</h2>
@@ -87,7 +87,7 @@ const SportBnkVsSportBankArticle = () => {
                 </p>
                 
                 <p className="text-gray-700 mb-8 leading-relaxed">
-                  Our commitment extends beyond just data—we're building long-term relationships with sports organizations worldwide, helping them navigate the complex landscape of sports business intelligence with confidence and clarity.
+                  Our commitment extends beyond just data—we're building long-term relationships with sports organisations worldwide, helping them navigate the complex landscape of sports business intelligence with confidence and clarity.
                 </p>
                 
                 <Card className="bg-sportbnk-lightGrey p-6 mb-8">

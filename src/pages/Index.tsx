@@ -14,7 +14,7 @@ const Index = () => {
     <PageLayout>
       <Helmet>
         <title>SportBnk - B2B Sports Intelligence Platform</title>
-        <meta name="description" content="The sports industry is to be an estimated $760 Billion market by 2026. SportBnk provides an intelligence platform for sports organizations to discover, boost, and recruit." />
+        <meta name="description" content="The sports industry is to be an estimated $760 Billion market by 2026. SportBnk provides an intelligence platform for sports organisations to discover, boost, and recruit." />
       </Helmet>
       <Hero />
       <Solutions />

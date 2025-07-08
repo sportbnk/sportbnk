@@ -30,7 +30,7 @@ const PageLayout = ({
     "alternateName": ["SportBnk Platform", "SportBnk Data Intelligence"],
     "url": "https://sportbnk.com",
     "logo": "https://sportbnk.com/lovable-uploads/5de360aa-8105-490e-bf75-94ff7ac0832d.png",
-    "description": "SportBnk is the leading sports intelligence platform providing data solutions for sports organizations worldwide.",
+    "description": "SportBnk is the leading sports intelligence platform providing data solutions for sports organisations worldwide.",
     "sameAs": [
       "https://www.linkedin.com/company/sportbnk",
       "https://twitter.com/sportbnk",

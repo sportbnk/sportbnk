@@ -292,7 +292,7 @@ const Meetings = () => {
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1">
               <Input
-                placeholder="Search meetings, contacts, or organizations..."
+                placeholder="Search meetings, contacts, or organisations..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />

@@ -77,7 +77,7 @@ const TechnologyStack = () => {
             </div>
             <h3 className="text-xl font-semibold mb-3 text-sportbnk-navy">List Building</h3>
             <p className="text-gray-600">
-              Create highly targeted lists of sports organizations and professionals using our advanced segmentation tools.
+              Create highly targeted lists of sports organisations and professionals using our advanced segmentation tools.
             </p>
           </div>
           

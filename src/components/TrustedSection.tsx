@@ -104,7 +104,7 @@ const TrustedSection = () => {
         <div className="mt-16 text-center">
           <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-6 py-3 border border-white/20">
             <div className="w-2 h-2 bg-sportbnk-green rounded-full animate-pulse"></div>
-            <span className="text-gray-300">Trusted by organizations worldwide</span>
+            <span className="text-gray-300">Trusted by organisations worldwide</span>
           </div>
         </div>
       </div>

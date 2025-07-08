@@ -82,7 +82,7 @@ const CaseStudies = () => {
       />
       <CaseStudy
         title="The European Sports Market"
-        description="Europe's sports industry is one of the fastest growing sectors, accounting for 2% of EU's total GDP. With Sportbnk's platform, you get access to data from teams and competitions all across Europe, leveraging comprehensive statistics. Our AI-powered predictions enable precise forecasting, while our seamless CRM integration streamlines workflow for sports organizations across the continent."
+        description="Europe's sports industry is one of the fastest growing sectors, accounting for 2% of EU's total GDP. With Sportbnk's platform, you get access to data from teams and competitions all across Europe, leveraging comprehensive statistics. Our AI-powered predictions enable precise forecasting, while our seamless CRM integration streamlines workflow for sports organisations across the continent."
         image="/lovable-uploads/c5351de4-d54d-424f-99a5-b07ddc3fcc40.png"
         color="navy"
         isReversed={true}

@@ -48,7 +48,7 @@ const Solutions = () => {
               <Briefcase className="text-sportbnk-green w-8 h-8" />
             </div>
             <h3 className="text-xl font-semibold mb-3 text-sportbnk-navy">Sales</h3>
-            <p className="text-gray-600 mb-6">Find qualified leads and decision-makers within sports organizations to expand your customer base and drive revenue growth.</p>
+            <p className="text-gray-600 mb-6">Find qualified leads and decision-makers within sports organisations to expand your customer base and drive revenue growth.</p>
             <Link to="/products/discover" className="inline-flex items-center text-sportbnk-green font-medium hover:underline">
               Learn more <ArrowRight className="ml-2 w-4 h-4" />
             </Link>

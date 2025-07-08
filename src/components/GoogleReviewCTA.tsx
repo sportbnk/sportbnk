@@ -28,7 +28,7 @@ const GoogleReviewCTA = () => {
             Love our platform? Let others know!
           </h3>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Your feedback helps us improve and helps other sports organizations discover our solutions.
+            Your feedback helps us improve and helps other sports organisations discover our solutions.
           </p>
         </div>
         

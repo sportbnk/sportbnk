@@ -8,7 +8,7 @@ const Recruit = () => {
   return (
     <PageLayout 
       pageTitle="Recruit Sports Industry Talent"
-      metaDescription="Find top talent in the sports industry with SportsBnk Recruit. Our specialized hiring platform connects sports organizations with qualified candidates who understand your industry needs."
+      metaDescription="Find top talent in the sports industry with SportsBnk Recruit. Our specialized hiring platform connects sports organisations with qualified candidates who understand your industry needs."
       metaKeywords="sports recruiting platform, sports industry hiring, sports talent acquisition, sports job board, hire sports professionals, sports careers, sports recruitment solution"
     >
       <section className="py-16 md:py-24">
@@ -22,7 +22,7 @@ const Recruit = () => {
                 Find Top Talent in Sports
               </h2>
               <p className="text-lg text-gray-600 mb-6">
-                A streamlined hiring platform specifically designed for organizations in the sports industry, helping you connect with qualified candidates who understand your unique industry needs.
+                A streamlined hiring platform specifically designed for organisations in the sports industry, helping you connect with qualified candidates who understand your unique industry needs.
               </p>
               <div className="space-y-4 mb-8">
                 <div className="flex items-start">

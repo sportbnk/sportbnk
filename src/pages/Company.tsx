@@ -55,7 +55,7 @@ const Company = () => {
         <div className="container mx-auto px-4 md:px-6">
           <CompanySection 
             title="About Sportsbnk"
-            description="Sportsbnk is an innovative B2B sales intelligence platform specifically tailored to the sports industry. Our platform harnesses the power of data analytics to provide businesses with highly accurate and compliant contact information, empowering them to effectively reach out to sports organizations, professionals, and stakeholders. With a data-driven approach and industry-specific insights, we aim to be the go-to platform for organizations in the sports space looking to enhance their business development, recruitment, and marketing efforts."
+            description="Sportsbnk is an innovative B2B sales intelligence platform specifically tailored to the sports industry. Our platform harnesses the power of data analytics to provide businesses with highly accurate and compliant contact information, empowering them to effectively reach out to sports organisations, professionals, and stakeholders. With a data-driven approach and industry-specific insights, we aim to be the go-to platform for organisations in the sports space looking to enhance their business development, recruitment, and marketing efforts."
             image="/lovable-uploads/1d95a70d-8230-4647-9c16-d5c94a124864.png"
           />
         </div>

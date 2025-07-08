@@ -8,8 +8,8 @@ const Discover = () => {
   return (
     <PageLayout 
       pageTitle="Discover Sports Contacts"
-      metaDescription="Build targeted lists of sports organizations, teams and professionals with SportsBnk Discover. Find the right decision-makers quickly with our powerful sports database."
-      metaKeywords="sports contacts database, find sports decision makers, sports organizations list, sports contact search, sport industry contacts, sports data discovery, sports professional database"
+      metaDescription="Build targeted lists of sports organisations, teams and professionals with SportsBnk Discover. Find the right decision-makers quickly with our powerful sports database."
+      metaKeywords="sports contacts database, find sports decision makers, sports organisations list, sports contact search, sport industry contacts, sports data discovery, sports professional database"
     >
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4 md:px-6">
@@ -22,7 +22,7 @@ const Discover = () => {
                 Find the Right Sports Contacts
               </h2>
               <p className="text-lg text-gray-600 mb-6">
-                Build highly targeted lists of sports organizations, teams, and professionals with powerful filtering options that allow you to identify the right decision-makers quickly and effectively.
+                Build highly targeted lists of sports organisations, teams, and professionals with powerful filtering options that allow you to identify the right decision-makers quickly and effectively.
               </p>
               <div className="space-y-4 mb-8">
                 <div className="flex items-start">
@@ -68,7 +68,7 @@ const Discover = () => {
                 Define Your Criteria
               </h3>
               <p className="text-gray-600">
-                Use our specialized filters to pinpoint exactly the right sports organizations and professionals you need to connect with.
+                Use our specialized filters to pinpoint exactly the right sports organisations and professionals you need to connect with.
               </p>
             </div>
             

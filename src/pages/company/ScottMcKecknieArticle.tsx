@@ -52,17 +52,17 @@ const ScottMcKecknieArticle = () => {
                 
                 <h2 className="text-2xl font-bold text-sportbnk-navy mb-4">Strategic Value for SportBnk</h2>
                 <p className="text-gray-700 mb-6 leading-relaxed">
-                  Scott's involvement as an advisory shareholder represents more than just financial investment—it's a strategic partnership that aligns perfectly with our vision. His expertise in sports business development, technology innovation, and market expansion will provide invaluable guidance as we scale our data intelligence platform to serve more organizations across the sports industry.
+                  Scott's involvement as an advisory shareholder represents more than just financial investment—it's a strategic partnership that aligns perfectly with our vision. His expertise in sports business development, technology innovation, and market expansion will provide invaluable guidance as we scale our data intelligence platform to serve more organisations across the sports industry.
                 </p>
                 
                 <h2 className="text-2xl font-bold text-sportbnk-navy mb-4">Looking Forward</h2>
                 <p className="text-gray-700 mb-8 leading-relaxed">
-                  This partnership marks an exciting milestone in SportBnk's journey. With Scott's advisory support and Plai Sport's industry connections, we're better positioned than ever to deliver innovative data intelligence solutions that help sports organizations make smarter, data-driven decisions.
+                  This partnership marks an exciting milestone in SportBnk's journey. With Scott's advisory support and Plai Sport's industry connections, we're better positioned than ever to deliver innovative data intelligence solutions that help sports organisations make smarter, data-driven decisions.
                 </p>
                 
                 <Card className="bg-sportbnk-lightGrey p-6 mb-8">
                   <blockquote className="text-lg italic text-sportbnk-navy mb-4">
-                    "SportBnk represents the future of sports data intelligence. Their innovative approach to helping organizations unlock the power of their data aligns perfectly with the industry's evolving needs. I'm excited to support their mission and contribute to their continued success."
+                    "SportBnk represents the future of sports data intelligence. Their innovative approach to helping organisations unlock the power of their data aligns perfectly with the industry's evolving needs. I'm excited to support their mission and contribute to their continued success."
                   </blockquote>
                   <cite className="text-sm text-gray-600">— Scott McKecknie, Founder & CEO, Plai Sport</cite>
                 </Card>

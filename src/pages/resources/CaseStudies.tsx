@@ -13,7 +13,7 @@ const CaseStudies = () => {
               Success Stories from the Sports Industry
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Discover how organizations across the sports industry have achieved their goals with our solutions.
+              Discover how organisations across the sports industry have achieved their goals with our solutions.
             </p>
           </div>
 

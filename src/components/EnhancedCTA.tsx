@@ -12,7 +12,7 @@ const EnhancedCTA = () => {
             Ready to Transform Your Sports Data Strategy?
           </h2>
           <p className="text-xl text-gray-300 mb-10 leading-relaxed">
-            Join over 500+ sports organizations worldwide who use SportBnk to drive their data-powered decisions.
+            Join over 500+ sports organisations worldwide who use SportBnk to drive their data-powered decisions.
           </p>
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
