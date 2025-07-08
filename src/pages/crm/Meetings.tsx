@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar, Plus, Trash2, ExternalLink, Video, Phone, MapPin, Edit, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -12,6 +12,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/components/auth/AuthContext";
 
 interface Meeting {
   id: string;
@@ -28,7 +30,9 @@ interface Meeting {
 }
 
 const Meetings = () => {
+  const { user } = useAuth();
   const [meetings, setMeetings] = useState<Meeting[]>([]);
+  const [loading, setLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedMeeting, setSelectedMeeting] = useState<Meeting | null>(null);
   const [isDetailPanelOpen, setIsDetailPanelOpen] = useState(false);
@@ -51,25 +55,117 @@ const Meetings = () => {
     }
   });
 
-  const onSubmit = (data: any) => {
-    const newMeeting = {
-      id: Date.now().toString(),
-      ...data
-    };
-    
-    setMeetings(prev => [newMeeting, ...prev]);
-    setIsDialogOpen(false);
-    form.reset();
-    
-    toast.success("Meeting scheduled successfully", {
-      description: `"${data.title}" has been scheduled for ${data.date} at ${data.time}`
-    });
+  // Load meetings from database
+  useEffect(() => {
+    if (user) {
+      loadMeetings();
+    }
+  }, [user]);
+
+  const loadMeetings = async () => {
+    try {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from('meetings')
+        .select('*')
+        .order('date', { ascending: false });
+
+      if (error) {
+        console.error('Error loading meetings:', error);
+        toast.error('Failed to load meetings');
+        return;
+      }
+
+      // Transform database data to match interface
+      const transformedMeetings = data.map(meeting => ({
+        id: meeting.id,
+        title: meeting.title,
+        linkedContact: meeting.linked_contact || '',
+        date: meeting.date,
+        time: meeting.time,
+        status: meeting.status as "Scheduled" | "Completed" | "Cancelled" | "Rescheduled",
+        leadLink: meeting.lead_link || '',
+        assignedTo: meeting.assigned_to || '',
+        location: meeting.location || '',
+        notes: meeting.notes || '',
+        type: meeting.meeting_type as "In-Person" | "Video Call" | "Phone Call"
+      }));
+
+      setMeetings(transformedMeetings);
+    } catch (error) {
+      console.error('Error loading meetings:', error);
+      toast.error('Failed to load meetings');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const deleteMeeting = (id: string) => {
-    setMeetings(meetings.filter(meeting => meeting.id !== id));
-    setIsDetailPanelOpen(false);
-    toast.info("Meeting deleted");
+  const onSubmit = async (data: any) => {
+    if (!user) {
+      toast.error('Please log in to create meetings');
+      return;
+    }
+
+    try {
+      const { error } = await supabase
+        .from('meetings')
+        .insert({
+          user_id: user.id,
+          title: data.title,
+          linked_contact: data.linkedContact,
+          date: data.date,
+          time: data.time,
+          status: data.status,
+          lead_link: data.leadLink,
+          assigned_to: data.assignedTo,
+          location: data.location,
+          notes: data.notes,
+          meeting_type: data.type
+        });
+
+      if (error) {
+        console.error('Error creating meeting:', error);
+        toast.error('Failed to create meeting');
+        return;
+      }
+
+      setIsDialogOpen(false);
+      form.reset();
+      
+      toast.success("Meeting scheduled successfully", {
+        description: `"${data.title}" has been scheduled for ${data.date} at ${data.time}`
+      });
+
+      // Reload meetings
+      loadMeetings();
+    } catch (error) {
+      console.error('Error creating meeting:', error);
+      toast.error('Failed to create meeting');
+    }
+  };
+
+  const deleteMeeting = async (id: string) => {
+    try {
+      const { error } = await supabase
+        .from('meetings')
+        .delete()
+        .eq('id', id);
+
+      if (error) {
+        console.error('Error deleting meeting:', error);
+        toast.error('Failed to delete meeting');
+        return;
+      }
+
+      setIsDetailPanelOpen(false);
+      toast.info("Meeting deleted");
+      
+      // Reload meetings
+      loadMeetings();
+    } catch (error) {
+      console.error('Error deleting meeting:', error);
+      toast.error('Failed to delete meeting');
+    }
   };
 
   const openDetailPanel = (meeting: Meeting) => {
@@ -236,7 +332,15 @@ const Meetings = () => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          {filteredMeetings.length === 0 ? (
+          {loading ? (
+            <div className="h-64 flex items-center justify-center border rounded-md bg-muted/20">
+              <p className="text-muted-foreground">Loading meetings...</p>
+            </div>
+          ) : !user ? (
+            <div className="h-64 flex items-center justify-center border rounded-md bg-muted/20">
+              <p className="text-muted-foreground">Please log in to view meetings</p>
+            </div>
+          ) : filteredMeetings.length === 0 ? (
             <div className="h-64 flex items-center justify-center border rounded-md bg-muted/20">
               <p className="text-muted-foreground">No meetings found</p>
             </div>

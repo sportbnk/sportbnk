@@ -305,6 +305,57 @@ export type Database = {
           },
         ]
       }
+      meetings: {
+        Row: {
+          assigned_to: string | null
+          created_at: string
+          date: string
+          id: string
+          lead_link: string | null
+          linked_contact: string | null
+          location: string | null
+          meeting_type: string
+          notes: string | null
+          status: string
+          time: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          assigned_to?: string | null
+          created_at?: string
+          date: string
+          id?: string
+          lead_link?: string | null
+          linked_contact?: string | null
+          location?: string | null
+          meeting_type?: string
+          notes?: string | null
+          status?: string
+          time: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          assigned_to?: string | null
+          created_at?: string
+          date?: string
+          id?: string
+          lead_link?: string | null
+          linked_contact?: string | null
+          location?: string | null
+          meeting_type?: string
+          notes?: string | null
+          status?: string
+          time?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       opening_hours: {
         Row: {
           created_at: string
