@@ -92,7 +92,6 @@ function App() {
                       <Route path="/free-trial" element={<Navigate to="/auth?tab=signup" replace />} />
                       
                       {/* Protected Routes with Trial Guard */}
-                      <Route path="/profile" element={<ProtectedRoute><TrialGuard><Navigate to="/crm/profile" replace /></TrialGuard></ProtectedRoute>} />
                       <Route path="/settings" element={<ProtectedRoute><TrialGuard><Settings /></TrialGuard></ProtectedRoute>} />
                       <Route path="/search" element={<ProtectedRoute><TrialGuard><SearchResults /></TrialGuard></ProtectedRoute>} />
                       <Route path="/csv-upload" element={<ProtectedRoute><TrialGuard><CsvUpload /></TrialGuard></ProtectedRoute>} />
