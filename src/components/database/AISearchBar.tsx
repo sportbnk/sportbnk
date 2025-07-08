@@ -84,7 +84,10 @@ const AISearchBar: React.FC<AISearchBarProps> = ({ onResults, onLoading }) => {
         <Button
           onClick={handleSearch}
           disabled={isSearching || !query.trim()}
-          className="px-6 py-3 bg-sportbnk-green hover:bg-sportbnk-green/90 text-white rounded-lg transition-colors"
+          className="px-6 py-3 text-white rounded-lg transition-colors"
+          style={{ backgroundColor: '#00ce7c' }}
+          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#00b96b'}
+          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#00ce7c'}
         >
           {isSearching ? (
             <>
