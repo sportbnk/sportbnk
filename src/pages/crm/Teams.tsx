@@ -120,51 +120,6 @@ export default function Teams() {
     setIsAiLoading(loading);
   };
 
-  // Search for specific team function
-  const searchSpecificTeam = async () => {
-    console.log('=== SEARCHING FOR "FORE" Business ===');
-    
-    try {
-      // Search with exact match
-      const { data: exactMatch, error: exactError } = await supabase
-        .from('teams')
-        .select('*')
-        .eq('name', '"FORE" Business');
-      
-      console.log('Exact match search results:', exactMatch);
-      console.log('Exact match error:', exactError);
-
-      // Search with ILIKE for partial matches
-      const { data: partialMatch, error: partialError } = await supabase
-        .from('teams')
-        .select('*')
-        .ilike('name', '%FORE%');
-      
-      console.log('Partial match (FORE) results:', partialMatch);
-      console.log('Partial match error:', partialError);
-
-      // Search with ILIKE for Business
-      const { data: businessMatch, error: businessError } = await supabase
-        .from('teams')
-        .select('*')
-        .ilike('name', '%Business%');
-      
-      console.log('Business match results:', businessMatch);
-      console.log('Business match error:', businessError);
-
-      // Get all teams to see what's in the database
-      const { data: allTeams, error: allError } = await supabase
-        .from('teams')
-        .select('name')
-        .order('name');
-      
-      console.log('All team names in database:', allTeams?.map(t => t.name));
-      console.log('Total teams:', allTeams?.length);
-      
-    } catch (error) {
-      console.error('Search error:', error);
-    }
-  };
 
   // Separate count query to get accurate total results
   const { data: totalCount } = useQuery({
@@ -410,9 +365,6 @@ export default function Teams() {
     <div className="container mx-auto px-4">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Organizations Database</h1>
-        <Button onClick={searchSpecificTeam} variant="outline">
-          Debug: Search for "FORE" Business
-        </Button>
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
