@@ -224,31 +224,43 @@ const CrmSidebar = () => {
                   <SidebarMenuItem>
                     <SidebarMenuButton 
                       onClick={handleProfileClick}
-                      className={`w-full justify-start h-9 px-3 rounded-lg transition-all duration-200 text-gray-700 hover:bg-gray-50 hover:text-gray-900 ${!open ? "justify-center" : ""}`}
+                      className={`w-full h-9 px-3 rounded-lg transition-all duration-200 text-gray-700 hover:bg-gray-50 hover:text-gray-900 ${
+                        !open ? "justify-center" : "justify-start"
+                      }`}
                       tooltip={!open ? "My Profile" : undefined}
                     >
-                      <User className={`h-4 w-4 ${open ? "mr-3" : ""} transition-all duration-200`} />
-                      {open && <span className="transition-opacity duration-200">My Profile</span>}
+                      <div className="flex items-center">
+                        <User className={`h-4 w-4 ${open ? "mr-3" : ""} transition-all duration-200`} />
+                        {open && <span className="transition-opacity duration-200">My Profile</span>}
+                      </div>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                   <SidebarMenuItem>
                     <SidebarMenuButton 
                       onClick={handleSettingsClick}
-                      className={`w-full justify-start h-9 px-3 rounded-lg transition-all duration-200 text-gray-700 hover:bg-gray-50 hover:text-gray-900 ${!open ? "justify-center" : ""}`}
+                      className={`w-full h-9 px-3 rounded-lg transition-all duration-200 text-gray-700 hover:bg-gray-50 hover:text-gray-900 ${
+                        !open ? "justify-center" : "justify-start"
+                      }`}
                       tooltip={!open ? "Settings" : undefined}
                     >
-                      <Settings className={`h-4 w-4 ${open ? "mr-3" : ""} transition-all duration-200`} />
-                      {open && <span className="transition-opacity duration-200">Settings</span>}
+                      <div className="flex items-center">
+                        <Settings className={`h-4 w-4 ${open ? "mr-3" : ""} transition-all duration-200`} />
+                        {open && <span className="transition-opacity duration-200">Settings</span>}
+                      </div>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                   <SidebarMenuItem>
                     <SidebarMenuButton 
                       onClick={handleLogout}
-                      className={`w-full justify-start h-9 px-3 rounded-lg transition-all duration-200 text-red-600 hover:text-red-700 hover:bg-red-50 ${!open ? "justify-center" : ""}`}
+                      className={`w-full h-9 px-3 rounded-lg transition-all duration-200 text-red-600 hover:text-red-700 hover:bg-red-50 ${
+                        !open ? "justify-center" : "justify-start"
+                      }`}
                       tooltip={!open ? "Log Out" : undefined}
                     >
-                      <LogOut className={`h-4 w-4 ${open ? "mr-3" : ""} transition-all duration-200`} />
-                      {open && <span className="transition-opacity duration-200">Log Out</span>}
+                      <div className="flex items-center">
+                        <LogOut className={`h-4 w-4 ${open ? "mr-3" : ""} transition-all duration-200`} />
+                        {open && <span className="transition-opacity duration-200">Log Out</span>}
+                      </div>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 </SidebarMenu>
