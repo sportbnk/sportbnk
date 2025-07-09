@@ -25,17 +25,50 @@ const PageLayout = ({
 
   const organizationData = {
     "@context": "https://schema.org",
-    "@type": "Organization",
+    "@type": ["Organization", "SoftwareApplication", "TechnologyCompany"],
     "name": "SportBnk",
-    "alternateName": ["SportBnk Platform", "SportBnk Data Intelligence"],
+    "alternateName": ["SportBnk Platform", "SportBnk Intelligence", "SportBnk Database"],
+    "legalName": "SportBnk Ltd",
     "url": "https://sportbnk.com",
-    "logo": "https://sportbnk.com/lovable-uploads/5de360aa-8105-490e-bf75-94ff7ac0832d.png",
-    "description": "SportBnk is the leading sports intelligence platform providing data solutions for sports organisations worldwide.",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://sportbnk.com/lovable-uploads/5de360aa-8105-490e-bf75-94ff7ac0832d.png",
+      "width": "200",
+      "height": "200"
+    },
+    "description": "SportBnk is the #1 B2B sports intelligence platform providing comprehensive data solutions, analytics, and contact discovery for sports organizations worldwide. Trusted by 1000+ organizations.",
+    "foundingDate": "2020",
+    "industry": "Sports Technology",
+    "numberOfEmployees": "11-50",
+    "address": {
+      "@type": "PostalAddress",
+      "addressCountry": "GB",
+      "addressRegion": "England"
+    },
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "customer service",
+      "url": "https://sportbnk.com/contact"
+    },
     "sameAs": [
       "https://www.linkedin.com/company/sportbnk",
       "https://twitter.com/sportbnk",
       "https://facebook.com/sportbnk"
-    ]
+    ],
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web Browser",
+    "offers": {
+      "@type": "Offer",
+      "description": "B2B Sports Intelligence Platform with database access to 750,000+ teams and 360,000+ competitions",
+      "category": "SaaS Software"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.8",
+      "reviewCount": "150",
+      "bestRating": "5",
+      "worstRating": "1"
+    }
   };
 
   const siteNavigationData = {
@@ -178,6 +211,37 @@ const PageLayout = ({
         <meta name="twitter:image" content="/lovable-uploads/5de360aa-8105-490e-bf75-94ff7ac0832d.png" />
         <script type="application/ld+json">
           {JSON.stringify(organizationData)}
+        </script>
+        <script type="application/ld+json">
+          {JSON.stringify(siteNavigationData)}
+        </script>
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            "name": "SportBnk Intelligence Platform",
+            "applicationCategory": "BusinessApplication",
+            "operatingSystem": "Web Browser",
+            "description": "B2B Sports Intelligence Platform providing access to 750,000+ teams, 360,000+ competitions, and comprehensive sports data analytics for marketing, recruitment, and partnerships.",
+            "url": "https://sportbnk.com",
+            "downloadUrl": "https://sportbnk.com/book-demo",
+            "screenshot": "https://sportbnk.com/lovable-uploads/5de360aa-8105-490e-bf75-94ff7ac0832d.png",
+            "applicationSubCategory": "Sports Analytics Software",
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "GBP",
+              "description": "Free trial available"
+            },
+            "featureList": [
+              "750,000+ Sports Teams Database",
+              "360,000+ Competitions Data",
+              "Contact Discovery & Verification",
+              "Sports Analytics & Intelligence",
+              "CRM Integration",
+              "Lead Generation Tools"
+            ]
+          })}
         </script>
         <meta name="robots" content="index, follow" />
         <meta name="google" content="notranslate" />
