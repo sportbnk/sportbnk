@@ -27,6 +27,7 @@ import {
   LogOut,
   ChevronLeft,
   ChevronRight,
+  Handshake,
 } from "lucide-react";
 import { useAuth } from "@/components/auth/AuthContext";
 import { toast } from "sonner";
@@ -190,6 +191,23 @@ const CrmSidebar = () => {
                   <Link to="/crm/leads" className="flex items-center">
                     <UserRound className={`h-4 w-4 ${open ? "mr-3" : ""} transition-all duration-200`} />
                     {open && <span className="transition-opacity duration-200">Leads</span>}
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton 
+                  asChild 
+                  isActive={isActive("/crm/deals")}
+                  className={`w-full justify-start h-9 px-3 rounded-lg transition-all duration-200 ${
+                    isActive("/crm/deals") 
+                      ? "bg-blue-50 text-blue-700 font-medium border border-blue-100" 
+                      : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
+                  } ${!open ? "justify-center" : ""}`}
+                  tooltip={!open ? "Deals" : undefined}
+                >
+                  <Link to="/crm/deals" className="flex items-center">
+                    <Handshake className={`h-4 w-4 ${open ? "mr-3" : ""} transition-all duration-200`} />
+                    {open && <span className="transition-opacity duration-200">Deals</span>}
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

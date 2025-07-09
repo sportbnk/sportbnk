@@ -35,6 +35,7 @@ import SearchResults from "./pages/SearchResults";
 import CsvUpload from "./pages/CsvUpload";
 import CsvUpdate from "./pages/CsvUpdate";
 import Meetings from "./pages/crm/Meetings";
+import Deals from "./pages/crm/Deals";
 import Profile from "./pages/crm/Profile";
 import CrmSettings from "./pages/crm/Settings";
 
@@ -102,11 +103,12 @@ function App() {
                         <Route path="/crm/database" element={<Navigate to="/crm/teams" replace />} />
                         <Route path="/database/lists" element={<Lists />} />
                         <Route path="/crm/teams" element={<Teams />} />
-                        <Route path="/crm/teams/:teamId" element={<TeamDetails />} />
-                        <Route path="/crm/people" element={<People />} />
-                        <Route path="/crm/leads" element={<Leads />} />
-                        <Route path="/crm/meetings" element={<Meetings />} />
-                        <Route path="/crm/profile" element={<Profile />} />
+                <Route path="/crm/teams/:teamId" element={<TeamDetails />} />
+                <Route path="/crm/people" element={<People />} />
+                <Route path="/crm/leads" element={<Leads />} />
+                <Route path="/crm/deals" element={<Deals />} />
+                <Route path="/crm/meetings" element={<Meetings />} />
+                <Route path="/crm/profile" element={<Profile />} />
                         <Route path="/crm/settings" element={<CrmSettings />} />
                       </Route>
                       

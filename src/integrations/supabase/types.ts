@@ -127,6 +127,84 @@ export type Database = {
         }
         Relationships: []
       }
+      deal_activities: {
+        Row: {
+          activity_type: string
+          created_at: string
+          deal_id: string
+          description: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          activity_type: string
+          created_at?: string
+          deal_id: string
+          description: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          activity_type?: string
+          created_at?: string
+          deal_id?: string
+          description?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      deals: {
+        Row: {
+          assigned_to: string | null
+          company_name: string
+          created_at: string
+          deal_name: string
+          deal_value: number | null
+          expected_close_date: string | null
+          id: string
+          internal_comments: string | null
+          notes: string | null
+          primary_contact: string | null
+          stage: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          assigned_to?: string | null
+          company_name: string
+          created_at?: string
+          deal_name: string
+          deal_value?: number | null
+          expected_close_date?: string | null
+          id?: string
+          internal_comments?: string | null
+          notes?: string | null
+          primary_contact?: string | null
+          stage?: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          assigned_to?: string | null
+          company_name?: string
+          created_at?: string
+          deal_name?: string
+          deal_value?: number | null
+          expected_close_date?: string | null
+          id?: string
+          internal_comments?: string | null
+          notes?: string | null
+          primary_contact?: string | null
+          stage?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       departments: {
         Row: {
           created_at: string
