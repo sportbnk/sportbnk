@@ -28,6 +28,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Handshake,
+  BarChart3,
 } from "lucide-react";
 import { useAuth } from "@/components/auth/AuthContext";
 import { toast } from "sonner";
@@ -225,6 +226,38 @@ const CrmSidebar = () => {
                   <Link to="/crm/meetings" className="flex items-center">
                     <Calendar className={`h-4 w-4 ${open ? "mr-3" : ""} transition-all duration-200`} />
                     {open && <span className="transition-opacity duration-200">Meetings</span>}
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        <SidebarSeparator className="mx-3" />
+
+        {/* CONVERSIONS Section */}
+        <SidebarGroup className="px-2 py-2">
+          {open && (
+            <SidebarGroupLabel className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 px-3 transition-opacity duration-200">
+              CONVERSIONS
+            </SidebarGroupLabel>
+          )}
+          <SidebarGroupContent>
+            <SidebarMenu className="space-y-0.5">
+              <SidebarMenuItem>
+                <SidebarMenuButton 
+                  asChild 
+                  isActive={isActive("/crm/analytics")}
+                  className={`w-full justify-start h-9 px-3 rounded-lg transition-all duration-200 ${
+                    isActive("/crm/analytics") 
+                      ? "bg-blue-50 text-blue-700 font-medium border border-blue-100" 
+                      : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
+                  } ${!open ? "justify-center" : ""}`}
+                  tooltip={!open ? "Analytics" : undefined}
+                >
+                  <Link to="/crm/analytics" className="flex items-center">
+                    <BarChart3 className={`h-4 w-4 ${open ? "mr-3" : ""} transition-all duration-200`} />
+                    {open && <span className="transition-opacity duration-200">Analytics</span>}
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

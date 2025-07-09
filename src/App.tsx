@@ -36,6 +36,7 @@ import CsvUpload from "./pages/CsvUpload";
 import CsvUpdate from "./pages/CsvUpdate";
 import Meetings from "./pages/crm/Meetings";
 import Deals from "./pages/crm/Deals";
+import Analytics from "./pages/crm/Analytics";
 import Profile from "./pages/crm/Profile";
 import CrmSettings from "./pages/crm/Settings";
 
@@ -108,6 +109,7 @@ function App() {
                 <Route path="/crm/leads" element={<Leads />} />
                 <Route path="/crm/deals" element={<Deals />} />
                 <Route path="/crm/meetings" element={<Meetings />} />
+                <Route path="/crm/analytics" element={<Analytics />} />
                 <Route path="/crm/profile" element={<Profile />} />
                         <Route path="/crm/settings" element={<CrmSettings />} />
                       </Route>
