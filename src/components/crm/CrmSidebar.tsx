@@ -275,7 +275,7 @@ const CrmSidebar = () => {
                   <SidebarMenuItem>
                     <SidebarMenuButton 
                       onClick={handleProfileClick}
-                      className={`w-full h-9 px-3 rounded-lg transition-all duration-200 text-gray-700 hover:bg-gray-50 hover:text-gray-900 flex items-center ${
+                      className={`w-full h-9 px-2 rounded-lg transition-all duration-200 text-gray-700 hover:bg-gray-50 hover:text-gray-900 flex items-center ${
                         !open ? "justify-center" : "justify-start"
                       }`}
                       tooltip={!open ? "My Profile" : undefined}
@@ -287,7 +287,7 @@ const CrmSidebar = () => {
                   <SidebarMenuItem>
                     <SidebarMenuButton 
                       onClick={handleSettingsClick}
-                      className={`w-full h-9 px-3 rounded-lg transition-all duration-200 text-gray-700 hover:bg-gray-50 hover:text-gray-900 flex items-center ${
+                      className={`w-full h-9 px-2 rounded-lg transition-all duration-200 text-gray-700 hover:bg-gray-50 hover:text-gray-900 flex items-center ${
                         !open ? "justify-center" : "justify-start"
                       }`}
                       tooltip={!open ? "Settings" : undefined}
@@ -299,7 +299,7 @@ const CrmSidebar = () => {
                   <SidebarMenuItem>
                     <SidebarMenuButton 
                       onClick={handleLogout}
-                      className={`w-full h-9 px-3 rounded-lg transition-all duration-200 text-red-600 hover:text-red-700 hover:bg-red-50 flex items-center ${
+                      className={`w-full h-9 px-2 rounded-lg transition-all duration-200 text-red-600 hover:text-red-700 hover:bg-red-50 flex items-center ${
                         !open ? "justify-center" : "justify-start"
                       }`}
                       tooltip={!open ? "Log Out" : undefined}
