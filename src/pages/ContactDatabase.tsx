@@ -112,25 +112,34 @@ const ContactDatabase = () => {
 
   // Handler for AI search results
   const handleAiSearchResults = (results: any[], query: string) => {
+    console.log('AI search raw results:', results);
+    console.log('AI search query:', query);
+    
     // Transform the results to match the expected format for ContactsView
-    const transformedResults = results.map((contact: any) => ({
-      id: contact.id,
-      name: contact.name,
-      position: contact.role || 'Unknown',
-      team: contact.teams?.name || 'Unknown',
-      teamId: contact.teams?.id || null,
-      sport: contact.teams?.sports?.name || 'Unknown',
-      email: contact.email || null,
-      phone: contact.phone || null,
-      linkedin: contact.linkedin || null,
-      city: contact.teams?.cities?.name || 'Unknown',
-      country: contact.teams?.cities?.countries?.name || 'Unknown',
-      verified: true,
-      activeReplier: true,
-      email_credits_consumed: contact.email_credits_consumed || 0,
-      phone_credits_consumed: contact.phone_credits_consumed || 0,
-      linkedin_credits_consumed: contact.linkedin_credits_consumed || 0
-    }));
+    const transformedResults = results.map((contact: any) => {
+      console.log('Transforming contact:', contact);
+      return {
+        id: contact.id,
+        name: contact.name,
+        position: contact.role || 'Unknown',
+        team: contact.teams?.name || 'Unknown',
+        teamId: contact.teams?.id || null,
+        sport: contact.teams?.sports?.name || 'Unknown',
+        email: contact.email || null,
+        phone: contact.phone || null,
+        linkedin: contact.linkedin || null,
+        city: contact.teams?.cities?.name || 'Unknown',
+        country: contact.teams?.cities?.countries?.name || 'Unknown',
+        verified: true,
+        activeReplier: true,
+        email_credits_consumed: contact.email_credits_consumed || 0,
+        phone_credits_consumed: contact.phone_credits_consumed || 0,
+        linkedin_credits_consumed: contact.linkedin_credits_consumed || 0
+      };
+    });
+    
+    console.log('Transformed results:', transformedResults);
+    console.log('Table data for display:', transformedResults);
     
     setAiSearchResults(transformedResults);
     setAiSearchQuery(query);

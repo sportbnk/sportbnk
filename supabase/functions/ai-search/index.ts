@@ -33,7 +33,7 @@ serve(async (req) => {
 
 The database contains teams/organizations with these fields:
 - name (text): team/organization name
-- sport (text): sport type (football, cricket, rugby, etc.)
+- sport (text): sport type (football, cricket, rugby, golf, boxing, etc.)
 - level (text): professional, amateur, youth, etc.
 - city (text): city name
 - country (text): country name
@@ -42,20 +42,21 @@ The database contains teams/organizations with these fields:
 
 Convert the user's query into a JSON object with these possible filters:
 {
-  "searchTerm": "text to search in team names",
-  "sport": "specific sport or 'all'",
+  "searchTerm": "text to search in team names or leave empty",
+  "sport": "specific sport name or 'all'",
   "level": "specific level or 'all'", 
-  "city": "specific city or 'all'",
-  "country": "specific country or 'all'",
+  "city": "specific city name or 'all'",
+  "country": "specific country name or 'all'",
   "revenue": "less1m|1m-10m|10m-50m|more50m|all",
   "employees": "less50|50-200|200-1000|more1000|all"
 }
 
+IMPORTANT: For sports, use the exact sport names as they appear in the database: Football, Cricket, Rugby, Golf, Boxing, Basketball, etc.
+
 Examples:
-- "Find cricket clubs in London" → {"searchTerm": "", "sport": "cricket", "city": "London", "country": "all", "level": "all", "revenue": "all", "employees": "all"}
-- "Show marketing managers in Dublin" → {"searchTerm": "marketing", "city": "Dublin", "sport": "all", "level": "all", "country": "all", "revenue": "all", "employees": "all"}
-- "Football teams with over 50 employees" → {"searchTerm": "", "sport": "football", "employees": "more1000", "city": "all", "country": "all", "level": "all", "revenue": "all"}
-- "Professional rugby teams" → {"searchTerm": "", "sport": "rugby", "level": "professional", "city": "all", "country": "all", "revenue": "all", "employees": "all"}
+- "London cricket clubs" → {"searchTerm": "", "sport": "Cricket", "city": "London", "country": "all", "level": "all", "revenue": "all", "employees": "all"}
+- "Professional football teams in Manchester" → {"searchTerm": "", "sport": "Football", "level": "Professional", "city": "Manchester", "country": "all", "revenue": "all", "employees": "all"}
+- "Golf clubs in Scotland" → {"searchTerm": "", "sport": "Golf", "city": "all", "country": "Scotland", "level": "all", "revenue": "all", "employees": "all"}
 
 Only return the JSON object, no explanation.`;
 
@@ -91,6 +92,7 @@ Only return the JSON object, no explanation.`;
     let filters;
     try {
       filters = JSON.parse(aiResponse);
+      console.log('Parsed filters:', filters);
     } catch (parseError) {
       console.error('Failed to parse AI response as JSON:', aiResponse);
       throw new Error('Failed to parse AI response');
