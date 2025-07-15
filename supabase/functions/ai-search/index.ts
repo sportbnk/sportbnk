@@ -62,43 +62,44 @@ Examples:
 
 Only return the JSON object, no explanation.`;
 
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${openAIApiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'gpt-4o-mini',
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: query }
-        ],
-        temperature: 0.1,
-        max_tokens: 200,
-      }),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error('OpenAI API error:', errorData);
-      throw new Error(`OpenAI API error: ${errorData.error?.message || 'Unknown error'}`);
-    }
-
-    const data = await response.json();
-    const aiResponse = data.choices[0].message.content.trim();
-    
-    console.log('AI response:', aiResponse);
-
-    // Parse the AI response as JSON
+    // Try to call OpenAI API, but fall back to simple search if it fails
     let filters;
     try {
+      console.log('Calling OpenAI API...');
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${openAIApiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'gpt-4o-mini',
+          messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: query }
+          ],
+          temperature: 0.1,
+          max_tokens: 200,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('OpenAI API error:', errorData);
+        throw new Error(`OpenAI API error: ${errorData.error?.message || 'Unknown error'}`);
+      }
+
+      const data = await response.json();
+      const aiResponse = data.choices[0].message.content.trim();
+      
+      console.log('AI response:', aiResponse);
+
+      // Parse the AI response as JSON
       filters = JSON.parse(aiResponse);
       console.log('Parsed filters:', filters);
-    } catch (parseError) {
-      console.error('Failed to parse AI response as JSON:', aiResponse);
+    } catch (error) {
+      console.error('OpenAI API failed or parsing failed, using fallback search logic:', error);
       // Fallback: create basic filters from the search query
-      console.log('Using fallback search logic...');
       filters = {
         searchTerm: query,
         sport: 'all',
