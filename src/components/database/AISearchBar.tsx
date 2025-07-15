@@ -38,12 +38,41 @@ const AISearchBar: React.FC<AISearchBarProps> = ({ onResults, onLoading }) => {
 
       console.log('AI search results:', data);
       
+      let allResults = [];
+      
+      // Handle contacts
       if (data?.contacts && data.contacts.length > 0) {
-        onResults(data.contacts, query);
-        toast.success(`Found ${data.contacts.length} contacts for "${query}"`);
+        allResults = [...allResults, ...data.contacts];
+      }
+      
+      // Handle teams - convert to contact format for display
+      if (data?.teams && data.teams.length > 0) {
+        const teamsAsContacts = data.teams.map((team: any) => ({
+          id: team.id,
+          name: team.name,
+          role: 'Team',
+          email: null,
+          phone: null,
+          linkedin: null,
+          teams: {
+            id: team.id,
+            name: team.name,
+            sports: team.sports,
+            cities: team.cities
+          },
+          email_credits_consumed: 0,
+          phone_credits_consumed: 0,
+          linkedin_credits_consumed: 0
+        }));
+        allResults = [...allResults, ...teamsAsContacts];
+      }
+      
+      if (allResults.length > 0) {
+        onResults(allResults, query);
+        toast.success(`Found ${allResults.length} results for "${query}"`);
       } else {
         onResults([], query);
-        toast.info('No contacts found for your query');
+        toast.info('No results found for your query');
       }
     } catch (error) {
       console.error('Search error:', error);

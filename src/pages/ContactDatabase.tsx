@@ -116,25 +116,49 @@ const ContactDatabase = () => {
     console.log('AI search query:', query);
     
     // Transform the results to match the expected format for ContactsView
-    const transformedResults = results.map((contact: any) => {
-      console.log('Transforming contact:', contact);
+    const transformedResults = results.map((item: any) => {
+      console.log('Transforming item:', item);
+      
+      // Handle teams (when role is 'Team')
+      if (item.role === 'Team') {
+        return {
+          id: item.id,
+          name: item.name,
+          position: 'Team',
+          team: item.name,
+          teamId: item.id,
+          sport: item.teams?.sports?.name || 'Unknown',
+          email: null,
+          phone: null,
+          linkedin: null,
+          city: item.teams?.cities?.name || 'Unknown',
+          country: item.teams?.cities?.countries?.name || 'Unknown',
+          verified: true,
+          activeReplier: false,
+          email_credits_consumed: 0,
+          phone_credits_consumed: 0,
+          linkedin_credits_consumed: 0
+        };
+      }
+      
+      // Handle contacts
       return {
-        id: contact.id,
-        name: contact.name,
-        position: contact.role || 'Unknown',
-        team: contact.teams?.name || 'Unknown',
-        teamId: contact.teams?.id || null,
-        sport: contact.teams?.sports?.name || 'Unknown',
-        email: contact.email || null,
-        phone: contact.phone || null,
-        linkedin: contact.linkedin || null,
-        city: contact.teams?.cities?.name || 'Unknown',
-        country: contact.teams?.cities?.countries?.name || 'Unknown',
+        id: item.id,
+        name: item.name,
+        position: item.role || 'Unknown',
+        team: item.teams?.name || 'Unknown',
+        teamId: item.teams?.id || null,
+        sport: item.teams?.sports?.name || 'Unknown',
+        email: item.email || null,
+        phone: item.phone || null,
+        linkedin: item.linkedin || null,
+        city: item.teams?.cities?.name || 'Unknown',
+        country: item.teams?.cities?.countries?.name || 'Unknown',
         verified: true,
         activeReplier: true,
-        email_credits_consumed: contact.email_credits_consumed || 0,
-        phone_credits_consumed: contact.phone_credits_consumed || 0,
-        linkedin_credits_consumed: contact.linkedin_credits_consumed || 0
+        email_credits_consumed: item.email_credits_consumed || 0,
+        phone_credits_consumed: item.phone_credits_consumed || 0,
+        linkedin_credits_consumed: item.linkedin_credits_consumed || 0
       };
     });
     
