@@ -277,13 +277,11 @@ const CrmSidebar = () => {
                       onClick={handleProfileClick}
                       className={`w-full justify-start h-9 px-3 rounded-lg transition-all duration-200 text-gray-700 hover:bg-gray-50 hover:text-gray-900 ${
                         !open ? "justify-center" : ""
-                      }`}
+                      } flex items-center`}
                       tooltip={!open ? "My Profile" : undefined}
                     >
-                      <div className="flex items-center">
-                        <User className={`h-4 w-4 ${open ? "mr-3" : ""} transition-all duration-200`} />
-                        {open && <span className="transition-opacity duration-200">My Profile</span>}
-                      </div>
+                      <User className={`h-4 w-4 ${open ? "mr-3" : ""} transition-all duration-200`} />
+                      {open && <span className="transition-opacity duration-200">My Profile</span>}
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                   <SidebarMenuItem>
@@ -291,13 +289,11 @@ const CrmSidebar = () => {
                       onClick={handleSettingsClick}
                       className={`w-full justify-start h-9 px-3 rounded-lg transition-all duration-200 text-gray-700 hover:bg-gray-50 hover:text-gray-900 ${
                         !open ? "justify-center" : ""
-                      }`}
+                      } flex items-center`}
                       tooltip={!open ? "Settings" : undefined}
                     >
-                      <div className="flex items-center">
-                        <Settings className={`h-4 w-4 ${open ? "mr-3" : ""} transition-all duration-200`} />
-                        {open && <span className="transition-opacity duration-200">Settings</span>}
-                      </div>
+                      <Settings className={`h-4 w-4 ${open ? "mr-3" : ""} transition-all duration-200`} />
+                      {open && <span className="transition-opacity duration-200">Settings</span>}
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                   <SidebarMenuItem>
@@ -305,13 +301,11 @@ const CrmSidebar = () => {
                       onClick={handleLogout}
                       className={`w-full justify-start h-9 px-3 rounded-lg transition-all duration-200 text-red-600 hover:text-red-700 hover:bg-red-50 ${
                         !open ? "justify-center" : ""
-                      }`}
+                      } flex items-center`}
                       tooltip={!open ? "Log Out" : undefined}
                     >
-                      <div className="flex items-center">
-                        <LogOut className={`h-4 w-4 ${open ? "mr-3" : ""} transition-all duration-200`} />
-                        {open && <span className="transition-opacity duration-200">Log Out</span>}
-                      </div>
+                      <LogOut className={`h-4 w-4 ${open ? "mr-3" : ""} transition-all duration-200`} />
+                      {open && <span className="transition-opacity duration-200">Log Out</span>}
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 </SidebarMenu>
