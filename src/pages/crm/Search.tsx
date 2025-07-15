@@ -9,87 +9,8 @@ import { Button } from '@/components/ui/button';
 import { Search as SearchIcon, Users, User, Loader } from 'lucide-react';
 import ContactsView from '@/components/database/ContactsView';
 import { RevealProvider } from '@/contexts/RevealContext';
-
-// Sample data for teams
-const teamsData = [
-  {
-    id: 1,
-    name: "Manchester United",
-    sport: "Football",
-    country: "United Kingdom",
-    logo: "/lovable-uploads/1eb7dc35-8f3d-4a53-8727-249a31db0275.png",
-    employees: 24,
-    verified: true
-  },
-  {
-    id: 2,
-    name: "LA Lakers",
-    sport: "Basketball",
-    country: "United States",
-    logo: "/lovable-uploads/b95abe05-7dc8-449e-91a1-c17046b01f5e.png",
-    employees: 18,
-    verified: true
-  },
-  {
-    id: 3,
-    name: "Real Madrid",
-    sport: "Football",
-    country: "Spain",
-    logo: "/lovable-uploads/5de360aa-8105-490e-bf75-94ff7ac0832d.png",
-    employees: 22,
-    verified: true
-  }
-];
-
-// Sample data for people
-const peopleData = [
-  {
-    id: "1",
-    name: "John Smith",
-    position: "Marketing Director",
-    team: "Manchester United",
-    teamId: 1,
-    sport: "Football",
-    email: "j.s******@manutd.com",
-    phone: "+44 77** *** ***",
-    teamLogo: "/lovable-uploads/1eb7dc35-8f3d-4a53-8727-249a31db0275.png",
-    verified: true,
-    activeReplier: true,
-    email_credits_consumed: 2,
-    phone_credits_consumed: 3,
-    linkedin_credits_consumed: 0
-  },
-  {
-    id: "2",
-    name: "Michael Johnson",
-    position: "Operations Director",
-    team: "LA Lakers",
-    teamId: 2,
-    sport: "Basketball",
-    email: "m.j******@lakers.com",
-    phone: "+1 31*-***-****",
-    teamLogo: "/lovable-uploads/b95abe05-7dc8-449e-91a1-c17046b01f5e.png",
-    verified: true,
-    email_credits_consumed: 1,
-    phone_credits_consumed: 0,
-    linkedin_credits_consumed: 2
-  },
-  {
-    id: "3",
-    name: "James Miller",
-    position: "Sponsorship Director",
-    team: "Real Madrid",
-    teamId: 3,
-    sport: "Football",
-    email: "j.m*****@realmadrid.es",
-    teamLogo: "/lovable-uploads/5de360aa-8105-490e-bf75-94ff7ac0832d.png",
-    verified: true,
-    activeReplier: true,
-    email_credits_consumed: 0,
-    phone_credits_consumed: 3,
-    linkedin_credits_consumed: 1
-  }
-];
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 
 const Search = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -100,34 +21,72 @@ const Search = () => {
   const [isLoading, setIsLoading] = useState(false);
   
   // States for teams and people search results
-  const [teamsResults, setTeamsResults] = useState<typeof teamsData>([]);
-  const [peopleResults, setPeopleResults] = useState<typeof peopleData>([]);
+  const [teamsResults, setTeamsResults] = useState<any[]>([]);
+  const [peopleResults, setPeopleResults] = useState<any[]>([]);
+  
+  // AI Search function
+  const performAISearch = async (searchQuery: string) => {
+    try {
+      setIsLoading(true);
+      
+      const { data, error } = await supabase.functions.invoke('ai-search', {
+        body: { query: searchQuery }
+      });
+      
+      if (error) {
+        console.error('AI search error:', error);
+        toast.error('Search failed. Please try again.');
+        return;
+      }
+      
+      // Transform teams data to match expected format
+      const transformedTeams = (data.teams || []).map((team: any) => ({
+        id: team.id,
+        name: team.name,
+        sport: team.sports?.name || 'Unknown',
+        country: team.cities?.countries?.name || 'Unknown',
+        city: team.cities?.name || 'Unknown',
+        employees: team.employees || 0,
+        level: team.level || 'Unknown',
+        revenue: team.revenue || 0,
+        verified: true // Default to verified
+      }));
+      
+      // Transform contacts data to match expected format
+      const transformedContacts = (data.contacts || []).map((contact: any) => ({
+        id: contact.id,
+        name: contact.name,
+        position: contact.role || 'Unknown',
+        team: contact.teams?.name || 'Unknown',
+        teamId: contact.teams?.id || null,
+        sport: contact.teams?.sports?.name || 'Unknown',
+        email: contact.email || null,
+        phone: contact.phone || null,
+        linkedin: contact.linkedin || null,
+        city: contact.teams?.cities?.name || 'Unknown',
+        country: contact.teams?.cities?.countries?.name || 'Unknown',
+        verified: true, // Default to verified
+        activeReplier: true, // Default to active replier
+        email_credits_consumed: contact.email_credits_consumed || 0,
+        phone_credits_consumed: contact.phone_credits_consumed || 0,
+        linkedin_credits_consumed: contact.linkedin_credits_consumed || 0
+      }));
+      
+      setTeamsResults(transformedTeams);
+      setPeopleResults(transformedContacts);
+      
+    } catch (error) {
+      console.error('Search error:', error);
+      toast.error('Search failed. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
   
   // Search function
   useEffect(() => {
     if (query) {
-      setIsLoading(true);
-      
-      // Simulate API search delay
-      setTimeout(() => {
-        // Search in teams
-        const filteredTeams = teamsData.filter(team => 
-          team.name.toLowerCase().includes(query.toLowerCase()) ||
-          team.sport.toLowerCase().includes(query.toLowerCase()) ||
-          team.country.toLowerCase().includes(query.toLowerCase())
-        );
-        setTeamsResults(filteredTeams);
-        
-        // Search in people
-        const filteredPeople = peopleData.filter(person => 
-          person.name.toLowerCase().includes(query.toLowerCase()) ||
-          person.position.toLowerCase().includes(query.toLowerCase()) ||
-          person.team.toLowerCase().includes(query.toLowerCase())
-        );
-        setPeopleResults(filteredPeople);
-        
-        setIsLoading(false);
-      }, 800);
+      performAISearch(query);
     } else {
       setTeamsResults([]);
       setPeopleResults([]);

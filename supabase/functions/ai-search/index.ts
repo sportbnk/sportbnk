@@ -101,8 +101,8 @@ Only return the JSON object, no explanation.`;
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Build the query based on AI-generated filters
-    let dbQuery = supabase
+    // Build queries for both teams and contacts
+    let teamsQuery = supabase
       .from('teams')
       .select(`
         id,
@@ -121,64 +121,124 @@ Only return the JSON object, no explanation.`;
         )
       `);
 
-    // Apply filters
+    let contactsQuery = supabase
+      .from('contacts')
+      .select(`
+        id,
+        name,
+        role,
+        email,
+        phone,
+        linkedin,
+        email_credits_consumed,
+        phone_credits_consumed,
+        linkedin_credits_consumed,
+        teams (
+          id,
+          name,
+          sports (
+            name
+          ),
+          cities (
+            name,
+            countries (
+              name
+            )
+          )
+        )
+      `);
+
+    // Apply filters to teams query
     if (filters.searchTerm && filters.searchTerm.trim()) {
-      dbQuery = dbQuery.ilike('name', `%${filters.searchTerm.trim()}%`);
+      teamsQuery = teamsQuery.ilike('name', `%${filters.searchTerm.trim()}%`);
     }
 
-    if (filters.sport && filters.sport !== 'all') {
-      dbQuery = dbQuery.eq('sports.name', filters.sport);
-    }
-
-    if (filters.level && filters.level !== 'all') {
-      dbQuery = dbQuery.eq('level', filters.level);
-    }
-
+    // Priority 1: City/Country filters
     if (filters.city && filters.city !== 'all') {
-      dbQuery = dbQuery.eq('cities.name', filters.city);
+      teamsQuery = teamsQuery.eq('cities.name', filters.city);
     }
 
     if (filters.country && filters.country !== 'all') {
-      dbQuery = dbQuery.eq('cities.countries.name', filters.country);
+      teamsQuery = teamsQuery.eq('cities.countries.name', filters.country);
+    }
+
+    // Priority 2: Sport filters
+    if (filters.sport && filters.sport !== 'all') {
+      teamsQuery = teamsQuery.eq('sports.name', filters.sport);
+    }
+
+    if (filters.level && filters.level !== 'all') {
+      teamsQuery = teamsQuery.eq('level', filters.level);
     }
 
     if (filters.revenue && filters.revenue !== 'all') {
       if (filters.revenue === 'less1m') {
-        dbQuery = dbQuery.lt('revenue', 1000000);
+        teamsQuery = teamsQuery.lt('revenue', 1000000);
       } else if (filters.revenue === '1m-10m') {
-        dbQuery = dbQuery.gte('revenue', 1000000).lte('revenue', 10000000);
+        teamsQuery = teamsQuery.gte('revenue', 1000000).lte('revenue', 10000000);
       } else if (filters.revenue === '10m-50m') {
-        dbQuery = dbQuery.gte('revenue', 10000000).lte('revenue', 50000000);
+        teamsQuery = teamsQuery.gte('revenue', 10000000).lte('revenue', 50000000);
       } else if (filters.revenue === 'more50m') {
-        dbQuery = dbQuery.gt('revenue', 50000000);
+        teamsQuery = teamsQuery.gt('revenue', 50000000);
       }
     }
 
     if (filters.employees && filters.employees !== 'all') {
       if (filters.employees === 'less50') {
-        dbQuery = dbQuery.lt('employees', 50);
+        teamsQuery = teamsQuery.lt('employees', 50);
       } else if (filters.employees === '50-200') {
-        dbQuery = dbQuery.gte('employees', 50).lte('employees', 200);
+        teamsQuery = teamsQuery.gte('employees', 50).lte('employees', 200);
       } else if (filters.employees === '200-1000') {
-        dbQuery = dbQuery.gte('employees', 200).lte('employees', 1000);
+        teamsQuery = teamsQuery.gte('employees', 200).lte('employees', 1000);
       } else if (filters.employees === 'more1000') {
-        dbQuery = dbQuery.gt('employees', 1000);
+        teamsQuery = teamsQuery.gt('employees', 1000);
       }
     }
 
-    // Execute the query
-    const { data: results, error } = await dbQuery.limit(50);
-
-    if (error) {
-      console.error('Database query error:', error);
-      throw new Error(`Database error: ${error.message}`);
+    // Apply similar filters to contacts query
+    if (filters.searchTerm && filters.searchTerm.trim()) {
+      contactsQuery = contactsQuery.or(`name.ilike.%${filters.searchTerm.trim()}%,role.ilike.%${filters.searchTerm.trim()}%`);
     }
 
-    console.log(`Found ${results?.length || 0} results`);
+    // Priority 1: City/Country filters for contacts (through teams)
+    if (filters.city && filters.city !== 'all') {
+      contactsQuery = contactsQuery.eq('teams.cities.name', filters.city);
+    }
+
+    if (filters.country && filters.country !== 'all') {
+      contactsQuery = contactsQuery.eq('teams.cities.countries.name', filters.country);
+    }
+
+    // Priority 2: Sport filters for contacts (through teams)
+    if (filters.sport && filters.sport !== 'all') {
+      contactsQuery = contactsQuery.eq('teams.sports.name', filters.sport);
+    }
+
+    // Execute both queries
+    const [teamsResult, contactsResult] = await Promise.all([
+      teamsQuery.limit(25),
+      contactsQuery.limit(25)
+    ]);
+
+    if (teamsResult.error) {
+      console.error('Teams query error:', teamsResult.error);
+      throw new Error(`Teams query error: ${teamsResult.error.message}`);
+    }
+
+    if (contactsResult.error) {
+      console.error('Contacts query error:', contactsResult.error);
+      throw new Error(`Contacts query error: ${contactsResult.error.message}`);
+    }
+
+    const teams = teamsResult.data || [];
+    const contacts = contactsResult.data || [];
+
+    console.log(`Found ${teams.length} teams and ${contacts.length} contacts`);
 
     return new Response(
       JSON.stringify({ 
-        results: results || [], 
+        teams: teams, 
+        contacts: contacts,
         filters,
         query: query
       }),

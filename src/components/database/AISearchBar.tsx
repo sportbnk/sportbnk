@@ -38,12 +38,12 @@ const AISearchBar: React.FC<AISearchBarProps> = ({ onResults, onLoading }) => {
 
       console.log('AI search results:', data);
       
-      if (data?.results) {
-        onResults(data.results, query);
-        toast.success(`Found ${data.results.length} results for "${query}"`);
+      if (data?.contacts && data.contacts.length > 0) {
+        onResults(data.contacts, query);
+        toast.success(`Found ${data.contacts.length} contacts for "${query}"`);
       } else {
         onResults([], query);
-        toast.info('No results found for your query');
+        toast.info('No contacts found for your query');
       }
     } catch (error) {
       console.error('Search error:', error);

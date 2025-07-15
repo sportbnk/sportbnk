@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import ContactsView from "@/components/database/ContactsView";
 import ContactsFilters from "@/components/database/ContactsFilters";
+import AISearchBar from "@/components/database/AISearchBar";
 import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -78,6 +79,12 @@ const ContactDatabase = () => {
   
   // State for credits
   const [credits, setCredits] = useState(250);
+  
+  // State for AI search
+  const [aiSearchResults, setAiSearchResults] = useState<any[]>([]);
+  const [aiSearchQuery, setAiSearchQuery] = useState('');
+  const [isAiSearchLoading, setIsAiSearchLoading] = useState(false);
+  const [showAiResults, setShowAiResults] = useState(false);
 
   // Handler for viewing team details
   const handleViewTeam = (teamId: number) => {
@@ -103,9 +110,47 @@ const ContactDatabase = () => {
     toast.info("Contact removed from your list.");
   };
 
+  // Handler for AI search results
+  const handleAiSearchResults = (results: any[], query: string) => {
+    // Transform the results to match the expected format for ContactsView
+    const transformedResults = results.map((contact: any) => ({
+      id: contact.id,
+      name: contact.name,
+      position: contact.role || 'Unknown',
+      team: contact.teams?.name || 'Unknown',
+      teamId: contact.teams?.id || null,
+      sport: contact.teams?.sports?.name || 'Unknown',
+      email: contact.email || null,
+      phone: contact.phone || null,
+      linkedin: contact.linkedin || null,
+      city: contact.teams?.cities?.name || 'Unknown',
+      country: contact.teams?.cities?.countries?.name || 'Unknown',
+      verified: true,
+      activeReplier: true,
+      email_credits_consumed: contact.email_credits_consumed || 0,
+      phone_credits_consumed: contact.phone_credits_consumed || 0,
+      linkedin_credits_consumed: contact.linkedin_credits_consumed || 0
+    }));
+    
+    setAiSearchResults(transformedResults);
+    setAiSearchQuery(query);
+    setShowAiResults(true);
+  };
+
+  // Handler for AI search loading
+  const handleAiSearchLoading = (loading: boolean) => {
+    setIsAiSearchLoading(loading);
+  };
+
   // Handler for filter changes
   const handleFilterChange = (filters: any) => {
     setActiveFilters(filters);
+    // Clear AI search results when filters change
+    if (showAiResults) {
+      setShowAiResults(false);
+      setAiSearchResults([]);
+      setAiSearchQuery('');
+    }
   };
 
   // Apply filters to the data
@@ -129,6 +174,11 @@ const ContactDatabase = () => {
     return true;
   });
 
+  // Choose which data to display
+  const displayData = showAiResults ? aiSearchResults : filteredData;
+  const displayTitle = showAiResults ? `AI Search Results for "${aiSearchQuery}"` : 'Contact List';
+  const displayCount = showAiResults ? aiSearchResults.length : filteredData.length;
+
   return (
     <RevealProvider>
       <div className="container max-w-full px-2">
@@ -141,6 +191,14 @@ const ContactDatabase = () => {
           </div>
         </div>
         
+        {/* AI Search Bar */}
+        <div className="mb-6">
+          <AISearchBar 
+            onResults={handleAiSearchResults}
+            onLoading={handleAiSearchLoading}
+          />
+        </div>
+        
         <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
           <div className="md:col-span-1">
             <Card className="shadow-md mb-4">
@@ -151,7 +209,7 @@ const ContactDatabase = () => {
                 <ContactsFilters 
                   onFilterChange={handleFilterChange} 
                   filters={activeFilters}
-                  totalResults={filteredData.length}
+                  totalResults={displayCount}
                 />
               </CardContent>
             </Card>
@@ -173,11 +231,27 @@ const ContactDatabase = () => {
           <div className="md:col-span-5">
             <Card className="shadow-md">
               <CardHeader className="pb-3 border-b pt-4 px-4">
-                <CardTitle className="text-lg font-semibold">Contact List</CardTitle>
+                <CardTitle className="text-lg font-semibold">
+                  {displayTitle} ({displayCount} results)
+                </CardTitle>
+                {showAiResults && (
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => {
+                      setShowAiResults(false);
+                      setAiSearchResults([]);
+                      setAiSearchQuery('');
+                    }}
+                    className="mt-2"
+                  >
+                    Clear AI Search
+                  </Button>
+                )}
               </CardHeader>
               <CardContent className="p-0">
                 <ContactsView 
-                  data={filteredData}
+                  data={displayData}
                   onViewTeam={handleViewTeam}
                   onAddToList={handleAddToList}
                   onRemoveFromList={handleRemoveFromList}
