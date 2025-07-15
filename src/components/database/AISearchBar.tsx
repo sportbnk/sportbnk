@@ -25,11 +25,15 @@ const AISearchBar: React.FC<AISearchBarProps> = ({ onResults, onLoading }) => {
     onLoading(true);
 
     try {
+      console.log('=== FRONTEND AI SEARCH START ===');
       console.log('Searching with AI query:', query);
       
       const { data, error } = await supabase.functions.invoke('ai-search', {
         body: { query: query.trim() }
       });
+
+      console.log('Raw supabase response:', { data, error });
+      console.log('=== FRONTEND AI SEARCH END ===');
 
       if (error) {
         console.error('AI search error:', error);

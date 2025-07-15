@@ -17,11 +17,13 @@ serve(async (req) => {
   try {
     const { query } = await req.json();
     
+    console.log('=== AI SEARCH DEBUG START ===');
+    console.log('Input query:', query);
+    
     if (!query) {
+      console.log('ERROR: No query provided');
       throw new Error('Query is required');
     }
-
-    console.log('Processing AI search query:', query);
 
     const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
     if (!openAIApiKey) {
@@ -95,7 +97,31 @@ Only return the JSON object, no explanation.`;
       console.log('Parsed filters:', filters);
     } catch (parseError) {
       console.error('Failed to parse AI response as JSON:', aiResponse);
-      throw new Error('Failed to parse AI response');
+      // Fallback: create basic filters from the search query
+      console.log('Using fallback search logic...');
+      filters = {
+        searchTerm: query,
+        sport: 'all',
+        level: 'all',
+        city: 'all',
+        country: 'all',
+        revenue: 'all',
+        employees: 'all'
+      };
+      
+      // Try to extract sport and city from query
+      const lowerQuery = query.toLowerCase();
+      if (lowerQuery.includes('cricket')) filters.sport = 'Cricket';
+      if (lowerQuery.includes('football')) filters.sport = 'Football';
+      if (lowerQuery.includes('rugby')) filters.sport = 'Rugby';
+      if (lowerQuery.includes('golf')) filters.sport = 'Golf';
+      if (lowerQuery.includes('boxing')) filters.sport = 'Boxing';
+      
+      if (lowerQuery.includes('london')) filters.city = 'London';
+      if (lowerQuery.includes('manchester')) filters.city = 'Manchester';
+      if (lowerQuery.includes('birmingham')) filters.city = 'Birmingham';
+      
+      console.log('Fallback filters:', filters);
     }
 
     // Initialize Supabase client
@@ -216,11 +242,23 @@ Only return the JSON object, no explanation.`;
       contactsQuery = contactsQuery.eq('teams.sports.name', filters.sport);
     }
 
+    console.log('Executing database queries...');
+    console.log('Teams query filters applied:', {
+      searchTerm: filters.searchTerm,
+      city: filters.city,
+      country: filters.country,
+      sport: filters.sport,
+      level: filters.level
+    });
+    
     // Execute both queries
     const [teamsResult, contactsResult] = await Promise.all([
       teamsQuery.limit(25),
       contactsQuery.limit(25)
     ]);
+
+    console.log('Teams query result:', teamsResult);
+    console.log('Contacts query result:', contactsResult);
 
     if (teamsResult.error) {
       console.error('Teams query error:', teamsResult.error);
@@ -236,6 +274,9 @@ Only return the JSON object, no explanation.`;
     const contacts = contactsResult.data || [];
 
     console.log(`Found ${teams.length} teams and ${contacts.length} contacts`);
+    console.log('Teams data:', teams);
+    console.log('Contacts data:', contacts);
+    console.log('=== AI SEARCH DEBUG END ===');
 
     return new Response(
       JSON.stringify({ 
