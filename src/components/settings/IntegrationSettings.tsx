@@ -27,6 +27,59 @@ const IntegrationSettings = () => {
   const { toast } = useToast();
   
   const [integrations, setIntegrations] = React.useState<Integration[]>([
+    // CRM Integrations
+    {
+      id: "salesforce",
+      name: "Salesforce",
+      description: "Sync leads, deals, and contacts with Salesforce CRM",
+      connected: false,
+      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Salesforce.com_logo.svg/1200px-Salesforce.com_logo.svg.png",
+      category: "crm",
+      status: "new"
+    },
+    {
+      id: "hubspot",
+      name: "HubSpot",
+      description: "Connect your HubSpot CRM for seamless lead management",
+      connected: false,
+      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/HubSpot_Logo.svg/1200px-HubSpot_Logo.svg.png",
+      category: "crm",
+      status: "new"
+    },
+    {
+      id: "pipedrive",
+      name: "Pipedrive",
+      description: "Sync your sales pipeline with Pipedrive CRM",
+      connected: false,
+      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Pipedrive_logo.svg/1200px-Pipedrive_logo.svg.png",
+      category: "crm"
+    },
+    {
+      id: "zoho-crm",
+      name: "Zoho CRM",
+      description: "Integrate with Zoho CRM for comprehensive contact management",
+      connected: false,
+      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Zoho_Corporation_Logo.svg/1200px-Zoho_Corporation_Logo.svg.png",
+      category: "crm"
+    },
+    // Analytics Integrations  
+    {
+      id: "google-analytics",
+      name: "Google Analytics",
+      description: "Track website traffic and user behavior analytics",
+      connected: false,
+      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Google_Analytics_logo.svg/1200px-Google_Analytics_logo.svg.png",
+      category: "analytics"
+    },
+    {
+      id: "mixpanel",
+      name: "Mixpanel",
+      description: "Advanced product analytics and user tracking",
+      connected: false,
+      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Mixpanel_logo.svg/1200px-Mixpanel_logo.svg.png",
+      category: "analytics"
+    },
+    // Communication Integrations
     {
       id: "google-calendar",
       name: "Google Calendar",
@@ -36,22 +89,30 @@ const IntegrationSettings = () => {
       category: "communication"
     },
     {
+      id: "outlook",
+      name: "Microsoft Outlook",
+      description: "Integrate with Outlook for email and calendar sync",
+      connected: false,
+      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Microsoft_Office_Outlook_%282018%E2%80%93present%29.svg/1200px-Microsoft_Office_Outlook_%282018%E2%80%93present%29.svg.png",
+      category: "communication"
+    },
+    {
       id: "slack",
       name: "Slack",
       description: "Get notifications and updates in your Slack workspace",
       connected: false,
       logo: "https://upload.wikimedia.org/wikipedia/commons/d/d5/Slack_icon_2019.svg",
-      category: "communication",
-      status: "new"
+      category: "communication"
     },
     {
       id: "mailchimp",
       name: "Mailchimp",
-      description: "Sync contacts with your Mailchimp lists",
+      description: "Sync contacts with your Mailchimp email lists",
       connected: false,
       logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Mailchimp_official_logo.svg/1200px-Mailchimp_official_logo.svg.png",
-      category: "crm"
+      category: "communication"
     },
+    // Other Integrations
     {
       id: "zapier",
       name: "Zapier",
@@ -59,16 +120,7 @@ const IntegrationSettings = () => {
       connected: true,
       logo: "https://cdn.zapier.com/zapier/images/logos/zapier-logo.svg",
       category: "other"
-    },
-    {
-      id: "google-analytics",
-      name: "Google Analytics",
-      description: "Track website traffic and user behavior",
-      connected: false,
-      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Google_Analytics_logo.svg/1200px-Google_Analytics_logo.svg.png",
-      category: "analytics",
-      status: "updated"
-    },
+    }
   ]);
   
   const toggleIntegration = (id: string) => {
