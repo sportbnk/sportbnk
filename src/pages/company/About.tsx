@@ -82,43 +82,6 @@ const About = () => {
         </div>
       </section>
       
-      <section id="team" className="py-16 md:py-24">
-        <div className="container mx-auto px-4 md:px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-sportbnk-navy mb-4">
-              Meet Our Team
-            </h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Meet the passionate professionals behind Sportsbnk who are dedicated to transforming how 
-              businesses connect in the sports industry.
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-6">
-            <TeamMember 
-              name="Jared Wilson" 
-              role="CEO & Founder" 
-              image="/lovable-uploads/5fd548ad-aa03-4895-ac96-cdf4cf77704b.png"
-            />
-            <TeamMember 
-              name="Chris Watts" 
-              role="CTO" 
-              image="/lovable-uploads/42b58d44-dfc2-460a-afcd-df6b898f7824.png"
-            />
-            <TeamMember 
-              name="Scott McKechnie" 
-              role="Executive Advisor" 
-              image="/lovable-uploads/e6aa5366-00d7-4f5e-981b-9990f9cfc353.png"
-            />
-            <TeamMember 
-              name="Greg Thomas" 
-              role="Director" 
-              image="/lovable-uploads/f4fa7b98-986a-409d-b134-8812c4fd3677.png"
-            />
-          </div>
-        </div>
-      </section>
-      
       <section className="py-16 bg-sportbnk-navy text-white">
         <div className="container mx-auto px-4 md:px-6">
           <div className="max-w-4xl mx-auto">
