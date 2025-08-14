@@ -2,7 +2,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import PageLayout from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
-import { Search, Rocket, UserPlus } from "lucide-react";
+import { Search, Rocket, UserPlus, Code } from "lucide-react";
 
 const ProductCard = ({ 
   title, 
@@ -49,7 +49,7 @@ const Products = () => {
             empowers your business to connect, engage, and grow in this specialized market.
           </p>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             <ProductCard 
               title="Discover" 
               icon={<Search size={24} />}
@@ -83,6 +83,18 @@ const Products = () => {
                 "Sports industry focus",
                 "No candidate exporting",
                 "Clear terms & conditions"
+              ]}
+            />
+            
+            <ProductCard 
+              title="API" 
+              icon={<Code size={24} />}
+              description="Integrate sports data directly into your applications with our comprehensive REST API."
+              features={[
+                "RESTful API endpoints",
+                "Real-time data access",
+                "Comprehensive documentation",
+                "Flexible rate limits"
               ]}
             />
           </div>
