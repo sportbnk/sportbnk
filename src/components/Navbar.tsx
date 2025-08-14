@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { Menu, X, ChevronDown, Package, BarChart3, Building, BookOpen, DollarSign, Calendar, Users, Rocket, Briefcase, Newspaper, Phone, BookmarkPlus, Users2, FileText, Video, Headphones, Clipboard, MessageSquare, HelpCircle } from 'lucide-react';
+import { Menu, X, ChevronDown, Package, BarChart3, Building, BookOpen, DollarSign, Calendar, Users, Rocket, Briefcase, Newspaper, Phone, BookmarkPlus, Users2, FileText, Video, Headphones, Clipboard, MessageSquare, HelpCircle, Code } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -84,6 +84,16 @@ const Navbar = () => {
                               <Users className="h-4 w-4 mr-2" /> Recruit
                             </div>
                             <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Find talents in sports</p>
+                          </Link>
+                        </NavigationMenuLink>
+                      </li>
+                      <li>
+                        <NavigationMenuLink asChild>
+                          <Link to="/products/api" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
+                            <div className="text-sm font-medium text-sportbnk-navy flex items-center">
+                              <Code className="h-4 w-4 mr-2" /> API
+                            </div>
+                            <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Integrate sports data via API</p>
                           </Link>
                         </NavigationMenuLink>
                       </li>
@@ -275,6 +285,11 @@ const Navbar = () => {
                 <DropdownMenuItem>
                   <Link to="/products/recruit" className="w-full flex items-center">
                     <Users className="h-4 w-4 mr-2" />Recruit
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link to="/products/api" className="w-full flex items-center">
+                    <Code className="h-4 w-4 mr-2" />API
                   </Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>

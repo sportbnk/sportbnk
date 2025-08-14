@@ -44,6 +44,7 @@ import CrmSettings from "./pages/crm/Settings";
 import Discover from "./pages/products/Discover";
 import Boost from "./pages/products/Boost";
 import Recruit from "./pages/products/Recruit";
+import Api from "./pages/products/Api";
 
 // Company sub-pages
 import About from "./pages/company/About";
@@ -118,6 +119,7 @@ function App() {
                       <Route path="/products/discover" element={<Discover />} />
                       <Route path="/products/boost" element={<Boost />} />
                       <Route path="/products/recruit" element={<Recruit />} />
+                      <Route path="/products/api" element={<Api />} />
                       
                       {/* Company sub-pages */}
                       <Route path="/company/about" element={<About />} />
