@@ -13,51 +13,42 @@ const Api = () => {
     >
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4 md:px-6">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <div className="inline-block p-3 bg-sportbnk-green/10 rounded-lg mb-4">
-                <Code className="h-8 w-8 text-sportbnk-green" />
+          <div className="max-w-4xl mx-auto text-center">
+            <div className="inline-block p-3 bg-sportbnk-green/10 rounded-lg mb-4">
+              <Code className="h-8 w-8 text-sportbnk-green" />
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-sportbnk-navy mb-4">
+              Powerful Sports Data API
+            </h2>
+            <p className="text-lg text-gray-600 mb-6">
+              Integrate comprehensive sports industry data directly into your applications with our robust REST API. 
+              Access real-time information about sports organizations, teams, and professionals programmatically.
+            </p>
+            <div className="grid md:grid-cols-2 gap-4 mb-8 text-left">
+              <div className="flex items-start">
+                <span className="text-sportbnk-green mr-2 font-bold text-lg">✓</span>
+                <p>RESTful API endpoints with JSON responses</p>
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-sportbnk-navy mb-4">
-                Powerful Sports Data API
-              </h2>
-              <p className="text-lg text-gray-600 mb-6">
-                Integrate comprehensive sports industry data directly into your applications with our robust REST API. 
-                Access real-time information about sports organizations, teams, and professionals programmatically.
-              </p>
-              <div className="space-y-4 mb-8">
-                <div className="flex items-start">
-                  <span className="text-sportbnk-green mr-2 font-bold text-lg">✓</span>
-                  <p>RESTful API endpoints with JSON responses</p>
-                </div>
-                <div className="flex items-start">
-                  <span className="text-sportbnk-green mr-2 font-bold text-lg">✓</span>
-                  <p>Real-time data synchronization</p>
-                </div>
-                <div className="flex items-start">
-                  <span className="text-sportbnk-green mr-2 font-bold text-lg">✓</span>
-                  <p>Comprehensive API documentation</p>
-                </div>
-                <div className="flex items-start">
-                  <span className="text-sportbnk-green mr-2 font-bold text-lg">✓</span>
-                  <p>Flexible rate limits and scalable pricing</p>
-                </div>
+              <div className="flex items-start">
+                <span className="text-sportbnk-green mr-2 font-bold text-lg">✓</span>
+                <p>Real-time data synchronization</p>
               </div>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white" asChild>
-                  <Link to="/free-trial">Start Free Trial</Link>
-                </Button>
-                <Button variant="outline" className="border-sportbnk-green text-sportbnk-green hover:bg-sportbnk-green hover:text-white" asChild>
-                  <Link to="/book-demo">View Documentation</Link>
-                </Button>
+              <div className="flex items-start">
+                <span className="text-sportbnk-green mr-2 font-bold text-lg">✓</span>
+                <p>Comprehensive API documentation</p>
+              </div>
+              <div className="flex items-start">
+                <span className="text-sportbnk-green mr-2 font-bold text-lg">✓</span>
+                <p>Flexible rate limits and scalable pricing</p>
               </div>
             </div>
-            <div>
-              <img 
-                src="/lovable-uploads/c506ab85-1e88-47f8-941f-cb182443bf55.png" 
-                alt="API Integration" 
-                className="rounded-lg shadow-lg"
-              />
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white" asChild>
+                <Link to="/free-trial">Start Free Trial</Link>
+              </Button>
+              <Button variant="outline" className="border-sportbnk-green text-sportbnk-green hover:bg-sportbnk-green hover:text-white" asChild>
+                <Link to="/book-demo">View Documentation</Link>
+              </Button>
             </div>
           </div>
         </div>
@@ -158,79 +149,6 @@ const Api = () => {
       </section>
 
       <section className="py-16">
-        <div className="container mx-auto px-4 md:px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-sportbnk-navy mb-4">API Endpoints</h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Our API provides access to comprehensive sports industry data through intuitive endpoints.
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-2 gap-8">
-            <Card className="bg-white border border-gray-200">
-              <CardHeader>
-                <CardTitle className="text-lg text-sportbnk-navy">Organizations</CardTitle>
-                <CardDescription>Access sports organizations and teams data</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="bg-gray-50 p-4 rounded-md font-mono text-sm">
-                  <div className="text-green-600">GET</div>
-                  <div className="text-gray-800">/api/v1/organizations</div>
-                  <div className="text-green-600 mt-2">GET</div>
-                  <div className="text-gray-800">/api/v1/organizations/{'{id}'}</div>
-                </div>
-              </CardContent>
-            </Card>
-            
-            <Card className="bg-white border border-gray-200">
-              <CardHeader>
-                <CardTitle className="text-lg text-sportbnk-navy">Teams</CardTitle>
-                <CardDescription>Retrieve team information and statistics</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="bg-gray-50 p-4 rounded-md font-mono text-sm">
-                  <div className="text-green-600">GET</div>
-                  <div className="text-gray-800">/api/v1/teams</div>
-                  <div className="text-green-600 mt-2">GET</div>
-                  <div className="text-gray-800">/api/v1/teams/{'{id}'}/employees</div>
-                </div>
-              </CardContent>
-            </Card>
-            
-            <Card className="bg-white border border-gray-200">
-              <CardHeader>
-                <CardTitle className="text-lg text-sportbnk-navy">Contacts</CardTitle>
-                <CardDescription>Access professional contact information</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="bg-gray-50 p-4 rounded-md font-mono text-sm">
-                  <div className="text-green-600">GET</div>
-                  <div className="text-gray-800">/api/v1/contacts</div>
-                  <div className="text-blue-600 mt-2">POST</div>
-                  <div className="text-gray-800">/api/v1/contacts/search</div>
-                </div>
-              </CardContent>
-            </Card>
-            
-            <Card className="bg-white border border-gray-200">
-              <CardHeader>
-                <CardTitle className="text-lg text-sportbnk-navy">Sports</CardTitle>
-                <CardDescription>Browse sports categories and classifications</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="bg-gray-50 p-4 rounded-md font-mono text-sm">
-                  <div className="text-green-600">GET</div>
-                  <div className="text-gray-800">/api/v1/sports</div>
-                  <div className="text-green-600 mt-2">GET</div>
-                  <div className="text-gray-800">/api/v1/sports/{'{id}'}/teams</div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-16 bg-sportbnk-lightGrey">
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-sportbnk-navy mb-4">Getting Started</h2>
