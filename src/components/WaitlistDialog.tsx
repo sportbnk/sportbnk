@@ -79,7 +79,7 @@ export function WaitlistDialog({ children, className }: WaitlistDialogProps) {
       } else {
         toast({
           title: "Successfully joined waitlist!",
-          description: "We'll notify you when SportBnk launches in 3 months.",
+          description: "We'll notify you when SportBnk launches.",
         });
         
         setFormData({
@@ -191,7 +191,7 @@ export function WaitlistDialog({ children, className }: WaitlistDialogProps) {
           </div>
           
           <p className="text-sm text-gray-600 text-center">
-            We'll notify you as soon as SportBnk launches in 3 months
+            We'll notify you as soon as SportBnk launches
           </p>
         </form>
       </DialogContent>
