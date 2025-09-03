@@ -662,6 +662,54 @@ export type Database = {
           },
         ]
       }
+      waitlist_signups: {
+        Row: {
+          company: string | null
+          consent: boolean
+          created_at: string
+          email: string
+          id: string
+          name: string
+          phone: string | null
+          role: string | null
+          source_page: string | null
+          status: Database["public"]["Enums"]["waitlist_status"]
+          utm_campaign: string | null
+          utm_medium: string | null
+          utm_source: string | null
+        }
+        Insert: {
+          company?: string | null
+          consent?: boolean
+          created_at?: string
+          email: string
+          id?: string
+          name: string
+          phone?: string | null
+          role?: string | null
+          source_page?: string | null
+          status?: Database["public"]["Enums"]["waitlist_status"]
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+        }
+        Update: {
+          company?: string | null
+          consent?: boolean
+          created_at?: string
+          email?: string
+          id?: string
+          name?: string
+          phone?: string | null
+          role?: string | null
+          source_page?: string | null
+          status?: Database["public"]["Enums"]["waitlist_status"]
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -677,7 +725,7 @@ export type Database = {
       }
     }
     Enums: {
-      [_ in never]: never
+      waitlist_status: "new" | "contacted" | "qualified" | "unsubscribed"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -804,6 +852,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      waitlist_status: ["new", "contacted", "qualified", "unsubscribed"],
+    },
   },
 } as const
