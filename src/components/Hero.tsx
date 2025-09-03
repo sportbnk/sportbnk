@@ -50,21 +50,17 @@ const Hero = () => {
               Expand your business with Sportbnk today:
             </p>
             
-            <div className={`text-center transition-all duration-700 delay-300 ${isVisible ? 'opacity-100' : 'opacity-0 translate-y-8'}`}>
-              <h3 className="text-2xl font-bold text-sportbnk-navy mb-4">Join the Waitlist</h3>
-              <p className="text-lg text-gray-600 mb-6">Be first to access our platform when we launch in 3 months</p>
-              <div className="flex flex-col gap-4 max-w-sm mx-auto">
-                <WaitlistDialog>
-                  <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white font-medium rounded-md px-8 py-3 text-lg">
-                    Join Waitlist
-                  </Button>
-                </WaitlistDialog>
-                <Button variant="outline" className="border-gray-300 text-sportbnk-navy hover:bg-gray-50 px-8 py-3 text-lg" asChild>
-                  <Link to="/products" className="flex items-center justify-center gap-2">
-                    Explore Solutions <ArrowRight className="w-5 h-5" />
-                  </Link>
+            <div className={`flex flex-col gap-4 max-w-sm mx-auto transition-all duration-700 delay-300 ${isVisible ? 'opacity-100' : 'opacity-0 translate-y-8'}`}>
+              <WaitlistDialog>
+                <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white font-medium rounded-md px-8 py-3 text-lg">
+                  Join Waitlist
                 </Button>
-              </div>
+              </WaitlistDialog>
+              <Button variant="outline" className="border-gray-300 text-sportbnk-navy hover:bg-gray-50 px-8 py-3 text-lg" asChild>
+                <Link to="/products" className="flex items-center justify-center gap-2">
+                  Explore Solutions <ArrowRight className="w-5 h-5" />
+                </Link>
+              </Button>
             </div>
             
             {/* Trust indicators - with Ludimos and TAKA logos */}
