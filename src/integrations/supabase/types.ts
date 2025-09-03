@@ -662,6 +662,24 @@ export type Database = {
           },
         ]
       }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
       waitlist_signups: {
         Row: {
           company: string | null
@@ -719,12 +737,20 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
       truncate_all_tables: {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
     }
     Enums: {
+      app_role: "admin"
       waitlist_status: "new" | "contacted" | "qualified" | "unsubscribed"
     }
     CompositeTypes: {
@@ -853,6 +879,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      app_role: ["admin"],
       waitlist_status: ["new", "contacted", "qualified", "unsubscribed"],
     },
   },
