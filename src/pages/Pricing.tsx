@@ -8,6 +8,7 @@ import { PricingToggle } from "@/components/PricingToggle";
 import { CurrencySelector } from "@/components/CurrencySelector";
 import { useToast } from "@/hooks/use-toast";
 import { usePricing } from "@/contexts/PricingContext";
+import { WaitlistDialog } from "@/components/WaitlistDialog";
 
 const PricingCard = ({ 
   title,
@@ -16,13 +17,10 @@ const PricingCard = ({
   period = "/ month",
   description,
   features,
-  buttonText = "Get Started",
-  buttonLink = "/book-demo",
   highlighted = false,
   isFree = false,
   isEnterprise = false,
-  isAnnual = false,
-  onSelectPlan = () => {}
+  isAnnual = false
 }: { 
   title: string;
   price: string;
@@ -30,15 +28,11 @@ const PricingCard = ({
   period?: string;
   description: string;
   features: string[];
-  buttonText?: string;
-  buttonLink?: string;
   highlighted?: boolean;
   isFree?: boolean;
   isEnterprise?: boolean;
   isAnnual?: boolean;
-  onSelectPlan?: () => void;
 }) => {
-  const isPaidPlan = !isFree && !isEnterprise;
   
   return (
     <Card className={`border ${highlighted ? 'border-sportbnk-green border-2' : 'border-gray-200'} shadow-lg max-w-md mx-auto`}>
@@ -74,29 +68,17 @@ const PricingCard = ({
         </ul>
       </CardContent>
       <CardFooter className="pb-6">
-        {isPaidPlan ? (
+        <WaitlistDialog className="w-full">
           <Button 
             className={`w-full ${
               highlighted ? 'bg-sportbnk-green hover:bg-sportbnk-green/90' : 
-              'bg-sportbnk-navy hover:bg-sportbnk-navy/90'
-            } text-white`}
-            onClick={onSelectPlan}
-          >
-            {buttonText}
-          </Button>
-        ) : (
-          <Button 
-            className={`w-full ${
-              highlighted ? 'bg-sportbnk-green hover:bg-sportbnk-green/90' : 
-              isFree ? 'bg-sportbnk-navy hover:bg-sportbnk-navy/90' :
               isEnterprise ? 'bg-sportbnk-darkBlue hover:bg-sportbnk-darkBlue/90' :
               'bg-sportbnk-navy hover:bg-sportbnk-navy/90'
             } text-white`}
-            asChild
           >
-            <Link to={isFree ? "/free-trial" : buttonLink}>{buttonText}</Link>
+            Join Waitlist
           </Button>
-        )}
+        </WaitlistDialog>
       </CardFooter>
     </Card>
   );
@@ -154,8 +136,6 @@ const Pricing = () => {
               price="£0"
               description="Try our platform with limited features at no cost"
               features={freeTrialFeatures}
-              buttonText="Start Free Trial"
-              buttonLink="/free-trial"
               isFree={true}
               isAnnual={isAnnual}
             />
@@ -166,9 +146,7 @@ const Pricing = () => {
               annualPrice={formatPrice(470)}
               description="All the features you need to grow your business in the sports industry"
               features={standardFeatures}
-              buttonText="Subscribe Now"
               isAnnual={isAnnual}
-              onSelectPlan={() => handleSelectPlan("Standard Plan", isAnnual ? `${formatPrice(470)}/year` : `${formatPrice(49)}/month`)}
             />
             
             <PricingCard 
@@ -177,10 +155,8 @@ const Pricing = () => {
               annualPrice={formatPrice(950)}
               description="Enhanced features and support for growing teams and enterprises"
               features={proFeatures}
-              buttonText="Subscribe Now"
               highlighted={true}
               isAnnual={isAnnual}
-              onSelectPlan={() => handleSelectPlan("Pro Plan", isAnnual ? `${formatPrice(950)}/year` : `${formatPrice(99)}/month`)}
             />
 
             <PricingCard 
@@ -189,7 +165,6 @@ const Pricing = () => {
               period=""
               description="Tailored solutions for large organisations with custom requirements"
               features={enterpriseFeatures}
-              buttonText="Contact Sales"
               isEnterprise={true}
               isAnnual={isAnnual}
             />
@@ -254,12 +229,11 @@ const Pricing = () => {
             <p className="text-lg mb-8 opacity-90">
               Our team is here to help you determine if our solution is right for your business.
             </p>
-            <Button 
-              className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white px-8 py-6 text-lg"
-              asChild
-            >
-              <Link to="/book-demo">Book A Demo</Link>
-            </Button>
+            <WaitlistDialog>
+              <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white px-8 py-6 text-lg">
+                Join Waitlist
+              </Button>
+            </WaitlistDialog>
           </div>
         </div>
       </section>
