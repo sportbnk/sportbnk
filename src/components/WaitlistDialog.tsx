@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { Mail } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
 
 interface WaitlistDialogProps {
   children: React.ReactNode;
@@ -43,24 +44,55 @@ export function WaitlistDialog({ children, className }: WaitlistDialogProps) {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate API call
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Get current page and UTM parameters
+      const currentPage = window.location.pathname;
+      const urlParams = new URLSearchParams(window.location.search);
       
-      toast({
-        title: "Successfully joined waitlist!",
-        description: "We'll notify you when SportBnk launches in 3 months.",
-      });
-      
-      setFormData({
-        name: '',
-        role: '',
-        company: '',
-        email: '',
-        phone: ''
-      });
-      setOpen(false);
+      const { error } = await supabase
+        .from('waitlist_signups')
+        .insert([
+          {
+            name: formData.name,
+            role: formData.role || null,
+            company: formData.company || null,
+            email: formData.email,
+            phone: formData.phone || null,
+            source_page: currentPage,
+            utm_source: urlParams.get('utm_source'),
+            utm_medium: urlParams.get('utm_medium'),
+            utm_campaign: urlParams.get('utm_campaign'),
+          }
+        ]);
+
+      if (error) {
+        if (error.code === '23505') {
+          // Unique constraint violation (duplicate email)
+          toast({
+            title: "Already on the waitlist",
+            description: "This email is already registered for our waitlist.",
+            variant: "destructive",
+          });
+        } else {
+          throw error;
+        }
+      } else {
+        toast({
+          title: "Successfully joined waitlist!",
+          description: "We'll notify you when SportBnk launches in 3 months.",
+        });
+        
+        setFormData({
+          name: '',
+          role: '',
+          company: '',
+          email: '',
+          phone: ''
+        });
+        setOpen(false);
+      }
     } catch (error) {
+      console.error('Error saving to waitlist:', error);
       toast({
         title: "Error",
         description: "Something went wrong. Please try again.",
