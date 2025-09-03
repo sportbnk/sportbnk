@@ -4,7 +4,7 @@ import { Menu, X, ChevronDown, Package, BarChart3, Building, BookOpen, DollarSig
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { SignInDialog } from '@/components/SignInDialog';
+
 import AccountBadge from '@/components/crm/AccountBadge';
 import TrialCountdown from '@/components/TrialCountdown';
 import { useAuth } from '@/components/auth/AuthContext';
@@ -236,13 +236,8 @@ const Navbar = () => {
             </NavigationMenu>
 
             <div className="hidden md:flex items-center space-x-3">
-              {!user && <SignInDialog triggerClassName="px-4 py-2 text-sm" />}
-              
-              <Button 
-                className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white rounded-md items-center"
-                asChild
-              >
-                <Link to="/book-demo">Book A Demo</Link>
+              <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white px-4 py-2 text-sm rounded-md">
+                Join Waitlist
               </Button>
 
               {user && (
@@ -369,13 +364,8 @@ const Navbar = () => {
             </div>
             
             <div className="flex flex-col space-y-3 mt-4">
-              {!user && <SignInDialog triggerClassName="w-full justify-center" />}
-              
-              <Button 
-                className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white rounded-md w-full flex items-center justify-center"
-                asChild
-              >
-                <Link to="/book-demo">Book A Demo</Link>
+              <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white px-4 py-2 text-sm rounded-md w-full">
+                Join Waitlist
               </Button>
 
               {user && (

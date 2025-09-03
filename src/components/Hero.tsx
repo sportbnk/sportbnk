@@ -49,15 +49,19 @@ const Hero = () => {
               Expand your business with Sportbnk today:
             </p>
             
-            <div className={`flex flex-col sm:flex-row gap-4 transition-all duration-700 delay-300 ${isVisible ? 'opacity-100' : 'opacity-0 translate-y-8'}`}>
-              <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white font-medium rounded-md px-8 py-6 text-lg" asChild>
-                <Link to="/book-demo">Book A Demo</Link>
-              </Button>
-              <Button className="bg-transparent hover:bg-gray-100 border border-gray-300 text-sportbnk-navy font-medium rounded-md px-8 py-6 text-lg" asChild>
-                <Link to="/products" className="flex items-center gap-2">
-                  Explore Solutions <ArrowRight className="w-5 h-5" />
-                </Link>
-              </Button>
+            <div className={`text-center transition-all duration-700 delay-300 ${isVisible ? 'opacity-100' : 'opacity-0 translate-y-8'}`}>
+              <h3 className="text-2xl font-bold text-sportbnk-navy mb-4">Join the Waitlist</h3>
+              <p className="text-lg text-gray-600 mb-6">Be first to access our platform when we launch in 3 months</p>
+              <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+                <input 
+                  type="email" 
+                  placeholder="Enter your email" 
+                  className="flex-1 px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-sportbnk-green focus:border-transparent"
+                />
+                <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white font-medium rounded-md px-6 py-3">
+                  Join Waitlist
+                </Button>
+              </div>
             </div>
             
             {/* Trust indicators - with Ludimos and TAKA logos */}

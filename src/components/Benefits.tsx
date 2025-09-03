@@ -13,8 +13,8 @@ const Benefits = () => {
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
             We're on a mission to transform how sports organisations leverage data for strategic advantage.
           </p>
-          <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white font-medium rounded-md px-8 py-6 text-lg" asChild>
-            <Link to="/book-demo">Book a demo</Link>
+          <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white font-medium rounded-md px-8 py-6 text-lg">
+            Join Waitlist
           </Button>
         </div>
       </div>
