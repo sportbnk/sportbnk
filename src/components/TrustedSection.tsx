@@ -37,9 +37,9 @@ const TrustedSection = () => {
     },
     {
       icon: Globe,
-      number: "360,000+",
-      label: "Contests",
-      description: "Tracked globally"
+      number: "3.5M+",
+      label: "Employees",
+      description: "In our database"
     },
     {
       icon: Shield,
@@ -67,8 +67,8 @@ const TrustedSection = () => {
           </h2>
           <p className="text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
             SportBnk connects you with comprehensive data from the global sports ecosystem. 
-            Our AI-driven platform delivers outstanding UX personalization, machine learning predictions, 
-            and seamless integrations - making it the complete solution for sports professionals.
+            Our platform gives you the right information, smart insights, 
+            and easy connections - making it simple for sports professionals to get things done.
           </p>
         </div>
         
