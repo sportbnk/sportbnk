@@ -67,19 +67,6 @@ const PricingCard = ({
           ))}
         </ul>
       </CardContent>
-      <CardFooter className="pb-6">
-        <WaitlistDialog className="w-full">
-          <Button 
-            className={`w-full ${
-              highlighted ? 'bg-sportbnk-green hover:bg-sportbnk-green/90' : 
-              isEnterprise ? 'bg-sportbnk-darkBlue hover:bg-sportbnk-darkBlue/90' :
-              'bg-sportbnk-navy hover:bg-sportbnk-navy/90'
-            } text-white`}
-          >
-            Join Waitlist
-          </Button>
-        </WaitlistDialog>
-      </CardFooter>
     </Card>
   );
 };
@@ -168,6 +155,14 @@ const Pricing = () => {
               isEnterprise={true}
               isAnnual={isAnnual}
             />
+          </div>
+          
+          <div className="text-center mt-12">
+            <WaitlistDialog>
+              <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white px-12 py-4 text-lg">
+                Join Waitlist
+              </Button>
+            </WaitlistDialog>
           </div>
         </div>
       </section>
