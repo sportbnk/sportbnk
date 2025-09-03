@@ -2,6 +2,7 @@
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Calendar } from 'lucide-react';
+import { WaitlistDialog } from '@/components/WaitlistDialog';
 
 const EnhancedCTA = () => {
   return (
@@ -16,13 +17,19 @@ const EnhancedCTA = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto">
-            <input 
-              type="email" 
-              placeholder="Enter your email address" 
-              className="flex-1 px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-sportbnk-green focus:border-transparent text-sportbnk-navy"
-            />
-            <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white px-6 py-3 rounded-md whitespace-nowrap">
-              Join Waitlist
+            <WaitlistDialog className="w-full sm:w-auto">
+              <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white px-8 py-3 rounded-md w-full sm:w-auto text-lg">
+                Join Waitlist
+              </Button>
+            </WaitlistDialog>
+            <Button 
+              className="bg-white hover:bg-gray-100 text-sportbnk-navy px-8 py-3 rounded-md w-full sm:w-auto text-lg flex items-center justify-center gap-2"
+              asChild
+            >
+              <Link to="/products">
+                Explore Solutions
+                <ArrowRight className="w-5 h-5" />
+              </Link>
             </Button>
           </div>
           

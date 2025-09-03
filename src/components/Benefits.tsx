@@ -1,6 +1,7 @@
 
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
+import { WaitlistDialog } from '@/components/WaitlistDialog';
 
 const Benefits = () => {
   return (
@@ -13,9 +14,11 @@ const Benefits = () => {
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
             We're on a mission to transform how sports organisations leverage data for strategic advantage.
           </p>
-          <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white font-medium rounded-md px-8 py-6 text-lg">
-            Join Waitlist
-          </Button>
+          <WaitlistDialog>
+            <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white font-medium rounded-md px-8 py-6 text-lg">
+              Join Waitlist
+            </Button>
+          </WaitlistDialog>
         </div>
       </div>
     </section>

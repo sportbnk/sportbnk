@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
+import { WaitlistDialog } from '@/components/WaitlistDialog';
 import AccountBadge from '@/components/crm/AccountBadge';
 import TrialCountdown from '@/components/TrialCountdown';
 import { useAuth } from '@/components/auth/AuthContext';
@@ -236,9 +237,11 @@ const Navbar = () => {
             </NavigationMenu>
 
             <div className="hidden md:flex items-center space-x-3">
-              <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white px-4 py-2 text-sm rounded-md">
-                Join Waitlist
-              </Button>
+              <WaitlistDialog>
+                <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white px-4 py-2 text-sm rounded-md">
+                  Join Waitlist
+                </Button>
+              </WaitlistDialog>
 
               {user && (
                 <div className="flex items-center space-x-3">
@@ -364,9 +367,11 @@ const Navbar = () => {
             </div>
             
             <div className="flex flex-col space-y-3 mt-4">
-              <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white px-4 py-2 text-sm rounded-md w-full">
-                Join Waitlist
-              </Button>
+              <WaitlistDialog>
+                <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white px-4 py-2 text-sm rounded-md w-full">
+                  Join Waitlist
+                </Button>
+              </WaitlistDialog>
 
               {user && (
                 <div className="w-full space-y-3">
