@@ -65,7 +65,7 @@ const Hero = () => {
             
             {/* Trust indicators - with Ludimos and TAKA logos */}
             <div className={`mt-8 transition-all duration-700 delay-400 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
-              <p className="text-sm text-gray-500 mb-4">Trusted by 500+ sports organisations worldwide</p>
+              <p className="text-sm text-gray-500 mb-4">Trusted by:</p>
               <div className="flex items-center gap-6">
                 <img 
                   src="/lovable-uploads/80c86358-6bad-4ced-a0dd-9c22a354c69c.png" 
