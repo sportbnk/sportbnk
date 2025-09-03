@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Code, Terminal, Book, Shield, Zap, Database } from "lucide-react";
 import { Link } from "react-router-dom";
+import { WaitlistDialog } from "@/components/WaitlistDialog";
 
 const Api = () => {
   return (
@@ -43,12 +44,16 @@ const Api = () => {
               </div>
             </div>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white" asChild>
-                <Link to="/free-trial">Start Free Trial</Link>
-              </Button>
-              <Button variant="outline" className="border-sportbnk-green text-sportbnk-green hover:bg-sportbnk-green hover:text-white" asChild>
-                <Link to="/book-demo">View Documentation</Link>
-              </Button>
+              <WaitlistDialog>
+                <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white">
+                  Join Waitlist
+                </Button>
+              </WaitlistDialog>
+              <WaitlistDialog>
+                <Button variant="outline" className="border-sportbnk-green text-sportbnk-green hover:bg-sportbnk-green hover:text-white">
+                  View Documentation
+                </Button>
+              </WaitlistDialog>
             </div>
           </div>
         </div>
@@ -202,9 +207,11 @@ const Api = () => {
           </div>
           
           <div className="text-center mt-12">
-            <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white text-lg px-8 py-3" asChild>
-              <Link to="/free-trial">Get Started with API</Link>
-            </Button>
+            <WaitlistDialog>
+              <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white text-lg px-8 py-3">
+                Join Waitlist
+              </Button>
+            </WaitlistDialog>
           </div>
         </div>
       </section>

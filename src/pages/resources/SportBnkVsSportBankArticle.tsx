@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Calendar, ArrowLeft, Share2 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { WaitlistDialog } from "@/components/WaitlistDialog";
 
 const SportBnkVsSportBankArticle = () => {
   return (
@@ -96,16 +97,16 @@ const SportBnkVsSportBankArticle = () => {
                     Whether you found us by searching for SportBnk, SportBank, or sports intelligence solutions, we're here to help your organization unlock the power of sports data.
                   </p>
                   <div className="flex flex-wrap gap-4">
-                    <Button asChild className="bg-sportbnk-green hover:bg-sportbnk-green/90">
-                      <Link to="/book-demo">
-                        Book a Demo
-                      </Link>
-                    </Button>
-                    <Button variant="outline" asChild className="border-sportbnk-navy text-sportbnk-navy hover:bg-sportbnk-navy hover:text-white">
-                      <Link to="/free-trial">
-                        Start Free Trial
-                      </Link>
-                    </Button>
+                    <WaitlistDialog>
+                      <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90">
+                        Join Waitlist
+                      </Button>
+                    </WaitlistDialog>
+                    <WaitlistDialog>
+                      <Button variant="outline" className="border-sportbnk-navy text-sportbnk-navy hover:bg-sportbnk-navy hover:text-white">
+                        Join Waitlist
+                      </Button>
+                    </WaitlistDialog>
                   </div>
                 </Card>
                 

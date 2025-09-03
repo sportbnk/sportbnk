@@ -224,7 +224,7 @@ const PageLayout = ({
             "operatingSystem": "Web Browser",
             "description": "B2B Sports Intelligence Platform providing access to 750,000+ teams, 360,000+ competitions, and comprehensive sports data analytics for marketing, recruitment, and partnerships.",
             "url": "https://sportbnk.com",
-            "downloadUrl": "https://sportbnk.com/book-demo",
+            "downloadUrl": "https://sportbnk.com/waitlist",
             "screenshot": "https://sportbnk.com/lovable-uploads/5de360aa-8105-490e-bf75-94ff7ac0832d.png",
             "applicationSubCategory": "Sports Analytics Software",
             "offers": {

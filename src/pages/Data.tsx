@@ -2,6 +2,7 @@
 import PageLayout from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
 import { Shield, Database, CheckCircle, Globe } from "lucide-react";
+import { WaitlistDialog } from "@/components/WaitlistDialog";
 
 const DataFeature = ({ 
   icon, 
@@ -78,9 +79,11 @@ const Data = () => {
             <p className="text-lg mb-8 opacity-90">
               Start using the most comprehensive sports industry database to drive your business forward.
             </p>
-            <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white px-8 py-6 text-lg">
-              Book A Demo
-            </Button>
+            <WaitlistDialog>
+              <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white px-8 py-6 text-lg">
+                Join Waitlist
+              </Button>
+            </WaitlistDialog>
           </div>
         </div>
       </section>

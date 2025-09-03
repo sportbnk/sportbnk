@@ -44,12 +44,12 @@ const BookDemo = () => {
   };
 
   return (
-    <PageLayout pageTitle="Book A Demo">
+    <PageLayout pageTitle="Join Waitlist">
       <div className="container mx-auto px-4 py-16 md:px-6">
         <div className="grid gap-12 md:grid-cols-2">
           {/* Left column - Form */}
           <div className="bg-white rounded-lg shadow-lg p-8">
-            <h2 className="text-2xl font-bold text-sportbnk-navy mb-6">Schedule Your Personalized Demo</h2>
+            <h2 className="text-2xl font-bold text-sportbnk-navy mb-6">Join Our Waitlist</h2>
             <p className="text-gray-600 mb-8">
               Fill out the form below and one of our experts will get in touch to schedule a personalized
               demonstration of our platform tailored to your specific needs.
@@ -161,7 +161,7 @@ const BookDemo = () => {
           {/* Right column - Info */}
           <div className="flex flex-col justify-center">
             <div className="mb-10">
-              <h3 className="text-xl font-bold text-sportbnk-navy mb-4">Why Book A Demo With Us?</h3>
+              <h3 className="text-xl font-bold text-sportbnk-navy mb-4">Why Join Our Waitlist?</h3>
               <ul className="space-y-4">
                 <li className="flex items-start">
                   <div className="mr-4 mt-1 bg-sportbnk-green rounded-full p-1">
