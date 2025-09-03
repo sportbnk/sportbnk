@@ -5,7 +5,7 @@ import Hero from "@/components/Hero";
 import Solutions from "@/components/Solutions";
 import Benefits from "@/components/Benefits";
 import TechnologyStack from "@/components/TechnologyStack";
-import Reviews from "@/components/Reviews";
+
 import EnhancedCTA from "@/components/EnhancedCTA";
 import TrustedSection from "@/components/TrustedSection";
 
@@ -21,7 +21,7 @@ const Index = () => {
       <TrustedSection />
       <Benefits />
       <TechnologyStack />
-      <Reviews />
+      
       <EnhancedCTA />
     </PageLayout>
   );

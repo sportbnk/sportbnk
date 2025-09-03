@@ -64,9 +64,6 @@ const PageLayout = ({
     },
     "aggregateRating": {
       "@type": "AggregateRating",
-      "ratingValue": "4.8",
-      "reviewCount": "150",
-      "bestRating": "5",
       "worstRating": "1"
     }
   };
@@ -170,11 +167,6 @@ const PageLayout = ({
             "@type": "SiteNavigationElement",
             "name": "Case Studies",
             "url": "https://sportbnk.com/resources/case-studies"
-          },
-          {
-            "@type": "SiteNavigationElement",
-            "name": "Reviews",
-            "url": "https://sportbnk.com/resources/reviews"
           },
           {
             "@type": "SiteNavigationElement",
