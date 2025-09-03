@@ -18,10 +18,9 @@ const Index = () => {
       </Helmet>
       <Hero />
       <Solutions />
-      <TrustedSection />
       <Benefits />
+      <TrustedSection />
       <TechnologyStack />
-      
       <EnhancedCTA />
     </PageLayout>
   );
