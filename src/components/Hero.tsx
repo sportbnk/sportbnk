@@ -50,7 +50,7 @@ const Hero = () => {
               Expand your business with Sportbnk today:
             </p>
             
-            <div className={`flex flex-col gap-4 max-w-sm mx-auto transition-all duration-700 delay-300 ${isVisible ? 'opacity-100' : 'opacity-0 translate-y-8'}`}>
+            <div className={`flex flex-col gap-4 max-w-sm transition-all duration-700 delay-300 ${isVisible ? 'opacity-100' : 'opacity-0 translate-y-8'}`}>
               <WaitlistDialog>
                 <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white font-medium rounded-md px-8 py-3 text-lg">
                   Join Waitlist
