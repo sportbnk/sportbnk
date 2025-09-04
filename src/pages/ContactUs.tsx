@@ -121,7 +121,6 @@ const ContactUs = () => {
                   <div>
                     <h4 className="font-semibold text-sportbnk-navy">Email</h4>
                     <p className="text-gray-600">info@sportbnk.com</p>
-                    <p className="text-gray-600">support@sportbnk.com</p>
                   </div>
                 </li>
                 <li className="flex items-start">
@@ -130,7 +129,7 @@ const ContactUs = () => {
                   </div>
                   <div>
                     <h4 className="font-semibold text-sportbnk-navy">Phone</h4>
-                    <p className="text-gray-600">+44 20 1234 5678</p>
+                    <p className="text-gray-600">+44 7935 969611</p>
                     <p className="text-gray-600">Mon-Fri, 9:00 AM - 6:00 PM GMT</p>
                   </div>
                 </li>
@@ -140,18 +139,8 @@ const ContactUs = () => {
                   </div>
                   <div>
                     <h4 className="font-semibold text-sportbnk-navy">Office</h4>
-                    <p className="text-gray-600">123 Sports Avenue</p>
-                    <p className="text-gray-600">London, UK EC1A 1BB</p>
-                  </div>
-                </li>
-                <li className="flex items-start">
-                  <div className="mr-4 mt-1 bg-sportbnk-green rounded-full p-2">
-                    <MessageSquare className="h-5 w-5 text-white" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-sportbnk-navy">Live Chat</h4>
-                    <p className="text-gray-600">Available on our website</p>
-                    <p className="text-gray-600">Mon-Fri, 9:00 AM - 6:00 PM GMT</p>
+                    <p className="text-gray-600">The Amp, 11, Ebrington Square</p>
+                    <p className="text-gray-600">Derry, Londonderry BT47 6FA</p>
                   </div>
                 </li>
               </ul>
