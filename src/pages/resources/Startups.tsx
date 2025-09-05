@@ -3,7 +3,7 @@ import PageLayout from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Rocket, Check, ArrowRight } from "lucide-react";
-import { Link } from "react-router-dom";
+import { WaitlistDialog } from "@/components/WaitlistDialog";
 
 const Startups = () => {
   return (
@@ -25,7 +25,7 @@ const Startups = () => {
               <div className="space-y-4 mb-8">
                 <div className="flex items-start">
                   <span className="text-sportbnk-green mr-2"><Check /></span>
-                  <p>90% discount for eligible startups in their first year</p>
+                  <p>50% discount for eligible startups for first 6 months</p>
                 </div>
                 <div className="flex items-start">
                   <span className="text-sportbnk-green mr-2"><Check /></span>
@@ -40,11 +40,11 @@ const Startups = () => {
                   <p>Access to our network of sports industry investors and mentors</p>
                 </div>
               </div>
-              <Link to="/contact">
+              <WaitlistDialog>
                 <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white">
-                  Apply to the Program
+                  Join Waitlist
                 </Button>
-              </Link>
+              </WaitlistDialog>
             </div>
             <div>
               <img 
@@ -98,11 +98,11 @@ const Startups = () => {
           </div>
           
           <div className="text-center mt-12">
-            <Link to="/contact">
+            <WaitlistDialog>
               <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white group">
-                Apply to the Program <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                Join Waitlist <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </Button>
-            </Link>
+            </WaitlistDialog>
           </div>
         </div>
       </section>
