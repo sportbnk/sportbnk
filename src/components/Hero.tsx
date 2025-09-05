@@ -58,19 +58,14 @@ const Hero = () => {
               </WaitlistDialog>
             </div>
             
-            {/* Trust indicators - with Ludimos and TAKA logos */}
+            {/* Trust indicators - with PLAI logo */}
             <div className={`mt-8 transition-all duration-700 delay-400 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
               <p className="text-sm text-gray-500 mb-4">Trusted by:</p>
               <div className="flex items-center gap-6">
                 <img 
-                  src="/lovable-uploads/80c86358-6bad-4ced-a0dd-9c22a354c69c.png" 
-                  alt="Ludimos Logo" 
-                  className="h-12 object-contain hover:opacity-90 transition-opacity" 
-                />
-                <img 
-                  src="/lovable-uploads/53090dbd-8563-439e-951d-47c7b07d47e4.png" 
-                  alt="TAKA Logo" 
-                  className="h-12 object-contain hover:opacity-90 transition-opacity" 
+                  src="/lovable-uploads/5edd5887-e894-48d8-916d-9032e152aec3.png" 
+                  alt="PLAI - Sports Team Administration Made Simpler" 
+                  className="h-16 object-contain hover:opacity-90 transition-opacity" 
                 />
               </div>
             </div>
