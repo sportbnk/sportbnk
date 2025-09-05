@@ -43,15 +43,10 @@ const Api = () => {
                 <p>Flexible rate limits and scalable pricing</p>
               </div>
             </div>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex justify-center">
               <WaitlistDialog>
                 <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white">
                   Join Waitlist
-                </Button>
-              </WaitlistDialog>
-              <WaitlistDialog>
-                <Button variant="outline" className="border-sportbnk-green text-sportbnk-green hover:bg-sportbnk-green hover:text-white">
-                  View Documentation
                 </Button>
               </WaitlistDialog>
             </div>
