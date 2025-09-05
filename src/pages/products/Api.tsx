@@ -28,10 +28,6 @@ const Api = () => {
             <div className="grid md:grid-cols-2 gap-4 mb-8 text-left">
               <div className="flex items-start">
                 <span className="text-sportbnk-green mr-2 font-bold text-lg">✓</span>
-                <p>RESTful API endpoints with JSON responses</p>
-              </div>
-              <div className="flex items-start">
-                <span className="text-sportbnk-green mr-2 font-bold text-lg">✓</span>
                 <p>Real-time data synchronization</p>
               </div>
               <div className="flex items-start">
