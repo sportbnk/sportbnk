@@ -23,7 +23,7 @@ const ScottMcKecknieArticle = () => {
                     Company News
                   </span>
                   <div className="flex items-center text-gray-500 text-sm">
-                    <Calendar className="h-4 w-4 mr-1" /> May 28, 2025
+                    <Calendar className="h-4 w-4 mr-1" /> September 5, 2025
                   </div>
                 </div>
                 
@@ -31,11 +31,11 @@ const ScottMcKecknieArticle = () => {
                   Scott McKecknie from Plai Sport Joins SportBnk as Advisory Shareholder
                 </h1>
                 
-                <div className="aspect-video w-full overflow-hidden rounded-lg mb-8">
+                <div className="w-full h-96 md:h-[500px] overflow-hidden rounded-lg mb-8">
                   <img 
                     src="/lovable-uploads/94f20b65-d719-4240-b79f-110e5fbe89de.png" 
                     alt="Scott McKecknie joins SportBnk as Advisory Shareholder" 
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover object-top"
                   />
                 </div>
               </div>
