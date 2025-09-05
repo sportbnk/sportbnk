@@ -48,8 +48,8 @@ const Startups = () => {
             </div>
             <div>
               <img 
-                src="/lovable-uploads/c5351de4-d54d-424f-99a5-b07ddc3fcc40.png" 
-                alt="SportBnk for Startups" 
+                src="/lovable-uploads/95851a5c-d2cb-4a03-9b29-9c36f64114f0.png" 
+                alt="Baseball player in action demonstrating athletic excellence and startup determination" 
                 className="rounded-lg shadow-lg"
               />
             </div>
