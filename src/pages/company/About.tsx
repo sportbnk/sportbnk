@@ -28,8 +28,8 @@ const About = () => {
             </div>
             <div>
               <img 
-                src="/lovable-uploads/1d95a70d-8230-4647-9c16-d5c94a124864.png" 
-                alt="SportBnk Platform Overview" 
+                src="/lovable-uploads/a245226e-4025-4fa7-8740-1e60792be2ef.png" 
+                alt="Cricket stadium showing the global reach of sports data" 
                 className="rounded-lg shadow-lg"
               />
             </div>
