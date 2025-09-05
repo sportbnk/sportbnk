@@ -93,7 +93,7 @@ const About = () => {
                 </p>
                 <div className="flex items-center mb-2">
                   <Phone size={18} className="mr-2" />
-                  <span>+44 (0) 123 456 7890</span>
+                  <span>+44 7935 969611</span>
                 </div>
                 <div className="flex items-center">
                   <span className="mr-2">✉</span>
