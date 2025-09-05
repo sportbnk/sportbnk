@@ -35,12 +35,13 @@ const PricingCard = ({
 }) => {
   
   return (
-    <Card className={`border ${highlighted ? 'border-sportbnk-green border-2' : 'border-gray-200'} shadow-lg max-w-md mx-auto`}>
+    <div className="relative">
       {highlighted && (
-        <div className="bg-sportbnk-green text-white text-center py-1 text-sm font-medium">
+        <div className="bg-sportbnk-green text-white text-center py-1 text-sm font-medium rounded-t-md mb-2">
           Most Popular
         </div>
       )}
+      <Card className={`border ${highlighted ? 'border-sportbnk-green border-2' : 'border-gray-200'} shadow-lg max-w-md mx-auto`}>
       <CardHeader className="pb-4 text-center">
         <CardTitle className="text-2xl font-bold text-sportbnk-navy">{title}</CardTitle>
         <div className="mt-4">
@@ -68,6 +69,7 @@ const PricingCard = ({
         </ul>
       </CardContent>
     </Card>
+    </div>
   );
 };
 
