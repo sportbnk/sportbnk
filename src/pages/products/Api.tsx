@@ -8,7 +8,7 @@ import { WaitlistDialog } from "@/components/WaitlistDialog";
 const Api = () => {
   return (
     <PageLayout 
-      pageTitle="SportsBnk API"
+      pageTitle="Sportbnk API"
       metaDescription="Integrate sports data directly into your applications with SportsBnk's comprehensive REST API. Access real-time sports organizations, teams, and professional data programmatically."
       metaKeywords="sports API, REST API, sports data integration, developer API, sports organizations API, teams data API, real-time sports data, sports database API"
     >
