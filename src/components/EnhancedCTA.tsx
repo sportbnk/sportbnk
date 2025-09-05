@@ -16,21 +16,12 @@ const EnhancedCTA = () => {
             Be the first to access our platform when we launch. Transform your sports data strategy with SportBnk.
           </p>
           
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto">
-            <WaitlistDialog className="w-full sm:w-auto">
-              <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white px-8 py-3 rounded-md w-full sm:w-auto text-lg">
+          <div className="flex justify-center">
+            <WaitlistDialog>
+              <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white px-8 py-3 rounded-md text-lg">
                 Join Waitlist
               </Button>
             </WaitlistDialog>
-            <Button 
-              className="bg-white hover:bg-gray-100 text-sportbnk-navy px-8 py-3 rounded-md w-full sm:w-auto text-lg flex items-center justify-center gap-2"
-              asChild
-            >
-              <Link to="/products">
-                Explore Solutions
-                <ArrowRight className="w-5 h-5" />
-              </Link>
-            </Button>
           </div>
         </div>
       </div>
