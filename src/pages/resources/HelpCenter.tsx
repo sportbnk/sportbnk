@@ -91,14 +91,6 @@ const HelpCenter = () => {
                 <p className="text-sm text-gray-500">info@sportbnk.com</p>
               </div>
               
-              <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white">
-                  Contact Support
-                </Button>
-                <Button variant="outline">
-                  Join WhatsApp Community
-                </Button>
-              </div>
             </div>
           </div>
         </div>
