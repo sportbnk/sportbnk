@@ -191,26 +191,6 @@ const Navbar = () => {
                       </li>
                       <li>
                         <NavigationMenuLink asChild>
-                          <Link to="/resources/webinars" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
-                            <div className="text-sm font-medium text-sportbnk-navy flex items-center">
-                              <Video className="h-4 w-4 mr-2" /> Webinars
-                            </div>
-                            <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Educational video content</p>
-                          </Link>
-                        </NavigationMenuLink>
-                      </li>
-                      <li>
-                        <NavigationMenuLink asChild>
-                          <Link to="/resources/case-studies" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
-                            <div className="text-sm font-medium text-sportbnk-navy flex items-center">
-                              <Clipboard className="h-4 w-4 mr-2" /> Case Studies
-                            </div>
-                            <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Success stories from our clients</p>
-                          </Link>
-                        </NavigationMenuLink>
-                      </li>
-                      <li>
-                        <NavigationMenuLink asChild>
                           <Link to="/resources/help-center" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
                             <div className="text-sm font-medium text-sportbnk-navy flex items-center">
                               <HelpCircle className="h-4 w-4 mr-2" /> Help Center
@@ -340,16 +320,6 @@ const Navbar = () => {
                 <DropdownMenuItem>
                   <Link to="/resources/articles" className="w-full flex items-center">
                     <FileText className="h-4 w-4 mr-2" />Articles
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Link to="/resources/webinars" className="w-full flex items-center">
-                    <Video className="h-4 w-4 mr-2" />Webinars
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Link to="/resources/case-studies" className="w-full flex items-center">
-                    <Clipboard className="h-4 w-4 mr-2" />Case Studies
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>

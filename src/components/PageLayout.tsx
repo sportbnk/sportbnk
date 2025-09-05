@@ -155,21 +155,6 @@ const PageLayout = ({
           },
           {
             "@type": "SiteNavigationElement",
-            "name": "Webinars",
-            "url": "https://sportbnk.com/resources/webinars"
-          },
-          {
-            "@type": "SiteNavigationElement",
-            "name": "Podcasts",
-            "url": "https://sportbnk.com/resources/podcasts"
-          },
-          {
-            "@type": "SiteNavigationElement",
-            "name": "Case Studies",
-            "url": "https://sportbnk.com/resources/case-studies"
-          },
-          {
-            "@type": "SiteNavigationElement",
             "name": "Help Center",
             "url": "https://sportbnk.com/resources/help-center"
           }

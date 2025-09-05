@@ -57,8 +57,6 @@ import Startups from "./pages/resources/Startups";
 import Articles from "./pages/resources/Articles";
 import SportBnkVsSportBankArticle from "./pages/resources/SportBnkVsSportBankArticle";
 import Community from "./pages/resources/Community";
-import Webinars from "./pages/resources/Webinars";
-import CaseStudies from "./pages/resources/CaseStudies";
 import HelpCenter from "./pages/resources/HelpCenter";
 
 // Legal pages
@@ -132,8 +130,6 @@ function App() {
                       <Route path="/resources/articles" element={<Articles />} />
                       <Route path="/resources/articles/sportbnk-vs-sportbank" element={<SportBnkVsSportBankArticle />} />
                       <Route path="/resources/community" element={<Community />} />
-                      <Route path="/resources/webinars" element={<Webinars />} />
-                      <Route path="/resources/case-studies" element={<CaseStudies />} />
                       <Route path="/resources/help-center" element={<HelpCenter />} />
                       
                       {/* Legal pages */}
