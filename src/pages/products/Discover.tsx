@@ -2,7 +2,7 @@
 import PageLayout from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
-import { Link } from "react-router-dom";
+import { WaitlistDialog } from "@/components/WaitlistDialog";
 
 const Discover = () => {
   return (
@@ -38,9 +38,11 @@ const Discover = () => {
                   <p>Easily exportable lists in multiple formats</p>
                 </div>
               </div>
-              <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white" asChild>
-                <Link to="/free-trial">Try Discover Now</Link>
-              </Button>
+              <WaitlistDialog>
+                <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white">
+                  Join Waitlist
+                </Button>
+              </WaitlistDialog>
             </div>
             <div>
               <img 
