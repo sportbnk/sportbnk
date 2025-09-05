@@ -32,10 +32,6 @@ const EnhancedCTA = () => {
               </Link>
             </Button>
           </div>
-          
-          <p className="text-gray-400 mt-12">
-            Contact us: <a href="mailto:info@sportbnk.com" className="text-sportbnk-green hover:underline">info@sportbnk.com</a>
-          </p>
         </div>
       </div>
     </section>
