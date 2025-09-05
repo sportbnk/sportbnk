@@ -56,11 +56,6 @@ const Hero = () => {
                   Join Waitlist
                 </Button>
               </WaitlistDialog>
-              <Button variant="outline" className="border-gray-300 text-sportbnk-navy hover:bg-gray-50 px-8 py-3 text-lg" asChild>
-                <Link to="/products" className="flex items-center justify-center gap-2">
-                  Explore Solutions <ArrowRight className="w-5 h-5" />
-                </Link>
-              </Button>
             </div>
             
             {/* Trust indicators - with Ludimos and TAKA logos */}
