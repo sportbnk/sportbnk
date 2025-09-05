@@ -2,7 +2,7 @@
 import PageLayout from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
 import { Users } from "lucide-react";
-import { Link } from "react-router-dom";
+import { WaitlistDialog } from "@/components/WaitlistDialog";
 
 const Recruit = () => {
   return (
@@ -38,9 +38,11 @@ const Recruit = () => {
                   <p>Transparent hiring process</p>
                 </div>
               </div>
-              <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white" asChild>
-                <Link to="/free-trial">Start Recruiting</Link>
-              </Button>
+              <WaitlistDialog>
+                <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white">
+                  Join Waitlist
+                </Button>
+              </WaitlistDialog>
             </div>
             <div>
               <img 
