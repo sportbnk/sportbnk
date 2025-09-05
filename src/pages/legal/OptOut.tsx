@@ -13,7 +13,7 @@ const OptOut = () => {
           <div className="text-center mb-12">
             <Shield className="mx-auto h-16 w-16 text-sportbnk-green mb-6" />
             <h1 className="text-4xl font-bold text-sportbnk-navy mb-4">Opt-Out & Removal Policy</h1>
-            <p className="text-gray-600">Last updated: January 2025</p>
+            <p className="text-gray-600">Last updated: September 2025</p>
           </div>
 
           <div className="prose prose-lg max-w-none">
