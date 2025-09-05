@@ -36,7 +36,7 @@ const Footer = () => {
               />
             </Link>
             <p className="text-gray-600 text-sm">
-              Sports intelligence platform for businesses, connecting data from 750k+ teams and 360k+ competitions.
+              Reach decision makers within sport in seconds.
             </p>
           </div>
           
