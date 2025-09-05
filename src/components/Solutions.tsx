@@ -31,7 +31,7 @@ const Solutions = () => {
       <div className="container mx-auto px-4 md:px-6">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-sportbnk-navy mb-4">
-            Want to see how sportbnk is helping businesses build stronger pipelines?
+            Want to see how Sportbnk is helping businesses build stronger pipelines?
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             The mission of SportBnk is creating a single space to find sports-data solutions for all
