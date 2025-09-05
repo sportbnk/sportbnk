@@ -153,68 +153,6 @@ const Api = () => {
         </div>
       </section>
 
-      <section className="py-16">
-        <div className="container mx-auto px-4 md:px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-sportbnk-navy mb-4">Getting Started</h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Start integrating sports data into your applications in minutes with our simple API.
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card className="bg-white shadow-sm text-center">
-              <CardHeader>
-                <div className="mx-auto mb-4 bg-sportbnk-green/10 w-12 h-12 rounded-full flex items-center justify-center">
-                  <span className="text-sportbnk-green font-bold text-xl">1</span>
-                </div>
-                <CardTitle className="text-xl text-sportbnk-navy">Sign Up & Get API Key</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600">
-                  Create your account and get instant access to your API key through our developer dashboard.
-                </p>
-              </CardContent>
-            </Card>
-            
-            <Card className="bg-white shadow-sm text-center">
-              <CardHeader>
-                <div className="mx-auto mb-4 bg-sportbnk-green/10 w-12 h-12 rounded-full flex items-center justify-center">
-                  <span className="text-sportbnk-green font-bold text-xl">2</span>
-                </div>
-                <CardTitle className="text-xl text-sportbnk-navy">Explore Documentation</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600">
-                  Browse our comprehensive API documentation with interactive examples and code snippets.
-                </p>
-              </CardContent>
-            </Card>
-            
-            <Card className="bg-white shadow-sm text-center">
-              <CardHeader>
-                <div className="mx-auto mb-4 bg-sportbnk-green/10 w-12 h-12 rounded-full flex items-center justify-center">
-                  <span className="text-sportbnk-green font-bold text-xl">3</span>
-                </div>
-                <CardTitle className="text-xl text-sportbnk-navy">Start Building</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600">
-                  Make your first API call and start building amazing sports applications with our data.
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-          
-          <div className="text-center mt-12">
-            <WaitlistDialog>
-              <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white text-lg px-8 py-3">
-                Join Waitlist
-              </Button>
-            </WaitlistDialog>
-          </div>
-        </div>
-      </section>
     </PageLayout>
   );
 };
