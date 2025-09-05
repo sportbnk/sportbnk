@@ -35,13 +35,7 @@ const PricingCard = ({
 }) => {
   
   return (
-    <div className="relative">
-      {highlighted && (
-        <div className="bg-sportbnk-green text-white text-center py-1 text-sm font-medium rounded-t-md mb-2">
-          Most Popular
-        </div>
-      )}
-      <Card className={`border ${highlighted ? 'border-sportbnk-green border-2' : 'border-gray-200'} shadow-lg max-w-md mx-auto`}>
+    <Card className={`border ${highlighted ? 'border-sportbnk-green border-2' : 'border-gray-200'} shadow-lg max-w-md mx-auto`}>
       <CardHeader className="pb-4 text-center">
         <CardTitle className="text-2xl font-bold text-sportbnk-navy">{title}</CardTitle>
         <div className="mt-4">
@@ -69,7 +63,6 @@ const PricingCard = ({
         </ul>
       </CardContent>
     </Card>
-    </div>
   );
 };
 
@@ -119,7 +112,13 @@ const Pricing = () => {
             </div>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto relative">
+            {/* Most Popular label above the grid */}
+            <div className="absolute -top-8 left-1/2 lg:left-[62.5%] transform -translate-x-1/2 z-10">
+              <div className="bg-sportbnk-green text-white text-center py-1 px-4 text-sm font-medium rounded-md">
+                Most Popular
+              </div>
+            </div>
             <PricingCard 
               title="Free Trial"
               price="£0"
