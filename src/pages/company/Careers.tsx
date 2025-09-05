@@ -8,17 +8,6 @@ const Careers = () => {
     <PageLayout pageTitle="Careers">
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4 md:px-6">
-          <div className="max-w-3xl mx-auto text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-sportbnk-navy mb-4">
-              Join Our Team
-            </h2>
-            <p className="text-lg text-gray-600">
-              We're looking for passionate individuals who share our mission to transform how businesses 
-              connect in the sports industry. At Sportsbnk, you'll work with cutting-edge technology 
-              while making a real impact in a dynamic and fast-growing sector.
-            </p>
-          </div>
-          
           <div className="max-w-2xl mx-auto">
             {/* Currently No Open Positions */}
             <div className="text-center bg-white p-8 rounded-lg border border-gray-200 shadow-sm">
