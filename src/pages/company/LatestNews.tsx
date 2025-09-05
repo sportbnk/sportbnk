@@ -13,11 +13,11 @@ const LatestNews = () => {
           <div className="max-w-4xl mx-auto">
             <Card className="overflow-hidden border-0 shadow-lg">
               <div className="grid md:grid-cols-2">
-                <div className="h-full">
+                <div className="h-96 md:h-full">
                   <img 
                     src="/lovable-uploads/94f20b65-d719-4240-b79f-110e5fbe89de.png" 
                     alt="Scott McKecknie joins SportBnk as Advisory Shareholder" 
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover object-top"
                   />
                 </div>
                 <div className="p-8 flex flex-col justify-center">
@@ -26,7 +26,7 @@ const LatestNews = () => {
                       Company News
                     </span>
                     <div className="flex items-center text-gray-500 text-sm">
-                      <Calendar className="h-4 w-4 mr-1" /> May 28, 2025
+                      <Calendar className="h-4 w-4 mr-1" /> September 5, 2025
                     </div>
                   </div>
                   <h2 className="text-2xl md:text-3xl font-bold text-sportbnk-navy mb-4">
