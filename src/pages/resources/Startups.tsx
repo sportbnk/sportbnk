@@ -7,7 +7,7 @@ import { WaitlistDialog } from "@/components/WaitlistDialog";
 
 const Startups = () => {
   return (
-    <PageLayout pageTitle="SportsBnk for Startups">
+    <PageLayout pageTitle="SportBnk for Startups">
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4 md:px-6">
           <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -29,7 +29,7 @@ const Startups = () => {
                 </div>
                 <div className="flex items-start">
                   <span className="text-sportbnk-green mr-2"><Check /></span>
-                  <p>Full access to all Sportsbnk tools and features</p>
+                  <p>Full access to all SportBnk tools and features</p>
                 </div>
                 <div className="flex items-start">
                   <span className="text-sportbnk-green mr-2"><Check /></span>
@@ -49,7 +49,7 @@ const Startups = () => {
             <div>
               <img 
                 src="/lovable-uploads/c5351de4-d54d-424f-99a5-b07ddc3fcc40.png" 
-                alt="SportsBnk for Startups" 
+                alt="SportBnk for Startups" 
                 className="rounded-lg shadow-lg"
               />
             </div>
@@ -91,7 +91,7 @@ const Startups = () => {
                 </div>
                 <div>
                   <h3 className="text-lg font-bold text-sportbnk-navy mb-1">Not previously enrolled</h3>
-                  <p className="text-gray-600">Your startup has not previously participated in the Sportsbnk startup program.</p>
+                  <p className="text-gray-600">Your startup has not previously participated in the SportBnk startup program.</p>
                 </div>
               </div>
             </div>
