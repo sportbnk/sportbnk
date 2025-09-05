@@ -227,11 +227,11 @@ const Pricing = () => {
             <p className="text-lg mb-8 opacity-90">
               Our team is here to help you determine if our solution is right for your business.
             </p>
-            <WaitlistDialog>
-              <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white px-8 py-6 text-lg">
-                Join Waitlist
-              </Button>
-            </WaitlistDialog>
+            <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white px-8 py-6 text-lg" asChild>
+              <Link to="/contact">
+                Contact Us
+              </Link>
+            </Button>
           </div>
         </div>
       </section>
