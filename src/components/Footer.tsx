@@ -17,12 +17,16 @@ const Footer = () => {
     setIsSubmitting(true);
     
     try {
+      console.log('Submitting newsletter email:', email);
       const { error } = await supabase
         .from('newsletter_subscriptions')
-        .insert([{
-          email: email.trim(),
-          source_page: location.pathname
-        }]);
+        .upsert(
+          {
+            email: email.trim().toLowerCase(),
+            source_page: location.pathname,
+          },
+          { onConflict: 'email', ignoreDuplicates: true }
+        );
 
       if (error) {
         // Handle duplicate email gracefully
@@ -36,6 +40,7 @@ const Footer = () => {
           throw error;
         }
       } else {
+        console.log('Newsletter subscription saved successfully');
         toast({
           title: "Subscription Successful!",
           description: "Thank you for subscribing to our newsletter.",
