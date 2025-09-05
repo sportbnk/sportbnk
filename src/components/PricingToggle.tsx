@@ -10,7 +10,7 @@ interface PricingToggleProps {
 
 export function PricingToggle({ isAnnual, onToggle }: PricingToggleProps) {
   return (
-    <div className="flex items-center justify-center gap-4 mb-8">
+    <div className="flex items-center justify-center gap-4">
       <Label htmlFor="pricing-toggle" className="text-gray-600 font-medium cursor-pointer">
         Monthly
       </Label>

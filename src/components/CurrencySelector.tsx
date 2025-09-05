@@ -8,10 +8,10 @@ interface CurrencySelectorProps {
 
 export function CurrencySelector({ currency, onCurrencyChange }: CurrencySelectorProps) {
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex items-center gap-3 h-10">
       <span className="text-gray-600 font-medium text-sm">Currency:</span>
       <Select value={currency} onValueChange={onCurrencyChange}>
-        <SelectTrigger className="w-24 h-8 text-sm">
+        <SelectTrigger className="w-24 h-10 text-sm">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
