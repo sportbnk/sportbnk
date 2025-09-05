@@ -79,9 +79,9 @@ const Articles = () => {
             <ArticleCard 
               title="SportBnk vs SportBank: Understanding Our Brand" 
               description="Discover why we chose SportBnk as our brand name, how it relates to SportBank, and what makes our sports intelligence platform unique in the industry. Learn about our mission to revolutionize sports data management."
-              date="April 23, 2025" 
+              date="September 5, 2025" 
               readTime="5 min read" 
-              image="/lovable-uploads/5de360aa-8105-490e-bf75-94ff7ac0832d.png" 
+              image="/lovable-uploads/0f96fe5c-2a2b-4e9b-b7e9-90423d6f8df1.png"
               category="Company"
               href="/resources/articles/sportbnk-vs-sportbank"
             />

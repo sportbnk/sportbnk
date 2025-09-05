@@ -29,7 +29,7 @@ const SportBnkVsSportBankArticle = () => {
                     Company
                   </span>
                   <div className="flex items-center text-gray-500 text-sm">
-                    <Calendar className="h-4 w-4 mr-1" /> April 23, 2025
+                    <Calendar className="h-4 w-4 mr-1" /> September 5, 2025
                   </div>
                 </div>
                 
@@ -39,8 +39,8 @@ const SportBnkVsSportBankArticle = () => {
                 
                 <div className="aspect-video w-full overflow-hidden rounded-lg mb-8 bg-white flex items-center justify-center p-8">
                   <img 
-                    src="/lovable-uploads/b727ac17-df3d-4270-a031-139c82129d27.png" 
-                    alt="SportBnk full logo" 
+                    src="/lovable-uploads/0f96fe5c-2a2b-4e9b-b7e9-90423d6f8df1.png" 
+                    alt="SportBnk B2B Intelligence Platform logo"
                     className="max-w-full max-h-full object-contain"
                   />
                 </div>
