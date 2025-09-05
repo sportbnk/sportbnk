@@ -63,6 +63,7 @@ import HelpCenter from "./pages/resources/HelpCenter";
 import Privacy from "./pages/legal/Privacy";
 import Terms from "./pages/legal/Terms";
 import Cookies from "./pages/legal/Cookies";
+import OptOut from "./pages/legal/OptOut";
 
 const queryClient = new QueryClient();
 
@@ -136,6 +137,7 @@ function App() {
                       <Route path="/legal/privacy" element={<Privacy />} />
                       <Route path="/legal/terms" element={<Terms />} />
                       <Route path="/legal/cookies" element={<Cookies />} />
+                      <Route path="/opt-out" element={<OptOut />} />
                       
                       {/* Redirect to root from any sportbnk.com URLs that should go to home */}
                       <Route path="/index" element={<Navigate replace to="/" />} />

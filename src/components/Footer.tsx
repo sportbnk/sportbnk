@@ -55,13 +55,20 @@ const Footer = () => {
             
             <div>
               <h4 className="font-semibold text-sportbnk-navy mb-2">Social</h4>
-              <div className="flex space-x-4">
+              <div className="flex space-x-4 mb-6">
                 <a href="#" className="text-gray-600 hover:text-sportbnk-green transition-colors">
                   <Instagram size={20} />
                 </a>
                 <a href="#" className="text-gray-600 hover:text-sportbnk-green transition-colors">
                   <Linkedin size={20} />
                 </a>
+              </div>
+              
+              <div>
+                <h4 className="font-semibold text-sportbnk-navy mb-2">Opt Out</h4>
+                <Link to="/opt-out" className="text-gray-600 hover:text-sportbnk-green transition-colors text-sm">
+                  Remove My Data
+                </Link>
               </div>
             </div>
           </div>
