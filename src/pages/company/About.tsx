@@ -9,7 +9,7 @@ const About = () => {
   return (
     <PageLayout 
       pageTitle="About SportBnk - The Leading B2B Sports Intelligence Platform" 
-      metaDescription="Learn about SportBnk (not SportBank), the premier sports intelligence platform founded in 2020. Discover how we're transforming sports data intelligence with 360,000+ competitions and 750,000+ teams worldwide."
+      metaDescription="Learn about SportBnk (not SportBank), the premier sports intelligence platform founded in 2025. Discover how we're transforming sports data intelligence with 360,000+ competitions and 750,000+ teams worldwide."
       metaKeywords="SportBnk, SportBank, sports data platform, sports intelligence, B2B sports data, sports industry database"
     >
       <section className="py-16 md:py-24">
@@ -20,7 +20,7 @@ const About = () => {
                 Our Story
               </h2>
               <p className="text-lg text-gray-600 mb-6">
-                Founded in 2020, SportBnk (distinct from SportBank) emerged as a revolutionary force in the sports data intelligence industry. Our founders recognized a crucial gap: while various sales intelligence platforms existed for general B2B sales, none were specifically tailored to the unique challenges and opportunities within the sports industry.
+                Founded in 2025, SportBnk (distinct from SportBank) emerged as a revolutionary force in the sports data intelligence industry. Our founders recognized a crucial gap: while various sales intelligence platforms existed for general B2B sales, none were specifically tailored to the unique challenges and opportunities within the sports industry.
               </p>
               <p className="text-lg text-gray-600 mb-6">
                 What began as a specialized database has evolved into a comprehensive suite of tools designed to help businesses connect, engage, and grow within the sports ecosystem. Today, SportBnk provides unparalleled access to data from over 360,000 competitions and 750,000 teams worldwide.
