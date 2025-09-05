@@ -14,37 +14,44 @@ const Api = () => {
     >
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4 md:px-6">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-block p-3 bg-sportbnk-green/10 rounded-lg mb-4">
-              <Code className="h-8 w-8 text-sportbnk-green" />
-            </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-sportbnk-navy mb-4">
-              Powerful Sports Data API
-            </h2>
-            <p className="text-lg text-gray-600 mb-6">
-              Integrate comprehensive sports industry data directly into your applications with our robust REST API. 
-              Access real-time information about sports organizations, teams, and professionals programmatically.
-            </p>
-            <div className="grid md:grid-cols-2 gap-4 mb-8 text-left">
-              <div className="flex items-start">
-                <span className="text-sportbnk-green mr-2 font-bold text-lg">✓</span>
-                <p>Real-time data synchronization</p>
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <div className="inline-block p-3 bg-sportbnk-green/10 rounded-lg mb-4">
+                <Code className="h-8 w-8 text-sportbnk-green" />
               </div>
-              <div className="flex items-start">
-                <span className="text-sportbnk-green mr-2 font-bold text-lg">✓</span>
-                <p>Comprehensive API documentation</p>
+              <h2 className="text-3xl md:text-4xl font-bold text-sportbnk-navy mb-4">
+                Sportbnk API
+              </h2>
+              <p className="text-lg text-gray-600 mb-6">
+                Integrate comprehensive sports industry data directly into your applications with our robust REST API. 
+                Access real-time information about sports organizations, teams, and professionals programmatically.
+              </p>
+              <div className="space-y-4 mb-8">
+                <div className="flex items-start">
+                  <span className="text-sportbnk-green mr-2 font-bold text-lg">✓</span>
+                  <p>Real-time data synchronization</p>
+                </div>
+                <div className="flex items-start">
+                  <span className="text-sportbnk-green mr-2 font-bold text-lg">✓</span>
+                  <p>Comprehensive API documentation</p>
+                </div>
+                <div className="flex items-start">
+                  <span className="text-sportbnk-green mr-2 font-bold text-lg">✓</span>
+                  <p>Flexible rate limits and scalable pricing</p>
+                </div>
               </div>
-              <div className="flex items-start">
-                <span className="text-sportbnk-green mr-2 font-bold text-lg">✓</span>
-                <p>Flexible rate limits and scalable pricing</p>
-              </div>
-            </div>
-            <div className="flex justify-center">
               <WaitlistDialog>
                 <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white">
                   Join Waitlist
                 </Button>
               </WaitlistDialog>
+            </div>
+            <div>
+              <img 
+                src="/lovable-uploads/eb79c886-efce-4f58-9a00-a8855589b3d2.png" 
+                alt="Sports stadium showcasing the scale of sports data available through Sportbnk API" 
+                className="rounded-lg shadow-lg"
+              />
             </div>
           </div>
         </div>
