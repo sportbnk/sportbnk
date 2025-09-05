@@ -114,9 +114,11 @@ const Pricing = () => {
           
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto relative">
             {/* Most Popular label above the grid */}
-            <div className="absolute -top-8 left-1/2 lg:left-[62.5%] transform -translate-x-1/2 z-10">
-              <div className="bg-sportbnk-green text-white text-center py-1 px-4 text-sm font-medium rounded-md">
+            <div className="absolute -top-6 left-1/2 lg:left-[62.5%] transform -translate-x-1/2 z-10">
+              <div className="bg-sportbnk-green text-white text-center py-2 px-6 text-sm font-medium rounded-t-lg border-2 border-sportbnk-green relative">
                 Most Popular
+                {/* Small triangle connector */}
+                <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-[6px] border-r-[6px] border-t-[6px] border-l-transparent border-r-transparent border-t-sportbnk-green"></div>
               </div>
             </div>
             <PricingCard 
