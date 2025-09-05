@@ -10,24 +10,33 @@ const Community = () => {
     <PageLayout pageTitle="Community">
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4 md:px-6">
-          <div className="max-w-3xl mx-auto text-center mb-16">
-            <div className="inline-block p-3 bg-sportbnk-green/10 rounded-lg mb-4">
-              <MessageCircle className="h-8 w-8 text-sportbnk-green" />
+          <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
+            <div>
+              <div className="inline-block p-3 bg-sportbnk-green/10 rounded-lg mb-4">
+                <MessageCircle className="h-8 w-8 text-sportbnk-green" />
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold text-sportbnk-navy mb-4">
+                Join Our Sports Data Community
+              </h2>
+              <p className="text-lg text-gray-600 mb-8">
+                Connect with sports industry professionals in our WhatsApp group. Get instant answers 
+                to your questions, share insights, and stay connected with the community.
+              </p>
+              <div>
+                <WaitlistDialog>
+                  <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white px-8 py-3 text-lg">
+                    <MessageCircle className="mr-2 h-5 w-5" />
+                    Join Waitlist
+                  </Button>
+                </WaitlistDialog>
+              </div>
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-sportbnk-navy mb-4">
-              Join Our Sports Data Community
-            </h2>
-            <p className="text-lg text-gray-600 mb-8">
-              Connect with sports industry professionals in our WhatsApp group. Get instant answers 
-              to your questions, share insights, and stay connected with the community.
-            </p>
-            <div className="mt-8">
-              <WaitlistDialog>
-                <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white px-8 py-3 text-lg">
-                  <MessageCircle className="mr-2 h-5 w-5" />
-                  Join Waitlist
-                </Button>
-              </WaitlistDialog>
+            <div>
+              <img 
+                src="/lovable-uploads/e8123646-36ca-4bd8-8260-72d085d91503.png" 
+                alt="Rugby players in action showing teamwork and community spirit" 
+                className="rounded-lg shadow-lg"
+              />
             </div>
           </div>
           
