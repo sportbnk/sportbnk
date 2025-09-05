@@ -1,67 +1,9 @@
 import { Instagram, Linkedin, Cookie } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
-import { useState } from 'react';
-import { toast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+import { Link } from 'react-router-dom';
+import { WaitlistDialog } from '@/components/WaitlistDialog';
+import { Button } from '@/components/ui/button';
 
 const Footer = () => {
-  const [email, setEmail] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const location = useLocation();
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!email || isSubmitting) return;
-
-    setIsSubmitting(true);
-    
-    try {
-      console.log('Submitting newsletter email:', email);
-      const { error } = await supabase
-        .from('newsletter_subscriptions')
-        .upsert(
-          {
-            email: email.trim().toLowerCase(),
-            source_page: location.pathname,
-          },
-          { onConflict: 'email', ignoreDuplicates: true }
-        );
-
-      if (error) {
-        // Handle duplicate email gracefully
-        if (error.code === '23505') {
-          toast({
-            title: "Already Subscribed!",
-            description: "This email is already subscribed to our newsletter.",
-            duration: 3000,
-          });
-        } else {
-          throw error;
-        }
-      } else {
-        console.log('Newsletter subscription saved successfully');
-        toast({
-          title: "Subscription Successful!",
-          description: "Thank you for subscribing to our newsletter.",
-          duration: 3000,
-        });
-      }
-      
-      // Reset the form
-      setEmail("");
-    } catch (error) {
-      console.error('Newsletter subscription error:', error);
-      toast({
-        title: "Subscription Failed",
-        description: "There was an error subscribing to our newsletter. Please try again.",
-        variant: "destructive",
-        duration: 3000,
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   return (
     <footer className="bg-white py-12 border-t">
@@ -106,26 +48,14 @@ const Footer = () => {
           </div>
           
           <div>
-            <h3 className="font-semibold text-sportbnk-navy mb-4">Subscribe to Us</h3>
-            <form className="flex" onSubmit={handleSubmit}>
-              <input 
-                type="email" 
-                placeholder="Your email" 
-                className="flex-1 px-4 py-2 rounded-l-md border border-gray-300 focus:outline-none focus:border-sportbnk-green"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-              <button 
-                type="submit" 
-                disabled={isSubmitting}
-                className="bg-sportbnk-green text-white px-4 py-2 rounded-r-md hover:bg-sportbnk-green/90 transition-colors disabled:opacity-50"
-              >
-                {isSubmitting ? "..." : "Go"}
-              </button>
-            </form>
+            <h3 className="font-semibold text-sportbnk-navy mb-4">Join Waitlist</h3>
+            <WaitlistDialog>
+              <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white w-full mb-4">
+                Join Waitlist
+              </Button>
+            </WaitlistDialog>
             
-            <div className="mt-4">
+            <div>
               <h4 className="font-semibold text-sportbnk-navy mb-2">Social</h4>
               <div className="flex space-x-4">
                 <a href="#" className="text-gray-600 hover:text-sportbnk-green transition-colors">
