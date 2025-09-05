@@ -14,7 +14,7 @@ const Cookies = () => {
           <div className="text-center mb-12">
             <Cookie className="mx-auto h-16 w-16 text-sportbnk-green mb-6" />
             <h1 className="text-4xl font-bold text-sportbnk-navy mb-4">Cookies Policy</h1>
-            <p className="text-gray-600">Last updated: January 2025</p>
+            <p className="text-gray-600">Last updated: September 2025</p>
           </div>
 
           <div className="prose prose-lg max-w-none space-y-8">
@@ -81,7 +81,7 @@ const Cookies = () => {
             <section className="mb-10">
               <h2 className="text-2xl font-semibold text-sportbnk-navy mb-4">Contact us</h2>
               <p className="text-gray-700">
-                If you have any questions about our cookies policy, please contact us at <a href="mailto:privacy@sportbnk.com" className="text-sportbnk-green hover:underline">privacy@sportbnk.com</a>.
+                If you have any questions about our cookies policy, please contact us at <a href="mailto:info@sportbnk.com" className="text-sportbnk-green hover:underline">info@sportbnk.com</a>.
               </p>
             </section>
           </div>
