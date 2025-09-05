@@ -111,7 +111,7 @@ const Pricing = () => {
               Choose the plan that works best for your business needs.
             </p>
             
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-8 mb-8">
+            <div className="flex items-center justify-center gap-8 mb-8">
               <PricingToggle isAnnual={isAnnual} onToggle={setIsAnnual} />
               <CurrencySelector currency={currency} onCurrencyChange={setCurrency} />
             </div>
