@@ -29,19 +29,19 @@ const Footer = () => {
               <li><Link to="/products" className="text-gray-600 hover:text-sportbnk-green transition-colors">Product</Link></li>
               <li><Link to="/data" className="text-gray-600 hover:text-sportbnk-green transition-colors">Data</Link></li>
               <li><Link to="/company" className="text-gray-600 hover:text-sportbnk-green transition-colors">Company</Link></li>
-              <li><Link to="/resources" className="text-gray-600 hover:text-sportbnk-green transition-colors">Resources</Link></li>
               <li><Link to="/pricing" className="text-gray-600 hover:text-sportbnk-green transition-colors">Pricing</Link></li>
-              <li><Link to="/contact" className="text-gray-600 hover:text-sportbnk-green transition-colors">Contact</Link></li>
             </ul>
           </div>
           
           <div>
             <h3 className="font-semibold text-sportbnk-navy mb-4">Resources</h3>
             <ul className="space-y-2">
+              <li><Link to="/resources" className="text-gray-600 hover:text-sportbnk-green transition-colors">Resources</Link></li>
               <li><Link to="/resources/startups" className="text-gray-600 hover:text-sportbnk-green transition-colors">Sportbnk for Startups</Link></li>
               <li><Link to="/resources/community" className="text-gray-600 hover:text-sportbnk-green transition-colors">Community</Link></li>
               <li><Link to="/resources/articles" className="text-gray-600 hover:text-sportbnk-green transition-colors">Articles</Link></li>
               <li><Link to="/resources/help-center" className="text-gray-600 hover:text-sportbnk-green transition-colors">Help Center</Link></li>
+              <li><Link to="/contact" className="text-gray-600 hover:text-sportbnk-green transition-colors">Contact</Link></li>
             </ul>
           </div>
           
@@ -66,7 +66,7 @@ const Footer = () => {
               
               <div>
                 <h4 className="font-semibold text-sportbnk-navy mb-2">Opt Out</h4>
-                <Link to="/opt-out" className="text-gray-600 hover:text-sportbnk-green transition-colors text-sm">
+                <Link to="/opt-out" className="text-gray-600 hover:text-sportbnk-green transition-colors text-base font-medium">
                   Remove My Data
                 </Link>
               </div>
