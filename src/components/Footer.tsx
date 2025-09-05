@@ -1,4 +1,4 @@
-import { Facebook, Twitter, Instagram, Linkedin, Cookie } from 'lucide-react';
+import { Instagram, Linkedin, Cookie } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { toast } from "@/hooks/use-toast";
@@ -87,12 +87,6 @@ const Footer = () => {
             <div className="mt-4">
               <h4 className="font-semibold text-sportbnk-navy mb-2">Social</h4>
               <div className="flex space-x-4">
-                <a href="#" className="text-gray-600 hover:text-sportbnk-green transition-colors">
-                  <Facebook size={20} />
-                </a>
-                <a href="#" className="text-gray-600 hover:text-sportbnk-green transition-colors">
-                  <Twitter size={20} />
-                </a>
                 <a href="#" className="text-gray-600 hover:text-sportbnk-green transition-colors">
                   <Instagram size={20} />
                 </a>
