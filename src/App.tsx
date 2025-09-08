@@ -12,7 +12,7 @@ import { ListsProvider } from "./contexts/ListsContext";
 import { PricingProvider } from "./contexts/PricingContext";
 import { RevealProvider } from '@/contexts/RevealContext';
 import ProtectedRoute from "./components/auth/ProtectedRoute";
-import TrialGuard from "./components/auth/TrialGuard";
+
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
@@ -94,12 +94,12 @@ function App() {
                       
                       {/* Protected Routes with Trial Guard */}
                       
-                      <Route path="/search" element={<ProtectedRoute><TrialGuard><SearchResults /></TrialGuard></ProtectedRoute>} />
-                      <Route path="/csv-upload" element={<ProtectedRoute><TrialGuard><CsvUpload /></TrialGuard></ProtectedRoute>} />
-                      <Route path="/csv-update" element={<ProtectedRoute><TrialGuard><CsvUpdate /></TrialGuard></ProtectedRoute>} />
+                      <Route path="/search" element={<ProtectedRoute><SearchResults /></ProtectedRoute>} />
+                      <Route path="/csv-upload" element={<ProtectedRoute><CsvUpload /></ProtectedRoute>} />
+                      <Route path="/csv-update" element={<ProtectedRoute><CsvUpdate /></ProtectedRoute>} />
                       
                       {/* CRM System with sidebar layout - Protected with Trial Guard */}
-                      <Route element={<ProtectedRoute><TrialGuard><CrmLayout /></TrialGuard></ProtectedRoute>}>
+                      <Route element={<ProtectedRoute><CrmLayout /></ProtectedRoute>}>
                         <Route path="/database" element={<Navigate to="/crm/teams" replace />} />
                         <Route path="/crm/database" element={<Navigate to="/crm/teams" replace />} />
                         <Route path="/database/lists" element={<Lists />} />
