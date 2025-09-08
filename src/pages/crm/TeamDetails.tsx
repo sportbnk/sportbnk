@@ -133,7 +133,6 @@ const TeamDetails = () => {
             )}
           </div>
         </div>
-        <Button>Edit Team</Button>
       </div>
 
       <div className="grid md:grid-cols-2 gap-6">
