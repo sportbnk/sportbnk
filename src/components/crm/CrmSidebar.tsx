@@ -182,34 +182,17 @@ const CrmSidebar = () => {
               <SidebarMenuItem>
                 <SidebarMenuButton 
                   asChild 
-                  isActive={isActive("/crm/settings")}
+                  isActive={isActive("/crm/integrations")}
                   className={`w-full justify-start h-9 px-3 rounded-lg transition-all duration-200 ${
-                    isActive("/crm/settings") 
+                    isActive("/crm/integrations") 
                       ? "bg-primary/10 text-primary font-medium border border-primary/20" 
                       : "text-foreground hover:bg-muted hover:text-foreground"
                   } ${!open ? "justify-center" : ""}`}
                   tooltip={!open ? "CRM & Sales Tools" : undefined}
                 >
-                  <Link to="/crm/settings?tab=integrations" className="flex items-center">
+                  <Link to="/crm/integrations" className="flex items-center">
                     <UserRound className={`h-4 w-4 ${open ? "mr-3" : ""} transition-all duration-200`} />
                     {open && <span className="transition-opacity duration-200">CRM & Sales Tools</span>}
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton 
-                  asChild 
-                  isActive={isActive("/crm/settings")}
-                  className={`w-full justify-start h-9 px-3 rounded-lg transition-all duration-200 ${
-                    isActive("/crm/settings") 
-                      ? "bg-primary/10 text-primary font-medium border border-primary/20" 
-                      : "text-foreground hover:bg-muted hover:text-foreground"
-                  } ${!open ? "justify-center" : ""}`}
-                  tooltip={!open ? "Analytics & Reporting" : undefined}
-                >
-                  <Link to="/crm/settings?tab=integrations" className="flex items-center">
-                    <BarChart3 className={`h-4 w-4 ${open ? "mr-3" : ""} transition-all duration-200`} />
-                    {open && <span className="transition-opacity duration-200">Analytics & Reporting</span>}
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

@@ -39,6 +39,7 @@ import Deals from "./pages/crm/Deals";
 import Analytics from "./pages/crm/Analytics";
 import Profile from "./pages/crm/Profile";
 import CrmSettings from "./pages/crm/Settings";
+import CrmIntegrations from "./pages/crm/Integrations";
 
 // Product pages
 import Discover from "./pages/products/Discover";
@@ -112,6 +113,7 @@ function App() {
                 <Route path="/crm/analytics" element={<Analytics />} />
                 <Route path="/crm/profile" element={<Profile />} />
                         <Route path="/crm/settings" element={<CrmSettings />} />
+                        <Route path="/crm/integrations" element={<CrmIntegrations />} />
                       </Route>
                       
                       {/* Product sub-pages */}
