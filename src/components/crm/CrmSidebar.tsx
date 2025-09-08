@@ -33,6 +33,7 @@ import {
 import { useAuth } from "@/components/auth/AuthContext";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 const CrmSidebar = () => {
   const location = useLocation();
@@ -69,8 +70,8 @@ const CrmSidebar = () => {
   const isActive = (path: string) => location.pathname === path;
   
   return (
-    <Sidebar collapsible="icon" className="border-r border-gray-200 bg-white">
-      <SidebarHeader className="p-3 border-b border-gray-50 relative">
+    <Sidebar collapsible="icon" className="border-r border-border bg-background">"
+      <SidebarHeader className="p-3 border-b border-border/50 relative">
         <div className="flex items-center justify-between">
           <div className="flex items-center justify-center flex-1">
             {open ? (
@@ -102,11 +103,11 @@ const CrmSidebar = () => {
         </div>
       </SidebarHeader>
       
-      <SidebarContent className="flex-1 bg-white">
+      <SidebarContent className="flex-1 bg-background">
         {/* DATABASE Section */}
         <SidebarGroup className="px-2 py-2">
           {open && (
-            <SidebarGroupLabel className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 px-3 transition-opacity duration-200">
+            <SidebarGroupLabel className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1 px-3 transition-opacity duration-200">
               DATABASE
             </SidebarGroupLabel>
           )}
@@ -118,8 +119,8 @@ const CrmSidebar = () => {
                   isActive={isActive("/crm/teams")}
                   className={`w-full justify-start h-9 px-3 rounded-lg transition-all duration-200 ${
                     isActive("/crm/teams") 
-                      ? "bg-blue-50 text-blue-700 font-medium border border-blue-100" 
-                      : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
+                      ? "bg-primary/10 text-primary font-medium border border-primary/20" 
+                      : "text-foreground hover:bg-muted hover:text-foreground"
                   } ${!open ? "justify-center" : ""}`}
                   tooltip={!open ? "Organisations" : undefined}
                 >
@@ -135,8 +136,8 @@ const CrmSidebar = () => {
                   isActive={isActive("/crm/people")}
                   className={`w-full justify-start h-9 px-3 rounded-lg transition-all duration-200 ${
                     isActive("/crm/people") 
-                      ? "bg-blue-50 text-blue-700 font-medium border border-blue-100" 
-                      : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
+                      ? "bg-primary/10 text-primary font-medium border border-primary/20" 
+                      : "text-foreground hover:bg-muted hover:text-foreground"
                   } ${!open ? "justify-center" : ""}`}
                   tooltip={!open ? "People" : undefined}
                 >
@@ -152,8 +153,8 @@ const CrmSidebar = () => {
                   isActive={isActive("/database/lists")}
                   className={`w-full justify-start h-9 px-3 rounded-lg transition-all duration-200 ${
                     isActive("/database/lists") 
-                      ? "bg-blue-50 text-blue-700 font-medium border border-blue-100" 
-                      : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
+                      ? "bg-primary/10 text-primary font-medium border border-primary/20" 
+                      : "text-foreground hover:bg-muted hover:text-foreground"
                   } ${!open ? "justify-center" : ""}`}
                   tooltip={!open ? "Lists" : undefined}
                 >
@@ -172,7 +173,7 @@ const CrmSidebar = () => {
         {/* CRM INTEGRATIONS Section */}
         <SidebarGroup className="px-2 py-2">
           {open && (
-            <SidebarGroupLabel className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 px-3 transition-opacity duration-200">
+            <SidebarGroupLabel className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1 px-3 transition-opacity duration-200">
               CRM INTEGRATIONS
             </SidebarGroupLabel>
           )}
@@ -184,8 +185,8 @@ const CrmSidebar = () => {
                   isActive={isActive("/crm/settings")}
                   className={`w-full justify-start h-9 px-3 rounded-lg transition-all duration-200 ${
                     isActive("/crm/settings") 
-                      ? "bg-blue-50 text-blue-700 font-medium border border-blue-100" 
-                      : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
+                      ? "bg-primary/10 text-primary font-medium border border-primary/20" 
+                      : "text-foreground hover:bg-muted hover:text-foreground"
                   } ${!open ? "justify-center" : ""}`}
                   tooltip={!open ? "CRM & Sales Tools" : undefined}
                 >
@@ -201,8 +202,8 @@ const CrmSidebar = () => {
                   isActive={isActive("/crm/settings")}
                   className={`w-full justify-start h-9 px-3 rounded-lg transition-all duration-200 ${
                     isActive("/crm/settings") 
-                      ? "bg-blue-50 text-blue-700 font-medium border border-blue-100" 
-                      : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
+                      ? "bg-primary/10 text-primary font-medium border border-primary/20" 
+                      : "text-foreground hover:bg-muted hover:text-foreground"
                   } ${!open ? "justify-center" : ""}`}
                   tooltip={!open ? "Analytics & Reporting" : undefined}
                 >
@@ -219,6 +220,12 @@ const CrmSidebar = () => {
         {/* Bottom Navigation */}
         <div className="mt-auto">
           <SidebarSeparator className="mx-3" />
+          
+          {/* Theme Toggle - positioned above profile */}
+          <div className="p-2 border-b border-border/50">
+            <ThemeToggle />
+          </div>
+          
           <SidebarFooter className="p-2">
             <SidebarGroup>
               <SidebarGroupContent>
@@ -238,7 +245,7 @@ const CrmSidebar = () => {
                   <SidebarMenuItem>
                     <SidebarMenuButton 
                       onClick={handleSettingsClick}
-                      className={`w-full h-9 px-2 rounded-lg transition-all duration-200 text-gray-700 hover:bg-gray-50 hover:text-gray-900 flex items-center ${
+                      className={`w-full h-9 px-2 rounded-lg transition-all duration-200 text-foreground hover:bg-muted hover:text-foreground flex items-center ${
                         !open ? "justify-center" : "justify-start"
                       }`}
                       tooltip={!open ? "Settings" : undefined}
@@ -250,7 +257,7 @@ const CrmSidebar = () => {
                   <SidebarMenuItem>
                     <SidebarMenuButton 
                       onClick={handleLogout}
-                      className={`w-full h-9 px-2 rounded-lg transition-all duration-200 text-red-600 hover:text-red-700 hover:bg-red-50 flex items-center ${
+                      className={`w-full h-9 px-2 rounded-lg transition-all duration-200 text-destructive hover:text-destructive hover:bg-destructive/10 flex items-center ${
                         !open ? "justify-center" : "justify-start"
                       }`}
                       tooltip={!open ? "Log Out" : undefined}
