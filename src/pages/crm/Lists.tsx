@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
-import { Plus, Trash2, Download } from 'lucide-react';
+import { Plus, Trash2, Download, Users, Calendar, Edit3, FolderOpen, Archive, Filter } from 'lucide-react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,6 +19,8 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
 import {
   Dialog,
   DialogContent,
@@ -59,6 +60,7 @@ const Lists = () => {
   const location = useLocation();
   const [isCreateListOpen, setIsCreateListOpen] = useState(false);
   const [activeListId, setActiveListId] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
   
   const { 
     lists, 
@@ -197,181 +199,297 @@ const Lists = () => {
     toast.success(`Exported ${activeList.contacts.length} contacts to CSV`);
   };
 
+  // Format date helper
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+  };
+
   if (loading) {
     return (
-      <div className="container mx-auto py-8">
-        <div className="flex justify-center items-center py-10">
-          <p className="text-muted-foreground">Loading lists...</p>
+      <div className="space-y-6">
+        <div className="border-b border-border pb-4">
+          <div className="h-8 bg-muted rounded w-32 animate-pulse"></div>
+          <div className="h-4 bg-muted rounded w-64 mt-2 animate-pulse"></div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {[...Array(6)].map((_, i) => (
+            <div key={i} className="h-32 bg-muted rounded-lg animate-pulse"></div>
+          ))}
         </div>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto py-8">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Lists</h1>
-        <div className="flex gap-2">
-          <Button 
-            variant="outline" 
-            onClick={handleExportCSV}
-            disabled={!activeList || activeList.contacts.length === 0}
-          >
-            <Download className="w-4 h-4 mr-2" /> Export CSV
-          </Button>
-          <Dialog open={isCreateListOpen} onOpenChange={setIsCreateListOpen}>
-            <DialogTrigger asChild>
-              <Button variant="outline">
-                <Plus className="w-4 h-4 mr-2" /> Create List
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Create a new list</DialogTitle>
-                <DialogDescription>
-                  Give your list a name and description.
-                </DialogDescription>
-              </DialogHeader>
-              <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                  <FormField
-                    control={form.control}
-                    name="listName"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>List Name</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Marketing Leads" {...field} />
-                        </FormControl>
-                        <FormDescription>
-                          This is the name of your list.
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="description"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Description</FormLabel>
-                        <FormControl>
-                          <Textarea
-                            placeholder="A brief description of the list."
-                            className="resize-none"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormDescription>
-                          Describe the purpose of this list.
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <div className="flex justify-end space-x-2">
-                    <Button type="button" variant="outline" onClick={() => setIsCreateListOpen(false)}>
-                      Cancel
-                    </Button>
-                    <Button type="submit">Create</Button>
-                  </div>
-                </form>
-              </Form>
-            </DialogContent>
-          </Dialog>
-        </div>
-      </div>
-
-      <div className="mb-6 flex flex-wrap justify-between items-center gap-4">
-        <div className="flex items-center gap-4">
-          {lists.length > 0 ? (
-            <Select
-              value={activeListId || ''}
-              onValueChange={(value) => setActiveListId(value)}
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="border-b border-border pb-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-bold text-foreground">Contact Lists</h1>
+            <p className="text-muted-foreground mt-1">
+              Organize and manage your contact lists efficiently
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            <Button 
+              variant="outline" 
+              onClick={handleExportCSV}
+              disabled={!activeList || activeList.contacts.length === 0}
             >
-              <SelectTrigger className="w-[280px]">
-                <SelectValue placeholder="Select a list" />
-              </SelectTrigger>
-              <SelectContent>
-                {lists.map(list => (
-                  <SelectItem key={list.id} value={list.id}>
-                    {list.name} ({list.contacts.length} contacts)
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          ) : (
-            <p className="text-muted-foreground">No lists found. Create your first list.</p>
-          )}
-          
-          {activeList?.description && (
-            <span className="text-sm text-muted-foreground">
-              {activeList.description}
-            </span>
-          )}
-        </div>
-        
-        {activeList && (
-          <div className="flex gap-2">
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button 
-                  variant="outline" 
-                  className="text-red-600 hover:text-red-700"
-                  disabled={lists.length <= 1}
-                >
-                  <Trash2 className="h-4 w-4 mr-2" />
-                  Delete List
+              <Download className="w-4 h-4 mr-2" /> Export
+            </Button>
+            <Dialog open={isCreateListOpen} onOpenChange={setIsCreateListOpen}>
+              <DialogTrigger asChild>
+                <Button>
+                  <Plus className="w-4 h-4 mr-2" /> Create List
                 </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    This will permanently delete the list "{activeList.name}" and all its contacts. This action cannot be undone.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction onClick={handleDeleteList} className="bg-red-600 hover:bg-red-700">
-                    Delete
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Create a new list</DialogTitle>
+                  <DialogDescription>
+                    Give your list a name and description to organize your contacts.
+                  </DialogDescription>
+                </DialogHeader>
+                <Form {...form}>
+                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                    <FormField
+                      control={form.control}
+                      name="listName"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>List Name</FormLabel>
+                          <FormControl>
+                            <Input placeholder="e.g. Marketing Leads, VIP Contacts" {...field} />
+                          </FormControl>
+                          <FormDescription>
+                            Choose a descriptive name for your list.
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="description"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Description (Optional)</FormLabel>
+                          <FormControl>
+                            <Textarea
+                              placeholder="Brief description of the list purpose..."
+                              className="resize-none"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormDescription>
+                            Describe the purpose of this list.
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <div className="flex justify-end space-x-2">
+                      <Button type="button" variant="outline" onClick={() => setIsCreateListOpen(false)}>
+                        Cancel
+                      </Button>
+                      <Button type="submit">Create List</Button>
+                    </div>
+                  </form>
+                </Form>
+              </DialogContent>
+            </Dialog>
           </div>
-        )}
+        </div>
       </div>
 
-      {/* List Content */}
-      <div className="bg-white rounded-lg border">
-        {activeList && activeList.contacts.length > 0 ? (
-          <ContactsView 
-            data={activeList.contacts}
-            onViewTeam={() => {}}
-            onAddToList={() => {}}
-            onRemoveFromList={handleRemoveFromList}
-            isSavedList={true}
-          />
-        ) : activeList ? (
-          <div className="text-center py-12">
-            <h3 className="text-lg font-medium mb-2">{activeList.name}</h3>
-            {activeList.description && (
-              <p className="text-muted-foreground mb-4">{activeList.description}</p>
-            )}
-            <p className="text-muted-foreground">
-              No contacts in this list yet. Add contacts from the People page using the + button.
-            </p>
+      {/* Lists Overview Grid */}
+      {lists.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {lists.map((list) => {
+            const isActive = activeListId === list.id;
+            return (
+              <Card 
+                key={list.id} 
+                className={`cursor-pointer transition-all duration-200 hover:shadow-lg ${
+                  isActive ? 'ring-2 ring-primary border-primary' : 'hover:border-primary/50'
+                }`}
+                onClick={() => setActiveListId(list.id)}
+              >
+                <CardHeader className="pb-3">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center space-x-2">
+                      <div className={`p-2 rounded-lg ${
+                        isActive ? 'bg-primary text-primary-foreground' : 'bg-muted'
+                      }`}>
+                        <FolderOpen className="h-4 w-4" />
+                      </div>
+                      <div>
+                        <CardTitle className="text-lg">{list.name}</CardTitle>
+                        <div className="flex items-center space-x-2 mt-1">
+                          <Badge variant="secondary" className="text-xs">
+                            <Users className="h-3 w-3 mr-1" />
+                            {list.contacts.length} contacts
+                          </Badge>
+                        </div>
+                      </div>
+                    </div>
+                    {isActive && (
+                      <Badge className="bg-primary/10 text-primary border-primary/20">
+                        Active
+                      </Badge>
+                    )}
+                  </div>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  {list.description ? (
+                    <CardDescription className="text-sm line-clamp-2 mb-3">
+                      {list.description}
+                    </CardDescription>
+                  ) : (
+                    <CardDescription className="text-sm text-muted-foreground/60 mb-3">
+                      No description provided
+                    </CardDescription>
+                  )}
+                  <div className="flex items-center justify-between text-xs text-muted-foreground">
+                    <div className="flex items-center space-x-1">
+                      <Calendar className="h-3 w-3" />
+                      <span>Created {formatDate(list.created_at)}</span>
+                    </div>
+                    {isActive && (
+                      <div className="flex items-center space-x-1">
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button 
+                              variant="ghost" 
+                              size="sm"
+                              className="h-6 px-2 text-destructive hover:text-destructive hover:bg-destructive/10"
+                              disabled={lists.length <= 1}
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <Trash2 className="h-3 w-3" />
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Delete List</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                Are you sure you want to delete "{list.name}"? This will permanently remove the list and all its contacts. This action cannot be undone.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Cancel</AlertDialogCancel>
+                              <AlertDialogAction 
+                                onClick={handleDeleteList} 
+                                className="bg-destructive hover:bg-destructive/90"
+                              >
+                                Delete List
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
+      ) : (
+        <Card className="text-center py-12">
+          <CardContent>
+            <div className="flex flex-col items-center space-y-4">
+              <div className="p-4 bg-muted rounded-full">
+                <FolderOpen className="h-8 w-8 text-muted-foreground" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold">No lists created yet</h3>
+                <p className="text-muted-foreground">
+                  Create your first list to start organizing your contacts.
+                </p>
+              </div>
+              <Dialog open={isCreateListOpen} onOpenChange={setIsCreateListOpen}>
+                <DialogTrigger asChild>
+                  <Button>
+                    <Plus className="w-4 h-4 mr-2" /> Create Your First List
+                  </Button>
+                </DialogTrigger>
+              </Dialog>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Active List Content */}
+      {activeList && (
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="p-2 bg-primary/10 text-primary rounded-lg">
+                <FolderOpen className="h-5 w-5" />
+              </div>
+              <div>
+                <h2 className="text-xl font-semibold">{activeList.name}</h2>
+                <p className="text-sm text-muted-foreground">
+                  {activeList.contacts.length} contacts • Created {formatDate(activeList.created_at)}
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Button variant="outline" size="sm">
+                <Edit3 className="h-4 w-4 mr-2" />
+                Edit List
+              </Button>
+              <Button variant="outline" size="sm" onClick={handleExportCSV}>
+                <Download className="h-4 w-4 mr-2" />
+                Export
+              </Button>
+            </div>
           </div>
-        ) : (
-          <div className="text-center py-12">
-            <p className="text-muted-foreground">
-              Create your first list to get started.
-            </p>
-          </div>
-        )}
-      </div>
+
+          {activeList.description && (
+            <Card>
+              <CardContent className="p-4">
+                <p className="text-sm text-muted-foreground">{activeList.description}</p>
+              </CardContent>
+            </Card>
+          )}
+
+          <Card>
+            <CardContent className="p-0">
+              {activeList.contacts.length > 0 ? (
+                <ContactsView 
+                  data={activeList.contacts}
+                  onViewTeam={() => {}}
+                  onAddToList={() => {}}
+                  onRemoveFromList={handleRemoveFromList}
+                  isSavedList={true}
+                />
+              ) : (
+                <div className="text-center py-12">
+                  <div className="flex flex-col items-center space-y-4">
+                    <div className="p-4 bg-muted rounded-full">
+                      <Users className="h-8 w-8 text-muted-foreground" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold">No contacts in this list</h3>
+                      <p className="text-muted-foreground">
+                        Add contacts from the People page using the + button.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+      )}
     </div>
   );
 };

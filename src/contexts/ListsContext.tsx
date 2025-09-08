@@ -23,6 +23,7 @@ interface ContactList {
   id: string;
   name: string;
   description?: string;
+  created_at: string;
   contacts: Contact[];
 }
 
@@ -113,6 +114,7 @@ export const ListsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         id: list.id,
         name: list.name,
         description: list.description,
+        created_at: list.created_at,
         contacts: list.list_items?.map((item: any) => {
           console.log('Raw contact data from DB:', {
             name: item.contacts.name,
