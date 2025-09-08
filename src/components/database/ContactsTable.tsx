@@ -8,12 +8,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ArrowDown, ArrowUp, Eye } from "lucide-react";
+import { ArrowDown, ArrowUp, Plus } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import TeamProfile from "./TeamProfile";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { TeamData } from "@/types/teams";
+import ListSelectionPopover from "./ListSelectionPopover";
 
 interface ContactsTableProps {
   data: TeamData[];
@@ -66,6 +67,10 @@ const ContactsTable = ({ data, useCredits, onTeamSelect }: ContactsTableProps) =
 
   const handleViewOrganization = (team: TeamData) => {
     navigate(`/crm/teams/${team.id}`);
+  };
+
+  const handleAddToList = (team: TeamData, listId: string, listName: string) => {
+    toast.success(`${team.team} added to list "${listName}"`);
   };
 
   const revealEmail = (email: string) => {
@@ -182,14 +187,10 @@ const ContactsTable = ({ data, useCredits, onTeamSelect }: ContactsTableProps) =
                   <TableCell className="hidden md:table-cell">{formatRevenue(team.revenue)}</TableCell>
                   <TableCell className="hidden md:table-cell">{team.employees}</TableCell>
                   <TableCell className="text-right">
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      className="text-blue-600" 
-                      onClick={() => handleViewOrganization(team)}
-                    >
-                      <Eye className="h-4 w-4" />
-                    </Button>
+                    <ListSelectionPopover
+                      onAddToList={(contact, listId, listName) => handleAddToList(team, listId, listName)}
+                      contact={team}
+                    />
                   </TableCell>
                 </TableRow>
               ))
