@@ -1,11 +1,11 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import ContactsFilters from "@/components/database/ContactsFilters";
 import ContactsTable from "@/components/database/ContactsTable";
 import AISearchBar from "@/components/database/AISearchBar";
 import { supabase } from "@/integrations/supabase/client";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCredits } from "@/contexts/CreditsContext";
 import {
   Pagination,
@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/pagination";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { triggerFootballSeeding } from "@/utils/seedFootball";
 
 // DTO interfaces for proper typing
 interface SportDTO {
@@ -45,6 +46,7 @@ interface OrganizationDTO {
 }
 
 export default function Teams() {
+  const queryClient = useQueryClient();
   const [filters, setFilters] = useState({
     sport: "all",
     level: "all",
@@ -63,6 +65,22 @@ export default function Teams() {
   const [aiQuery, setAiQuery] = useState('');
   const [isAiLoading, setIsAiLoading] = useState(false);
   const { credits, tier } = useCredits();
+
+  // Trigger seeding on component mount
+  useEffect(() => {
+    const runSeeding = async () => {
+      try {
+        await triggerFootballSeeding();
+        // Invalidate queries to refresh data
+        queryClient.invalidateQueries({ queryKey: ['teams-count'] });
+        queryClient.invalidateQueries({ queryKey: ['organisations'] });
+      } catch (error) {
+        console.error("Failed to seed football data:", error);
+      }
+    };
+    
+    runSeeding();
+  }, []); // Run once on mount
 
   const pageSize = 50;
 
