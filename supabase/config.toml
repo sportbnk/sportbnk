@@ -56,6 +56,3 @@ otp_exp = 3600
 
 [functions.process-teams-csv]
 verify_jwt = false
-
-[functions.collect-club-info]
-verify_jwt = false

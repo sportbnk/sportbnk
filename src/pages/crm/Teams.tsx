@@ -34,8 +34,6 @@ import {
   X
 } from 'lucide-react';
 import { Team, Sport, Country, City } from '@/types/teams';
-import { ExecutiveDataCollector } from '@/components/ExecutiveDataCollector';
-import { ClubInfoCollector } from '@/components/ClubInfoCollector';
 
 // Import team logos
 import arsenalLogo from "@/assets/team-logos/arsenal.png";
@@ -349,12 +347,6 @@ const Teams = () => {
           </Button>
         </div>
 
-        {/* Executive Data Collector */}
-        <div className="mb-6">
-          <ExecutiveDataCollector />
-          
-          <ClubInfoCollector />
-        </div>
 
         {/* Results Table */}
         <Card className="shadow-sm border-border">
