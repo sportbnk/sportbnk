@@ -1,0 +1,11 @@
+-- Remove all team and contact related data and tables
+DROP TABLE IF EXISTS list_items CASCADE;
+DROP TABLE IF EXISTS revealed_details CASCADE;
+DROP TABLE IF EXISTS contacts CASCADE;
+DROP TABLE IF EXISTS opening_hours CASCADE;
+DROP TABLE IF EXISTS team_social_links CASCADE;
+DROP TABLE IF EXISTS teams CASCADE;
+DROP TABLE IF EXISTS cities CASCADE;
+DROP TABLE IF EXISTS countries CASCADE;
+DROP TABLE IF EXISTS sports CASCADE;
+DROP TABLE IF EXISTS departments CASCADE;

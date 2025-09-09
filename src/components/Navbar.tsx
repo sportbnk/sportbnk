@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import { WaitlistDialog } from '@/components/WaitlistDialog';
-import AccountBadge from '@/components/crm/AccountBadge';
+
 import TrialCountdown from '@/components/TrialCountdown';
 import { useAuth } from '@/components/auth/AuthContext';
 import { useCredits } from '@/contexts/CreditsContext';
@@ -226,7 +226,6 @@ const Navbar = () => {
               {user && (
                 <div className="flex items-center space-x-3">
                   {tier === 'free' ? <TrialCountdown /> : null}
-                  <AccountBadge showEmail={false} />
                 </div>
               )}
             </div>
@@ -350,7 +349,6 @@ const Navbar = () => {
                       <TrialCountdown />
                     </div>
                   )}
-                  <AccountBadge showEmail={false} />
                 </div>
               )}
             </div>

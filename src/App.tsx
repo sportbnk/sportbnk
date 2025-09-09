@@ -8,9 +8,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import FaviconUpdater from "./components/FaviconUpdater";
 import { AuthProvider } from "./components/auth/AuthContext";
 import { CreditsProvider } from "./contexts/CreditsContext";
-import { ListsProvider } from "./contexts/ListsContext";
 import { PricingProvider } from "./contexts/PricingContext";
-import { RevealProvider } from '@/contexts/RevealContext';
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 
 import Index from "./pages/Index";
@@ -24,20 +22,14 @@ import Pricing from "./pages/Pricing";
 import BookDemo from "./pages/BookDemo";
 import ContactUs from "./pages/ContactUs";
 import FreeTrial from "./pages/FreeTrial";
-import ContactDatabase from "./pages/ContactDatabase";
-import CrmLayout from "./components/crm/CrmLayout";
-import Lists from "./pages/crm/Lists";
-import Teams from "./pages/crm/Teams";
-import People from "./pages/crm/People";
-import TeamDetails from "./pages/crm/TeamDetails";
 
 
 
-import CsvUpdate from "./pages/CsvUpdate";
+
 import Profile from "./pages/crm/Profile";
 import CrmSettings from "./pages/crm/Settings";
 import CrmIntegrations from "./pages/crm/Integrations";
-import SeedEnglishFootball from "./pages/admin/SeedEnglishFootball";
+
 
 // Product pages
 import Discover from "./pages/products/Discover";
@@ -73,9 +65,7 @@ function App() {
         <Toaster />
         <AuthProvider>
           <CreditsProvider>
-            <ListsProvider>
-              <PricingProvider>
-                <RevealProvider>
+            <PricingProvider>
                   <HelmetProvider>
                     <Routes>
                       <Route path="/" element={<Index />} />
@@ -93,22 +83,13 @@ function App() {
                       
                       {/* Protected Routes with Trial Guard */}
                       
-                      <Route path="/admin/seed-english-football" element={<ProtectedRoute><SeedEnglishFootball /></ProtectedRoute>} />
-                      <Route path="/csv-update" element={<ProtectedRoute><CsvUpdate /></ProtectedRoute>} />
                       
-                      {/* CRM System with sidebar layout - Protected with Trial Guard */}
-                      <Route element={<ProtectedRoute><CrmLayout /></ProtectedRoute>}>
-                        <Route path="/database" element={<Navigate to="/crm/teams" replace />} />
-                        <Route path="/crm/database" element={<Navigate to="/crm/teams" replace />} />
-                        <Route path="/database/lists" element={<Lists />} />
-                        <Route path="/crm/teams" element={<Teams />} />
-                <Route path="/crm/teams/:teamId" element={<TeamDetails />} />
-                <Route path="/crm/people" element={<People />} />
-                
-                <Route path="/crm/profile" element={<Profile />} />
-                        <Route path="/crm/settings" element={<CrmSettings />} />
-                        <Route path="/crm/integrations" element={<CrmIntegrations />} />
-                      </Route>
+                      
+                      
+                      {/* CRM System - Protected with Trial Guard */}
+                      <Route path="/crm/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+                      <Route path="/crm/settings" element={<ProtectedRoute><CrmSettings /></ProtectedRoute>} />
+                      <Route path="/crm/integrations" element={<ProtectedRoute><CrmIntegrations /></ProtectedRoute>} />
                       
                       {/* Product sub-pages */}
                       <Route path="/products/discover" element={<Discover />} />
@@ -143,11 +124,9 @@ function App() {
                       {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                       <Route path="*" element={<NotFound />} />
                     </Routes>
-                  </HelmetProvider>
-                </RevealProvider>
+                </HelmetProvider>
               </PricingProvider>
-            </ListsProvider>
-          </CreditsProvider>
+            </CreditsProvider>
         </AuthProvider>
       </BrowserRouter>
     </QueryClientProvider>
