@@ -309,82 +309,75 @@ const TeamDetails = () => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Users className="h-5 w-5" />
-                Employees
+                Employees {contacts.length > 0 && `(${contacts.length})`}
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow className="bg-muted/30">
-                    <TableHead className="font-semibold">Name</TableHead>
-                    <TableHead className="font-semibold">Role</TableHead>
-                    <TableHead className="font-semibold">Club</TableHead>
-                    <TableHead className="font-semibold">Email</TableHead>
-                    <TableHead className="font-semibold">Phone</TableHead>
-                    <TableHead className="font-semibold">LinkedIn</TableHead>
-                    <TableHead className="font-semibold text-right">Action</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  <TableRow>
-                    <TableCell colSpan={7} className="text-center py-12">
-                      <div className="flex flex-col items-center gap-3">
-                        <Users className="h-12 w-12 text-muted-foreground" />
-                        <div>
-                          <p className="font-medium text-foreground">No employees found</p>
-                          <p className="text-sm text-muted-foreground">
-                            Employee data will be displayed here when available
-                          </p>
-                        </div>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
-
-          {/* Team Contacts */}
-          {contacts.length > 0 && (
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <User className="h-5 w-5" />
-                  Team Contacts ({contacts.length})
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {contacts.map((contact) => (
-                    <div key={contact.id} className="flex items-start gap-3 p-3 border rounded-md">
-                      <User className="h-5 w-5 text-muted-foreground mt-0.5" />
-                      <div className="flex-1">
-                        <h4 className="font-semibold">
+              {contacts.length > 0 ? (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Name</TableHead>
+                      <TableHead>Position</TableHead>
+                      <TableHead>Department</TableHead>
+                      <TableHead>Email</TableHead>
+                      <TableHead>Phone</TableHead>
+                      <TableHead>Mobile</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {contacts.map((contact) => (
+                      <TableRow key={contact.id} className="hover:bg-muted/50">
+                        <TableCell className="font-medium">
                           {contact.first_name} {contact.last_name}
-                        </h4>
-                        {contact.position && (
-                          <p className="text-sm text-muted-foreground">{contact.position}</p>
-                        )}
-                        {contact.department && (
-                          <p className="text-sm text-muted-foreground">{contact.department.name}</p>
-                        )}
-                        <div className="flex gap-4 mt-2 text-sm">
-                          {contact.email && (
-                            <a href={`mailto:${contact.email}`} className="text-primary hover:underline">
+                        </TableCell>
+                        <TableCell>
+                          {contact.position ? (
+                            <Badge variant="secondary">{contact.position}</Badge>
+                          ) : (
+                            <span className="text-muted-foreground">—</span>
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          {contact.department?.name || <span className="text-muted-foreground">—</span>}
+                        </TableCell>
+                        <TableCell>
+                          {contact.email ? (
+                            <a 
+                              href={`mailto:${contact.email}`} 
+                              className="text-primary hover:underline"
+                            >
                               {contact.email}
                             </a>
+                          ) : (
+                            <span className="text-muted-foreground">—</span>
                           )}
-                          {contact.phone && (
-                            <span className="text-muted-foreground">{contact.phone}</span>
-                          )}
-                        </div>
-                      </div>
+                        </TableCell>
+                        <TableCell>
+                          {contact.phone || <span className="text-muted-foreground">—</span>}
+                        </TableCell>
+                        <TableCell>
+                          {contact.mobile || <span className="text-muted-foreground">—</span>}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              ) : (
+                <div className="text-center py-12">
+                  <div className="flex flex-col items-center gap-3">
+                    <Users className="h-12 w-12 text-muted-foreground" />
+                    <div>
+                      <p className="font-medium text-foreground">No employees found</p>
+                      <p className="text-sm text-muted-foreground">
+                        Employee data will be displayed here when available
+                      </p>
                     </div>
-                  ))}
+                  </div>
                 </div>
-              </CardContent>
-            </Card>
-          )}
+              )}
+            </CardContent>
+          </Card>
         </div>
 
         {/* Right Column - Opening Hours */}
