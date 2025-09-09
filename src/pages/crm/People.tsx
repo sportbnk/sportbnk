@@ -4,7 +4,16 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Search, User, Building2, MapPin, Mail, Phone, Linkedin, Twitter, Instagram, Facebook } from "lucide-react";
+import { 
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Skeleton } from '@/components/ui/skeleton';
+import { Search, User, Building2, MapPin, Mail, Phone, Linkedin, Twitter, Instagram, Facebook, Filter, X, Eye, ExternalLink } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Contact, Team, Department } from "@/types/teams";
 
@@ -17,6 +26,14 @@ const People = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTeam, setSelectedTeam] = useState("all");
   const [selectedDepartment, setSelectedDepartment] = useState("all");
+
+  const clearFilters = () => {
+    setSearchQuery("");
+    setSelectedTeam("all");
+    setSelectedDepartment("all");
+  };
+
+  const hasActiveFilters = searchQuery || selectedTeam !== "all" || selectedDepartment !== "all";
 
   useEffect(() => {
     fetchData();
@@ -90,186 +107,234 @@ const People = () => {
 
   if (loading) {
     return (
-      <div className="space-y-4 pt-6">
-        <h1 className="text-2xl font-bold">People</h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {[1, 2, 3, 4, 5, 6].map((i) => (
-            <Card key={i} className="animate-pulse">
-              <CardHeader>
-                <div className="h-4 bg-muted rounded w-3/4"></div>
-                <div className="h-3 bg-muted rounded w-1/2"></div>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2">
-                  <div className="h-3 bg-muted rounded"></div>
-                  <div className="h-3 bg-muted rounded w-2/3"></div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+      <div className="flex gap-6 h-full">
+        {/* Sidebar Skeleton */}
+        <div className="w-64 space-y-4">
+          <Skeleton className="h-10 w-full" />
+          <Skeleton className="h-40 w-full" />
+          <Skeleton className="h-32 w-full" />
+        </div>
+        {/* Content Skeleton */}
+        <div className="flex-1 space-y-4">
+          <Skeleton className="h-8 w-48" />
+          <Skeleton className="h-96 w-full" />
         </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6 pt-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">People</h1>
-        <div className="flex items-center gap-2">
-          <Badge variant="secondary">
-            {filteredContacts.length} contact{filteredContacts.length !== 1 ? 's' : ''}
-          </Badge>
-        </div>
-      </div>
-
-      {/* Filters */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-          <Input
-            placeholder="Search people..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10"
-          />
-        </div>
-
-        <Select value={selectedTeam} onValueChange={setSelectedTeam}>
-          <SelectTrigger>
-            <SelectValue placeholder="All Teams" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Teams</SelectItem>
-            {teams.map((team) => (
-              <SelectItem key={team.id} value={team.id}>
-                {team.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-
-        <Select value={selectedDepartment} onValueChange={setSelectedDepartment}>
-          <SelectTrigger>
-            <SelectValue placeholder="All Departments" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Departments</SelectItem>
-            {departments.map((department) => (
-              <SelectItem key={department.id} value={department.id}>
-                {department.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-
-        <Button 
-          variant="outline" 
-          onClick={() => {
-            setSearchQuery("");
-            setSelectedTeam("all");
-            setSelectedDepartment("all");
-          }}
-        >
-          Clear Filters
-        </Button>
-      </div>
-
-      {/* Contacts Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredContacts.map((contact) => (
-          <Card key={contact.id} className="hover:shadow-lg transition-shadow">
-            <CardHeader>
-              <CardTitle className="text-lg flex items-center gap-2">
-                <User className="h-5 w-5 text-primary" />
-                {contact.first_name} {contact.last_name}
-              </CardTitle>
-              {contact.position && (
-                <Badge variant="secondary" className="w-fit">
-                  {contact.position}
-                </Badge>
+    <div className="flex gap-4 h-full">
+      {/* Left Sidebar - Filters */}
+      <div className="w-64 flex-shrink-0">
+        <Card className="shadow-sm border-border sticky top-4">
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center gap-2 text-foreground text-base">
+              <Filter className="h-4 w-4 text-primary" />
+              Filters
+              {hasActiveFilters && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={clearFilters}
+                  className="ml-auto h-6 px-2 text-xs"
+                >
+                  <X className="h-3 w-3 mr-1" />
+                  Clear
+                </Button>
               )}
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {contact.team && (
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Building2 className="h-4 w-4" />
-                    {contact.team.name}
-                  </div>
-                )}
-
-                {contact.department && (
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <MapPin className="h-4 w-4" />
-                    {contact.department.name}
-                  </div>
-                )}
-
-                {contact.email && (
-                  <div className="flex items-center gap-2 text-sm">
-                    <Mail className="h-4 w-4 text-muted-foreground" />
-                    <a 
-                      href={`mailto:${contact.email}`}
-                      className="text-primary hover:underline truncate"
-                    >
-                      {contact.email}
-                    </a>
-                  </div>
-                )}
-
-                {(contact.phone || contact.mobile) && (
-                  <div className="flex items-center gap-2 text-sm">
-                    <Phone className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-muted-foreground">
-                      {contact.phone || contact.mobile}
-                    </span>
-                  </div>
-                )}
-
-                {/* Social Links */}
-                {getSocialLinks(contact).length > 0 && (
-                  <div className="flex gap-2 pt-2">
-                    {getSocialLinks(contact).map((link, index) => {
-                      const Icon = link.icon;
-                      return (
-                        <a
-                          key={index}
-                          href={link.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="p-2 rounded-md bg-muted hover:bg-muted/80 transition-colors"
-                          title={link.platform}
-                        >
-                          <Icon className="h-4 w-4" />
-                        </a>
-                      );
-                    })}
-                  </div>
-                )}
-
-                {contact.notes && (
-                  <div className="text-sm text-muted-foreground mt-3 p-3 bg-muted rounded-md">
-                    <p className="line-clamp-3">{contact.notes}</p>
-                  </div>
-                )}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {/* Search */}
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-foreground">Search</label>
+              <div className="relative">
+                <Search className="absolute left-2.5 top-1/2 transform -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+                <Input
+                  placeholder="Search people..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-8 bg-background border-border h-8 text-xs"
+                />
               </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+            </div>
 
-      {filteredContacts.length === 0 && !loading && (
-        <Card>
-          <CardContent className="flex flex-col items-center justify-center py-12">
-            <User className="h-12 w-12 text-muted-foreground mb-4" />
-            <h3 className="text-lg font-semibold mb-2">No contacts found</h3>
-            <p className="text-muted-foreground text-center">
-              Try adjusting your search criteria or clear the filters.
-            </p>
+            {/* Team Filter */}
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-foreground">Team</label>
+              <Select value={selectedTeam} onValueChange={setSelectedTeam}>
+                <SelectTrigger className="bg-background border-border h-8 text-xs">
+                  <SelectValue placeholder="All Teams" />
+                </SelectTrigger>
+                <SelectContent className="bg-popover border-border">
+                  <SelectItem value="all">All Teams</SelectItem>
+                  {teams.map((team) => (
+                    <SelectItem key={team.id} value={team.id}>
+                      {team.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Department Filter */}
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-foreground">Role</label>
+              <Select value={selectedDepartment} onValueChange={setSelectedDepartment}>
+                <SelectTrigger className="bg-background border-border h-8 text-xs">
+                  <SelectValue placeholder="All Roles" />
+                </SelectTrigger>
+                <SelectContent className="bg-popover border-border">
+                  <SelectItem value="all">All Roles</SelectItem>
+                  {departments.map((department) => (
+                    <SelectItem key={department.id} value={department.id}>
+                      {department.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Results Count */}
+            <div className="pt-3 border-t border-border">
+              <p className="text-xs text-muted-foreground">
+                Showing {filteredContacts.length} of {contacts.length} people
+              </p>
+            </div>
           </CardContent>
         </Card>
-      )}
+      </div>
+
+      {/* Main Content */}
+      <div className="flex-1 space-y-4">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-xl font-bold text-foreground">People</h1>
+            <p className="text-muted-foreground text-sm">
+              Manage contacts and team members in your database
+            </p>
+          </div>
+        </div>
+
+        {/* Results Table */}
+        <Card className="shadow-sm border-border">
+          <div className="rounded-lg overflow-hidden">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-muted/30">
+                  <TableHead className="font-semibold">Name</TableHead>
+                  <TableHead className="font-semibold">Role</TableHead>
+                  <TableHead className="font-semibold">Club</TableHead>
+                  <TableHead className="font-semibold">Email</TableHead>
+                  <TableHead className="font-semibold">Phone</TableHead>
+                  <TableHead className="font-semibold">LinkedIn</TableHead>
+                  <TableHead className="font-semibold text-right">Action</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredContacts.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={7} className="text-center py-12">
+                      <div className="flex flex-col items-center gap-3">
+                        <User className="h-12 w-12 text-muted-foreground" />
+                        <div>
+                          <p className="font-medium text-foreground">No people found</p>
+                          <p className="text-sm text-muted-foreground">
+                            Try adjusting your filters or search terms
+                          </p>
+                        </div>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  filteredContacts.map((contact) => (
+                    <TableRow 
+                      key={contact.id} 
+                      className="hover:bg-muted/50 cursor-pointer transition-colors"
+                    >
+                      <TableCell>
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center shadow-soft">
+                            <User className="h-5 w-5 text-muted-foreground" />
+                          </div>
+                          <div>
+                            <p className="font-medium text-foreground">
+                              {contact.first_name} {contact.last_name}
+                            </p>
+                          </div>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        {contact.position ? (
+                          <Badge variant="secondary" className="font-medium">
+                            {contact.position}
+                          </Badge>
+                        ) : (
+                          <span className="text-muted-foreground">-</span>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        <span className="text-foreground font-medium">
+                          {contact.team?.name || '-'}
+                        </span>
+                      </TableCell>
+                      <TableCell>
+                        {contact.email ? (
+                          <a 
+                            href={`mailto:${contact.email}`}
+                            className="text-primary hover:underline"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            {contact.email}
+                          </a>
+                        ) : (
+                          <span className="text-muted-foreground">-</span>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        <span className="text-foreground">
+                          {contact.phone || contact.mobile || '-'}
+                        </span>
+                      </TableCell>
+                      <TableCell>
+                        {contact.linkedin ? (
+                          <a
+                            href={contact.linkedin}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 text-primary hover:underline"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <Linkedin className="h-4 w-4" />
+                            <ExternalLink className="h-3 w-3" />
+                          </a>
+                        ) : (
+                          <span className="text-muted-foreground">-</span>
+                        )}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-8 w-8 p-0"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            // Handle view action
+                          }}
+                        >
+                          <Eye className="h-4 w-4" />
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        </Card>
+      </div>
     </div>
   );
 };
