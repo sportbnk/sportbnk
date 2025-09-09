@@ -73,9 +73,11 @@ export function CrmSidebar() {
       <SidebarContent className="flex-1 py-4">
         {/* Main Navigation */}
         <SidebarGroup>
-          <SidebarGroupLabel className="text-sidebar-foreground/70 font-medium px-6 mb-2">
-            Main
-          </SidebarGroupLabel>
+          {open && (
+            <SidebarGroupLabel className="text-sidebar-foreground/70 font-medium px-6 mb-2">
+              Main
+            </SidebarGroupLabel>
+          )}
           <SidebarGroupContent>
             <SidebarMenu className="px-3">
               {mainNavItems.map((item) => (
