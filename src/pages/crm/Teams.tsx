@@ -408,18 +408,6 @@ const Teams = () => {
                             size="sm"
                             onClick={(e) => {
                               e.stopPropagation();
-                              navigate(`/crm/teams/${team.id}`);
-                            }}
-                            className="h-8"
-                          >
-                            <Eye className="h-3 w-3 mr-1" />
-                            View Profile
-                          </Button>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={(e) => {
-                              e.stopPropagation();
                               // Add to list functionality
                             }}
                             className="h-8"
