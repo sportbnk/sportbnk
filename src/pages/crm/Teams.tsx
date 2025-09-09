@@ -331,7 +331,8 @@ const Teams = () => {
                 <TableRow className="bg-muted/30">
                   <TableHead className="font-semibold">Organisation</TableHead>
                   <TableHead className="font-semibold">League</TableHead>
-                  <TableHead className="font-semibold">Location</TableHead>
+                  <TableHead className="font-semibold">Country</TableHead>
+                  <TableHead className="font-semibold">City</TableHead>
                   <TableHead className="font-semibold">Website</TableHead>
                   <TableHead className="font-semibold">Last Updated</TableHead>
                   <TableHead className="font-semibold text-right">Actions</TableHead>
@@ -340,7 +341,7 @@ const Teams = () => {
               <TableBody>
                 {filteredTeams.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center py-12">
+                    <TableCell colSpan={7} className="text-center py-12">
                       <div className="flex flex-col items-center gap-3">
                         <Building2 className="h-12 w-12 text-muted-foreground" />
                         <div>
@@ -393,20 +394,14 @@ const Teams = () => {
                         )}
                       </TableCell>
                       <TableCell>
-                        <div className="flex items-center gap-3">
-                          <div className="flex items-center gap-2">
-                            <div className="w-3 h-3 rounded-full bg-red-500 border border-red-600"></div>
-                            <span className="text-foreground font-medium">
-                              {team.country?.name || '-'}
-                            </span>
-                          </div>
-                          {team.city?.name && (
-                            <div className="flex items-center gap-1 text-muted-foreground">
-                              <MapPin className="h-3 w-3" />
-                              <span className="text-sm">{team.city.name}</span>
-                            </div>
-                          )}
-                        </div>
+                        <span className="text-foreground font-medium">
+                          {team.country?.name || '-'}
+                        </span>
+                      </TableCell>
+                      <TableCell>
+                        <span className="text-foreground">
+                          {team.city?.name || '-'}
+                        </span>
                       </TableCell>
                       <TableCell>
                         {team.website ? (
