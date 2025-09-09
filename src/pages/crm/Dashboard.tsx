@@ -6,15 +6,15 @@ const Dashboard = () => {
   const stats = [
     {
       title: "Total Organisations",
-      value: "92",
-      description: "Active football clubs",
+      value: "140",
+      description: "Active sports clubs",
       icon: Building2,
       color: "text-primary"
     },
     {
-      title: "People",
-      value: "1,247",
-      description: "Contacts in database",
+      title: "Employees",
+      value: "700",
+      description: "Sports professionals",
       icon: Users,
       color: "text-accent"
     },
@@ -35,10 +35,12 @@ const Dashboard = () => {
   ];
 
   const recentActivity = [
-    { action: "Added Arsenal to Premier League List", time: "2 hours ago", icon: Star },
-    { action: "Updated Manchester United profile", time: "4 hours ago", icon: Building2 },
-    { action: "Created new Championship list", time: "6 hours ago", icon: List },
-    { action: "Added 12 new contacts", time: "1 day ago", icon: Users },
+    { action: "Brighton's Head of Commercial moved to Crystal Palace", time: "2 hours ago", icon: Users },
+    { action: "Manchester United hiring new Director of Football", time: "4 hours ago", icon: Building2 },
+    { action: "Leicester City announces CFO departure", time: "6 hours ago", icon: TrendingUp },
+    { action: "Arsenal expanding commercial team with 3 new hires", time: "8 hours ago", icon: Star },
+    { action: "Chelsea's COO transitions to advisory role", time: "1 day ago", icon: Users },
+    { action: "Tottenham actively recruiting Head of Analytics", time: "1 day ago", icon: Building2 },
   ];
 
   return (
