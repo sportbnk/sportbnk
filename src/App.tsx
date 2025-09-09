@@ -37,6 +37,7 @@ import CsvUpdate from "./pages/CsvUpdate";
 import Profile from "./pages/crm/Profile";
 import CrmSettings from "./pages/crm/Settings";
 import CrmIntegrations from "./pages/crm/Integrations";
+import SeedEnglishFootball from "./pages/admin/SeedEnglishFootball";
 
 // Product pages
 import Discover from "./pages/products/Discover";
@@ -92,8 +93,7 @@ function App() {
                       
                       {/* Protected Routes with Trial Guard */}
                       
-                      
-                      
+                      <Route path="/admin/seed-english-football" element={<ProtectedRoute><SeedEnglishFootball /></ProtectedRoute>} />
                       <Route path="/csv-update" element={<ProtectedRoute><CsvUpdate /></ProtectedRoute>} />
                       
                       {/* CRM System with sidebar layout - Protected with Trial Guard */}
