@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { CrmSidebar } from '@/components/CrmSidebar';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { ThemeProvider } from '@/contexts/ThemeContext';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Search, Bot, Menu } from 'lucide-react';
@@ -37,17 +38,20 @@ const CrmLayout: React.FC<CrmLayoutProps> = ({ children, pageTitle }) => {
           <CrmSidebar />
           
           <div className="flex-1 flex flex-col">
-            {/* Top Bar */}
+            {/* Top Bar with Theme Toggle */}
             <header className="h-16 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
               <div className="flex items-center justify-between px-6 h-full">
                 <div className="flex items-center gap-4">
-                  <SidebarTrigger className="lg:hidden" />
+                  <SidebarTrigger className="p-2 hover:bg-accent hover:text-accent-foreground rounded-lg transition-colors" />
                   {pageTitle && (
                     <h1 className="text-xl font-semibold text-foreground">{pageTitle}</h1>
                   )}
                 </div>
                 
                 <div className="flex items-center gap-4">
+                  {/* Theme Toggle */}
+                  <ThemeToggle />
+                  
                   {/* Global Search */}
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />

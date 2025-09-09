@@ -53,7 +53,10 @@ export function CrmSidebar() {
   };
 
   return (
-    <Sidebar className="border-r border-sidebar-border bg-sidebar">
+    <Sidebar 
+      className="border-r border-sidebar-border bg-sidebar"
+      collapsible="icon"
+    >
       {/* Logo Section */}
       <div className="flex items-center gap-3 p-6 border-b border-sidebar-border">
         <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-accent text-accent-foreground font-bold text-sm">
@@ -117,11 +120,6 @@ export function CrmSidebar() {
             {open && <span className="text-sm">{item.title}</span>}
           </NavLink>
         ))}
-        
-        {/* Theme Toggle */}
-        <div className="flex justify-center py-2">
-          <ThemeToggle />
-        </div>
         
         {/* Sign Out */}
         <Button
