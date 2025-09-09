@@ -1,279 +1,252 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Switch } from '@/components/ui/switch';
 import { 
+  Building2, 
+  Users, 
   Settings, 
-  CheckCircle, 
-  Circle, 
-  ExternalLink,
-  Zap,
-  Shield,
-  Users,
-  BarChart3,
-  ArrowRight
+  Plug, 
+  Webhook,
+  Key,
+  RefreshCw,
+  ExternalLink 
 } from 'lucide-react';
-import { toast } from 'sonner';
-
-interface CRMIntegration {
-  id: string;
-  name: string;
-  description: string;
-  logo: string;
-  category: string;
-  status: 'connected' | 'available' | 'coming-soon';
-  features: string[];
-  color: string;
-}
-
-const crmIntegrations: CRMIntegration[] = [
-  {
-    id: 'salesforce',
-    name: 'Salesforce',
-    description: 'World\'s #1 CRM platform for sales, service, and marketing automation',
-    logo: 'https://logos-world.net/wp-content/uploads/2020/08/Salesforce-Logo.png',
-    category: 'CRM & Sales',
-    status: 'available',
-    features: ['Lead Management', 'Sales Pipeline', 'Email Integration', 'Analytics'],
-    color: 'bg-blue-600'
-  },
-  {
-    id: 'hubspot',
-    name: 'HubSpot',
-    description: 'Inbound marketing, sales, and service software that helps companies attract visitors',
-    logo: 'https://www.hubspot.com/hubfs/HubSpot_Logos/HubSpot-Inversed-Favicon.png',
-    category: 'CRM & Marketing',
-    status: 'connected',
-    features: ['Contact Management', 'Email Marketing', 'Lead Scoring', 'Reporting'],
-    color: 'bg-orange-500'
-  },
-  {
-    id: 'pipedrive',
-    name: 'Pipedrive',
-    description: 'Sales CRM and pipeline management tool designed to help small sales teams',
-    logo: 'https://cdn.worldvectorlogo.com/logos/pipedrive.svg',
-    category: 'Sales Management',
-    status: 'available',
-    features: ['Pipeline Management', 'Deal Tracking', 'Activity Reminders', 'Mobile App'],
-    color: 'bg-green-600'
-  },
-  {
-    id: 'zendesk',
-    name: 'Zendesk',
-    description: 'Customer service platform that brings organizations and customers together',
-    logo: 'https://d1eipm3vz40hy0.cloudfront.net/images/AMER/zendesk%20logo.png',
-    category: 'Customer Support',
-    status: 'available',
-    features: ['Ticket Management', 'Customer Support', 'Knowledge Base', 'Live Chat'],
-    color: 'bg-emerald-600'
-  },
-  {
-    id: 'monday',
-    name: 'Monday.com',
-    description: 'Work operating system that powers teams to run projects and workflows',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Monday.com_logo.svg/2560px-Monday.com_logo.svg.png',
-    category: 'Project Management',
-    status: 'coming-soon',
-    features: ['Project Tracking', 'Team Collaboration', 'Workflow Automation', 'Time Tracking'],
-    color: 'bg-purple-600'
-  },
-  {
-    id: 'mailchimp',
-    name: 'Mailchimp',
-    description: 'All-in-one marketing platform for small businesses to grow their audience',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Mailchimp_Logo.svg/2560px-Mailchimp_Logo.svg.png',
-    category: 'Email Marketing',
-    status: 'available',
-    features: ['Email Campaigns', 'Audience Management', 'Marketing Automation', 'Analytics'],
-    color: 'bg-yellow-500'
-  }
-];
 
 const Integrations = () => {
-  const [connectedIntegrations, setConnectedIntegrations] = useState<string[]>(['hubspot']);
-
-  const handleConnect = (integrationId: string) => {
-    if (connectedIntegrations.includes(integrationId)) {
-      setConnectedIntegrations(prev => prev.filter(id => id !== integrationId));
-      toast.success('Integration disconnected');
-    } else {
-      setConnectedIntegrations(prev => [...prev, integrationId]);
-      toast.success('Integration connected successfully');
+  const integrations = [
+    {
+      name: 'HubSpot',
+      description: 'Sync contacts and organizations with HubSpot CRM',
+      icon: Building2,
+      status: 'Connected',
+      lastSync: '2 hours ago',
+      color: 'bg-orange-500'
+    },
+    {
+      name: 'Salesforce',
+      description: 'Integrate with Salesforce for comprehensive CRM management',
+      icon: Users,
+      status: 'Available',
+      lastSync: null,
+      color: 'bg-blue-500'
+    },
+    {
+      name: 'Pipedrive',
+      description: 'Connect your sales pipeline with Pipedrive',
+      icon: Building2,
+      status: 'Available',
+      lastSync: null,
+      color: 'bg-green-500'
+    },
+    {
+      name: 'Slack',
+      description: 'Get notifications and updates in your Slack channels',
+      icon: Users,
+      status: 'Connected',
+      lastSync: '1 day ago',
+      color: 'bg-purple-500'
     }
-  };
+  ];
 
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case 'connected':
-        return <Badge className="bg-green-100 text-green-800 border-green-200">Connected</Badge>;
-      case 'available':
-        return <Badge className="bg-blue-100 text-blue-800 border-blue-200">Available</Badge>;
-      case 'coming-soon':
-        return <Badge className="bg-gray-100 text-gray-600 border-gray-200">Coming Soon</Badge>;
-      default:
-        return null;
+  const webhooks = [
+    {
+      name: 'Team Updates',
+      url: 'https://api.example.com/webhooks/teams',
+      events: ['team.created', 'team.updated'],
+      status: 'Active'
+    },
+    {
+      name: 'Contact Sync',
+      url: 'https://api.example.com/webhooks/contacts',
+      events: ['contact.created', 'contact.updated'],
+      status: 'Active'
     }
-  };
+  ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Header */}
-      <div className="border-b border-border pb-4">
-        <h1 className="text-3xl font-bold text-foreground">CRM & Sales Tools</h1>
+      <div>
+        <h1 className="text-3xl font-bold text-foreground">Integrations</h1>
         <p className="text-muted-foreground mt-2">
-          Connect your favorite tools to streamline your sales process and boost productivity
+          Connect Sportbnk with your favorite tools and services to streamline your workflow.
         </p>
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center space-x-2">
-              <CheckCircle className="h-5 w-5 text-green-500" />
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Connected</p>
-                <p className="text-2xl font-bold text-foreground">{connectedIntegrations.length}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center space-x-2">
-              <Zap className="h-5 w-5 text-blue-500" />
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Available</p>
-                <p className="text-2xl font-bold text-foreground">{crmIntegrations.filter(i => i.status === 'available').length}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center space-x-2">
-              <Users className="h-5 w-5 text-purple-500" />
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Categories</p>
-                <p className="text-2xl font-bold text-foreground">{new Set(crmIntegrations.map(i => i.category)).size}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center space-x-2">
-              <Shield className="h-5 w-5 text-green-500" />
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Security</p>
-                <p className="text-lg font-semibold text-foreground">Enterprise</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Integrations Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {crmIntegrations.map((integration) => {
-          const isConnected = connectedIntegrations.includes(integration.id);
-          const isComingSoon = integration.status === 'coming-soon';
-          
-          return (
-            <Card key={integration.id} className="relative overflow-hidden group hover:shadow-lg transition-all duration-200">
-              <CardHeader className="pb-3">
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center space-x-3">
-                    <div className={`w-12 h-12 rounded-lg ${integration.color} flex items-center justify-center p-2`}>
-                      <img 
-                        src={integration.logo} 
-                        alt={`${integration.name} logo`}
-                        className="w-full h-full object-contain filter brightness-0 invert"
-                        onError={(e) => {
-                          // Fallback to first letter if image fails to load
-                          e.currentTarget.style.display = 'none';
-                          e.currentTarget.parentElement!.innerHTML = `<span class="text-white font-bold text-lg">${integration.name[0]}</span>`;
-                        }}
-                      />
-                    </div>
-                    <div>
-                      <CardTitle className="text-lg">{integration.name}</CardTitle>
-                      <p className="text-sm text-muted-foreground">{integration.category}</p>
-                    </div>
-                  </div>
-                  {getStatusBadge(integration.status)}
-                </div>
-                <CardDescription className="text-sm leading-relaxed mt-2">
-                  {integration.description}
-                </CardDescription>
-              </CardHeader>
-              
-              <CardContent className="pt-0">
-                <div className="space-y-4">
-                  {/* Features */}
-                  <div>
-                    <p className="text-sm font-medium text-foreground mb-2">Key Features:</p>
-                    <div className="flex flex-wrap gap-1">
-                      {integration.features.map((feature) => (
-                        <Badge key={feature} variant="secondary" className="text-xs">
-                          {feature}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                  
-                  {/* Connect Button */}
-                  <div className="flex items-center justify-between pt-2">
-                    {isComingSoon ? (
-                      <Button disabled className="w-full">
-                        Coming Soon
-                      </Button>
-                    ) : (
-                      <div className="flex items-center space-x-2 w-full">
-                        <Switch
-                          checked={isConnected}
-                          onCheckedChange={() => handleConnect(integration.id)}
-                          disabled={isComingSoon}
-                        />
-                        <span className="text-sm font-medium">
-                          {isConnected ? 'Connected' : 'Connect'}
-                        </span>
-                        {isConnected && (
-                          <Button variant="ghost" size="sm" className="ml-auto">
-                            <Settings className="h-4 w-4" />
-                          </Button>
-                        )}
+      {/* CRM Integrations */}
+      <div className="space-y-6">
+        <div>
+          <h2 className="text-xl font-semibold text-foreground mb-4">CRM & Sales Tools</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {integrations.map((integration, index) => (
+              <Card key={index} className="shadow-soft border-border">
+                <CardHeader className="pb-4">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-10 h-10 rounded-lg ${integration.color} flex items-center justify-center`}>
+                        <integration.icon className="h-5 w-5 text-white" />
                       </div>
-                    )}
+                      <div>
+                        <CardTitle className="text-lg">{integration.name}</CardTitle>
+                        <CardDescription className="text-sm">
+                          {integration.description}
+                        </CardDescription>
+                      </div>
+                    </div>
+                    <Badge 
+                      variant={integration.status === 'Connected' ? 'default' : 'secondary'}
+                      className={integration.status === 'Connected' ? 'bg-accent text-accent-foreground' : ''}
+                    >
+                      {integration.status}
+                    </Badge>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-          );
-        })}
-      </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-center justify-between">
+                    <div className="text-sm text-muted-foreground">
+                      {integration.lastSync ? (
+                        <span className="flex items-center gap-1">
+                          <RefreshCw className="h-3 w-3" />
+                          Last sync: {integration.lastSync}
+                        </span>
+                      ) : (
+                        <span>Not connected</span>
+                      )}
+                    </div>
+                    <div className="flex gap-2">
+                      {integration.status === 'Connected' ? (
+                        <>
+                          <Button variant="outline" size="sm">
+                            <Settings className="h-3 w-3 mr-1" />
+                            Configure
+                          </Button>
+                          <Button variant="outline" size="sm">
+                            <RefreshCw className="h-3 w-3 mr-1" />
+                            Sync Now
+                          </Button>
+                        </>
+                      ) : (
+                        <Button size="sm" className="bg-accent hover:bg-accent/90">
+                          <Plug className="h-3 w-3 mr-1" />
+                          Connect
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
 
-      {/* Call to Action */}
-      <Card className="bg-gradient-to-r from-primary/10 to-blue-600/10 border-primary/20">
-        <CardContent className="p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="text-lg font-semibold text-foreground">Need a custom integration?</h3>
-              <p className="text-muted-foreground mt-1">
-                We can build custom integrations for your specific tools and workflows.
-              </p>
-            </div>
-            <Button className="bg-primary hover:bg-primary/90">
-              Contact Sales
-              <ArrowRight className="ml-2 h-4 w-4" />
+        {/* Webhooks Section */}
+        <div>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-semibold text-foreground">Webhooks</h2>
+            <Button className="shadow-soft">
+              <Webhook className="h-4 w-4 mr-2" />
+              Add Webhook
             </Button>
           </div>
-        </CardContent>
-      </Card>
+          <Card className="shadow-soft border-border">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Webhook className="h-5 w-5 text-primary" />
+                Webhook Endpoints
+              </CardTitle>
+              <CardDescription>
+                Configure webhooks to receive real-time updates about your data changes.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {webhooks.map((webhook, index) => (
+                  <div key={index} className="flex items-center justify-between p-4 border border-border rounded-lg">
+                    <div className="space-y-1">
+                      <p className="font-medium text-foreground">{webhook.name}</p>
+                      <p className="text-sm text-muted-foreground font-mono">{webhook.url}</p>
+                      <div className="flex gap-1">
+                        {webhook.events.map((event, eventIndex) => (
+                          <Badge key={eventIndex} variant="outline" className="text-xs">
+                            {event}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Badge 
+                        variant={webhook.status === 'Active' ? 'default' : 'secondary'}
+                        className={webhook.status === 'Active' ? 'bg-accent text-accent-foreground' : ''}
+                      >
+                        {webhook.status}
+                      </Badge>
+                      <Button variant="outline" size="sm">
+                        <Settings className="h-3 w-3" />
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* API Keys Section */}
+        <div>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-semibold text-foreground">API Access</h2>
+            <Button variant="outline" className="shadow-soft">
+              <Key className="h-4 w-4 mr-2" />
+              Generate API Key
+            </Button>
+          </div>
+          <Card className="shadow-soft border-border">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Key className="h-5 w-5 text-primary" />
+                API Keys & Documentation
+              </CardTitle>
+              <CardDescription>
+                Access the Sportbnk API to build custom integrations and automations.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between p-4 border border-border rounded-lg">
+                  <div>
+                    <p className="font-medium text-foreground">Production API Key</p>
+                    <p className="text-sm text-muted-foreground font-mono">
+                      sb_prod_••••••••••••••••••••••••••••••••
+                    </p>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button variant="outline" size="sm">
+                      Regenerate
+                    </Button>
+                    <Button variant="outline" size="sm">
+                      Copy
+                    </Button>
+                  </div>
+                </div>
+                
+                <div className="flex items-center justify-between p-4 border border-border rounded-lg">
+                  <div>
+                    <p className="font-medium text-foreground">API Documentation</p>
+                    <p className="text-sm text-muted-foreground">
+                      Complete reference for all Sportbnk API endpoints
+                    </p>
+                  </div>
+                  <Button variant="outline" size="sm">
+                    <ExternalLink className="h-3 w-3 mr-1" />
+                    View Docs
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
     </div>
   );
 };
