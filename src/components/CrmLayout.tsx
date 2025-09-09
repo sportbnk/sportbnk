@@ -38,17 +38,17 @@ const CrmLayout: React.FC<CrmLayoutProps> = ({ children, pageTitle }) => {
           <CrmSidebar />
           
           <div className="flex-1 flex flex-col">
-            {/* Top Bar with Theme Toggle */}
-            <header className="h-16 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
-              <div className="flex items-center justify-between px-6 h-full">
-                <div className="flex items-center gap-4">
-                  <SidebarTrigger className="p-2 hover:bg-accent hover:text-accent-foreground rounded-lg transition-colors" />
+            {/* Top Bar with Sidebar Toggle and Theme Toggle */}
+            <header className="h-14 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
+              <div className="flex items-center justify-between px-4 h-full">
+                <div className="flex items-center gap-3">
+                  <SidebarTrigger className="p-2 hover:bg-accent hover:text-accent-foreground rounded-lg transition-colors border border-border shadow-sm" />
                   {pageTitle && (
-                    <h1 className="text-xl font-semibold text-foreground">{pageTitle}</h1>
+                    <h1 className="text-lg font-semibold text-foreground">{pageTitle}</h1>
                   )}
                 </div>
                 
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3">
                   {/* Theme Toggle */}
                   <ThemeToggle />
                   
@@ -57,16 +57,16 @@ const CrmLayout: React.FC<CrmLayoutProps> = ({ children, pageTitle }) => {
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input
                       placeholder="Search anything..."
-                      className="pl-10 w-80 bg-background border-border shadow-soft"
+                      className="pl-10 w-64 h-9 bg-background border-border shadow-sm text-sm"
                     />
                   </div>
                   
                   {/* Ask Sportbnk AI Button */}
                   <Sheet open={aiChatOpen} onOpenChange={setAiChatOpen}>
                     <SheetTrigger asChild>
-                      <Button className="bg-accent hover:bg-accent/90 text-accent-foreground shadow-soft">
+                      <Button size="sm" className="bg-accent hover:bg-accent/90 text-accent-foreground shadow-sm h-9 text-sm">
                         <Bot className="h-4 w-4 mr-2" />
-                        Ask Sportbnk AI
+                        Ask AI
                       </Button>
                     </SheetTrigger>
                     <SheetContent className="w-[400px] sm:w-[540px]">
@@ -100,7 +100,7 @@ const CrmLayout: React.FC<CrmLayoutProps> = ({ children, pageTitle }) => {
             
             {/* Main Content */}
             <main className="flex-1 overflow-auto bg-background">
-              <div className="container mx-auto p-6 max-w-7xl">
+              <div className="container mx-auto p-4 max-w-7xl">
                 {children}
               </div>
             </main>

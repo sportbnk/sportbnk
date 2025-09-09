@@ -161,13 +161,13 @@ const Teams = () => {
   }
 
   return (
-    <div className="flex gap-6 h-full">
+    <div className="flex gap-4 h-full">
       {/* Left Sidebar - Filters */}
-      <div className="w-80 flex-shrink-0">
-        <Card className="shadow-soft border-border sticky top-6">
-          <CardHeader className="pb-4">
-            <CardTitle className="flex items-center gap-2 text-foreground">
-              <Filter className="h-5 w-5 text-primary" />
+      <div className="w-72 flex-shrink-0">
+        <Card className="shadow-sm border-border sticky top-4">
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center gap-2 text-foreground text-base">
+              <Filter className="h-4 w-4 text-primary" />
               Filters
               {hasActiveFilters && (
                 <Button
@@ -182,9 +182,9 @@ const Teams = () => {
               )}
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-3">
             {/* Search */}
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <label className="text-sm font-medium text-foreground">Search</label>
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -192,16 +192,16 @@ const Teams = () => {
                   placeholder="Search teams..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-9 bg-background border-border"
+                  className="pl-9 bg-background border-border h-9 text-sm"
                 />
               </div>
             </div>
 
             {/* Sport Filter */}
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <label className="text-sm font-medium text-foreground">Sport</label>
               <Select value={selectedSport} onValueChange={setSelectedSport}>
-                <SelectTrigger className="bg-background border-border">
+                <SelectTrigger className="bg-background border-border h-9">
                   <SelectValue placeholder="All Sports" />
                 </SelectTrigger>
                 <SelectContent className="bg-popover border-border">
@@ -217,10 +217,10 @@ const Teams = () => {
 
             {/* League Filter */}
             {leagues.length > 0 && (
-              <div className="space-y-2">
+              <div className="space-y-1.5">
                 <label className="text-sm font-medium text-foreground">League</label>
                 <Select value={selectedLeague} onValueChange={setSelectedLeague}>
-                  <SelectTrigger className="bg-background border-border">
+                  <SelectTrigger className="bg-background border-border h-9">
                     <SelectValue placeholder="All Leagues" />
                   </SelectTrigger>
                   <SelectContent className="bg-popover border-border">
@@ -236,10 +236,10 @@ const Teams = () => {
             )}
 
             {/* Country Filter */}
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <label className="text-sm font-medium text-foreground">Country</label>
               <Select value={selectedCountry} onValueChange={setSelectedCountry}>
-                <SelectTrigger className="bg-background border-border">
+                <SelectTrigger className="bg-background border-border h-9">
                   <SelectValue placeholder="All Countries" />
                 </SelectTrigger>
                 <SelectContent className="bg-popover border-border">
@@ -254,10 +254,10 @@ const Teams = () => {
             </div>
 
             {/* City Filter */}
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <label className="text-sm font-medium text-foreground">City</label>
               <Select value={selectedCity} onValueChange={setSelectedCity}>
-                <SelectTrigger className="bg-background border-border">
+                <SelectTrigger className="bg-background border-border h-9">
                   <SelectValue placeholder="All Cities" />
                 </SelectTrigger>
                 <SelectContent className="bg-popover border-border">
@@ -273,10 +273,10 @@ const Teams = () => {
 
             {/* Level Filter */}
             {levels.length > 0 && (
-              <div className="space-y-2">
+              <div className="space-y-1.5">
                 <label className="text-sm font-medium text-foreground">Level</label>
                 <Select value={selectedLevel} onValueChange={setSelectedLevel}>
-                  <SelectTrigger className="bg-background border-border">
+                  <SelectTrigger className="bg-background border-border h-9">
                     <SelectValue placeholder="All Levels" />
                   </SelectTrigger>
                   <SelectContent className="bg-popover border-border">
@@ -292,9 +292,9 @@ const Teams = () => {
             )}
 
             {/* Results Count */}
-            <div className="pt-4 border-t border-border">
-              <p className="text-sm text-muted-foreground">
-                Showing {filteredTeams.length} of {teams.length} organizations
+            <div className="pt-3 border-t border-border">
+              <p className="text-xs text-muted-foreground">
+                Showing {filteredTeams.length} of {teams.length} organisations
               </p>
             </div>
           </CardContent>
@@ -302,29 +302,29 @@ const Teams = () => {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 space-y-6">
+      <div className="flex-1 space-y-4">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-foreground">Organisations</h1>
-            <p className="text-muted-foreground mb-2">
+            <h1 className="text-xl font-bold text-foreground">Organisations</h1>
+            <p className="text-muted-foreground text-sm mb-2">
               Manage and explore sports organizations in your database
             </p>
             <div className="flex items-center gap-2">
               <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary">
                 Professional Level
               </span>
-              <span className="text-sm text-muted-foreground">All clubs shown are professional organizations</span>
+              <span className="text-xs text-muted-foreground">All clubs shown are professional organizations</span>
             </div>
           </div>
-          <Button className="shadow-soft">
+          <Button size="sm" className="shadow-sm h-9">
             <Plus className="h-4 w-4 mr-2" />
             Add Organisation
           </Button>
         </div>
 
         {/* Results Table */}
-        <Card className="shadow-soft border-border">
+        <Card className="shadow-sm border-border">
           <div className="rounded-lg overflow-hidden">
             <Table>
               <TableHeader>
