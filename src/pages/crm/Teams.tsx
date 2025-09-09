@@ -163,7 +163,7 @@ const Teams = () => {
   return (
     <div className="flex gap-4 h-full">
       {/* Left Sidebar - Filters */}
-      <div className="w-72 flex-shrink-0">
+      <div className="w-64 flex-shrink-0">
         <Card className="shadow-sm border-border sticky top-4">
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center gap-2 text-foreground text-base">
@@ -184,24 +184,24 @@ const Teams = () => {
           </CardHeader>
           <CardContent className="space-y-3">
             {/* Search */}
-            <div className="space-y-1.5">
-              <label className="text-sm font-medium text-foreground">Search</label>
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-foreground">Search</label>
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Search className="absolute left-2.5 top-1/2 transform -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
                 <Input
                   placeholder="Search teams..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-9 bg-background border-border h-9 text-sm"
+                  className="pl-8 bg-background border-border h-8 text-xs"
                 />
               </div>
             </div>
 
             {/* Sport Filter */}
-            <div className="space-y-1.5">
-              <label className="text-sm font-medium text-foreground">Sport</label>
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-foreground">Sport</label>
               <Select value={selectedSport} onValueChange={setSelectedSport}>
-                <SelectTrigger className="bg-background border-border h-9">
+                <SelectTrigger className="bg-background border-border h-8 text-xs">
                   <SelectValue placeholder="All Sports" />
                 </SelectTrigger>
                 <SelectContent className="bg-popover border-border">
@@ -217,10 +217,10 @@ const Teams = () => {
 
             {/* League Filter */}
             {leagues.length > 0 && (
-              <div className="space-y-1.5">
-                <label className="text-sm font-medium text-foreground">League</label>
+              <div className="space-y-1">
+                <label className="text-xs font-medium text-foreground">League</label>
                 <Select value={selectedLeague} onValueChange={setSelectedLeague}>
-                  <SelectTrigger className="bg-background border-border h-9">
+                  <SelectTrigger className="bg-background border-border h-8 text-xs">
                     <SelectValue placeholder="All Leagues" />
                   </SelectTrigger>
                   <SelectContent className="bg-popover border-border">
@@ -236,10 +236,10 @@ const Teams = () => {
             )}
 
             {/* Country Filter */}
-            <div className="space-y-1.5">
-              <label className="text-sm font-medium text-foreground">Country</label>
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-foreground">Country</label>
               <Select value={selectedCountry} onValueChange={setSelectedCountry}>
-                <SelectTrigger className="bg-background border-border h-9">
+                <SelectTrigger className="bg-background border-border h-8 text-xs">
                   <SelectValue placeholder="All Countries" />
                 </SelectTrigger>
                 <SelectContent className="bg-popover border-border">
