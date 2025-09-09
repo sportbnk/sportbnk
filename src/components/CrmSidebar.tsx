@@ -6,7 +6,7 @@ import {
   Building2,
   Users,
   List,
-  Search,
+  Puzzle,
   LogOut,
   Menu
 } from 'lucide-react';
@@ -31,7 +31,7 @@ const crmNavItems = [
   { title: 'Organisations', url: '/crm/teams', icon: Building2 },
   { title: 'People', url: '/crm/people', icon: Users },
   { title: 'Lists', url: '/crm/lists', icon: List },
-  { title: 'Search', url: '/crm/search', icon: Search },
+  { title: 'Integrations', url: '/crm/integrations', icon: Puzzle },
 ];
 
 const bottomNavItems = [
