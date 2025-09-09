@@ -46,6 +46,16 @@ import newcastleLogo from "@/assets/team-logos/newcastle.png";
 import brightonLogo from "@/assets/team-logos/brighton.png";
 import astonVillaLogo from "@/assets/team-logos/aston-villa.png";
 import westHamLogo from "@/assets/team-logos/west-ham.png";
+import brentfordLogo from "@/assets/team-logos/brentford.png";
+import crystalPalaceLogo from "@/assets/team-logos/crystal-palace.png";
+import evertonLogo from "@/assets/team-logos/everton.png";
+import fulhamLogo from "@/assets/team-logos/fulham.png";
+import bournemouthLogo from "@/assets/team-logos/bournemouth.png";
+import nottinghamForestLogo from "@/assets/team-logos/nottingham-forest.png";
+import wolvesLogo from "@/assets/team-logos/wolves.png";
+import leicesterLogo from "@/assets/team-logos/leicester.png";
+import burnleyLogo from "@/assets/team-logos/burnley.png";
+import sheffieldUnitedLogo from "@/assets/team-logos/sheffield-united.png";
 
 // Logo mapping function
 const getTeamLogo = (teamName: string) => {
@@ -60,6 +70,16 @@ const getTeamLogo = (teamName: string) => {
     'Brighton & Hove Albion': brightonLogo,
     'Aston Villa': astonVillaLogo,
     'West Ham United': westHamLogo,
+    'Brentford': brentfordLogo,
+    'Crystal Palace': crystalPalaceLogo,
+    'Everton': evertonLogo,
+    'Fulham': fulhamLogo,
+    'Bournemouth': bournemouthLogo,
+    'Nottingham Forest': nottinghamForestLogo,
+    'Wolverhampton Wanderers': wolvesLogo,
+    'Leicester City': leicesterLogo,
+    'Burnley': burnleyLogo,
+    'Sheffield United': sheffieldUnitedLogo,
   };
   
   return logoMap[teamName] || null;
