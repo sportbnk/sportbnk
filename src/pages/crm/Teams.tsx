@@ -307,15 +307,9 @@ const Teams = () => {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-xl font-bold text-foreground">Organisations</h1>
-            <p className="text-muted-foreground text-sm mb-2">
+            <p className="text-muted-foreground text-sm">
               Manage and explore sports organizations in your database
             </p>
-            <div className="flex items-center gap-2">
-              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary">
-                Professional Level
-              </span>
-              <span className="text-xs text-muted-foreground">All clubs shown are professional organizations</span>
-            </div>
           </div>
           <Button size="sm" className="shadow-sm h-9">
             <Plus className="h-4 w-4 mr-2" />
@@ -333,7 +327,7 @@ const Teams = () => {
                   <TableHead className="font-semibold">League</TableHead>
                   <TableHead className="font-semibold">Country</TableHead>
                   <TableHead className="font-semibold">City</TableHead>
-                  <TableHead className="font-semibold">Website</TableHead>
+                  <TableHead className="font-semibold">Level</TableHead>
                   <TableHead className="font-semibold">Last Updated</TableHead>
                   <TableHead className="font-semibold text-right">Actions</TableHead>
                 </TableRow>
@@ -404,22 +398,9 @@ const Teams = () => {
                         </span>
                       </TableCell>
                       <TableCell>
-                        {team.website ? (
-                          <div className="flex items-center gap-2">
-                            <Globe2 className="h-4 w-4 text-muted-foreground" />
-                            <a 
-                              href={team.website} 
-                              target="_blank" 
-                              rel="noopener noreferrer"
-                              className="text-accent hover:text-accent/80 transition-colors"
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              Website
-                            </a>
-                          </div>
-                        ) : (
-                          <span className="text-muted-foreground">-</span>
-                        )}
+                        <Badge variant="secondary" className="font-medium">
+                          {team.level || 'Professional'}
+                        </Badge>
                       </TableCell>
                       <TableCell className="text-muted-foreground">
                         {new Date(team.updated_at).toLocaleDateString()}
