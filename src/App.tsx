@@ -9,6 +9,8 @@ import FaviconUpdater from "./components/FaviconUpdater";
 import { AuthProvider } from "./components/auth/AuthContext";
 import { CreditsProvider } from "./contexts/CreditsContext";
 import { PricingProvider } from "./contexts/PricingContext";
+import { ListsProvider } from "./contexts/ListsContext";
+import { RevealProvider } from "./contexts/RevealContext";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 
 import Index from "./pages/Index";
@@ -28,11 +30,11 @@ import FreeTrial from "./pages/FreeTrial";
 
 import Profile from "./pages/crm/Profile";
 import CrmSettings from "./pages/crm/Settings";
-import CrmIntegrations from "./pages/crm/Integrations";
-import Calls from "./pages/crm/Calls";
-import Meetings from "./pages/crm/Meetings";
-import Emails from "./pages/crm/Emails";
-import Tasks from "./pages/crm/Tasks";
+import Teams from "./pages/crm/Teams";
+import TeamDetails from "./pages/crm/TeamDetails";
+import People from "./pages/crm/People";
+import Lists from "./pages/crm/Lists";
+import Search from "./pages/crm/Search";
 import CrmLayout from "./components/CrmLayout";
 
 
@@ -71,7 +73,9 @@ function App() {
         <AuthProvider>
           <CreditsProvider>
             <PricingProvider>
-              <HelmetProvider>
+              <ListsProvider>
+                <RevealProvider>
+                  <HelmetProvider>
                     <Routes>
                       <Route path="/" element={<Index />} />
                       <Route path="/auth" element={<Auth />} />
@@ -94,11 +98,11 @@ function App() {
                       {/* CRM System - Protected with Trial Guard */}
                       <Route path="/crm/profile" element={<ProtectedRoute><CrmLayout pageTitle="Profile"><Profile /></CrmLayout></ProtectedRoute>} />
                       <Route path="/crm/settings" element={<ProtectedRoute><CrmLayout pageTitle="Settings"><CrmSettings /></CrmLayout></ProtectedRoute>} />
-                      <Route path="/crm/calls" element={<ProtectedRoute><CrmLayout pageTitle="Calls"><Calls /></CrmLayout></ProtectedRoute>} />
-                      <Route path="/crm/meetings" element={<ProtectedRoute><CrmLayout pageTitle="Meetings"><Meetings /></CrmLayout></ProtectedRoute>} />
-                      <Route path="/crm/emails" element={<ProtectedRoute><CrmLayout pageTitle="Emails"><Emails /></CrmLayout></ProtectedRoute>} />
-                      <Route path="/crm/tasks" element={<ProtectedRoute><CrmLayout pageTitle="Tasks"><Tasks /></CrmLayout></ProtectedRoute>} />
-                      <Route path="/crm/integrations" element={<ProtectedRoute><CrmLayout pageTitle="Integrations"><CrmIntegrations /></CrmLayout></ProtectedRoute>} />
+                      <Route path="/crm/teams" element={<ProtectedRoute><CrmLayout pageTitle="Organisations"><Teams /></CrmLayout></ProtectedRoute>} />
+                      <Route path="/crm/teams/:id" element={<ProtectedRoute><CrmLayout pageTitle="Organisation Details"><TeamDetails /></CrmLayout></ProtectedRoute>} />
+                      <Route path="/crm/people" element={<ProtectedRoute><CrmLayout pageTitle="People"><People /></CrmLayout></ProtectedRoute>} />
+                      <Route path="/crm/lists" element={<ProtectedRoute><CrmLayout pageTitle="Lists"><Lists /></CrmLayout></ProtectedRoute>} />
+                      <Route path="/crm/search" element={<ProtectedRoute><CrmLayout pageTitle="Search"><Search /></CrmLayout></ProtectedRoute>} />
                       
                       {/* Product sub-pages */}
                       <Route path="/products/discover" element={<Discover />} />
@@ -134,8 +138,10 @@ function App() {
                       <Route path="*" element={<NotFound />} />
                     </Routes>
                   </HelmetProvider>
-              </PricingProvider>
-            </CreditsProvider>
+                </RevealProvider>
+              </ListsProvider>
+            </PricingProvider>
+          </CreditsProvider>
         </AuthProvider>
       </BrowserRouter>
     </QueryClientProvider>

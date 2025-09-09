@@ -3,12 +3,10 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { 
   User, 
   Settings, 
-  Phone, 
-  Calendar, 
-  Mail, 
-  CheckSquare, 
-  Link as LinkIcon,
-  BarChart3,
+  Building2,
+  Users,
+  List,
+  Search,
   LogOut,
   Menu
 } from 'lucide-react';
@@ -30,13 +28,15 @@ import {
 } from "@/components/ui/sidebar";
 
 const crmNavItems = [
+  { title: 'Organisations', url: '/crm/teams', icon: Building2 },
+  { title: 'People', url: '/crm/people', icon: Users },
+  { title: 'Lists', url: '/crm/lists', icon: List },
+  { title: 'Search', url: '/crm/search', icon: Search },
+];
+
+const bottomNavItems = [
   { title: 'Profile', url: '/crm/profile', icon: User },
   { title: 'Settings', url: '/crm/settings', icon: Settings },
-  { title: 'Calls', url: '/crm/calls', icon: Phone },
-  { title: 'Meetings', url: '/crm/meetings', icon: Calendar },
-  { title: 'Emails', url: '/crm/emails', icon: Mail },
-  { title: 'Tasks', url: '/crm/tasks', icon: CheckSquare },
-  { title: 'Integrations', url: '/crm/integrations', icon: LinkIcon },
 ];
 
 export function CrmSidebar() {
@@ -70,7 +70,7 @@ export function CrmSidebar() {
 
       <SidebarContent className="flex-1">
         <SidebarGroup>
-          <SidebarGroupLabel>CRM</SidebarGroupLabel>
+          <SidebarGroupLabel>Database</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {crmNavItems.map((item) => (
@@ -97,7 +97,26 @@ export function CrmSidebar() {
       </SidebarContent>
 
       <div className="border-t p-4 space-y-2">
+        {/* Profile and Settings */}
+        {bottomNavItems.map((item) => (
+          <NavLink
+            key={item.title}
+            to={item.url}
+            className={({ isActive }) => cn(
+              "flex items-center gap-3 px-3 py-2 rounded-md transition-colors w-full",
+              isActive 
+                ? "bg-primary text-primary-foreground" 
+                : "hover:bg-muted text-muted-foreground hover:text-foreground",
+              !open && "justify-center"
+            )}
+          >
+            <item.icon className="h-4 w-4" />
+            {open && <span className="text-sm">{item.title}</span>}
+          </NavLink>
+        ))}
+        
         <ThemeToggle />
+        
         <Button
           variant="ghost"
           size="sm"
