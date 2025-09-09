@@ -35,6 +35,36 @@ import {
 } from 'lucide-react';
 import { Team, Sport, Country, City } from '@/types/teams';
 
+// Import team logos
+import arsenalLogo from "@/assets/team-logos/arsenal.png";
+import chelseaLogo from "@/assets/team-logos/chelsea.png";
+import liverpoolLogo from "@/assets/team-logos/liverpool.png";
+import manchesterUnitedLogo from "@/assets/team-logos/manchester-united.png";
+import manchesterCityLogo from "@/assets/team-logos/manchester-city.png";
+import tottenhamLogo from "@/assets/team-logos/tottenham.png";
+import newcastleLogo from "@/assets/team-logos/newcastle.png";
+import brightonLogo from "@/assets/team-logos/brighton.png";
+import astonVillaLogo from "@/assets/team-logos/aston-villa.png";
+import westHamLogo from "@/assets/team-logos/west-ham.png";
+
+// Logo mapping function
+const getTeamLogo = (teamName: string) => {
+  const logoMap: Record<string, string> = {
+    'Arsenal': arsenalLogo,
+    'Chelsea': chelseaLogo,
+    'Liverpool': liverpoolLogo,
+    'Manchester United': manchesterUnitedLogo,
+    'Manchester City': manchesterCityLogo,
+    'Tottenham Hotspur': tottenhamLogo,
+    'Newcastle United': newcastleLogo,
+    'Brighton & Hove Albion': brightonLogo,
+    'Aston Villa': astonVillaLogo,
+    'West Ham United': westHamLogo,
+  };
+  
+  return logoMap[teamName] || null;
+};
+
 const Teams = () => {
   const navigate = useNavigate();
   
@@ -355,20 +385,35 @@ const Teams = () => {
                     >
                       <TableCell>
                         <div className="flex items-center gap-3">
-                          {team.logo_url ? (
-                            <img 
-                              src={team.logo_url} 
-                              alt={`${team.name} logo`}
-                              className="w-10 h-10 rounded-lg object-cover shadow-soft"
-                              onError={(e) => {
-                                e.currentTarget.style.display = 'none';
-                              }}
-                            />
-                          ) : (
-                            <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center shadow-soft">
-                              <Building2 className="h-5 w-5 text-muted-foreground" />
-                            </div>
-                          )}
+                          {(() => {
+                            const generatedLogo = getTeamLogo(team.name);
+                            if (generatedLogo) {
+                              return (
+                                <img 
+                                  src={generatedLogo} 
+                                  alt={`${team.name} logo`}
+                                  className="w-10 h-10 rounded-lg object-cover shadow-soft"
+                                />
+                              );
+                            } else if (team.logo_url) {
+                              return (
+                                <img 
+                                  src={team.logo_url} 
+                                  alt={`${team.name} logo`}
+                                  className="w-10 h-10 rounded-lg object-cover shadow-soft"
+                                  onError={(e) => {
+                                    e.currentTarget.style.display = 'none';
+                                  }}
+                                />
+                              );
+                            } else {
+                              return (
+                                <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center shadow-soft">
+                                  <Building2 className="h-5 w-5 text-muted-foreground" />
+                                </div>
+                              );
+                            }
+                          })()}
                           <div>
                             <p className="font-medium text-foreground">{team.name}</p>
                             {team.sport?.name && (
