@@ -34,6 +34,7 @@ import {
   X
 } from 'lucide-react';
 import { Team, Sport, Country, City } from '@/types/teams';
+import { ExecutiveDataCollector } from '@/components/ExecutiveDataCollector';
 
 // Import team logos
 import arsenalLogo from "@/assets/team-logos/arsenal.png";
@@ -345,6 +346,11 @@ const Teams = () => {
             <Plus className="h-4 w-4 mr-2" />
             Add Organisation
           </Button>
+        </div>
+
+        {/* Executive Data Collector */}
+        <div className="mb-6">
+          <ExecutiveDataCollector />
         </div>
 
         {/* Results Table */}
