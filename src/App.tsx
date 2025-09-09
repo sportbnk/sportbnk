@@ -34,9 +34,6 @@ import Leads from "./pages/crm/Leads";
 import SearchResults from "./pages/SearchResults";
 
 import CsvUpdate from "./pages/CsvUpdate";
-import Meetings from "./pages/crm/Meetings";
-import Deals from "./pages/crm/Deals";
-import Analytics from "./pages/crm/Analytics";
 import Profile from "./pages/crm/Profile";
 import CrmSettings from "./pages/crm/Settings";
 import CrmIntegrations from "./pages/crm/Integrations";
@@ -108,9 +105,6 @@ function App() {
                 <Route path="/crm/teams/:teamId" element={<TeamDetails />} />
                 <Route path="/crm/people" element={<People />} />
                 <Route path="/crm/leads" element={<Leads />} />
-                <Route path="/crm/deals" element={<Deals />} />
-                <Route path="/crm/meetings" element={<Meetings />} />
-                <Route path="/crm/analytics" element={<Analytics />} />
                 <Route path="/crm/profile" element={<Profile />} />
                         <Route path="/crm/settings" element={<CrmSettings />} />
                         <Route path="/crm/integrations" element={<CrmIntegrations />} />
