@@ -17,9 +17,9 @@ const Teams = () => {
   const [cities, setCities] = useState<City[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedSport, setSelectedSport] = useState("");
-  const [selectedCountry, setSelectedCountry] = useState("");
-  const [selectedCity, setSelectedCity] = useState("");
+  const [selectedSport, setSelectedSport] = useState("all");
+  const [selectedCountry, setSelectedCountry] = useState("all");
+  const [selectedCity, setSelectedCity] = useState("all");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -74,15 +74,15 @@ const Teams = () => {
       );
     }
 
-    if (selectedSport) {
+    if (selectedSport && selectedSport !== "all") {
       filtered = filtered.filter(team => team.sport_id === selectedSport);
     }
 
-    if (selectedCountry) {
+    if (selectedCountry && selectedCountry !== "all") {
       filtered = filtered.filter(team => team.country_id === selectedCountry);
     }
 
-    if (selectedCity) {
+    if (selectedCity && selectedCity !== "all") {
       filtered = filtered.filter(team => team.city_id === selectedCity);
     }
 
@@ -145,7 +145,7 @@ const Teams = () => {
             <SelectValue placeholder="All Sports" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">All Sports</SelectItem>
+            <SelectItem value="all">All Sports</SelectItem>
             {sports.map((sport) => (
               <SelectItem key={sport.id} value={sport.id}>
                 {sport.name}
@@ -159,7 +159,7 @@ const Teams = () => {
             <SelectValue placeholder="All Countries" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">All Countries</SelectItem>
+            <SelectItem value="all">All Countries</SelectItem>
             {countries.map((country) => (
               <SelectItem key={country.id} value={country.id}>
                 {country.name}
@@ -173,7 +173,7 @@ const Teams = () => {
             <SelectValue placeholder="All Cities" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">All Cities</SelectItem>
+            <SelectItem value="all">All Cities</SelectItem>
             {cities.map((city) => (
               <SelectItem key={city.id} value={city.id}>
                 {city.name}
@@ -186,9 +186,9 @@ const Teams = () => {
           variant="outline" 
           onClick={() => {
             setSearchQuery("");
-            setSelectedSport("");
-            setSelectedCountry("");
-            setSelectedCity("");
+            setSelectedSport("all");
+            setSelectedCountry("all");
+            setSelectedCity("all");
           }}
         >
           Clear Filters

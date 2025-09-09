@@ -15,8 +15,8 @@ const People = () => {
   const [departments, setDepartments] = useState<Department[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedTeam, setSelectedTeam] = useState("");
-  const [selectedDepartment, setSelectedDepartment] = useState("");
+  const [selectedTeam, setSelectedTeam] = useState("all");
+  const [selectedDepartment, setSelectedDepartment] = useState("all");
 
   useEffect(() => {
     fetchData();
@@ -68,11 +68,11 @@ const People = () => {
       );
     }
 
-    if (selectedTeam) {
+    if (selectedTeam && selectedTeam !== "all") {
       filtered = filtered.filter(contact => contact.team_id === selectedTeam);
     }
 
-    if (selectedDepartment) {
+    if (selectedDepartment && selectedDepartment !== "all") {
       filtered = filtered.filter(contact => contact.department_id === selectedDepartment);
     }
 
@@ -140,7 +140,7 @@ const People = () => {
             <SelectValue placeholder="All Teams" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">All Teams</SelectItem>
+            <SelectItem value="all">All Teams</SelectItem>
             {teams.map((team) => (
               <SelectItem key={team.id} value={team.id}>
                 {team.name}
@@ -154,7 +154,7 @@ const People = () => {
             <SelectValue placeholder="All Departments" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">All Departments</SelectItem>
+            <SelectItem value="all">All Departments</SelectItem>
             {departments.map((department) => (
               <SelectItem key={department.id} value={department.id}>
                 {department.name}
@@ -167,8 +167,8 @@ const People = () => {
           variant="outline" 
           onClick={() => {
             setSearchQuery("");
-            setSelectedTeam("");
-            setSelectedDepartment("");
+            setSelectedTeam("all");
+            setSelectedDepartment("all");
           }}
         >
           Clear Filters
