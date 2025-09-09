@@ -324,10 +324,10 @@ const Teams = () => {
               <TableHeader>
                 <TableRow className="bg-muted/30">
                   <TableHead className="font-semibold">Organisation</TableHead>
+                  <TableHead className="font-semibold">Level</TableHead>
                   <TableHead className="font-semibold">League</TableHead>
                   <TableHead className="font-semibold">Country</TableHead>
                   <TableHead className="font-semibold">City</TableHead>
-                  <TableHead className="font-semibold">Level</TableHead>
                   <TableHead className="font-semibold text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -378,6 +378,11 @@ const Teams = () => {
                         </div>
                       </TableCell>
                       <TableCell>
+                        <Badge variant="secondary" className="font-medium">
+                          {team.level || 'Professional'}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
                         {team.league ? (
                           <Badge variant="secondary" className="font-medium">
                             {team.league}
@@ -395,11 +400,6 @@ const Teams = () => {
                         <span className="text-foreground">
                           {team.city?.name || '-'}
                         </span>
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant="secondary" className="font-medium">
-                          {team.level || 'Professional'}
-                        </Badge>
                       </TableCell>
                       <TableCell className="text-right">
                         <div className="flex items-center justify-end gap-2">
