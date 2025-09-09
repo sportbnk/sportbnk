@@ -147,6 +147,26 @@ import sussexCricketLogo from "@/assets/team-logos/sussex-cricket.png";
 import warwickshireCricketLogo from "@/assets/team-logos/warwickshire-cricket.png";
 import worcestershireCricketLogo from "@/assets/team-logos/worcestershire-cricket.png";
 import yorkshireCricketLogo from "@/assets/team-logos/yorkshire-cricket.png";
+// Minor Counties Cricket logos
+import bedfordshireCricketLogo from "@/assets/team-logos/bedfordshire-cricket.png";
+import berkshireCricketLogo from "@/assets/team-logos/berkshire-cricket.png";
+import buckinghamshireCricketLogo from "@/assets/team-logos/buckinghamshire-cricket.png";
+import cambridgeshireCricketLogo from "@/assets/team-logos/cambridgeshire-cricket.png";
+import cheshireCricketLogo from "@/assets/team-logos/cheshire-cricket.png";
+import cornwallCricketLogo from "@/assets/team-logos/cornwall-cricket.png";
+import cumberlandCricketLogo from "@/assets/team-logos/cumberland-cricket.png";
+import devonCricketLogo from "@/assets/team-logos/devon-cricket.png";
+import dorsetCricketLogo from "@/assets/team-logos/dorset-cricket.png";
+import hertfordshireCricketLogo from "@/assets/team-logos/hertfordshire-cricket.png";
+import lincolnshireCricketLogo from "@/assets/team-logos/lincolnshire-cricket.png";
+import norfolkCricketLogo from "@/assets/team-logos/norfolk-cricket.png";
+import northumberlandCricketLogo from "@/assets/team-logos/northumberland-cricket.png";
+import oxfordshireCricketLogo from "@/assets/team-logos/oxfordshire-cricket.png";
+import shropshireCricketLogo from "@/assets/team-logos/shropshire-cricket.png";
+import staffordshireCricketLogo from "@/assets/team-logos/staffordshire-cricket.png";
+import suffolkCricketLogo from "@/assets/team-logos/suffolk-cricket.png";
+import walesMinorCountiesCricketLogo from "@/assets/team-logos/wales-minor-counties-cricket.png";
+import wiltshireCricketLogo from "@/assets/team-logos/wiltshire-cricket.png";
 
 // Logo mapping function
 const getTeamLogo = (teamName: string) => {
@@ -282,6 +302,46 @@ const getTeamLogo = (teamName: string) => {
     'Warwickshire': warwickshireCricketLogo,
     'Worcestershire': worcestershireCricketLogo,
     'Yorkshire': yorkshireCricketLogo,
+    // Minor Counties Cricket (full names)
+    'Bedfordshire Minor County Cricket Club': bedfordshireCricketLogo,
+    'Berkshire Minor County Cricket Club': berkshireCricketLogo,
+    'Buckinghamshire Minor County Cricket Club': buckinghamshireCricketLogo,
+    'Cambridgeshire Minor County Cricket Club': cambridgeshireCricketLogo,
+    'Cheshire Minor County Cricket Club': cheshireCricketLogo,
+    'Cornwall Minor County Cricket Club': cornwallCricketLogo,
+    'Cumberland Minor County Cricket Club': cumberlandCricketLogo,
+    'Devon Minor County Cricket Club': devonCricketLogo,
+    'Dorset Minor County Cricket Club': dorsetCricketLogo,
+    'Hertfordshire Minor County Cricket Club': hertfordshireCricketLogo,
+    'Lincolnshire Minor County Cricket Club': lincolnshireCricketLogo,
+    'Norfolk Minor County Cricket Club': norfolkCricketLogo,
+    'Northumberland Minor County Cricket Club': northumberlandCricketLogo,
+    'Oxfordshire Minor County Cricket Club': oxfordshireCricketLogo,
+    'Shropshire Minor County Cricket Club': shropshireCricketLogo,
+    'Staffordshire Minor County Cricket Club': staffordshireCricketLogo,
+    'Suffolk Minor County Cricket Club': suffolkCricketLogo,
+    'Wales Minor Counties': walesMinorCountiesCricketLogo,
+    'Wiltshire Minor County Cricket Club': wiltshireCricketLogo,
+    // Minor Counties Cricket (short names)
+    'Bedfordshire MC': bedfordshireCricketLogo,
+    'Berkshire MC': berkshireCricketLogo,
+    'Buckinghamshire MC': buckinghamshireCricketLogo,
+    'Cambridgeshire MC': cambridgeshireCricketLogo,
+    'Cheshire MC': cheshireCricketLogo,
+    'Cornwall MC': cornwallCricketLogo,
+    'Cumberland MC': cumberlandCricketLogo,
+    'Devon MC': devonCricketLogo,
+    'Dorset MC': dorsetCricketLogo,
+    'Hertfordshire MC': hertfordshireCricketLogo,
+    'Lincolnshire MC': lincolnshireCricketLogo,
+    'Norfolk MC': norfolkCricketLogo,
+    'Northumberland MC': northumberlandCricketLogo,
+    'Oxfordshire MC': oxfordshireCricketLogo,
+    'Shropshire MC': shropshireCricketLogo,
+    'Staffordshire MC': staffordshireCricketLogo,
+    'Suffolk MC': suffolkCricketLogo,
+    'Wales MC': walesMinorCountiesCricketLogo,
+    'Wiltshire MC': wiltshireCricketLogo,
   };
   
   return logoMap[teamName] || null;
