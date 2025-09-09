@@ -328,14 +328,13 @@ const Teams = () => {
                   <TableHead className="font-semibold">Country</TableHead>
                   <TableHead className="font-semibold">City</TableHead>
                   <TableHead className="font-semibold">Level</TableHead>
-                  <TableHead className="font-semibold">Last Updated</TableHead>
                   <TableHead className="font-semibold text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {filteredTeams.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={7} className="text-center py-12">
+                    <TableCell colSpan={6} className="text-center py-12">
                       <div className="flex flex-col items-center gap-3">
                         <Building2 className="h-12 w-12 text-muted-foreground" />
                         <div>
@@ -401,9 +400,6 @@ const Teams = () => {
                         <Badge variant="secondary" className="font-medium">
                           {team.level || 'Professional'}
                         </Badge>
-                      </TableCell>
-                      <TableCell className="text-muted-foreground">
-                        {new Date(team.updated_at).toLocaleDateString()}
                       </TableCell>
                       <TableCell className="text-right">
                         <div className="flex items-center justify-end gap-2">
