@@ -5,6 +5,14 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { 
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { 
   Building2, 
   MapPin, 
   Globe, 
@@ -15,7 +23,12 @@ import {
   ArrowLeft,
   ExternalLink,
   Clock,
-  User
+  User,
+  Linkedin,
+  Twitter,
+  Facebook,
+  Instagram,
+  Plus
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Team, Contact } from "@/types/teams";
@@ -27,6 +40,23 @@ const TeamDetails = () => {
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Function to get social media icon
+  const getSocialIcon = (platform: string) => {
+    const platformLower = platform.toLowerCase();
+    switch (platformLower) {
+      case 'linkedin':
+        return <Linkedin className="h-4 w-4" />;
+      case 'twitter':
+        return <Twitter className="h-4 w-4" />;
+      case 'facebook':
+        return <Facebook className="h-4 w-4" />;
+      case 'instagram':
+        return <Instagram className="h-4 w-4" />;
+      default:
+        return <Globe className="h-4 w-4" />;
+    }
+  };
 
   useEffect(() => {
     if (id) {
@@ -275,7 +305,7 @@ const TeamDetails = () => {
                       rel="noopener noreferrer"
                       className="flex items-center gap-2 p-3 rounded-md border hover:bg-muted transition-colors"
                     >
-                      <Globe className="h-4 w-4" />
+                      {getSocialIcon(link.platform)}
                       <span className="capitalize">{link.platform}</span>
                       <ExternalLink className="h-3 w-3 ml-auto" />
                     </a>
@@ -285,12 +315,52 @@ const TeamDetails = () => {
             </Card>
           )}
 
+          {/* Employees Section */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Users className="h-5 w-5" />
+                Employees
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-muted/30">
+                    <TableHead className="font-semibold">Name</TableHead>
+                    <TableHead className="font-semibold">Role</TableHead>
+                    <TableHead className="font-semibold">Club</TableHead>
+                    <TableHead className="font-semibold">Email</TableHead>
+                    <TableHead className="font-semibold">Phone</TableHead>
+                    <TableHead className="font-semibold">LinkedIn</TableHead>
+                    <TableHead className="font-semibold text-right">Action</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  <TableRow>
+                    <TableCell colSpan={7} className="text-center py-12">
+                      <div className="flex flex-col items-center gap-3">
+                        <Users className="h-12 w-12 text-muted-foreground" />
+                        <div>
+                          <p className="font-medium text-foreground">No employees found</p>
+                          <p className="text-sm text-muted-foreground">
+                            Employee data will be displayed here when available
+                          </p>
+                        </div>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+
           {/* Team Contacts */}
           {contacts.length > 0 && (
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Users className="h-5 w-5" />
+                  <User className="h-5 w-5" />
                   Team Contacts ({contacts.length})
                 </CardTitle>
               </CardHeader>
