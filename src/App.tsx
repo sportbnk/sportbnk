@@ -31,7 +31,7 @@ import Teams from "./pages/crm/Teams";
 import People from "./pages/crm/People";
 import TeamDetails from "./pages/crm/TeamDetails";
 
-import SearchResults from "./pages/SearchResults";
+
 
 import CsvUpdate from "./pages/CsvUpdate";
 import Profile from "./pages/crm/Profile";
@@ -92,7 +92,7 @@ function App() {
                       
                       {/* Protected Routes with Trial Guard */}
                       
-                      <Route path="/search" element={<ProtectedRoute><SearchResults /></ProtectedRoute>} />
+                      
                       
                       <Route path="/csv-update" element={<ProtectedRoute><CsvUpdate /></ProtectedRoute>} />
                       
