@@ -9,6 +9,8 @@ import FaviconUpdater from "./components/FaviconUpdater";
 import { AuthProvider } from "./components/auth/AuthContext";
 import { CreditsProvider } from "./contexts/CreditsContext";
 import { PricingProvider } from "./contexts/PricingContext";
+import { ListsProvider } from "./contexts/ListsContext";
+import { RevealProvider } from "./contexts/RevealContext";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 
 import Index from "./pages/Index";
@@ -29,6 +31,11 @@ import FreeTrial from "./pages/FreeTrial";
 import Profile from "./pages/crm/Profile";
 import CrmSettings from "./pages/crm/Settings";
 import CrmIntegrations from "./pages/crm/Integrations";
+import Teams from "./pages/crm/Teams";
+import TeamDetails from "./pages/crm/TeamDetails";
+import People from "./pages/crm/People";
+import Lists from "./pages/crm/Lists";
+import Search from "./pages/crm/Search";
 
 
 // Product pages
@@ -66,6 +73,8 @@ function App() {
         <AuthProvider>
           <CreditsProvider>
             <PricingProvider>
+              <ListsProvider>
+                <RevealProvider>
                   <HelmetProvider>
                     <Routes>
                       <Route path="/" element={<Index />} />
@@ -90,6 +99,11 @@ function App() {
                       <Route path="/crm/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
                       <Route path="/crm/settings" element={<ProtectedRoute><CrmSettings /></ProtectedRoute>} />
                       <Route path="/crm/integrations" element={<ProtectedRoute><CrmIntegrations /></ProtectedRoute>} />
+                      <Route path="/crm/teams" element={<ProtectedRoute><Teams /></ProtectedRoute>} />
+                      <Route path="/crm/teams/:id" element={<ProtectedRoute><TeamDetails /></ProtectedRoute>} />
+                      <Route path="/crm/people" element={<ProtectedRoute><People /></ProtectedRoute>} />
+                      <Route path="/crm/lists" element={<ProtectedRoute><Lists /></ProtectedRoute>} />
+                      <Route path="/crm/search" element={<ProtectedRoute><Search /></ProtectedRoute>} />
                       
                       {/* Product sub-pages */}
                       <Route path="/products/discover" element={<Discover />} />
@@ -124,9 +138,11 @@ function App() {
                       {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                       <Route path="*" element={<NotFound />} />
                     </Routes>
-                </HelmetProvider>
-              </PricingProvider>
-            </CreditsProvider>
+                  </HelmetProvider>
+                </RevealProvider>
+              </ListsProvider>
+            </PricingProvider>
+          </CreditsProvider>
         </AuthProvider>
       </BrowserRouter>
     </QueryClientProvider>

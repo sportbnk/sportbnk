@@ -14,6 +14,128 @@ export type Database = {
   }
   public: {
     Tables: {
+      cities: {
+        Row: {
+          country_id: string | null
+          created_at: string
+          id: string
+          name: string
+        }
+        Insert: {
+          country_id?: string | null
+          created_at?: string
+          id?: string
+          name: string
+        }
+        Update: {
+          country_id?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cities_country_id_fkey"
+            columns: ["country_id"]
+            isOneToOne: false
+            referencedRelation: "countries"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      contacts: {
+        Row: {
+          created_at: string
+          department_id: string | null
+          email: string | null
+          facebook: string | null
+          first_name: string
+          id: string
+          instagram: string | null
+          last_name: string
+          linkedin: string | null
+          mobile: string | null
+          notes: string | null
+          phone: string | null
+          position: string | null
+          team_id: string | null
+          twitter: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          department_id?: string | null
+          email?: string | null
+          facebook?: string | null
+          first_name: string
+          id?: string
+          instagram?: string | null
+          last_name: string
+          linkedin?: string | null
+          mobile?: string | null
+          notes?: string | null
+          phone?: string | null
+          position?: string | null
+          team_id?: string | null
+          twitter?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          department_id?: string | null
+          email?: string | null
+          facebook?: string | null
+          first_name?: string
+          id?: string
+          instagram?: string | null
+          last_name?: string
+          linkedin?: string | null
+          mobile?: string | null
+          notes?: string | null
+          phone?: string | null
+          position?: string | null
+          team_id?: string | null
+          twitter?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contacts_department_id_fkey"
+            columns: ["department_id"]
+            isOneToOne: false
+            referencedRelation: "departments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "contacts_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      countries: {
+        Row: {
+          code: string | null
+          created_at: string
+          id: string
+          name: string
+        }
+        Insert: {
+          code?: string | null
+          created_at?: string
+          id?: string
+          name: string
+        }
+        Update: {
+          code?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
       deal_activities: {
         Row: {
           activity_type: string
@@ -89,6 +211,24 @@ export type Database = {
           status?: string
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      departments: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
         }
         Relationships: []
       }
@@ -183,6 +323,52 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      list_items: {
+        Row: {
+          contact_id: string | null
+          created_at: string
+          id: string
+          list_id: string
+          team_id: string | null
+        }
+        Insert: {
+          contact_id?: string | null
+          created_at?: string
+          id?: string
+          list_id: string
+          team_id?: string | null
+        }
+        Update: {
+          contact_id?: string | null
+          created_at?: string
+          id?: string
+          list_id?: string
+          team_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "list_items_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "list_items_list_id_fkey"
+            columns: ["list_id"]
+            isOneToOne: false
+            referencedRelation: "lists"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "list_items_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       lists: {
         Row: {
@@ -288,6 +474,44 @@ export type Database = {
         }
         Relationships: []
       }
+      opening_hours: {
+        Row: {
+          close_time: string | null
+          created_at: string
+          day_of_week: number
+          id: string
+          is_closed: boolean
+          open_time: string | null
+          team_id: string
+        }
+        Insert: {
+          close_time?: string | null
+          created_at?: string
+          day_of_week: number
+          id?: string
+          is_closed?: boolean
+          open_time?: string | null
+          team_id: string
+        }
+        Update: {
+          close_time?: string | null
+          created_at?: string
+          day_of_week?: number
+          id?: string
+          is_closed?: boolean
+          open_time?: string | null
+          team_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "opening_hours_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -320,6 +544,187 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      revealed_details: {
+        Row: {
+          contact_id: string | null
+          created_at: string
+          field_name: string
+          id: string
+          profile_id: string
+          team_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          contact_id?: string | null
+          created_at?: string
+          field_name: string
+          id?: string
+          profile_id: string
+          team_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          contact_id?: string | null
+          created_at?: string
+          field_name?: string
+          id?: string
+          profile_id?: string
+          team_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "revealed_details_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "revealed_details_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "revealed_details_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sports: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      team_social_links: {
+        Row: {
+          created_at: string
+          id: string
+          platform: string
+          team_id: string
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          platform: string
+          team_id: string
+          url: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          platform?: string
+          team_id?: string
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "team_social_links_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      teams: {
+        Row: {
+          address: string | null
+          city_id: string | null
+          country_id: string | null
+          created_at: string
+          description: string | null
+          division: string | null
+          email: string | null
+          founded_year: number | null
+          id: string
+          league: string | null
+          logo_url: string | null
+          name: string
+          phone: string | null
+          sport_id: string | null
+          updated_at: string
+          website: string | null
+        }
+        Insert: {
+          address?: string | null
+          city_id?: string | null
+          country_id?: string | null
+          created_at?: string
+          description?: string | null
+          division?: string | null
+          email?: string | null
+          founded_year?: number | null
+          id?: string
+          league?: string | null
+          logo_url?: string | null
+          name: string
+          phone?: string | null
+          sport_id?: string | null
+          updated_at?: string
+          website?: string | null
+        }
+        Update: {
+          address?: string | null
+          city_id?: string | null
+          country_id?: string | null
+          created_at?: string
+          description?: string | null
+          division?: string | null
+          email?: string | null
+          founded_year?: number | null
+          id?: string
+          league?: string | null
+          logo_url?: string | null
+          name?: string
+          phone?: string | null
+          sport_id?: string | null
+          updated_at?: string
+          website?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "teams_city_id_fkey"
+            columns: ["city_id"]
+            isOneToOne: false
+            referencedRelation: "cities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "teams_country_id_fkey"
+            columns: ["country_id"]
+            isOneToOne: false
+            referencedRelation: "countries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "teams_sport_id_fkey"
+            columns: ["sport_id"]
+            isOneToOne: false
+            referencedRelation: "sports"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {
