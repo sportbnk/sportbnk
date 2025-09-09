@@ -278,35 +278,31 @@ const TeamDetails = () => {
                     <p className="text-muted-foreground">{team.description}</p>
                   </div>
                 )}
+
+                {/* Social Media Links */}
+                {team.team_social_links && team.team_social_links.length > 0 && (
+                  <div className="pt-4">
+                    <h4 className="font-semibold mb-3">Social Media</h4>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                      {team.team_social_links.map((link, index) => (
+                        <a
+                          key={index}
+                          href={link.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 p-3 rounded-md border hover:bg-muted transition-colors"
+                        >
+                          {getSocialIcon(link.platform)}
+                          <span className="capitalize">{link.platform}</span>
+                          <ExternalLink className="h-3 w-3 ml-auto" />
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>
-
-          {/* Social Links */}
-          {team.team_social_links && team.team_social_links.length > 0 && (
-            <Card>
-              <CardHeader>
-                <CardTitle>Social Media</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                  {team.team_social_links.map((link, index) => (
-                    <a
-                      key={index}
-                      href={link.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2 p-3 rounded-md border hover:bg-muted transition-colors"
-                    >
-                      {getSocialIcon(link.platform)}
-                      <span className="capitalize">{link.platform}</span>
-                      <ExternalLink className="h-3 w-3 ml-auto" />
-                    </a>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          )}
 
           {/* Employees Section */}
           <Card>
@@ -422,24 +418,6 @@ const TeamDetails = () => {
             </Card>
           )}
 
-          {/* Quick Stats */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Quick Stats</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Contacts</span>
-                  <span className="font-medium">{contacts.length}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Social Links</span>
-                  <span className="font-medium">{team.team_social_links?.length || 0}</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
         </div>
       </div>
     </div>
