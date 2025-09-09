@@ -1,14 +1,15 @@
 import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { 
-  User, 
-  Settings, 
+  LayoutDashboard,
   Building2,
   Users,
   List,
   Puzzle,
+  User,
+  Settings,
   LogOut,
-  Menu
+  Bot
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -23,11 +24,11 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
 
-const crmNavItems = [
+const mainNavItems = [
+  { title: 'Dashboard', url: '/crm/dashboard', icon: LayoutDashboard },
   { title: 'Organisations', url: '/crm/teams', icon: Building2 },
   { title: 'People', url: '/crm/people', icon: Users },
   { title: 'Lists', url: '/crm/lists', icon: List },
@@ -35,7 +36,7 @@ const crmNavItems = [
 ];
 
 const bottomNavItems = [
-  { title: 'Profile', url: '/crm/profile', icon: User },
+  { title: 'My Profile', url: '/crm/profile', icon: User },
   { title: 'Settings', url: '/crm/settings', icon: Settings },
 ];
 
@@ -46,46 +47,47 @@ export function CrmSidebar() {
   const currentPath = location.pathname;
 
   const isActive = (path: string) => currentPath === path;
-  const isExpanded = crmNavItems.some((item) => isActive(item.url));
 
   const handleSignOut = async () => {
     await signOut();
   };
 
   return (
-    <Sidebar className={cn("border-r", !open ? "w-16" : "w-64")}>
-      <div className="flex items-center gap-2 p-4 border-b">
-        <img 
-          src="/lovable-uploads/49b40e55-1e07-40a4-929b-470e2e85125d.png" 
-          alt="SportBnk Logo" 
-          className={cn("transition-all", !open ? "h-8 w-8" : "h-10")}
-        />
+    <Sidebar className="border-r border-sidebar-border bg-sidebar">
+      {/* Logo Section */}
+      <div className="flex items-center gap-3 p-6 border-b border-sidebar-border">
+        <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-accent text-accent-foreground font-bold text-sm">
+          S
+        </div>
         {open && (
           <div className="flex flex-col">
-            <span className="font-semibold text-lg">SportBnk</span>
-            <span className="text-xs text-muted-foreground">CRM Dashboard</span>
+            <span className="font-bold text-lg text-sidebar-foreground">Sportbnk</span>
+            <span className="text-xs text-sidebar-foreground/70">Sports Intelligence</span>
           </div>
         )}
       </div>
 
-      <SidebarContent className="flex-1">
+      <SidebarContent className="flex-1 py-4">
+        {/* Main Navigation */}
         <SidebarGroup>
-          <SidebarGroupLabel>Database</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-sidebar-foreground/70 font-medium px-6 mb-2">
+            Main
+          </SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu>
-              {crmNavItems.map((item) => (
+            <SidebarMenu className="px-3">
+              {mainNavItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <NavLink 
                       to={item.url} 
                       className={({ isActive }) => cn(
-                        "flex items-center gap-3 px-3 py-2 rounded-md transition-colors",
+                        "flex items-center gap-3 px-3 py-3 rounded-lg transition-all duration-200 font-medium",
                         isActive 
-                          ? "bg-primary text-primary-foreground" 
-                          : "hover:bg-muted text-muted-foreground hover:text-foreground"
+                          ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-soft" 
+                          : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                       )}
                     >
-                      <item.icon className="h-4 w-4" />
+                      <item.icon className="h-5 w-5" />
                       {open && <span>{item.title}</span>}
                     </NavLink>
                   </SidebarMenuButton>
@@ -96,38 +98,43 @@ export function CrmSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <div className="border-t p-4 space-y-2">
+      {/* Bottom Section */}
+      <div className="border-t border-sidebar-border p-3 space-y-1">
         {/* Profile and Settings */}
         {bottomNavItems.map((item) => (
           <NavLink
             key={item.title}
             to={item.url}
             className={({ isActive }) => cn(
-              "flex items-center gap-3 px-3 py-2 rounded-md transition-colors w-full",
+              "flex items-center gap-3 px-3 py-3 rounded-lg transition-all duration-200 font-medium w-full",
               isActive 
-                ? "bg-primary text-primary-foreground" 
-                : "hover:bg-muted text-muted-foreground hover:text-foreground",
+                ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-soft" 
+                : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
               !open && "justify-center"
             )}
           >
-            <item.icon className="h-4 w-4" />
+            <item.icon className="h-5 w-5" />
             {open && <span className="text-sm">{item.title}</span>}
           </NavLink>
         ))}
         
-        <ThemeToggle />
+        {/* Theme Toggle */}
+        <div className="flex justify-center py-2">
+          <ThemeToggle />
+        </div>
         
+        {/* Sign Out */}
         <Button
           variant="ghost"
           size="sm"
           onClick={handleSignOut}
           className={cn(
-            "w-full justify-start gap-3",
+            "w-full justify-start gap-3 text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground font-medium",
             !open && "justify-center"
           )}
         >
-          <LogOut className="h-4 w-4" />
-          {open && <span>Sign Out</span>}
+          <LogOut className="h-5 w-5" />
+          {open && <span>Log Out</span>}
         </Button>
       </div>
     </Sidebar>

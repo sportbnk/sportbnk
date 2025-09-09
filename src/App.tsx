@@ -31,6 +31,8 @@ import FreeTrial from "./pages/FreeTrial";
 import Profile from "./pages/crm/Profile";
 import CrmSettings from "./pages/crm/Settings";
 import Teams from "./pages/crm/Teams";
+import Dashboard from "./pages/crm/Dashboard";
+import Teams from "./pages/crm/Teams";
 import TeamDetails from "./pages/crm/TeamDetails";
 import People from "./pages/crm/People";
 import Lists from "./pages/crm/Lists";
