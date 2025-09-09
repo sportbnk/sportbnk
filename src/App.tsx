@@ -32,7 +32,7 @@ import People from "./pages/crm/People";
 import TeamDetails from "./pages/crm/TeamDetails";
 import Leads from "./pages/crm/Leads";
 import SearchResults from "./pages/SearchResults";
-import CsvUpload from "./pages/CsvUpload";
+
 import CsvUpdate from "./pages/CsvUpdate";
 import Meetings from "./pages/crm/Meetings";
 import Deals from "./pages/crm/Deals";
@@ -96,7 +96,7 @@ function App() {
                       {/* Protected Routes with Trial Guard */}
                       
                       <Route path="/search" element={<ProtectedRoute><SearchResults /></ProtectedRoute>} />
-                      <Route path="/csv-upload" element={<ProtectedRoute><CsvUpload /></ProtectedRoute>} />
+                      
                       <Route path="/csv-update" element={<ProtectedRoute><CsvUpdate /></ProtectedRoute>} />
                       
                       {/* CRM System with sidebar layout - Protected with Trial Guard */}
