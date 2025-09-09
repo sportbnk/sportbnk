@@ -128,6 +128,25 @@ import swindonTownLogo from "@/assets/team-logos/swindon-town.png";
 import tranmereRoversLogo from "@/assets/team-logos/tranmere-rovers.png";
 import walsallLogo from "@/assets/team-logos/walsall.png";
 import carlisleUnitedLogo from "@/assets/team-logos/carlisle-united.png";
+// County Championship Cricket logos
+import derbyshireCricketLogo from "@/assets/team-logos/derbyshire-cricket.png";
+import durhamCricketLogo from "@/assets/team-logos/durham-cricket.png";
+import essexCricketLogo from "@/assets/team-logos/essex-cricket.png";
+import glamorganCricketLogo from "@/assets/team-logos/glamorgan-cricket.png";
+import gloucestershireCricketLogo from "@/assets/team-logos/gloucestershire-cricket.png";
+import hampshireCricketLogo from "@/assets/team-logos/hampshire-cricket.png";
+import kentCricketLogo from "@/assets/team-logos/kent-cricket.png";
+import lancashireCricketLogo from "@/assets/team-logos/lancashire-cricket.png";
+import leicestershireCricketLogo from "@/assets/team-logos/leicestershire-cricket.png";
+import middlesexCricketLogo from "@/assets/team-logos/middlesex-cricket.png";
+import northamptonshireCricketLogo from "@/assets/team-logos/northamptonshire-cricket.png";
+import nottinghamshireCricketLogo from "@/assets/team-logos/nottinghamshire-cricket.png";
+import somersetCricketLogo from "@/assets/team-logos/somerset-cricket.png";
+import surreyCricketLogo from "@/assets/team-logos/surrey-cricket.png";
+import sussexCricketLogo from "@/assets/team-logos/sussex-cricket.png";
+import warwickshireCricketLogo from "@/assets/team-logos/warwickshire-cricket.png";
+import worcestershireCricketLogo from "@/assets/team-logos/worcestershire-cricket.png";
+import yorkshireCricketLogo from "@/assets/team-logos/yorkshire-cricket.png";
 
 // Logo mapping function
 const getTeamLogo = (teamName: string) => {
@@ -225,6 +244,44 @@ const getTeamLogo = (teamName: string) => {
     'Tranmere Rovers': tranmereRoversLogo,
     'Walsall': walsallLogo,
     'Carlisle United': carlisleUnitedLogo,
+    // County Championship Cricket
+    'Derbyshire County Cricket Club': derbyshireCricketLogo,
+    'Durham County Cricket Club': durhamCricketLogo,
+    'Essex County Cricket Club': essexCricketLogo,
+    'Glamorgan County Cricket Club': glamorganCricketLogo,
+    'Gloucestershire County Cricket Club': gloucestershireCricketLogo,
+    'Hampshire County Cricket Club': hampshireCricketLogo,
+    'Kent County Cricket Club': kentCricketLogo,
+    'Lancashire County Cricket Club': lancashireCricketLogo,
+    'Leicestershire County Cricket Club': leicestershireCricketLogo,
+    'Middlesex County Cricket Club': middlesexCricketLogo,
+    'Northamptonshire County Cricket Club': northamptonshireCricketLogo,
+    'Nottinghamshire County Cricket Club': nottinghamshireCricketLogo,
+    'Somerset County Cricket Club': somersetCricketLogo,
+    'Surrey County Cricket Club': surreyCricketLogo,
+    'Sussex County Cricket Club': sussexCricketLogo,
+    'Warwickshire County Cricket Club': warwickshireCricketLogo,
+    'Worcestershire County Cricket Club': worcestershireCricketLogo,
+    'Yorkshire County Cricket Club': yorkshireCricketLogo,
+    // Cricket team short names
+    'Derbyshire': derbyshireCricketLogo,
+    'Durham': durhamCricketLogo,
+    'Essex': essexCricketLogo,
+    'Glamorgan': glamorganCricketLogo,
+    'Gloucestershire': gloucestershireCricketLogo,
+    'Hampshire': hampshireCricketLogo,
+    'Kent': kentCricketLogo,
+    'Lancashire': lancashireCricketLogo,
+    'Leicestershire': leicestershireCricketLogo,
+    'Middlesex': middlesexCricketLogo,
+    'Northamptonshire': northamptonshireCricketLogo,
+    'Nottinghamshire': nottinghamshireCricketLogo,
+    'Somerset': somersetCricketLogo,
+    'Surrey': surreyCricketLogo,
+    'Sussex': sussexCricketLogo,
+    'Warwickshire': warwickshireCricketLogo,
+    'Worcestershire': worcestershireCricketLogo,
+    'Yorkshire': yorkshireCricketLogo,
   };
   
   return logoMap[teamName] || null;
