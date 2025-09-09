@@ -173,6 +173,14 @@ import walesNationalLogo from "@/assets/team-logos/wales-national.png";
 import irelandNationalLogo from "@/assets/team-logos/ireland-national.png";
 import scotlandNationalLogo from "@/assets/team-logos/scotland-national.png";
 import northernIrelandNationalLogo from "@/assets/team-logos/northern-ireland-national.png";
+// National and Provincial Cricket Teams
+import englandCricketNationalLogo from "@/assets/team-logos/england-cricket-national.png";
+import irelandCricketNationalLogo from "@/assets/team-logos/ireland-cricket-national.png";
+import scotlandCricketNationalLogo from "@/assets/team-logos/scotland-cricket-national.png";
+import northWestWarriorsCricketLogo from "@/assets/team-logos/north-west-warriors-cricket.png";
+import leinsterLightningCricketLogo from "@/assets/team-logos/leinster-lightning-cricket.png";
+import ncuCricketLogo from "@/assets/team-logos/ncu-cricket.png";
+import munsterCricketLogo from "@/assets/team-logos/munster-cricket.png";
 
 // Logo mapping function
 const getTeamLogo = (teamName: string) => {
@@ -355,6 +363,19 @@ const getTeamLogo = (teamName: string) => {
     'Ireland': irelandNationalLogo,
     'Scotland': scotlandNationalLogo,
     'Northern Ireland': northernIrelandNationalLogo,
+    // National and Provincial Cricket Teams
+    'England Cricket': englandCricketNationalLogo,
+    'England National Cricket Team': englandCricketNationalLogo,
+    'Ireland Cricket': irelandCricketNationalLogo,
+    'Ireland National Cricket Team': irelandCricketNationalLogo,
+    'Scotland Cricket': scotlandCricketNationalLogo,
+    'Scotland National Cricket Team': scotlandCricketNationalLogo,
+    'North West Warriors': northWestWarriorsCricketLogo,
+    'Leinster Lightning': leinsterLightningCricketLogo,
+    'NCU': ncuCricketLogo,
+    'Northern Cricket Union': ncuCricketLogo,
+    'Munster Cricket': munsterCricketLogo,
+    'Munster': munsterCricketLogo,
   };
   
   return logoMap[teamName] || null;
