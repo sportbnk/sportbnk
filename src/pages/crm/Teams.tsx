@@ -81,6 +81,31 @@ import cambridgeUnitedLogo from "@/assets/team-logos/cambridge-united.png";
 import crawleyTownLogo from "@/assets/team-logos/crawley-town.png";
 import burtonAlbionLogo from "@/assets/team-logos/burton-albion.png";
 import readingLogo from "@/assets/team-logos/reading.png";
+// EFL League Two logos
+import afcWimbledonLogo from "@/assets/team-logos/afc-wimbledon.png";
+import accringtonStanleyLogo from "@/assets/team-logos/accrington-stanley.png";
+import barrowLogo from "@/assets/team-logos/barrow.png";
+import bradfordCityLogo from "@/assets/team-logos/bradford-city.png";
+import bromleyLogo from "@/assets/team-logos/bromley.png";
+import cheltenhamTownLogo from "@/assets/team-logos/cheltenham-town.png";
+import chesterfieldLogo from "@/assets/team-logos/chesterfield.png";
+import colchesterUnitedLogo from "@/assets/team-logos/colchester-united.png";
+import creweAlexandraLogo from "@/assets/team-logos/crewe-alexandra.png";
+import doncasterRoversLogo from "@/assets/team-logos/doncaster-rovers.png";
+import fleetwoodTownLogo from "@/assets/team-logos/fleetwood-town.png";
+import gillinghamLogo from "@/assets/team-logos/gillingham.png";
+import grimsbyTownLogo from "@/assets/team-logos/grimsby-town.png";
+import harrogateTownLogo from "@/assets/team-logos/harrogate-town.png";
+import mkDonsLogo from "@/assets/team-logos/mk-dons.png";
+import morecambeLogo from "@/assets/team-logos/morecambe.png";
+import newportCountyLogo from "@/assets/team-logos/newport-county.png";
+import nottsCountyLogo from "@/assets/team-logos/notts-county.png";
+import portValeLogo from "@/assets/team-logos/port-vale.png";
+import salfordCityLogo from "@/assets/team-logos/salford-city.png";
+import swindonTownLogo from "@/assets/team-logos/swindon-town.png";
+import tranmereRoversLogo from "@/assets/team-logos/tranmere-rovers.png";
+import walsallLogo from "@/assets/team-logos/walsall.png";
+import carlisleUnitedLogo from "@/assets/team-logos/carlisle-united.png";
 
 // Logo mapping function
 const getTeamLogo = (teamName: string) => {
@@ -131,6 +156,31 @@ const getTeamLogo = (teamName: string) => {
     'Crawley Town': crawleyTownLogo,
     'Burton Albion': burtonAlbionLogo,
     'Reading': readingLogo,
+    // EFL League Two
+    'AFC Wimbledon': afcWimbledonLogo,
+    'Accrington Stanley': accringtonStanleyLogo,
+    'Barrow': barrowLogo,
+    'Bradford City': bradfordCityLogo,
+    'Bromley': bromleyLogo,
+    'Cheltenham Town': cheltenhamTownLogo,
+    'Chesterfield': chesterfieldLogo,
+    'Colchester United': colchesterUnitedLogo,
+    'Crewe Alexandra': creweAlexandraLogo,
+    'Doncaster Rovers': doncasterRoversLogo,
+    'Fleetwood Town': fleetwoodTownLogo,
+    'Gillingham': gillinghamLogo,
+    'Grimsby Town': grimsbyTownLogo,
+    'Harrogate Town': harrogateTownLogo,
+    'MK Dons': mkDonsLogo,
+    'Morecambe': morecambeLogo,
+    'Newport County': newportCountyLogo,
+    'Notts County': nottsCountyLogo,
+    'Port Vale': portValeLogo,
+    'Salford City': salfordCityLogo,
+    'Swindon Town': swindonTownLogo,
+    'Tranmere Rovers': tranmereRoversLogo,
+    'Walsall': walsallLogo,
+    'Carlisle United': carlisleUnitedLogo,
   };
   
   return logoMap[teamName] || null;
