@@ -65,6 +65,7 @@ export default function Teams() {
   const [aiQuery, setAiQuery] = useState('');
   const [isAiLoading, setIsAiLoading] = useState(false);
   const { credits, tier } = useCredits();
+  const [seeding, setSeeding] = useState(false);
 
   // Trigger seeding on component mount
   useEffect(() => {
@@ -139,7 +140,19 @@ export default function Teams() {
     setIsAiLoading(loading);
   };
 
-
+  // Manual reseed handler
+  const handleReseed = async () => {
+    try {
+      setSeeding(true);
+      await triggerFootballSeeding();
+      await queryClient.invalidateQueries({ queryKey: ['teams-count'] });
+      await queryClient.invalidateQueries({ queryKey: ['organisations'] });
+    } catch (err) {
+      console.error('Reseed failed:', err);
+    } finally {
+      setSeeding(false);
+    }
+  };
   // Separate count query to get accurate total results
   const { data: totalCount } = useQuery({
     queryKey: ['teams-count', filters, searchTerm],
@@ -434,18 +447,23 @@ export default function Teams() {
             <CardHeader>
               <CardTitle className="flex items-center justify-between">
                 <span>Organisation Database</span>
-                <span className="text-sm font-normal text-muted-foreground">
-                  {isAiSearchActive && aiQuery ? (
-                    <>AI Search: "{aiQuery}" • {formatNumber(totalCount || 0)} results</>
-                  ) : (
-                    <>
-                      {formatNumber(totalCount || 0)} total results
-                      {totalPages > 1 && (
-                        <span> • Page {currentPage} of {totalPages}</span>
-                      )}
-                    </>
-                  )}
-                </span>
+                <div className="flex items-center gap-3">
+                  <span className="text-sm font-normal text-muted-foreground">
+                    {isAiSearchActive && aiQuery ? (
+                      <>AI Search: "{aiQuery}" • {formatNumber(totalCount || 0)} results</>
+                    ) : (
+                      <>
+                        {formatNumber(totalCount || 0)} total results
+                        {totalPages > 1 && (
+                          <span> • Page {currentPage} of {totalPages}</span>
+                        )}
+                      </>
+                    )}
+                  </span>
+                  <Button size="sm" variant="outline" onClick={handleReseed} disabled={seeding}>
+                    {seeding ? "Replacing..." : "Replace with English Clubs"}
+                  </Button>
+                </div>
               </CardTitle>
             </CardHeader>
             <CardContent>

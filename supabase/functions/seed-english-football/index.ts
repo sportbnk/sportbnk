@@ -159,19 +159,10 @@ serve(async (req) => {
     const sportId = await getOrCreateSportId("Football");
     const countryId = await getOrCreateCountryId("England");
 
-    // Find existing English football teams to delete
-    const { data: englishCities, error: citiesErr } = await supabase
-      .from("cities")
-      .select("id")
-      .eq("country_id", countryId);
-    if (citiesErr) throw citiesErr;
-    const cityIds = (englishCities || []).map((c) => c.id);
-
+    // Find ALL existing teams to delete (clean slate)
     const { data: teamsToDelete, error: teamsErr } = await supabase
       .from("teams")
-      .select("id")
-      .in("city_id", cityIds.length ? cityIds : ["00000000-0000-0000-0000-000000000000"]) // guard empty
-      .eq("sport_id", sportId);
+      .select("id");
     if (teamsErr) throw teamsErr;
 
     const toDeleteIds = (teamsToDelete || []).map((t) => t.id);
