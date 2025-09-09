@@ -56,6 +56,28 @@ import wolvesLogo from "@/assets/team-logos/wolves.png";
 import leicesterLogo from "@/assets/team-logos/leicester.png";
 import burnleyLogo from "@/assets/team-logos/burnley.png";
 import sheffieldUnitedLogo from "@/assets/team-logos/sheffield-united.png";
+// EFL Championship logos
+import leedsUnitedLogo from "@/assets/team-logos/leeds-united.png";
+import lutonTownLogo from "@/assets/team-logos/luton-town.png";
+import middlesbroughLogo from "@/assets/team-logos/middlesbrough.png";
+import norwichCityLogo from "@/assets/team-logos/norwich-city.png";
+import cardiffCityLogo from "@/assets/team-logos/cardiff-city.png";
+import hullCityLogo from "@/assets/team-logos/hull-city.png";
+import stokeCityLogo from "@/assets/team-logos/stoke-city.png";
+import coventryCityLogo from "@/assets/team-logos/coventry-city.png";
+import bristolCityLogo from "@/assets/team-logos/bristol-city.png";
+import queensParkRangersLogo from "@/assets/team-logos/queens-park-rangers.png";
+import swanseaCityLogo from "@/assets/team-logos/swansea-city.png";
+import millwallLogo from "@/assets/team-logos/millwall.png";
+import prestonNorthEndLogo from "@/assets/team-logos/preston-north-end.png";
+import blackburnRoversLogo from "@/assets/team-logos/blackburn-rovers.png";
+import oxfordUnitedLogo from "@/assets/team-logos/oxford-united.png";
+import sheffieldWednesdayLogo from "@/assets/team-logos/sheffield-wednesday.png";
+import watfordLogo from "@/assets/team-logos/watford.png";
+import westBromwichAlbionLogo from "@/assets/team-logos/west-bromwich-albion.png";
+import plymouthArgyleLogo from "@/assets/team-logos/plymouth-argyle.png";
+import sunderlandLogo from "@/assets/team-logos/sunderland.png";
+import ipswichTownLogo from "@/assets/team-logos/ipswich-town.png";
 // EFL League One logos
 import portsmouthLogo from "@/assets/team-logos/portsmouth.png";
 import derbyCountyLogo from "@/assets/team-logos/derby-county.png";
@@ -131,6 +153,28 @@ const getTeamLogo = (teamName: string) => {
     'Leicester City': leicesterLogo,
     'Burnley': burnleyLogo,
     'Sheffield United': sheffieldUnitedLogo,
+    // EFL Championship
+    'Leeds United': leedsUnitedLogo,
+    'Luton Town': lutonTownLogo,
+    'Middlesbrough': middlesbroughLogo,
+    'Norwich City': norwichCityLogo,
+    'Cardiff City': cardiffCityLogo,
+    'Hull City': hullCityLogo,
+    'Stoke City': stokeCityLogo,
+    'Coventry City': coventryCityLogo,
+    'Bristol City': bristolCityLogo,
+    'Queens Park Rangers': queensParkRangersLogo,
+    'Swansea City': swanseaCityLogo,
+    'Millwall': millwallLogo,
+    'Preston North End': prestonNorthEndLogo,
+    'Blackburn Rovers': blackburnRoversLogo,
+    'Oxford United': oxfordUnitedLogo,
+    'Sheffield Wednesday': sheffieldWednesdayLogo,
+    'Watford': watfordLogo,
+    'West Bromwich Albion': westBromwichAlbionLogo,
+    'Plymouth Argyle': plymouthArgyleLogo,
+    'Sunderland': sunderlandLogo,
+    'Ipswich Town': ipswichTownLogo,
     // EFL League One
     'Portsmouth': portsmouthLogo,
     'Derby County': derbyCountyLogo,
