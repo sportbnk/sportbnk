@@ -58,7 +58,10 @@ export function CrmSidebar() {
       collapsible="icon"
     >
       {/* Logo Section */}
-      <div className="flex items-center gap-3 p-6 border-b border-sidebar-border">
+      <div className={cn(
+        "flex items-center gap-3 p-6 border-b border-sidebar-border",
+        !open && "justify-center"
+      )}>
         <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-accent text-accent-foreground font-bold text-sm">
           S
         </div>
@@ -89,7 +92,8 @@ export function CrmSidebar() {
                         "flex items-center gap-3 px-3 py-3 rounded-lg transition-all duration-200 font-medium",
                         isActive 
                           ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-soft" 
-                          : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                          : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                        !open && "justify-center"
                       )}
                     >
                       <item.icon className="h-5 w-5" />
