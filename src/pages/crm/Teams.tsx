@@ -167,6 +167,12 @@ import staffordshireCricketLogo from "@/assets/team-logos/staffordshire-cricket.
 import suffolkCricketLogo from "@/assets/team-logos/suffolk-cricket.png";
 import walesMinorCountiesCricketLogo from "@/assets/team-logos/wales-minor-counties-cricket.png";
 import wiltshireCricketLogo from "@/assets/team-logos/wiltshire-cricket.png";
+// Home Nations National Football Teams
+import englandNationalLogo from "@/assets/team-logos/england-national.png";
+import walesNationalLogo from "@/assets/team-logos/wales-national.png";
+import irelandNationalLogo from "@/assets/team-logos/ireland-national.png";
+import scotlandNationalLogo from "@/assets/team-logos/scotland-national.png";
+import northernIrelandNationalLogo from "@/assets/team-logos/northern-ireland-national.png";
 
 // Logo mapping function
 const getTeamLogo = (teamName: string) => {
@@ -342,6 +348,13 @@ const getTeamLogo = (teamName: string) => {
     'Suffolk MC': suffolkCricketLogo,
     'Wales MC': walesMinorCountiesCricketLogo,
     'Wiltshire MC': wiltshireCricketLogo,
+    // Home Nations National Football Teams
+    'England': englandNationalLogo,
+    'Wales': walesNationalLogo,
+    'Republic of Ireland': irelandNationalLogo,
+    'Ireland': irelandNationalLogo,
+    'Scotland': scotlandNationalLogo,
+    'Northern Ireland': northernIrelandNationalLogo,
   };
   
   return logoMap[teamName] || null;
