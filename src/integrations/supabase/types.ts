@@ -626,6 +626,7 @@ export type Database = {
           founded: string | null
           id: string
           level: string | null
+          logo_url: string | null
           name: string
           phone: string | null
           postal_code: string | null
@@ -642,6 +643,7 @@ export type Database = {
           founded?: string | null
           id?: string
           level?: string | null
+          logo_url?: string | null
           name: string
           phone?: string | null
           postal_code?: string | null
@@ -658,6 +660,7 @@ export type Database = {
           founded?: string | null
           id?: string
           level?: string | null
+          logo_url?: string | null
           name?: string
           phone?: string | null
           postal_code?: string | null

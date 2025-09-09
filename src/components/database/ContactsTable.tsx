@@ -173,12 +173,24 @@ const ContactsTable = ({ data, useCredits, onTeamSelect }: ContactsTableProps) =
               sortedData.map((team) => (
                 <TableRow key={team.id}>
                   <TableCell>
-                    <span 
-                      className="font-medium text-blue-600 hover:underline cursor-pointer"
-                      onClick={() => handleTeamClick(team)}
-                    >
-                      {team.team}
-                    </span>
+                    <div className="flex items-center gap-3">
+                      {team.logo && (
+                        <img 
+                          src={team.logo} 
+                          alt={`${team.team} logo`}
+                          className="w-8 h-8 object-contain rounded-sm"
+                          onError={(e) => {
+                            e.currentTarget.style.display = 'none';
+                          }}
+                        />
+                      )}
+                      <span 
+                        className="font-medium text-blue-600 hover:underline cursor-pointer"
+                        onClick={() => handleTeamClick(team)}
+                      >
+                        {team.team}
+                      </span>
+                    </div>
                   </TableCell>
                   <TableCell>{team.sport}</TableCell>
                   <TableCell>{team.level}</TableCell>

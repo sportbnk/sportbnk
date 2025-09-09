@@ -64,10 +64,10 @@ function buildClubMap() {
 async function fetchEnrichment(clubs: { name: string; division: string }[]) {
   if (!OPENAI_API_KEY) {
     console.warn("OPENAI_API_KEY not set, skipping AI enrichment");
-    return {} as Record<string, { city?: string; website?: string; founded?: string }>;
+    return {} as Record<string, { city?: string; website?: string; founded?: string; logo_url?: string }>;
   }
 
-  const prompt = `Return strict JSON with an array key clubs. For each English football club below, include {name, city, website, founded}. Use the official home city/town within England and the current official website domain. If unsure, leave fields empty strings. Clubs: ${clubs
+  const prompt = `Return strict JSON with an array key clubs. For each English football club below, include {name, city, website, founded, logo_url}. Use the official home city/town within England, the current official website domain, and a direct URL to the official team badge/logo (PNG/JPG format). If unsure about any field, leave it empty string. Clubs: ${clubs
     .map((c) => `${c.name}`)
     .join(", ")}`;
 
@@ -92,20 +92,21 @@ async function fetchEnrichment(clubs: { name: string; division: string }[]) {
   const content: string = data?.choices?.[0]?.message?.content || "";
   try {
     const parsed = JSON.parse(content);
-    const result: Record<string, { city?: string; website?: string; founded?: string }> = {};
+    const result: Record<string, { city?: string; website?: string; founded?: string; logo_url?: string }> = {};
     for (const item of parsed?.clubs || []) {
       if (item?.name) {
         result[item.name] = {
           city: item.city || undefined,
           website: item.website || undefined,
           founded: item.founded ? String(item.founded) : undefined,
+          logo_url: item.logo_url || undefined,
         };
       }
     }
     return result;
   } catch (_e) {
     console.warn("Failed to parse AI JSON, continuing without enrichment");
-    return {} as Record<string, { city?: string; website?: string; founded?: string }>;
+    return {} as Record<string, { city?: string; website?: string; founded?: string; logo_url?: string }>;
   }
 }
 
@@ -202,6 +203,7 @@ serve(async (req) => {
           level: "Professional",
           website: ai.website || null,
           founded: ai.founded || null,
+          logo_url: ai.logo_url || null,
           sport_id: sportId,
           city_id: cityId,
         };

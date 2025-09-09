@@ -39,6 +39,7 @@ interface OrganizationDTO {
   revenue: number | null;
   employees: number | null;
   level: string | null;
+  logo_url?: string | null;
   sport: SportDTO;
   city: CityDTO;
 }
@@ -215,6 +216,7 @@ export default function Teams() {
           revenue,
           employees,
           level,
+          logo_url,
           sports (
             name
           ),
@@ -294,6 +296,7 @@ export default function Teams() {
           revenue: team.revenue,
           employees: team.employees,
           level: team.level,
+          logo_url: team.logo_url,
           sport: {
             name: team.sports?.name || 'Not specified'
           },
@@ -349,7 +352,7 @@ export default function Teams() {
     country: org.city?.country?.name || 'Not specified',
     revenue: org.revenue || 0,
     employees: org.employees || 0,
-    logo: '', // No logo in current schema
+    logo: org.logo_url || '', // Now included logo_url from database
     description: '', // No description in current schema
     founded: '', // Not included in DTO
     website: '', // Not included in DTO
