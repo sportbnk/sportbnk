@@ -30,7 +30,7 @@ import Lists from "./pages/crm/Lists";
 import Teams from "./pages/crm/Teams";
 import People from "./pages/crm/People";
 import TeamDetails from "./pages/crm/TeamDetails";
-import Leads from "./pages/crm/Leads";
+
 import SearchResults from "./pages/SearchResults";
 
 import CsvUpdate from "./pages/CsvUpdate";
@@ -104,7 +104,7 @@ function App() {
                         <Route path="/crm/teams" element={<Teams />} />
                 <Route path="/crm/teams/:teamId" element={<TeamDetails />} />
                 <Route path="/crm/people" element={<People />} />
-                <Route path="/crm/leads" element={<Leads />} />
+                
                 <Route path="/crm/profile" element={<Profile />} />
                         <Route path="/crm/settings" element={<CrmSettings />} />
                         <Route path="/crm/integrations" element={<CrmIntegrations />} />
