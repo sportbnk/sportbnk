@@ -51,6 +51,7 @@ export interface Team {
   country_id?: string;
   league?: string;
   division?: string;
+  level?: string;
   website?: string;
   email?: string;
   phone?: string;

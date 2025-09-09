@@ -52,9 +52,11 @@ const Teams = () => {
   const [selectedCountry, setSelectedCountry] = useState<string>('all');
   const [selectedCity, setSelectedCity] = useState<string>('all');
   const [selectedLeague, setSelectedLeague] = useState<string>('all');
+  const [selectedLevel, setSelectedLevel] = useState<string>('all');
 
-  // Get unique leagues from teams
+  // Get unique leagues and levels from teams
   const leagues = [...new Set(teams.map(team => team.league).filter(Boolean))];
+  const levels = [...new Set(teams.map(team => team.level).filter(Boolean))];
 
   // Fetch data
   const fetchData = async () => {
@@ -120,8 +122,12 @@ const Teams = () => {
       filtered = filtered.filter(team => team.league === selectedLeague);
     }
 
+    if (selectedLevel !== 'all') {
+      filtered = filtered.filter(team => team.level === selectedLevel);
+    }
+
     setFilteredTeams(filtered);
-  }, [teams, searchQuery, selectedSport, selectedCountry, selectedCity, selectedLeague]);
+  }, [teams, searchQuery, selectedSport, selectedCountry, selectedCity, selectedLeague, selectedLevel]);
 
   const clearFilters = () => {
     setSearchQuery('');
@@ -129,11 +135,12 @@ const Teams = () => {
     setSelectedCountry('all');
     setSelectedCity('all');
     setSelectedLeague('all');
+    setSelectedLevel('all');
   };
 
   const hasActiveFilters = searchQuery || selectedSport !== 'all' || 
                            selectedCountry !== 'all' || selectedCity !== 'all' || 
-                           selectedLeague !== 'all';
+                           selectedLeague !== 'all' || selectedLevel !== 'all';
 
   if (loading) {
     return (
@@ -264,6 +271,26 @@ const Teams = () => {
               </Select>
             </div>
 
+            {/* Level Filter */}
+            {levels.length > 0 && (
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-foreground">Level</label>
+                <Select value={selectedLevel} onValueChange={setSelectedLevel}>
+                  <SelectTrigger className="bg-background border-border">
+                    <SelectValue placeholder="All Levels" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-popover border-border">
+                    <SelectItem value="all">All Levels</SelectItem>
+                    {levels.map((level) => (
+                      <SelectItem key={level} value={level}>
+                        {level}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+
             {/* Results Count */}
             <div className="pt-4 border-t border-border">
               <p className="text-sm text-muted-foreground">
@@ -280,9 +307,15 @@ const Teams = () => {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-foreground">Organisations</h1>
-            <p className="text-muted-foreground">
+            <p className="text-muted-foreground mb-2">
               Manage and explore sports organizations in your database
             </p>
+            <div className="flex items-center gap-2">
+              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary">
+                Professional Level
+              </span>
+              <span className="text-sm text-muted-foreground">All clubs shown are professional organizations</span>
+            </div>
           </div>
           <Button className="shadow-soft">
             <Plus className="h-4 w-4 mr-2" />
@@ -298,7 +331,7 @@ const Teams = () => {
                 <TableRow className="bg-muted/30">
                   <TableHead className="font-semibold">Organisation</TableHead>
                   <TableHead className="font-semibold">League</TableHead>
-                  <TableHead className="font-semibold">Country</TableHead>
+                  <TableHead className="font-semibold">Location</TableHead>
                   <TableHead className="font-semibold">Website</TableHead>
                   <TableHead className="font-semibold">Last Updated</TableHead>
                   <TableHead className="font-semibold text-right">Actions</TableHead>
@@ -360,11 +393,19 @@ const Teams = () => {
                         )}
                       </TableCell>
                       <TableCell>
-                        <div className="flex items-center gap-2">
-                          <MapPin className="h-4 w-4 text-muted-foreground" />
-                          <span className="text-foreground">
-                            {team.country?.name || '-'}
-                          </span>
+                        <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-2">
+                            <div className="w-3 h-3 rounded-full bg-red-500 border border-red-600"></div>
+                            <span className="text-foreground font-medium">
+                              {team.country?.name || '-'}
+                            </span>
+                          </div>
+                          {team.city?.name && (
+                            <div className="flex items-center gap-1 text-muted-foreground">
+                              <MapPin className="h-3 w-3" />
+                              <span className="text-sm">{team.city.name}</span>
+                            </div>
+                          )}
                         </div>
                       </TableCell>
                       <TableCell>

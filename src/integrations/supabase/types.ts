@@ -659,6 +659,7 @@ export type Database = {
           founded_year: number | null
           id: string
           league: string | null
+          level: string | null
           logo_url: string | null
           name: string
           phone: string | null
@@ -677,6 +678,7 @@ export type Database = {
           founded_year?: number | null
           id?: string
           league?: string | null
+          level?: string | null
           logo_url?: string | null
           name: string
           phone?: string | null
@@ -695,6 +697,7 @@ export type Database = {
           founded_year?: number | null
           id?: string
           league?: string | null
+          level?: string | null
           logo_url?: string | null
           name?: string
           phone?: string | null
