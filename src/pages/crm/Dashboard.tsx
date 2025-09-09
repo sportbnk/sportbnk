@@ -80,10 +80,10 @@ const Dashboard = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Clock className="h-5 w-5 text-primary" />
-              Recent Activity
+              Insights in Sports World
             </CardTitle>
             <CardDescription>
-              Latest updates and changes in your workspace
+              Latest industry movements and hiring trends
             </CardDescription>
           </CardHeader>
           <CardContent>
