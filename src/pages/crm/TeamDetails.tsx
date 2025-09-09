@@ -231,13 +231,6 @@ const TeamDetails = () => {
                   </div>
                 )}
 
-                {team.founded_year && (
-                  <div className="flex items-center gap-2">
-                    <Calendar className="h-4 w-4 text-muted-foreground" />
-                    <span>Founded {team.founded_year}</span>
-                  </div>
-                )}
-
                 {team.website && (
                   <div className="flex items-center gap-2">
                     <Globe className="h-4 w-4 text-muted-foreground" />
@@ -444,12 +437,6 @@ const TeamDetails = () => {
                   <span className="text-muted-foreground">Social Links</span>
                   <span className="font-medium">{team.team_social_links?.length || 0}</span>
                 </div>
-                {team.founded_year && (
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Years Active</span>
-                    <span className="font-medium">{new Date().getFullYear() - team.founded_year}</span>
-                  </div>
-                )}
               </div>
             </CardContent>
           </Card>
