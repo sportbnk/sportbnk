@@ -71,10 +71,8 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				sportbnk: {
-					green: '#00ce7c',
-					darkBlue: '#111B4E',
-					navy: '#0F1741',
-					lightGrey: '#F5F6FA'
+					navy: '#0B1A51',
+					green: '#03CD7B'
 				}
 			},
 			borderRadius: {
@@ -130,8 +128,12 @@ export default {
 				float: 'float 3s ease-in-out infinite',
 				'slow-spin': 'rotate 8s linear infinite'
 			},
+			boxShadow: {
+				'soft': '0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04)',
+				'soft-lg': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+			},
 			fontFamily: {
-				sans: ['Inter', 'system-ui', 'sans-serif'],
+				sans: ['Poppins', 'system-ui', 'sans-serif'],
 				display: ['Poppins', 'system-ui', 'sans-serif']
 			},
 			backgroundImage: {
