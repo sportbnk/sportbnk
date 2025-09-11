@@ -306,15 +306,14 @@ const TeamDetails = () => {
             </CardContent>
           </Card>
 
-          {/* Hiring Opportunities Section - Only for Accrington Stanley */}
-          {team.name === "Accrington Stanley" && (
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Briefcase className="h-5 w-5" />
-                  Hiring Opportunities
-                </CardTitle>
-              </CardHeader>
+          {/* Hiring Opportunities Section */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Briefcase className="h-5 w-5" />
+                Hiring Opportunities
+              </CardTitle>
+            </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   <div className="border rounded-lg p-4">
@@ -362,19 +361,17 @@ const TeamDetails = () => {
                     </div>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
-          )}
+            </CardContent>
+          </Card>
 
-          {/* Buying Signals Section - Only for Accrington Stanley */}
-          {team.name === "Accrington Stanley" && (
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <TrendingUp className="h-5 w-5" />
-                  Buying Signals
-                </CardTitle>
-              </CardHeader>
+          {/* Buying Signals Section */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <TrendingUp className="h-5 w-5" />
+                Buying Signals
+              </CardTitle>
+            </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   <div className="border-l-4 border-primary pl-4">
@@ -423,7 +420,6 @@ const TeamDetails = () => {
                 </div>
               </CardContent>
             </Card>
-          )}
 
           {/* Employees Section */}
           <Card>
