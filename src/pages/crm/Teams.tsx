@@ -448,14 +448,13 @@ const Teams = () => {
   const [selectedSport, setSelectedSport] = useState<string>('all');
   const [selectedCountry, setSelectedCountry] = useState<string>('all');
   const [selectedCity, setSelectedCity] = useState<string>('all');
-  const [selectedLeague, setSelectedLeague] = useState<string>('all');
+  
   const [selectedLevel, setSelectedLevel] = useState<string>('all');
   const [currentPage, setCurrentPage] = useState(1);
   
   const ITEMS_PER_PAGE = 50;
 
-  // Get unique leagues and levels from teams
-  const leagues = [...new Set(teams.map(team => team.league).filter(Boolean))];
+  // Get unique levels from teams
   const levels = [...new Set(teams.map(team => team.level).filter(Boolean))];
   
   // Calculate pagination values
@@ -524,35 +523,32 @@ const Teams = () => {
       filtered = filtered.filter(team => team.city_id === selectedCity);
     }
 
-    if (selectedLeague !== 'all') {
-      filtered = filtered.filter(team => team.league === selectedLeague);
-    }
 
     if (selectedLevel !== 'all') {
       filtered = filtered.filter(team => team.level === selectedLevel);
     }
 
     setFilteredTeams(filtered);
-  }, [teams, searchQuery, selectedSport, selectedCountry, selectedCity, selectedLeague, selectedLevel]);
+  }, [teams, searchQuery, selectedSport, selectedCountry, selectedCity, selectedLevel]);
   
   useEffect(() => {
     // Reset to first page when filters change
     setCurrentPage(1);
-  }, [searchQuery, selectedSport, selectedCountry, selectedCity, selectedLeague, selectedLevel]);
+  }, [searchQuery, selectedSport, selectedCountry, selectedCity, selectedLevel]);
 
   const clearFilters = () => {
     setSearchQuery('');
     setSelectedSport('all');
     setSelectedCountry('all');
     setSelectedCity('all');
-    setSelectedLeague('all');
+    
     setSelectedLevel('all');
     setCurrentPage(1);
   };
 
   const hasActiveFilters = searchQuery || selectedSport !== 'all' || 
                            selectedCountry !== 'all' || selectedCity !== 'all' || 
-                           selectedLeague !== 'all' || selectedLevel !== 'all';
+                           selectedLevel !== 'all';
 
   if (loading) {
     return (
@@ -627,25 +623,6 @@ const Teams = () => {
               </Select>
             </div>
 
-            {/* League Filter */}
-            {leagues.length > 0 && (
-              <div className="space-y-1">
-                <label className="text-xs font-medium text-foreground">League</label>
-                <Select value={selectedLeague} onValueChange={setSelectedLeague}>
-                  <SelectTrigger className="bg-background border-border h-8 text-xs">
-                    <SelectValue placeholder="All Leagues" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-popover border-border">
-                    <SelectItem value="all">All Leagues</SelectItem>
-                    {leagues.map((league) => (
-                      <SelectItem key={league} value={league}>
-                        {league}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            )}
 
             {/* Country Filter */}
             <div className="space-y-1">
