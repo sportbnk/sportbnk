@@ -74,33 +74,7 @@ const Dashboard = () => {
       </div>
 
       {/* Content Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Recent Activity */}
-        <Card className="shadow-soft border-border">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Clock className="h-5 w-5 text-primary" />
-              Insights in Sports World
-            </CardTitle>
-            <CardDescription>
-              Latest industry movements and hiring trends
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {recentActivity.map((activity, index) => (
-                <div key={index} className="flex items-center gap-3 p-3 rounded-lg bg-muted/30">
-                  <activity.icon className="h-4 w-4 text-muted-foreground" />
-                  <div className="flex-1">
-                    <p className="text-sm font-medium text-foreground">{activity.action}</p>
-                    <p className="text-xs text-muted-foreground">{activity.time}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-
+      <div className="grid grid-cols-1 gap-6">
         {/* Quick Actions */}
         <Card className="shadow-soft border-border">
           <CardHeader>
@@ -114,12 +88,12 @@ const Dashboard = () => {
               <div className="p-4 rounded-lg border border-border hover:bg-muted/50 cursor-pointer transition-colors">
                 <Building2 className="h-6 w-6 text-primary mb-2" />
                 <p className="font-medium text-sm">Add Organisation</p>
-                <p className="text-xs text-muted-foreground">Create new club profile</p>
+                <p className="text-xs text-muted-foreground">Create new club profile and earn more credits</p>
               </div>
               <div className="p-4 rounded-lg border border-border hover:bg-muted/50 cursor-pointer transition-colors">
                 <Users className="h-6 w-6 text-accent mb-2" />
                 <p className="font-medium text-sm">Add Contact</p>
-                <p className="text-xs text-muted-foreground">Import new person</p>
+                <p className="text-xs text-muted-foreground">Import new person and earn more credits</p>
               </div>
               <div className="p-4 rounded-lg border border-border hover:bg-muted/50 cursor-pointer transition-colors">
                 <List className="h-6 w-6 text-chart-1 mb-2" />
@@ -128,8 +102,8 @@ const Dashboard = () => {
               </div>
               <div className="p-4 rounded-lg border border-border hover:bg-muted/50 cursor-pointer transition-colors">
                 <TrendingUp className="h-6 w-6 text-chart-2 mb-2" />
-                <p className="font-medium text-sm">View Insights</p>
-                <p className="text-xs text-muted-foreground">Analytics dashboard</p>
+                <p className="font-medium text-sm">View Analytics</p>
+                <p className="text-xs text-muted-foreground">Performance dashboard</p>
               </div>
             </div>
           </CardContent>
