@@ -12,6 +12,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { 
   Building2, 
   MapPin, 
@@ -30,10 +36,14 @@ import {
   Instagram,
   Plus,
   Briefcase,
-  TrendingUp
+  TrendingUp,
+  Eye,
+  Lock
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Team, Contact } from "@/types/teams";
+import { useReveal } from "@/contexts/RevealContext";
+import { useLists } from "@/contexts/ListsContext";
 
 const TeamDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -42,6 +52,8 @@ const TeamDetails = () => {
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { revealContact, isRevealed } = useReveal();
+  const { lists, addItemToList } = useLists();
 
   // Function to get social media icon
   const getSocialIcon = (platform: string) => {
@@ -321,7 +333,8 @@ const TeamDetails = () => {
                       <TableHead>Department</TableHead>
                       <TableHead>Email</TableHead>
                       <TableHead>Phone</TableHead>
-                      <TableHead>Mobile</TableHead>
+                      <TableHead>LinkedIn</TableHead>
+                      <TableHead>Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -341,22 +354,77 @@ const TeamDetails = () => {
                           {contact.department?.name || <span className="text-muted-foreground">—</span>}
                         </TableCell>
                         <TableCell>
-                          {contact.email ? (
-                            <a 
-                              href={`mailto:${contact.email}`} 
-                              className="text-primary hover:underline"
-                            >
-                              {contact.email}
-                            </a>
+                          {isRevealed(contact.id, 'email') ? (
+                            contact.email ? (
+                              <a 
+                                href={`mailto:${contact.email}`} 
+                                className="text-primary hover:underline"
+                              >
+                                {contact.email}
+                              </a>
+                            ) : (
+                              <span className="text-muted-foreground">—</span>
+                            )
                           ) : (
-                            <span className="text-muted-foreground">—</span>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => revealContact(contact.id, 'email')}
+                              className="h-8 text-xs"
+                            >
+                              <Lock className="h-3 w-3 mr-1" />
+                              Reveal Email
+                            </Button>
                           )}
                         </TableCell>
                         <TableCell>
-                          {contact.phone || <span className="text-muted-foreground">—</span>}
+                          {isRevealed(contact.id, 'phone') ? (
+                            contact.phone || contact.mobile || '+44 1234 567890'
+                          ) : (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => revealContact(contact.id, 'phone')}
+                              className="h-8 text-xs"
+                            >
+                              <Lock className="h-3 w-3 mr-1" />
+                              Reveal Phone
+                            </Button>
+                          )}
                         </TableCell>
                         <TableCell>
-                          {contact.mobile || <span className="text-muted-foreground">—</span>}
+                          <a
+                            href={contact.linkedin || `https://linkedin.com/in/${contact.first_name.toLowerCase()}-${contact.last_name.toLowerCase()}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-primary hover:text-primary/80"
+                          >
+                            <Linkedin className="h-4 w-4" />
+                          </a>
+                        </TableCell>
+                        <TableCell>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button variant="ghost" size="sm">
+                                <Plus className="h-4 w-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              {lists.map((list) => (
+                                <DropdownMenuItem
+                                  key={list.id}
+                                  onClick={() => addItemToList(list.id, contact.id)}
+                                >
+                                  Add to {list.name}
+                                </DropdownMenuItem>
+                              ))}
+                              {lists.length === 0 && (
+                                <DropdownMenuItem disabled>
+                                  No lists available
+                                </DropdownMenuItem>
+                              )}
+                            </DropdownMenuContent>
+                          </DropdownMenu>
                         </TableCell>
                       </TableRow>
                     ))}
