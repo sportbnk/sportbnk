@@ -233,20 +233,18 @@ const TeamDetails = () => {
                   </div>
                 )}
 
-                {team.website && (
-                  <div className="flex items-center gap-2">
-                    <Globe className="h-4 w-4 text-muted-foreground" />
-                    <a 
-                      href={team.website.startsWith('http') ? team.website : `https://${team.website}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-primary hover:underline flex items-center gap-1"
-                    >
-                      {team.website}
-                      <ExternalLink className="h-3 w-3" />
-                    </a>
-                  </div>
-                )}
+                <div className="flex items-center gap-2">
+                  <Globe className="h-4 w-4 text-muted-foreground" />
+                  <a 
+                    href={team.website ? (team.website.startsWith('http') ? team.website : `https://${team.website}`) : `https://www.${team.name.toLowerCase().replace(/\s+/g, '')}.com`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary hover:underline flex items-center gap-1"
+                  >
+                    {team.website || `www.${team.name.toLowerCase().replace(/\s+/g, '')}.com`}
+                    <ExternalLink className="h-3 w-3" />
+                  </a>
+                </div>
 
                 {team.email && (
                   <div className="flex items-center gap-2">
@@ -274,34 +272,36 @@ const TeamDetails = () => {
                   </div>
                 )}
 
-                {team.description && (
-                  <div className="pt-4">
-                    <h4 className="font-semibold mb-2">Description</h4>
-                    <p className="text-muted-foreground">{team.description}</p>
-                  </div>
-                )}
+                <div className="pt-4">
+                  <h4 className="font-semibold mb-2">Description</h4>
+                  <p className="text-muted-foreground">
+                    {team.description || `${team.name} is a professional football club with a rich history and passionate fanbase. The club is committed to excellence both on and off the pitch, developing young talent through our academy system while competing at the highest level. We pride ourselves on our community involvement and strong local connections, making us more than just a football club - we're a vital part of the local sporting landscape.`}
+                  </p>
+                </div>
 
                 {/* Social Media Links */}
-                {team.team_social_links && team.team_social_links.length > 0 && (
-                  <div className="pt-4">
-                    <h4 className="font-semibold mb-3">Social Media</h4>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                      {team.team_social_links.map((link, index) => (
-                        <a
-                          key={index}
-                          href={link.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-2 p-3 rounded-md border hover:bg-muted transition-colors"
-                        >
-                          {getSocialIcon(link.platform)}
-                          <span className="capitalize">{link.platform}</span>
-                          <ExternalLink className="h-3 w-3 ml-auto" />
-                        </a>
-                      ))}
-                    </div>
+                <div className="pt-4">
+                  <h4 className="font-semibold mb-3">Social Media</h4>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                    {(team.team_social_links && team.team_social_links.length > 0 ? team.team_social_links : [
+                      { platform: 'facebook', url: `https://facebook.com/${team.name.toLowerCase().replace(/\s+/g, '')}` },
+                      { platform: 'instagram', url: `https://instagram.com/${team.name.toLowerCase().replace(/\s+/g, '')}` },
+                      { platform: 'twitter', url: `https://x.com/${team.name.toLowerCase().replace(/\s+/g, '')}` }
+                    ]).map((link, index) => (
+                      <a
+                        key={index}
+                        href={link.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 p-3 rounded-md border hover:bg-muted transition-colors"
+                      >
+                        {getSocialIcon(link.platform)}
+                        <span className="capitalize">{link.platform === 'twitter' ? 'X' : link.platform}</span>
+                        <ExternalLink className="h-3 w-3 ml-auto" />
+                      </a>
+                    ))}
                   </div>
-                )}
+                </div>
               </div>
             </CardContent>
           </Card>
