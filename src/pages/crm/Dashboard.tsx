@@ -113,12 +113,12 @@ const Dashboard = () => {
             <div className="grid grid-cols-3 gap-3">
               <div className="p-4 rounded-lg border border-border hover:bg-muted/50 cursor-pointer transition-colors">
                 <Building2 className="h-6 w-6 text-primary mb-2" />
-                <p className="font-medium text-sm">Add Organisation</p>
+                <p className="font-medium text-sm">Add or Edit Organisation</p>
                 <p className="text-xs text-muted-foreground">Create new club profile and earn more credits</p>
               </div>
               <div className="p-4 rounded-lg border border-border hover:bg-muted/50 cursor-pointer transition-colors">
                 <Users className="h-6 w-6 text-accent mb-2" />
-                <p className="font-medium text-sm">Add Contact</p>
+                <p className="font-medium text-sm">Add or Edit Contact</p>
                 <p className="text-xs text-muted-foreground">Import new person and earn more credits</p>
               </div>
               <div className="p-4 rounded-lg border border-border hover:bg-muted/50 cursor-pointer transition-colors">
