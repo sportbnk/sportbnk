@@ -488,7 +488,7 @@ const Teams = () => {
 
       setTeams(teamsResponse.data || []);
       setSports((sportsResponse.data || []).filter(sport => sport.name.toLowerCase() !== 'rugby'));
-      setCountries((countriesResponse.data || []).filter(country => country.name.toLowerCase() !== 'multi nation'));
+      setCountries((countriesResponse.data || []).filter(country => !country.name.toLowerCase().includes('multi')));
       setCities(citiesResponse.data || []);
     } catch (error) {
       console.error('Error fetching data:', error);
