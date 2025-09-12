@@ -743,7 +743,7 @@ const Teams = () => {
                 <TableRow className="bg-muted/30">
                   <TableHead className="font-semibold">Organisation</TableHead>
                   <TableHead className="font-semibold">Level</TableHead>
-                  <TableHead className="font-semibold">League</TableHead>
+                  <TableHead className="font-semibold">Sport</TableHead>
                   <TableHead className="font-semibold">Country</TableHead>
                   <TableHead className="font-semibold">City</TableHead>
                   <TableHead className="font-semibold text-right">Actions</TableHead>
@@ -816,9 +816,9 @@ const Teams = () => {
                         </Badge>
                       </TableCell>
                       <TableCell>
-                        {team.league ? (
+                        {team.sport?.name ? (
                           <Badge variant="secondary" className="font-medium">
-                            {team.league}
+                            {team.sport.name}
                           </Badge>
                         ) : (
                           <span className="text-muted-foreground">-</span>
