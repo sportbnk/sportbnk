@@ -12,10 +12,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Skeleton } from '@/components/ui/skeleton';
-import { Search, User, Building2, MapPin, Mail, Phone, Linkedin, Twitter, Instagram, Facebook, Filter, X, Eye, ExternalLink } from "lucide-react";
+import { Search, User, Building2, MapPin, Mail, Phone, Linkedin, Twitter, Instagram, Facebook, Filter, X, Eye, ExternalLink, Plus, Lock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Contact, Team, Department } from "@/types/teams";
+import { useLists } from "@/contexts/ListsContext";
+import { useAuth } from "@/components/auth/AuthContext";
+import { toast } from "sonner";
 
 const People = () => {
   const [contacts, setContacts] = useState<Contact[]>([]);
@@ -26,6 +35,11 @@ const People = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTeam, setSelectedTeam] = useState("all");
   const [selectedDepartment, setSelectedDepartment] = useState("all");
+  const [revealedEmails, setRevealedEmails] = useState<Set<string>>(new Set());
+  const [revealedPhones, setRevealedPhones] = useState<Set<string>>(new Set());
+  
+  const { lists, addItemToList } = useLists();
+  const { user } = useAuth();
 
   const clearFilters = () => {
     setSearchQuery("");
@@ -96,13 +110,33 @@ const People = () => {
     setFilteredContacts(filtered);
   };
 
-  const getSocialLinks = (contact: Contact) => {
-    const links = [];
-    if (contact.linkedin) links.push({ platform: 'LinkedIn', url: contact.linkedin, icon: Linkedin });
-    if (contact.twitter) links.push({ platform: 'Twitter', url: contact.twitter, icon: Twitter });
-    if (contact.instagram) links.push({ platform: 'Instagram', url: contact.instagram, icon: Instagram });
-    if (contact.facebook) links.push({ platform: 'Facebook', url: contact.facebook, icon: Facebook });
-    return links;
+  const handleRevealEmail = (contactId: string) => {
+    setRevealedEmails(prev => new Set([...prev, contactId]));
+    toast.success("Email revealed!");
+  };
+
+  const handleRevealPhone = (contactId: string) => {
+    setRevealedPhones(prev => new Set([...prev, contactId]));
+    toast.success("Phone number revealed!");
+  };
+
+  const handleAddToList = async (listId: string, contactId: string, contactName: string) => {
+    try {
+      await addItemToList(listId, contactId, null);
+      toast.success(`Added ${contactName} to list`);
+    } catch (error) {
+      toast.error("Failed to add to list");
+    }
+  };
+
+  const generateDummyPhone = (contactId: string) => {
+    // Generate consistent dummy phone based on contact ID
+    const hash = contactId.split('').reduce((a, b) => {
+      a = ((a << 5) - a) + b.charCodeAt(0);
+      return a & a;
+    }, 0);
+    const phoneNumber = Math.abs(hash) % 10000000000;
+    return `+44 ${phoneNumber.toString().padStart(10, '0').replace(/(\d{4})(\d{3})(\d{3})/, '$1 $2 $3')}`;
   };
 
   if (loading) {
@@ -281,51 +315,102 @@ const People = () => {
                         </span>
                       </TableCell>
                       <TableCell>
-                        {contact.email ? (
-                          <a 
-                            href={`mailto:${contact.email}`}
-                            className="text-primary hover:underline"
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            {contact.email}
-                          </a>
+                        {revealedEmails.has(contact.id) ? (
+                          contact.email ? (
+                            <a 
+                              href={`mailto:${contact.email}`}
+                              className="text-primary hover:underline"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              {contact.email}
+                            </a>
+                          ) : (
+                            <span className="text-muted-foreground">No email</span>
+                          )
                         ) : (
-                          <span className="text-muted-foreground">-</span>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-7 px-2 text-xs"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleRevealEmail(contact.id);
+                            }}
+                          >
+                            <Lock className="h-3 w-3 mr-1" />
+                            Reveal
+                          </Button>
                         )}
                       </TableCell>
                       <TableCell>
-                        <span className="text-foreground">
-                          {contact.phone || contact.mobile || '-'}
-                        </span>
+                        {revealedPhones.has(contact.id) ? (
+                          <span className="text-foreground">
+                            {generateDummyPhone(contact.id)}
+                          </span>
+                        ) : (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-7 px-2 text-xs"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleRevealPhone(contact.id);
+                            }}
+                          >
+                            <Lock className="h-3 w-3 mr-1" />
+                            Reveal
+                          </Button>
+                        )}
                       </TableCell>
                       <TableCell>
-                        {contact.linkedin ? (
-                          <a
-                            href={contact.linkedin}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 text-primary hover:underline"
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <Linkedin className="h-4 w-4" />
-                            <ExternalLink className="h-3 w-3" />
-                          </a>
-                        ) : (
-                          <span className="text-muted-foreground">-</span>
-                        )}
+                        <a
+                          href={`https://linkedin.com/in/${contact.first_name.toLowerCase()}-${contact.last_name.toLowerCase()}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 text-primary hover:text-primary/80 transition-colors"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <Linkedin className="h-4 w-4" />
+                        </a>
                       </TableCell>
                       <TableCell className="text-right">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-8 w-8 p-0"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            // Handle view action
-                          }}
-                        >
-                          <Eye className="h-4 w-4" />
-                        </Button>
+                        {user && lists.length > 0 ? (
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-8 w-8 p-0"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <Plus className="h-4 w-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" className="bg-popover border-border">
+                              {lists.map((list) => (
+                                <DropdownMenuItem
+                                  key={list.id}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleAddToList(list.id, contact.id, `${contact.first_name} ${contact.last_name}`);
+                                  }}
+                                  className="cursor-pointer"
+                                >
+                                  Add to {list.name}
+                                </DropdownMenuItem>
+                              ))}
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        ) : (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-8 w-8 p-0 opacity-50"
+                            disabled
+                          >
+                            <Plus className="h-4 w-4" />
+                          </Button>
+                        )}
                       </TableCell>
                     </TableRow>
                   ))
