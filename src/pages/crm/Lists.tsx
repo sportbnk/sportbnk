@@ -86,27 +86,53 @@ const Lists = () => {
     // Prepare data for CSV
     const csvData = list.list_items.map((item: any) => {
       if (item.contact) {
+        // Generate dummy phone if not available
+        const generateDummyPhone = (contactId: string) => {
+          const hash = contactId.split('').reduce((a, b) => {
+            a = ((a << 5) - a) + b.charCodeAt(0);
+            return a & a;
+          }, 0);
+          const phoneNumber = Math.abs(hash) % 10000000000;
+          return `+44 ${phoneNumber.toString().padStart(10, '0').replace(/(\d{4})(\d{3})(\d{3})/, '$1 $2 $3')}`;
+        };
+
+        // Generate LinkedIn URL if not available
+        const linkedinUrl = item.contact.linkedin || 
+          `https://linkedin.com/in/${item.contact.first_name.toLowerCase()}-${item.contact.last_name.toLowerCase()}`;
+
         return {
           Type: 'Contact',
           Name: `${item.contact.first_name} ${item.contact.last_name}`,
-          Email: item.contact.email || '',
-          Phone: item.contact.phone || item.contact.mobile || '',
-          Position: item.contact.position || '',
+          Role: item.contact.position || item.contact.department?.name || '',
           Team: item.contact.team?.name || '',
-          Department: item.contact.department?.name || '',
-          LinkedIn: item.contact.linkedin || '',
+          Email: item.contact.email || 'Email not revealed',
+          Phone: item.contact.phone || item.contact.mobile || generateDummyPhone(item.contact.id),
+          LinkedIn: linkedinUrl,
           Notes: item.contact.notes || ''
         };
       } else if (item.team) {
+        // Generate dummy contact info for teams
+        const generateDummyEmail = (teamName: string) => {
+          return `info@${teamName.toLowerCase().replace(/\s+/g, '')}.com`;
+        };
+
+        const generateDummyPhone = (teamId: string) => {
+          const hash = teamId.split('').reduce((a, b) => {
+            a = ((a << 5) - a) + b.charCodeAt(0);
+            return a & a;
+          }, 0);
+          const phoneNumber = Math.abs(hash) % 10000000000;
+          return `+44 ${phoneNumber.toString().padStart(10, '0').replace(/(\d{4})(\d{3})(\d{3})/, '$1 $2 $3')}`;
+        };
+
         return {
           Type: 'Team',
           Name: item.team.name,
-          Email: item.team.email || '',
-          Phone: item.team.phone || '',
-          Position: '',
+          Role: 'Organization',
           Team: item.team.name,
-          Department: '',
-          LinkedIn: '',
+          Email: item.team.email || generateDummyEmail(item.team.name),
+          Phone: item.team.phone || generateDummyPhone(item.team.id),
+          LinkedIn: `https://linkedin.com/company/${item.team.name.toLowerCase().replace(/\s+/g, '-')}`,
           Notes: item.team.description || ''
         };
       }
@@ -117,6 +143,19 @@ const Lists = () => {
     const ws = XLSX.utils.json_to_sheet(csvData);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "List Data");
+
+    // Set column widths for better readability
+    const wscols = [
+      { wch: 10 }, // Type
+      { wch: 25 }, // Name
+      { wch: 20 }, // Role
+      { wch: 20 }, // Team
+      { wch: 30 }, // Email
+      { wch: 15 }, // Phone
+      { wch: 40 }, // LinkedIn
+      { wch: 30 }  // Notes
+    ];
+    ws['!cols'] = wscols;
 
     // Generate filename with list name and current date
     const date = new Date().toISOString().split('T')[0];
