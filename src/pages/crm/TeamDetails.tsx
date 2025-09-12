@@ -246,24 +246,20 @@ const TeamDetails = () => {
                   </a>
                 </div>
 
-                {team.email && (
-                  <div className="flex items-center gap-2">
-                    <Mail className="h-4 w-4 text-muted-foreground" />
-                    <a 
-                      href={`mailto:${team.email}`}
-                      className="text-primary hover:underline"
-                    >
-                      {team.email}
-                    </a>
-                  </div>
-                )}
+                <div className="flex items-center gap-2">
+                  <Mail className="h-4 w-4 text-muted-foreground" />
+                  <a 
+                    href={`mailto:${team.email || `info@${team.name.toLowerCase().replace(/\s+/g, '')}.com`}`}
+                    className="text-primary hover:underline"
+                  >
+                    {team.email || `info@${team.name.toLowerCase().replace(/\s+/g, '')}.com`}
+                  </a>
+                </div>
 
-                {team.phone && (
-                  <div className="flex items-center gap-2">
-                    <Phone className="h-4 w-4 text-muted-foreground" />
-                    <span>{team.phone}</span>
-                  </div>
-                )}
+                <div className="flex items-center gap-2">
+                  <Phone className="h-4 w-4 text-muted-foreground" />
+                  <span>{team.phone || '+44 1234 567890'}</span>
+                </div>
 
                 {team.address && (
                   <div className="flex items-start gap-2">
