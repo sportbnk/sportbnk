@@ -5,9 +5,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
-import { Plus, List, Trash2, Edit2, User, Building2 } from "lucide-react";
+import { Plus, List, Trash2, Edit2, User, Building2, Download } from "lucide-react";
 import { useLists } from "@/contexts/ListsContext";
 import { useToast } from "@/components/ui/use-toast";
+import * as XLSX from 'xlsx';
 
 const Lists = () => {
   const { lists, loading, createList, deleteList, updateList, removeItemFromList } = useLists();
@@ -70,6 +71,64 @@ const Lists = () => {
     if (window.confirm("Are you sure you want to remove this item from the list?")) {
       await removeItemFromList(itemId);
     }
+  };
+
+  const exportListToCSV = (list: any) => {
+    if (!list.list_items || list.list_items.length === 0) {
+      toast({
+        title: "No data to export",
+        description: "This list is empty",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Prepare data for CSV
+    const csvData = list.list_items.map((item: any) => {
+      if (item.contact) {
+        return {
+          Type: 'Contact',
+          Name: `${item.contact.first_name} ${item.contact.last_name}`,
+          Email: item.contact.email || '',
+          Phone: item.contact.phone || item.contact.mobile || '',
+          Position: item.contact.position || '',
+          Team: item.contact.team?.name || '',
+          Department: item.contact.department?.name || '',
+          LinkedIn: item.contact.linkedin || '',
+          Notes: item.contact.notes || ''
+        };
+      } else if (item.team) {
+        return {
+          Type: 'Team',
+          Name: item.team.name,
+          Email: item.team.email || '',
+          Phone: item.team.phone || '',
+          Position: '',
+          Team: item.team.name,
+          Department: '',
+          LinkedIn: '',
+          Notes: item.team.description || ''
+        };
+      }
+      return {};
+    });
+
+    // Create workbook and worksheet
+    const ws = XLSX.utils.json_to_sheet(csvData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "List Data");
+
+    // Generate filename with list name and current date
+    const date = new Date().toISOString().split('T')[0];
+    const filename = `${list.name.replace(/[^a-z0-9]/gi, '_')}_${date}.xlsx`;
+
+    // Save file
+    XLSX.writeFile(wb, filename);
+
+    toast({
+      title: "Export successful",
+      description: `List exported as ${filename}`,
+    });
   };
 
   if (loading) {
@@ -261,6 +320,21 @@ const Lists = () => {
                     </p>
                   )}
                 </div>
+
+                {/* Export Button */}
+                {list.list_items && list.list_items.length > 0 && (
+                  <div className="pt-3 border-t border-border">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => exportListToCSV(list)}
+                      className="w-full"
+                    >
+                      <Download className="h-4 w-4 mr-2" />
+                      Export to Excel
+                    </Button>
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>
