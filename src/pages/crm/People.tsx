@@ -18,6 +18,15 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import { Skeleton } from '@/components/ui/skeleton';
 import { Search, User, Building2, MapPin, Mail, Phone, Linkedin, Twitter, Instagram, Facebook, Filter, X, Eye, ExternalLink, Plus, Lock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -37,17 +46,27 @@ const People = () => {
   const [selectedDepartment, setSelectedDepartment] = useState("all");
   const [revealedEmails, setRevealedEmails] = useState<Set<string>>(new Set());
   const [revealedPhones, setRevealedPhones] = useState<Set<string>>(new Set());
+  const [currentPage, setCurrentPage] = useState(1);
   
   const { lists, addItemToList } = useLists();
   const { user } = useAuth();
+  
+  const ITEMS_PER_PAGE = 50;
 
   const clearFilters = () => {
     setSearchQuery("");
     setSelectedTeam("all");
     setSelectedDepartment("all");
+    setCurrentPage(1);
   };
 
   const hasActiveFilters = searchQuery || selectedTeam !== "all" || selectedDepartment !== "all";
+
+  // Calculate pagination values
+  const totalPages = Math.ceil(filteredContacts.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const paginatedContacts = filteredContacts.slice(startIndex, endIndex);
 
   useEffect(() => {
     fetchData();
@@ -56,6 +75,11 @@ const People = () => {
   useEffect(() => {
     filterContacts();
   }, [contacts, searchQuery, selectedTeam, selectedDepartment]);
+
+  useEffect(() => {
+    // Reset to first page when filters change
+    setCurrentPage(1);
+  }, [searchQuery, selectedTeam, selectedDepartment]);
 
   const fetchData = async () => {
     try {
@@ -233,7 +257,12 @@ const People = () => {
             {/* Results Count */}
             <div className="pt-3 border-t border-border">
               <p className="text-xs text-muted-foreground">
-                Showing {filteredContacts.length} of {contacts.length} people
+                Showing {startIndex + 1}-{Math.min(endIndex, filteredContacts.length)} of {filteredContacts.length} people
+                {totalPages > 1 && (
+                  <span className="block mt-1">
+                    Page {currentPage} of {totalPages}
+                  </span>
+                )}
               </p>
             </div>
           </CardContent>
@@ -268,7 +297,7 @@ const People = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredContacts.length === 0 ? (
+                {paginatedContacts.length === 0 ? (
                   <TableRow>
                     <TableCell colSpan={7} className="text-center py-12">
                       <div className="flex flex-col items-center gap-3">
@@ -283,7 +312,7 @@ const People = () => {
                     </TableCell>
                   </TableRow>
                 ) : (
-                  filteredContacts.map((contact) => (
+                  paginatedContacts.map((contact) => (
                     <TableRow 
                       key={contact.id} 
                       className="hover:bg-muted/50 cursor-pointer transition-colors"
@@ -419,6 +448,54 @@ const People = () => {
             </Table>
           </div>
         </Card>
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="flex justify-center">
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious 
+                    onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                    className={currentPage === 1 ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
+                  />
+                </PaginationItem>
+                
+                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                  let pageNumber;
+                  if (totalPages <= 5) {
+                    pageNumber = i + 1;
+                  } else if (currentPage <= 3) {
+                    pageNumber = i + 1;
+                  } else if (currentPage >= totalPages - 2) {
+                    pageNumber = totalPages - 4 + i;
+                  } else {
+                    pageNumber = currentPage - 2 + i;
+                  }
+                  
+                  return (
+                    <PaginationItem key={pageNumber}>
+                      <PaginationLink
+                        onClick={() => setCurrentPage(pageNumber)}
+                        isActive={currentPage === pageNumber}
+                        className="cursor-pointer"
+                      >
+                        {pageNumber}
+                      </PaginationLink>
+                    </PaginationItem>
+                  );
+                })}
+                
+                <PaginationItem>
+                  <PaginationNext 
+                    onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+                    className={currentPage === totalPages ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          </div>
+        )}
       </div>
     </div>
   );

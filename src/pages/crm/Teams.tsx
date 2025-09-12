@@ -20,6 +20,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import { Skeleton } from '@/components/ui/skeleton';
 import { 
   Search, 
@@ -441,10 +450,19 @@ const Teams = () => {
   const [selectedCity, setSelectedCity] = useState<string>('all');
   const [selectedLeague, setSelectedLeague] = useState<string>('all');
   const [selectedLevel, setSelectedLevel] = useState<string>('all');
+  const [currentPage, setCurrentPage] = useState(1);
+  
+  const ITEMS_PER_PAGE = 50;
 
   // Get unique leagues and levels from teams
   const leagues = [...new Set(teams.map(team => team.league).filter(Boolean))];
   const levels = [...new Set(teams.map(team => team.level).filter(Boolean))];
+  
+  // Calculate pagination values
+  const totalPages = Math.ceil(filteredTeams.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const paginatedTeams = filteredTeams.slice(startIndex, endIndex);
 
   // Fetch data
   const fetchData = async () => {
@@ -516,6 +534,11 @@ const Teams = () => {
 
     setFilteredTeams(filtered);
   }, [teams, searchQuery, selectedSport, selectedCountry, selectedCity, selectedLeague, selectedLevel]);
+  
+  useEffect(() => {
+    // Reset to first page when filters change
+    setCurrentPage(1);
+  }, [searchQuery, selectedSport, selectedCountry, selectedCity, selectedLeague, selectedLevel]);
 
   const clearFilters = () => {
     setSearchQuery('');
@@ -524,6 +547,7 @@ const Teams = () => {
     setSelectedCity('all');
     setSelectedLeague('all');
     setSelectedLevel('all');
+    setCurrentPage(1);
   };
 
   const hasActiveFilters = searchQuery || selectedSport !== 'all' || 
@@ -682,7 +706,12 @@ const Teams = () => {
             {/* Results Count */}
             <div className="pt-3 border-t border-border">
               <p className="text-xs text-muted-foreground">
-                Showing {filteredTeams.length} of {teams.length} organisations
+                Showing {startIndex + 1}-{Math.min(endIndex, filteredTeams.length)} of {filteredTeams.length} organisations
+                {totalPages > 1 && (
+                  <span className="block mt-1">
+                    Page {currentPage} of {totalPages}
+                  </span>
+                )}
               </p>
             </div>
           </CardContent>
@@ -721,7 +750,7 @@ const Teams = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredTeams.length === 0 ? (
+                {paginatedTeams.length === 0 ? (
                   <TableRow>
                     <TableCell colSpan={6} className="text-center py-12">
                       <div className="flex flex-col items-center gap-3">
@@ -736,7 +765,7 @@ const Teams = () => {
                     </TableCell>
                   </TableRow>
                 ) : (
-                  filteredTeams.map((team) => (
+                  paginatedTeams.map((team) => (
                     <TableRow 
                       key={team.id} 
                       className="hover:bg-muted/50 cursor-pointer transition-colors"
@@ -828,6 +857,54 @@ const Teams = () => {
             </Table>
           </div>
         </Card>
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="flex justify-center">
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious 
+                    onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                    className={currentPage === 1 ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
+                  />
+                </PaginationItem>
+                
+                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                  let pageNumber;
+                  if (totalPages <= 5) {
+                    pageNumber = i + 1;
+                  } else if (currentPage <= 3) {
+                    pageNumber = i + 1;
+                  } else if (currentPage >= totalPages - 2) {
+                    pageNumber = totalPages - 4 + i;
+                  } else {
+                    pageNumber = currentPage - 2 + i;
+                  }
+                  
+                  return (
+                    <PaginationItem key={pageNumber}>
+                      <PaginationLink
+                        onClick={() => setCurrentPage(pageNumber)}
+                        isActive={currentPage === pageNumber}
+                        className="cursor-pointer"
+                      >
+                        {pageNumber}
+                      </PaginationLink>
+                    </PaginationItem>
+                  );
+                })}
+                
+                <PaginationItem>
+                  <PaginationNext 
+                    onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+                    className={currentPage === totalPages ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          </div>
+        )}
       </div>
     </div>
   );
