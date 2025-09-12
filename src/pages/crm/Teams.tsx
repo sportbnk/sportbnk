@@ -804,9 +804,6 @@ const Teams = () => {
                           })()}
                           <div>
                             <p className="font-medium text-foreground">{team.name}</p>
-                            {team.sport?.name && (
-                              <p className="text-sm text-muted-foreground">{team.sport.name}</p>
-                            )}
                           </div>
                         </div>
                       </TableCell>
