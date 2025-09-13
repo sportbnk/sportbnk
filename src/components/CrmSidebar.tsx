@@ -62,7 +62,7 @@ export function CrmSidebar() {
     >
       {/* Logo Section */}
       <div className={cn(
-        "flex items-center gap-3 border-b border-white/20 dark:border-white/20",
+        "flex items-center gap-3 border-b border-sidebar-border",
         open ? "p-6" : "p-4 justify-center"
       )}>
         <div className="flex items-center justify-center w-8 h-8 rounded-lg overflow-hidden">
@@ -74,8 +74,8 @@ export function CrmSidebar() {
         </div>
         {open && (
           <div className="flex flex-col">
-            <span className="font-bold text-lg text-white">Sportbnk</span>
-            <span className="text-xs text-white/70">Sports Intelligence</span>
+            <span className="font-bold text-lg text-sidebar-foreground">Sportbnk</span>
+            <span className="text-xs text-sidebar-foreground/70">Sports Intelligence</span>
           </div>
         )}
       </div>
@@ -84,7 +84,7 @@ export function CrmSidebar() {
         {/* Main Navigation */}
         <SidebarGroup>
           {open && (
-            <SidebarGroupLabel className="text-white/70 font-medium px-6 mb-2">
+            <SidebarGroupLabel className="text-sidebar-foreground/70 font-medium px-6 mb-2">
               Main
             </SidebarGroupLabel>
           )}
@@ -100,7 +100,7 @@ export function CrmSidebar() {
                         open ? "gap-3 px-3 py-3" : "justify-center px-3 py-3",
                         isActive 
                           ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-soft" 
-                          : "text-white hover:bg-white/10 hover:text-white"
+                          : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                       )}
                     >
                       <item.icon className="h-5 w-5" />
@@ -116,7 +116,7 @@ export function CrmSidebar() {
 
       {/* Bottom Section */}
       <div className={cn(
-        "border-t border-white/20 dark:border-white/20 space-y-1",
+        "border-t border-sidebar-border space-y-1",
         open ? "p-3" : "p-1"
       )}>
         {/* Profile and Settings */}
@@ -129,11 +129,11 @@ export function CrmSidebar() {
               open ? "gap-3 px-3 py-3" : "justify-center px-3 py-3",
               isActive 
                 ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-soft" 
-                : "text-white hover:bg-white/10 hover:text-white"
+                : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
             )}
           >
             <item.icon className="h-5 w-5" />
-            {open && <span className="text-sm text-white">{item.title}</span>}
+            {open && <span className="text-sm">{item.title}</span>}
           </NavLink>
         ))}
         
@@ -143,12 +143,12 @@ export function CrmSidebar() {
           size="sm"
           onClick={handleSignOut}
           className={cn(
-            "w-full font-medium text-white hover:bg-white/10 hover:text-white",
+            "w-full font-medium text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
             open ? "justify-start gap-3" : "justify-center px-3 py-3"
           )}
         >
           <LogOut className="h-5 w-5" />
-          {open && <span className="text-white">Log Out</span>}
+          {open && <span>Log Out</span>}
         </Button>
       </div>
     </Sidebar>
