@@ -59,8 +59,8 @@ export function CrmSidebar() {
     >
       {/* Logo Section */}
       <div className={cn(
-        "flex items-center gap-3 p-6 border-b border-sidebar-border",
-        !open && "justify-center"
+        "flex items-center gap-3 border-b border-sidebar-border",
+        open ? "p-6" : "p-4 justify-center"
       )}>
         <div className="flex items-center justify-center w-8 h-8 rounded-lg overflow-hidden">
           <img 
