@@ -123,7 +123,7 @@ export function CrmSidebar() {
             to={item.url}
             className={({ isActive }) => cn(
               "flex items-center rounded-lg transition-all duration-200 font-medium w-full",
-              open ? "gap-3 px-3 py-3" : "justify-center p-3",
+              open ? "gap-3 px-3 py-3" : "justify-center px-3 py-3",
               isActive 
                 ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-soft" 
                 : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
@@ -141,7 +141,7 @@ export function CrmSidebar() {
           onClick={handleSignOut}
           className={cn(
             "w-full font-medium text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-            open ? "justify-start gap-3" : "justify-center p-3"
+            open ? "justify-start gap-3" : "justify-center px-3 py-3"
           )}
         >
           <LogOut className="h-5 w-5" />
