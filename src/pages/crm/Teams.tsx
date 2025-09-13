@@ -808,22 +808,21 @@ const Teams = () => {
                           {team.city?.name || '-'}
                         </span>
                       </TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex items-center justify-end gap-2">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              // Add to list functionality
-                            }}
-                            className="h-8"
-                          >
-                            <Plus className="h-3 w-3 mr-1" />
-                            Add to List
-                          </Button>
-                        </div>
-                      </TableCell>
+                       <TableCell className="text-right">
+                         <div className="flex items-center justify-end gap-2">
+                           <Button
+                             variant="outline"
+                             size="icon"
+                             onClick={(e) => {
+                               e.stopPropagation();
+                               // Add to list functionality
+                             }}
+                             className="h-8 w-8"
+                           >
+                             <Plus className="h-4 w-4" />
+                           </Button>
+                         </div>
+                       </TableCell>
                     </TableRow>
                   ))
                 )}
