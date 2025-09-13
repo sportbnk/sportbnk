@@ -361,17 +361,12 @@ const TeamDetails = () => {
                         <TableCell>
                           {isRevealed(contact.id, 'email') ? (
                             contact.email ? (
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                asChild
-                                className="h-8 px-3"
+                              <a 
+                                href={`mailto:${contact.email}`} 
+                                className="text-primary hover:underline"
                               >
-                                <a href={`mailto:${contact.email}`}>
-                                  <Mail className="h-3 w-3 mr-1" />
-                                  Email me
-                                </a>
-                              </Button>
+                                {contact.email}
+                              </a>
                             ) : (
                               <span className="text-muted-foreground">—</span>
                             )
