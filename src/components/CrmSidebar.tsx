@@ -86,18 +86,18 @@ export function CrmSidebar() {
             </SidebarGroupLabel>
           )}
           <SidebarGroupContent>
-            <SidebarMenu className="px-3">
+            <SidebarMenu className={cn(open ? "px-3" : "px-1")}>
               {mainNavItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <NavLink 
                       to={item.url} 
                       className={({ isActive }) => cn(
-                        "flex items-center gap-3 px-3 py-3 rounded-lg transition-all duration-200 font-medium",
+                        "flex items-center rounded-lg transition-all duration-200 font-medium w-full",
+                        open ? "gap-3 px-3 py-3" : "justify-center px-3 py-3",
                         isActive 
                           ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-soft" 
-                          : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-                        !open && "justify-center"
+                          : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                       )}
                     >
                       <item.icon className="h-5 w-5" />
@@ -114,7 +114,7 @@ export function CrmSidebar() {
       {/* Bottom Section */}
       <div className={cn(
         "border-t border-sidebar-border space-y-1",
-        open ? "p-3" : "p-2"
+        open ? "p-3" : "p-1"
       )}>
         {/* Profile and Settings */}
         {bottomNavItems.map((item) => (
