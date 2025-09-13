@@ -57,6 +57,7 @@ const People = () => {
     "CEO",
     "CFO", 
     "Director of Football",
+    "Director of Cricket",
     "COO",
     "Head of Commercial"
   ];
