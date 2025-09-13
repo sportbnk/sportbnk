@@ -35,6 +35,12 @@ import { useLists } from "@/contexts/ListsContext";
 import { useAuth } from "@/components/auth/AuthContext";
 import { toast } from "sonner";
 import * as XLSX from 'xlsx';
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import profile1 from "@/assets/profiles/profile-1.jpg";
+import profile2 from "@/assets/profiles/profile-2.jpg";
+import profile3 from "@/assets/profiles/profile-3.jpg";
+import profile4 from "@/assets/profiles/profile-4.jpg";
+import profile5 from "@/assets/profiles/profile-5.jpg";
 
 const People = () => {
   const [contacts, setContacts] = useState<Contact[]>([]);
@@ -169,6 +175,21 @@ const People = () => {
     }, 0);
     const phoneNumber = Math.abs(hash) % 10000000000;
     return `+44 ${phoneNumber.toString().padStart(10, '0').replace(/(\d{4})(\d{3})(\d{3})/, '$1 $2 $3')}`;
+  };
+
+  // Sample profile images for demonstration
+  const getProfileImage = (contactId: string) => {
+    const profileImages = [profile1, profile2, profile3, profile4, profile5];
+    const hash = contactId.split('').reduce((a, b) => {
+      a = ((a << 5) - a) + b.charCodeAt(0);
+      return a & a;
+    }, 0);
+    
+    // Only show images for some contacts (about 30%)
+    if (Math.abs(hash) % 10 < 3) {
+      return profileImages[Math.abs(hash) % profileImages.length];
+    }
+    return null;
   };
 
   const exportToExcel = () => {
@@ -380,9 +401,18 @@ const People = () => {
                     >
                       <TableCell>
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center shadow-soft">
-                            <User className="h-5 w-5 text-muted-foreground" />
-                          </div>
+                          {getProfileImage(contact.id) ? (
+                            <Avatar className="w-10 h-10">
+                              <AvatarImage src={getProfileImage(contact.id)} alt={`${contact.first_name} ${contact.last_name}`} />
+                              <AvatarFallback>
+                                <User className="h-5 w-5 text-muted-foreground" />
+                              </AvatarFallback>
+                            </Avatar>
+                          ) : (
+                            <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center shadow-soft">
+                              <User className="h-5 w-5 text-muted-foreground" />
+                            </div>
+                          )}
                           <div>
                             <p className="font-medium text-foreground">
                               {contact.first_name} {contact.last_name}
