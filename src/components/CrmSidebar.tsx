@@ -112,18 +112,21 @@ export function CrmSidebar() {
       </SidebarContent>
 
       {/* Bottom Section */}
-      <div className="border-t border-sidebar-border p-3 space-y-1">
+      <div className={cn(
+        "border-t border-sidebar-border space-y-1",
+        open ? "p-3" : "p-2"
+      )}>
         {/* Profile and Settings */}
         {bottomNavItems.map((item) => (
           <NavLink
             key={item.title}
             to={item.url}
             className={({ isActive }) => cn(
-              "flex items-center gap-3 px-3 py-3 rounded-lg transition-all duration-200 font-medium w-full",
+              "flex items-center rounded-lg transition-all duration-200 font-medium w-full",
+              open ? "gap-3 px-3 py-3" : "justify-center p-3",
               isActive 
                 ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-soft" 
-                : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-              !open && "justify-center"
+                : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
             )}
           >
             <item.icon className="h-5 w-5" />
@@ -137,8 +140,8 @@ export function CrmSidebar() {
           size="sm"
           onClick={handleSignOut}
           className={cn(
-            "w-full justify-start gap-3 text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground font-medium",
-            !open && "justify-center"
+            "w-full font-medium text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+            open ? "justify-start gap-3" : "justify-center p-3"
           )}
         >
           <LogOut className="h-5 w-5" />
