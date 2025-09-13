@@ -54,7 +54,10 @@ export function CrmSidebar() {
 
   return (
     <Sidebar 
-      className="border-r border-sidebar-border bg-sidebar"
+      className={cn(
+        "border-r border-sidebar-border bg-sidebar transition-all duration-300",
+        open ? "w-64" : "w-18"
+      )}
       collapsible="icon"
     >
       {/* Logo Section */}
