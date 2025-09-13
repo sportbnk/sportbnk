@@ -210,8 +210,8 @@ const TeamDetails = () => {
             {team.sport && (
               <Badge variant="secondary">{team.sport.name}</Badge>
             )}
-            {team.league && (
-              <Badge variant="outline">{team.league}</Badge>
+            {team.level && (
+              <Badge variant="outline">{team.level}</Badge>
             )}
             {team.division && (
               <Badge variant="outline">{team.division}</Badge>
