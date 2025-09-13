@@ -260,12 +260,17 @@ const TeamDetails = () => {
 
                 <div className="flex items-center gap-2">
                   <Mail className="h-4 w-4 text-muted-foreground" />
-                  <a 
-                    href={`mailto:${team.email || `info@${team.name.toLowerCase().replace(/\s+/g, '')}.com`}`}
-                    className="text-primary hover:underline"
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    asChild
+                    className="h-8 px-3"
                   >
-                    {team.email || `info@${team.name.toLowerCase().replace(/\s+/g, '')}.com`}
-                  </a>
+                    <a href={`mailto:${team.email || `info@${team.name.toLowerCase().replace(/\s+/g, '')}.com`}`}>
+                      <Mail className="h-3 w-3 mr-1" />
+                      Email me
+                    </a>
+                  </Button>
                 </div>
 
                 <div className="flex items-center gap-2">
@@ -356,12 +361,17 @@ const TeamDetails = () => {
                         <TableCell>
                           {isRevealed(contact.id, 'email') ? (
                             contact.email ? (
-                              <a 
-                                href={`mailto:${contact.email}`} 
-                                className="text-primary hover:underline"
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                asChild
+                                className="h-8 px-3"
                               >
-                                {contact.email}
-                              </a>
+                                <a href={`mailto:${contact.email}`}>
+                                  <Mail className="h-3 w-3 mr-1" />
+                                  Email me
+                                </a>
+                              </Button>
                             ) : (
                               <span className="text-muted-foreground">—</span>
                             )
