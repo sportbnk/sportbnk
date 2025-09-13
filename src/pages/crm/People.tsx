@@ -39,11 +39,10 @@ const People = () => {
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [filteredContacts, setFilteredContacts] = useState<Contact[]>([]);
   const [teams, setTeams] = useState<Team[]>([]);
-  const [departments, setDepartments] = useState<Department[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTeam, setSelectedTeam] = useState("all");
-  const [selectedDepartment, setSelectedDepartment] = useState("all");
+  const [selectedRole, setSelectedRole] = useState("all");
   const [revealedEmails, setRevealedEmails] = useState<Set<string>>(new Set());
   const [revealedPhones, setRevealedPhones] = useState<Set<string>>(new Set());
   const [currentPage, setCurrentPage] = useState(1);
@@ -53,14 +52,23 @@ const People = () => {
   
   const ITEMS_PER_PAGE = 50;
 
+  // Specific roles to filter by
+  const allowedRoles = [
+    "CEO",
+    "CFO", 
+    "Director of Football",
+    "COO",
+    "Head of Commercial"
+  ];
+
   const clearFilters = () => {
     setSearchQuery("");
     setSelectedTeam("all");
-    setSelectedDepartment("all");
+    setSelectedRole("all");
     setCurrentPage(1);
   };
 
-  const hasActiveFilters = searchQuery || selectedTeam !== "all" || selectedDepartment !== "all";
+  const hasActiveFilters = searchQuery || selectedTeam !== "all" || selectedRole !== "all";
 
   // Calculate pagination values
   const totalPages = Math.ceil(filteredContacts.length / ITEMS_PER_PAGE);
@@ -74,12 +82,12 @@ const People = () => {
 
   useEffect(() => {
     filterContacts();
-  }, [contacts, searchQuery, selectedTeam, selectedDepartment]);
+  }, [contacts, searchQuery, selectedTeam, selectedRole]);
 
   useEffect(() => {
     // Reset to first page when filters change
     setCurrentPage(1);
-  }, [searchQuery, selectedTeam, selectedDepartment]);
+  }, [searchQuery, selectedTeam, selectedRole]);
 
   const fetchData = async () => {
     try {
@@ -95,15 +103,11 @@ const People = () => {
 
       if (contactsError) throw contactsError;
 
-      // Fetch filter options
-      const [teamsResult, departmentsResult] = await Promise.all([
-        supabase.from('teams').select('*').order('name'),
-        supabase.from('departments').select('*').order('name')
-      ]);
+      // Fetch filter options - only teams needed now
+      const teamsResult = await supabase.from('teams').select('*').order('name');
 
       setContacts(contactsData || []);
       setTeams(teamsResult.data || []);
-      setDepartments(departmentsResult.data || []);
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
@@ -127,8 +131,10 @@ const People = () => {
       filtered = filtered.filter(contact => contact.team_id === selectedTeam);
     }
 
-    if (selectedDepartment && selectedDepartment !== "all") {
-      filtered = filtered.filter(contact => contact.department_id === selectedDepartment);
+    if (selectedRole && selectedRole !== "all") {
+      filtered = filtered.filter(contact => 
+        contact.position && contact.position.toLowerCase().includes(selectedRole.toLowerCase())
+      );
     }
 
     setFilteredContacts(filtered);
@@ -236,18 +242,18 @@ const People = () => {
               </Select>
             </div>
 
-            {/* Department Filter */}
+            {/* Role Filter */}
             <div className="space-y-1">
               <label className="text-xs font-medium text-foreground">Role</label>
-              <Select value={selectedDepartment} onValueChange={setSelectedDepartment}>
+              <Select value={selectedRole} onValueChange={setSelectedRole}>
                 <SelectTrigger className="bg-background border-border h-8 text-xs">
                   <SelectValue placeholder="All Roles" />
                 </SelectTrigger>
                 <SelectContent className="bg-popover border-border">
                   <SelectItem value="all">All Roles</SelectItem>
-                  {departments.map((department) => (
-                    <SelectItem key={department.id} value={department.id}>
-                      {department.name}
+                  {allowedRoles.map((role) => (
+                    <SelectItem key={role} value={role}>
+                      {role}
                     </SelectItem>
                   ))}
                 </SelectContent>
