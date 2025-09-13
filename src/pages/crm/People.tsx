@@ -28,12 +28,13 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { Skeleton } from '@/components/ui/skeleton';
-import { Search, User, Building2, MapPin, Mail, Phone, Linkedin, Twitter, Instagram, Facebook, Filter, X, Eye, ExternalLink, Plus, Lock } from "lucide-react";
+import { Search, User, Building2, MapPin, Mail, Phone, Linkedin, Twitter, Instagram, Facebook, Filter, X, Eye, ExternalLink, Plus, Lock, Download } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Contact, Team, Department } from "@/types/teams";
 import { useLists } from "@/contexts/ListsContext";
 import { useAuth } from "@/components/auth/AuthContext";
 import { toast } from "sonner";
+import * as XLSX from 'xlsx';
 
 const People = () => {
   const [contacts, setContacts] = useState<Contact[]>([]);
@@ -170,6 +171,51 @@ const People = () => {
     return `+44 ${phoneNumber.toString().padStart(10, '0').replace(/(\d{4})(\d{3})(\d{3})/, '$1 $2 $3')}`;
   };
 
+  const exportToExcel = () => {
+    if (filteredContacts.length === 0) {
+      toast.error("No data to export");
+      return;
+    }
+
+    const csvData = filteredContacts.map(contact => ({
+      'First Name': contact.first_name,
+      'Last Name': contact.last_name,
+      'Role': contact.position || '',
+      'Team': contact.team?.name || '',
+      'Email': contact.email || '',
+      'Phone': contact.phone || contact.mobile || generateDummyPhone(contact.id),
+      'LinkedIn': `https://linkedin.com/in/${contact.first_name.toLowerCase()}-${contact.last_name.toLowerCase()}`,
+      'Notes': contact.notes || ''
+    }));
+
+    // Create workbook and worksheet
+    const ws = XLSX.utils.json_to_sheet(csvData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "People Data");
+
+    // Set column widths for better readability
+    const wscols = [
+      { wch: 15 }, // First Name
+      { wch: 15 }, // Last Name
+      { wch: 25 }, // Role
+      { wch: 25 }, // Team
+      { wch: 30 }, // Email
+      { wch: 15 }, // Phone
+      { wch: 40 }, // LinkedIn
+      { wch: 30 }  // Notes
+    ];
+    ws['!cols'] = wscols;
+
+    // Generate filename with current date
+    const date = new Date().toISOString().split('T')[0];
+    const filename = `people_export_${date}.xlsx`;
+
+    // Save file
+    XLSX.writeFile(wb, filename);
+
+    toast.success(`Exported ${filteredContacts.length} contacts to ${filename}`);
+  };
+
   if (loading) {
     return (
       <div className="flex gap-6 h-full">
@@ -286,6 +332,14 @@ const People = () => {
               Manage contacts and team members in your database
             </p>
           </div>
+          <Button
+            onClick={exportToExcel}
+            className="flex items-center gap-2"
+            disabled={filteredContacts.length === 0}
+          >
+            <Download className="h-4 w-4" />
+            Export to Excel
+          </Button>
         </div>
 
         {/* Results Table */}
