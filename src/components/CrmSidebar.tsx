@@ -62,8 +62,12 @@ export function CrmSidebar() {
         "flex items-center gap-3 p-6 border-b border-sidebar-border",
         !open && "justify-center"
       )}>
-        <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-accent text-accent-foreground font-bold text-sm">
-          S
+        <div className="flex items-center justify-center w-8 h-8 rounded-lg overflow-hidden">
+          <img 
+            src="/lovable-uploads/sportbnk-logo.jpeg" 
+            alt="SportBnk Logo" 
+            className="w-full h-full object-cover"
+          />
         </div>
         {open && (
           <div className="flex flex-col">
