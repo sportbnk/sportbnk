@@ -122,7 +122,7 @@ export function CrmSidebar() {
               "flex items-center gap-3 px-3 py-3 rounded-lg transition-all duration-200 font-medium w-full",
               isActive 
                 ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-soft" 
-                : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
               !open && "justify-center"
             )}
           >
@@ -137,7 +137,7 @@ export function CrmSidebar() {
           size="sm"
           onClick={handleSignOut}
           className={cn(
-            "w-full justify-start gap-3 text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground font-medium",
+            "w-full justify-start gap-3 text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground font-medium",
             !open && "justify-center"
           )}
         >
