@@ -7,7 +7,6 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import { WaitlistDialog } from '@/components/WaitlistDialog';
 
-import TrialCountdown from '@/components/TrialCountdown';
 import { useAuth } from '@/components/auth/AuthContext';
 import { useCredits } from '@/contexts/CreditsContext';
 import {
@@ -223,11 +222,6 @@ const Navbar = () => {
                 </Button>
               </WaitlistDialog>
 
-              {user && (
-                <div className="flex items-center space-x-3">
-                  {tier === 'free' ? <TrialCountdown /> : null}
-                </div>
-              )}
             </div>
 
             <button 
@@ -342,15 +336,6 @@ const Navbar = () => {
                 </Button>
               </WaitlistDialog>
 
-              {user && (
-                <div className="w-full space-y-3">
-                  {tier === 'free' && (
-                    <div className="flex justify-center">
-                      <TrialCountdown />
-                    </div>
-                  )}
-                </div>
-              )}
             </div>
           </div>
         </div>
