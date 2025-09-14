@@ -19,8 +19,8 @@ const Integrations = () => {
       name: 'HubSpot',
       description: 'Sync contacts and organizations with HubSpot CRM',
       icon: Building2,
-      status: 'Connected',
-      lastSync: '2 hours ago',
+      status: 'Available',
+      lastSync: null,
       color: 'bg-orange-500'
     },
     {
@@ -43,8 +43,8 @@ const Integrations = () => {
       name: 'Slack',
       description: 'Get notifications and updates in your Slack channels',
       icon: Users,
-      status: 'Connected',
-      lastSync: '1 day ago',
+      status: 'Available',
+      lastSync: null,
       color: 'bg-purple-500'
     }
   ];
@@ -105,33 +105,13 @@ const Integrations = () => {
                 <CardContent>
                   <div className="flex items-center justify-between">
                     <div className="text-sm text-muted-foreground">
-                      {integration.lastSync ? (
-                        <span className="flex items-center gap-1">
-                          <RefreshCw className="h-3 w-3" />
-                          Last sync: {integration.lastSync}
-                        </span>
-                      ) : (
-                        <span>Not connected</span>
-                      )}
+                      <span>Ready to connect</span>
                     </div>
                     <div className="flex gap-2">
-                      {integration.status === 'Connected' ? (
-                        <>
-                          <Button variant="outline" size="sm">
-                            <Settings className="h-3 w-3 mr-1" />
-                            Configure
-                          </Button>
-                          <Button variant="outline" size="sm">
-                            <RefreshCw className="h-3 w-3 mr-1" />
-                            Sync Now
-                          </Button>
-                        </>
-                      ) : (
-                        <Button size="sm" className="bg-accent hover:bg-accent/90">
-                          <Plug className="h-3 w-3 mr-1" />
-                          Connect
-                        </Button>
-                      )}
+                      <Button size="sm" className="bg-accent hover:bg-accent/90">
+                        <Plug className="h-3 w-3 mr-1" />
+                        Connect
+                      </Button>
                     </div>
                   </div>
                 </CardContent>
