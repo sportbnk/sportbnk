@@ -108,76 +108,60 @@ const Resources = () => {
         description="Join our community of sports industry professionals to network, share insights, and stay updated on the latest trends."
         id="community"
       >
-        <div className="text-center mb-8">
-          <Link to="/resources/community">
-            <Button className="bg-sportbnk-navy hover:bg-sportbnk-navy/90 text-white px-8">
-              <Users className="mr-2 h-4 w-4" />
-              Join Our Community
-            </Button>
-          </Link>
-        </div>
-        
-        <div className="grid md:grid-cols-3 gap-6">
-          <Card className="bg-white/80 border-0 shadow-sm p-6">
-            <div className="text-sportbnk-green mb-4">
-              <Users size={24} />
+        <div className="bg-sportbnk-lightGrey rounded-xl p-8 md:p-12">
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            <div>
+              <h3 className="text-2xl font-bold text-sportbnk-navy mb-4">Connect with Sports Professionals</h3>
+              <p className="text-gray-600 mb-6">
+                Join our WhatsApp community to network with industry peers, share insights, and stay updated on the latest trends in sports data intelligence.
+              </p>
+              <Link to="/resources/community">
+                <Button className="bg-sportbnk-navy hover:bg-sportbnk-navy/90 text-white">
+                  <Users className="mr-2 h-4 w-4" />
+                  Join Community
+                </Button>
+              </Link>
             </div>
-            <h3 className="text-xl font-bold text-sportbnk-navy mb-2">Member Networking</h3>
-            <p className="text-gray-600">
-              Connect with industry peers, share experiences, and build meaningful professional relationships.
-            </p>
-          </Card>
-          
-          <Card className="bg-white/80 border-0 shadow-sm p-6">
-            <div className="text-sportbnk-green mb-4">
-              <BookOpen size={24} />
+            <div className="relative">
+              <img 
+                src="/lovable-uploads/b90959b3-c7b5-4727-814a-cf86cd3204a1.png" 
+                alt="Community networking" 
+                className="rounded-lg shadow-lg"
+              />
             </div>
-            <h3 className="text-xl font-bold text-sportbnk-navy mb-2">Exclusive Resources</h3>
-            <p className="text-gray-600">
-              Access members-only content, guides, and tools designed specifically for the sports industry.
-            </p>
-          </Card>
-          
-          <Card className="bg-white/80 border-0 shadow-sm p-6">
-            <div className="text-sportbnk-green mb-4">
-              <Star size={24} />
-            </div>
-            <h3 className="text-xl font-bold text-sportbnk-navy mb-2">Special Events</h3>
-            <p className="text-gray-600">
-              Participate in networking events and workshops tailored to sports professionals.
-            </p>
-          </Card>
+          </div>
         </div>
       </ResourceSection>
       
-      <section className="py-16 bg-sportbnk-lightGrey" id="latest-resources">
-        <div className="container mx-auto px-4 md:px-6">
-          <h2 className="text-3xl font-bold text-sportbnk-navy mb-12 text-center">Resource Categories</h2>
-          
-          <div className="max-w-2xl mx-auto space-y-4">
-            <Link to="/resources/startups">
-              <Button variant="outline" className="w-full border-sportbnk-navy text-sportbnk-navy hover:bg-sportbnk-navy hover:text-white text-lg py-6">
-                SportBnk for Startups
-              </Button>
-            </Link>
-            <Link to="/resources/community">
-              <Button variant="outline" className="w-full border-sportbnk-navy text-sportbnk-navy hover:bg-sportbnk-navy hover:text-white text-lg py-6">
-                Community
-              </Button>
-            </Link>
-            <Link to="/resources/articles">
-              <Button variant="outline" className="w-full border-sportbnk-navy text-sportbnk-navy hover:bg-sportbnk-navy hover:text-white text-lg py-6">
-                Articles
-              </Button>
-            </Link>
-            <Link to="/resources/help-center">
-              <Button variant="outline" className="w-full border-sportbnk-navy text-sportbnk-navy hover:bg-sportbnk-navy hover:text-white text-lg py-6">
-                Help Center
-              </Button>
-            </Link>
+      <ResourceSection
+        title="Help Center"
+        description="Get the support you need with our comprehensive help resources and frequently asked questions."
+        id="help-center"
+      >
+        <div className="bg-sportbnk-lightGrey rounded-xl p-8 md:p-12">
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            <div>
+              <h3 className="text-2xl font-bold text-sportbnk-navy mb-4">Get Support When You Need It</h3>
+              <p className="text-gray-600 mb-6">
+                Find answers to common questions, access documentation, and get help with our platform features. Our support team is here to help you succeed.
+              </p>
+              <Link to="/resources/help-center">
+                <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white">
+                  <BookOpen className="mr-2 h-4 w-4" />
+                  Visit Help Center
+                </Button>
+              </Link>
+            </div>
+            <div className="relative">
+              <img 
+                src="/lovable-uploads/f5c8dc20-3de5-497c-bb2a-f7b149472312.png" 
+                alt="Help and support" 
+                className="rounded-lg shadow-lg"
+              />
+            </div>
           </div>
         </div>
-      </section>
+      </ResourceSection>
     </PageLayout>
   );
 };
