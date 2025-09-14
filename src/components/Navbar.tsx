@@ -180,16 +180,6 @@ const Navbar = () => {
                       </li>
                       <li>
                         <NavigationMenuLink asChild>
-                          <Link to="/resources/articles" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
-                            <div className="text-sm font-medium text-sportbnk-navy flex items-center">
-                              <FileText className="h-4 w-4 mr-2" /> Articles
-                            </div>
-                            <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Latest industry insights</p>
-                          </Link>
-                        </NavigationMenuLink>
-                      </li>
-                      <li>
-                        <NavigationMenuLink asChild>
                           <Link to="/resources/help-center" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
                             <div className="text-sm font-medium text-sportbnk-navy flex items-center">
                               <HelpCircle className="h-4 w-4 mr-2" /> Help Center
@@ -308,11 +298,6 @@ const Navbar = () => {
                 <DropdownMenuItem>
                   <Link to="/resources/community" className="w-full flex items-center">
                     <Users2 className="h-4 w-4 mr-2" />Community
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Link to="/resources/articles" className="w-full flex items-center">
-                    <FileText className="h-4 w-4 mr-2" />Articles
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
