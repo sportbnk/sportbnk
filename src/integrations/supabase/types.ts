@@ -58,6 +58,7 @@ export type Database = {
           notes: string | null
           phone: string | null
           position: string | null
+          sport_id: string | null
           team_id: string | null
           twitter: string | null
           updated_at: string
@@ -76,6 +77,7 @@ export type Database = {
           notes?: string | null
           phone?: string | null
           position?: string | null
+          sport_id?: string | null
           team_id?: string | null
           twitter?: string | null
           updated_at?: string
@@ -94,6 +96,7 @@ export type Database = {
           notes?: string | null
           phone?: string | null
           position?: string | null
+          sport_id?: string | null
           team_id?: string | null
           twitter?: string | null
           updated_at?: string
@@ -104,6 +107,13 @@ export type Database = {
             columns: ["department_id"]
             isOneToOne: false
             referencedRelation: "departments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "contacts_sport_id_fkey"
+            columns: ["sport_id"]
+            isOneToOne: false
+            referencedRelation: "sports"
             referencedColumns: ["id"]
           },
           {

@@ -73,6 +73,7 @@ export interface Contact {
   id: string;
   team_id?: string;
   department_id?: string;
+  sport_id?: string;
   first_name: string;
   last_name: string;
   email?: string;
@@ -88,6 +89,7 @@ export interface Contact {
   updated_at: string;
   team?: Team;
   department?: Department;
+  sport?: Sport;
 }
 
 export interface ListItem {

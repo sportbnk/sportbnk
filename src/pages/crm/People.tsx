@@ -30,7 +30,7 @@ import {
 import { Skeleton } from '@/components/ui/skeleton';
 import { Search, User, Building2, MapPin, Mail, Phone, Linkedin, Twitter, Instagram, Facebook, Filter, X, Eye, ExternalLink, Plus, Lock, Download } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { Contact, Team, Department } from "@/types/teams";
+import { Contact, Team, Department, Sport } from "@/types/teams";
 import { useLists } from "@/contexts/ListsContext";
 import { useAuth } from "@/components/auth/AuthContext";
 import { toast } from "sonner";
@@ -46,10 +46,12 @@ const People = () => {
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [filteredContacts, setFilteredContacts] = useState<Contact[]>([]);
   const [teams, setTeams] = useState<Team[]>([]);
+  const [sports, setSports] = useState<Sport[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTeam, setSelectedTeam] = useState("all");
   const [selectedRole, setSelectedRole] = useState("all");
+  const [selectedSport, setSelectedSport] = useState("all");
   const [revealedEmails, setRevealedEmails] = useState<Set<string>>(new Set());
   const [revealedPhones, setRevealedPhones] = useState<Set<string>>(new Set());
   const [currentPage, setCurrentPage] = useState(1);
@@ -73,10 +75,11 @@ const People = () => {
     setSearchQuery("");
     setSelectedTeam("all");
     setSelectedRole("all");
+    setSelectedSport("all");
     setCurrentPage(1);
   };
 
-  const hasActiveFilters = searchQuery || selectedTeam !== "all" || selectedRole !== "all";
+  const hasActiveFilters = searchQuery || selectedTeam !== "all" || selectedRole !== "all" || selectedSport !== "all";
 
   // Calculate pagination values
   const totalPages = Math.ceil(filteredContacts.length / ITEMS_PER_PAGE);
@@ -90,12 +93,12 @@ const People = () => {
 
   useEffect(() => {
     filterContacts();
-  }, [contacts, searchQuery, selectedTeam, selectedRole]);
+  }, [contacts, searchQuery, selectedTeam, selectedRole, selectedSport]);
 
   useEffect(() => {
     // Reset to first page when filters change
     setCurrentPage(1);
-  }, [searchQuery, selectedTeam, selectedRole]);
+  }, [searchQuery, selectedTeam, selectedRole, selectedSport]);
 
   const fetchData = async () => {
     try {
@@ -105,17 +108,20 @@ const People = () => {
         .select(`
           *,
           team:teams(*),
-          department:departments(*)
+          department:departments(*),
+          sport:sports(*)
         `)
         .order('first_name');
 
       if (contactsError) throw contactsError;
 
-      // Fetch filter options - only teams needed now
+      // Fetch filter options
       const teamsResult = await supabase.from('teams').select('*').order('name');
+      const sportsResult = await supabase.from('sports').select('*').order('name');
 
       setContacts(contactsData || []);
       setTeams(teamsResult.data || []);
+      setSports(sportsResult.data || []);
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
@@ -143,6 +149,10 @@ const People = () => {
       filtered = filtered.filter(contact => 
         contact.position && contact.position.toLowerCase().includes(selectedRole.toLowerCase())
       );
+    }
+
+    if (selectedSport && selectedSport !== "all") {
+      filtered = filtered.filter(contact => contact.sport_id === selectedSport);
     }
 
     setFilteredContacts(filtered);
@@ -203,6 +213,7 @@ const People = () => {
       'Last Name': contact.last_name,
       'Role': contact.position || '',
       'Team': contact.team?.name || '',
+      'Sport': contact.sport?.name || '',
       'Email': contact.email || '',
       'Phone': contact.phone || contact.mobile || generateDummyPhone(contact.id),
       'LinkedIn': `https://linkedin.com/in/${contact.first_name.toLowerCase()}-${contact.last_name.toLowerCase()}`,
@@ -220,6 +231,7 @@ const People = () => {
       { wch: 15 }, // Last Name
       { wch: 25 }, // Role
       { wch: 25 }, // Team
+      { wch: 20 }, // Sport
       { wch: 30 }, // Email
       { wch: 15 }, // Phone
       { wch: 40 }, // LinkedIn
@@ -328,6 +340,24 @@ const People = () => {
               </Select>
             </div>
 
+            {/* Sport Filter */}
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-foreground">Sport</label>
+              <Select value={selectedSport} onValueChange={setSelectedSport}>
+                <SelectTrigger className="bg-background border-border h-8 text-xs">
+                  <SelectValue placeholder="All Sports" />
+                </SelectTrigger>
+                <SelectContent className="bg-popover border-border">
+                  <SelectItem value="all">All Sports</SelectItem>
+                  {sports.map((sport) => (
+                    <SelectItem key={sport.id} value={sport.id}>
+                      {sport.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
             {/* Results Count */}
             <div className="pt-3 border-t border-border">
               <p className="text-xs text-muted-foreground">
@@ -372,6 +402,7 @@ const People = () => {
                   <TableHead className="font-semibold">Name</TableHead>
                   <TableHead className="font-semibold">Role</TableHead>
                   <TableHead className="font-semibold">Club</TableHead>
+                  <TableHead className="font-semibold">Sport</TableHead>
                   <TableHead className="font-semibold">Email</TableHead>
                   <TableHead className="font-semibold">Phone</TableHead>
                   <TableHead className="font-semibold">LinkedIn</TableHead>
@@ -381,7 +412,7 @@ const People = () => {
               <TableBody>
                 {paginatedContacts.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={7} className="text-center py-12">
+                    <TableCell colSpan={8} className="text-center py-12">
                       <div className="flex flex-col items-center gap-3">
                         <User className="h-12 w-12 text-muted-foreground" />
                         <div>
@@ -432,6 +463,11 @@ const People = () => {
                       <TableCell>
                         <span className="text-foreground font-medium">
                           {contact.team?.name || '-'}
+                        </span>
+                      </TableCell>
+                      <TableCell>
+                        <span className="text-foreground">
+                          {contact.sport?.name || '-'}
                         </span>
                       </TableCell>
                       <TableCell>
