@@ -79,7 +79,7 @@ export function CrmSidebar() {
         {open && (
           <div className="flex flex-col">
             <span className="font-bold text-lg text-sidebar-foreground">Sportbnk</span>
-            <span className="text-xs text-sidebar-foreground/70">All the decision makers, all the intent signals, all in one place.</span>
+            <span className="text-xs text-sidebar-foreground/70">Sports Intelligence</span>
           </div>
         )}
       </div>
