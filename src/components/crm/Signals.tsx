@@ -144,8 +144,8 @@ const Signals = () => {
     const matchesSearch = signal.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          signal.organization.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          signal.description.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesType = !selectedType || signal.type === selectedType;
-    const matchesPriority = !selectedPriority || signal.priority === selectedPriority;
+    const matchesType = selectedType === "all" || !selectedType || signal.type === selectedType;
+    const matchesPriority = selectedPriority === "all" || !selectedPriority || signal.priority === selectedPriority;
     
     return matchesSearch && matchesType && matchesPriority;
   });
@@ -259,7 +259,7 @@ const Signals = () => {
                 <SelectValue placeholder="Type" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Types</SelectItem>
+                <SelectItem value="all">All Types</SelectItem>
                 <SelectItem value="Opportunity">Opportunity</SelectItem>
                 <SelectItem value="Risk">Risk</SelectItem>
                 <SelectItem value="Alert">Alert</SelectItem>
@@ -271,7 +271,7 @@ const Signals = () => {
                 <SelectValue placeholder="Priority" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Priorities</SelectItem>
+                <SelectItem value="all">All Priorities</SelectItem>
                 <SelectItem value="High">High</SelectItem>
                 <SelectItem value="Medium">Medium</SelectItem>
                 <SelectItem value="Low">Low</SelectItem>

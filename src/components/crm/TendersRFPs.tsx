@@ -113,8 +113,8 @@ const TendersRFPs = () => {
     const matchesSearch = tender.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          tender.organization.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          tender.sport.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = !selectedCategory || tender.category === selectedCategory;
-    const matchesStatus = !selectedStatus || tender.status === selectedStatus;
+    const matchesCategory = selectedCategory === "all" || !selectedCategory || tender.category === selectedCategory;
+    const matchesStatus = selectedStatus === "all" || !selectedStatus || tender.status === selectedStatus;
     
     return matchesSearch && matchesCategory && matchesStatus;
   });
@@ -169,7 +169,7 @@ const TendersRFPs = () => {
                 <SelectValue placeholder="Category" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Categories</SelectItem>
+                <SelectItem value="all">All Categories</SelectItem>
                 <SelectItem value="Infrastructure">Infrastructure</SelectItem>
                 <SelectItem value="Technology">Technology</SelectItem>
                 <SelectItem value="Equipment">Equipment</SelectItem>
@@ -182,7 +182,7 @@ const TendersRFPs = () => {
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Status</SelectItem>
+                <SelectItem value="all">All Status</SelectItem>
                 <SelectItem value="Open">Open</SelectItem>
                 <SelectItem value="Closing Soon">Closing Soon</SelectItem>
                 <SelectItem value="Closed">Closed</SelectItem>
