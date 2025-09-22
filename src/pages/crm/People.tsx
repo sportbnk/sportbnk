@@ -428,21 +428,21 @@ const People = () => {
                     <Table>
                       <TableHeader>
                         <TableRow>
-                          <TableHead className="w-12 px-2"></TableHead>
-                          <TableHead className="px-2">Name</TableHead>
-                          <TableHead className="px-2">Role</TableHead>
-                          <TableHead className="px-2">Club</TableHead>
-                          <TableHead className="px-2">Sport</TableHead>
-                          <TableHead className="px-2">Email</TableHead>
-                          <TableHead className="px-2">Phone</TableHead>
-                          <TableHead className="px-2">LinkedIn</TableHead>
-                          <TableHead className="px-2">Actions</TableHead>
+                          <TableHead className="w-12"></TableHead>
+                          <TableHead>Name</TableHead>
+                          <TableHead>Role</TableHead>
+                          <TableHead>Club</TableHead>
+                          <TableHead>Sport</TableHead>
+                          <TableHead>Email</TableHead>
+                          <TableHead>Phone</TableHead>
+                          <TableHead>LinkedIn</TableHead>
+                          <TableHead>Actions</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
                         {currentContacts.map((contact) => (
                           <TableRow key={contact.id}>
-                            <TableCell className="px-2">
+                            <TableCell>
                               <Avatar className="h-8 w-8">
                                 <AvatarImage src={getProfileImage(contact.id)} />
                                 <AvatarFallback>
@@ -450,28 +450,28 @@ const People = () => {
                                 </AvatarFallback>
                               </Avatar>
                             </TableCell>
-                            <TableCell className="px-2">
+                            <TableCell>
                               <div className="font-medium">
                                 {contact.first_name} {contact.last_name}
                               </div>
                             </TableCell>
-                            <TableCell className="px-2">
+                            <TableCell>
                               <Badge variant="secondary" className="text-xs">
                                 {contact.position || "Not specified"}
                               </Badge>
                             </TableCell>
-                            <TableCell className="px-2">
+                            <TableCell>
                               <div className="flex items-center gap-1">
                                 <Building2 className="h-4 w-4 text-muted-foreground" />
                                 {contact.team?.name || "No team"}
                               </div>
                             </TableCell>
-                            <TableCell className="px-2">
+                            <TableCell>
                               <Badge variant="outline" className="text-xs">
                                 {contact.sport?.name || contact.team?.sport?.name || "No sport"}
                               </Badge>
                             </TableCell>
-                            <TableCell className="px-2">
+                            <TableCell>
                               <div className="flex items-center gap-1">
                                 {revealedEmails.has(contact.id) ? (
                                   <div className="flex items-center gap-1">
@@ -491,7 +491,7 @@ const People = () => {
                                 )}
                               </div>
                             </TableCell>
-                            <TableCell className="px-2">
+                            <TableCell>
                               <div className="flex items-center gap-1">
                                 {revealedPhones.has(contact.id) ? (
                                   <div className="flex items-center gap-1">
@@ -511,7 +511,7 @@ const People = () => {
                                 )}
                               </div>
                             </TableCell>
-                            <TableCell className="px-2">
+                            <TableCell>
                               {contact.linkedin ? (
                                 <Button
                                   variant="ghost"
@@ -531,7 +531,7 @@ const People = () => {
                                 <span className="text-muted-foreground text-sm">-</span>
                               )}
                             </TableCell>
-                            <TableCell className="px-2">
+                            <TableCell>
                               <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
                                   <Button variant="ghost" size="sm" className="gap-1">
