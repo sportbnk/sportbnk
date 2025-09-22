@@ -139,15 +139,15 @@ const People = () => {
       );
     }
 
-    if (selectedTeam) {
+    if (selectedTeam && selectedTeam !== "all") {
       filtered = filtered.filter(contact => contact.team_id === selectedTeam);
     }
 
-    if (selectedRole) {
+    if (selectedRole && selectedRole !== "all") {
       filtered = filtered.filter(contact => contact.position === selectedRole);
     }
 
-    if (selectedSport) {
+    if (selectedSport && selectedSport !== "all") {
       filtered = filtered.filter(contact => 
         contact.sport_id === selectedSport || contact.team?.sport?.id === selectedSport
       );
@@ -348,7 +348,7 @@ const People = () => {
                         <SelectValue placeholder="All teams" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="">All teams</SelectItem>
+                        <SelectItem value="all">All teams</SelectItem>
                         {teams.map((team) => (
                           <SelectItem key={team.id} value={team.id}>
                             {team.name}
@@ -366,7 +366,7 @@ const People = () => {
                         <SelectValue placeholder="All roles" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="">All roles</SelectItem>
+                        <SelectItem value="all">All roles</SelectItem>
                         <SelectItem value="Manager">Manager</SelectItem>
                         <SelectItem value="Director">Director</SelectItem>
                         <SelectItem value="CEO">CEO</SelectItem>
@@ -388,7 +388,7 @@ const People = () => {
                         <SelectValue placeholder="All sports" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="">All sports</SelectItem>
+                        <SelectItem value="all">All sports</SelectItem>
                         {sports.map((sport) => (
                           <SelectItem key={sport.id} value={sport.id}>
                             {sport.name}
