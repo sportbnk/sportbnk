@@ -539,99 +539,75 @@ const People = () => {
                             </Badge>
                           </TableCell>
                           <TableCell>
-                            <div className="space-y-2">
-                              {revealedEmails.has(contact.id) ? (
-                                <div className="flex items-center gap-2">
-                                  <Mail className="h-3 w-3 text-muted-foreground" />
-                                  <a 
-                                    href={`mailto:${contact.email || generateDummyEmail(contact)}`} 
-                                    className="text-sm text-foreground hover:text-primary truncate"
-                                  >
-                                    {contact.email || generateDummyEmail(contact)}
-                                  </a>
-                                </div>
-                              ) : (
-                                <div className="space-y-1">
-                                  <div className="flex items-center gap-2">
-                                    <Mail className="h-3 w-3 text-muted-foreground" />
-                                    <span className="text-sm text-muted-foreground">****@****.com</span>
-                                  </div>
-                                  <Button
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() => handleRevealEmail(contact.id)}
-                                    className="h-6 px-2 text-xs bg-primary/10 hover:bg-primary/20 border-primary/20"
-                                  >
-                                    <Eye className="h-3 w-3 mr-1" />
-                                    Reveal Email
-                                  </Button>
-                                </div>
-                              )}
-                            </div>
+                            {revealedEmails.has(contact.id) ? (
+                              <div className="flex items-center gap-2">
+                                <Mail className="h-3 w-3 text-muted-foreground" />
+                                <a 
+                                  href={`mailto:${contact.email || generateDummyEmail(contact)}`} 
+                                  className="text-sm text-foreground hover:text-primary truncate"
+                                >
+                                  {contact.email || generateDummyEmail(contact)}
+                                </a>
+                              </div>
+                            ) : (
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => handleRevealEmail(contact.id)}
+                                className="h-6 px-2 text-xs bg-primary/10 hover:bg-primary/20 border-primary/20"
+                              >
+                                <Eye className="h-3 w-3 mr-1" />
+                                Reveal Email
+                              </Button>
+                            )}
                           </TableCell>
                           <TableCell>
-                            <div className="space-y-2">
-                              {revealedPhones.has(contact.id) ? (
-                                <div className="flex items-center gap-2">
-                                  <Phone className="h-3 w-3 text-muted-foreground" />
-                                  <a 
-                                    href={`tel:${contact.phone || generateDummyPhone(contact.id)}`} 
-                                    className="text-sm text-foreground hover:text-primary"
-                                  >
-                                    {contact.phone || generateDummyPhone(contact.id)}
-                                  </a>
-                                </div>
-                              ) : (
-                                <div className="space-y-1">
-                                  <div className="flex items-center gap-2">
-                                    <Phone className="h-3 w-3 text-muted-foreground" />
-                                    <span className="text-sm text-muted-foreground">+44 **** *** ***</span>
-                                  </div>
-                                  <Button
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() => handleRevealPhone(contact.id)}
-                                    className="h-6 px-2 text-xs bg-primary/10 hover:bg-primary/20 border-primary/20"
-                                  >
-                                    <Eye className="h-3 w-3 mr-1" />
-                                    Reveal Phone
-                                  </Button>
-                                </div>
-                              )}
-                            </div>
+                            {revealedPhones.has(contact.id) ? (
+                              <div className="flex items-center gap-2">
+                                <Phone className="h-3 w-3 text-muted-foreground" />
+                                <a 
+                                  href={`tel:${contact.phone || generateDummyPhone(contact.id)}`} 
+                                  className="text-sm text-foreground hover:text-primary"
+                                >
+                                  {contact.phone || generateDummyPhone(contact.id)}
+                                </a>
+                              </div>
+                            ) : (
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => handleRevealPhone(contact.id)}
+                                className="h-6 px-2 text-xs bg-primary/10 hover:bg-primary/20 border-primary/20"
+                              >
+                                <Eye className="h-3 w-3 mr-1" />
+                                Reveal Phone
+                              </Button>
+                            )}
                           </TableCell>
                           <TableCell>
-                            <div className="space-y-2">
-                              {revealedLinkedIns.has(contact.id) ? (
-                                <div className="flex items-center gap-2">
-                                  <Linkedin className="h-3 w-3 text-muted-foreground" />
-                                  <a 
-                                    href={contact.linkedin || generateDummyLinkedIn(contact)} 
-                                    target="_blank" 
-                                    rel="noopener noreferrer"
-                                    className="text-sm text-foreground hover:text-primary"
-                                  >
-                                    Profile
-                                  </a>
-                                </div>
-                              ) : (
-                                <div className="space-y-1">
-                                  <div className="flex items-center gap-2">
-                                    <Linkedin className="h-3 w-3 text-muted-foreground" />
-                                    <span className="text-sm text-muted-foreground">**** Profile</span>
-                                  </div>
-                                  <Button
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() => handleRevealLinkedIn(contact.id)}
-                                    className="h-6 px-2 text-xs bg-primary/10 hover:bg-primary/20 border-primary/20"
-                                  >
-                                    <Eye className="h-3 w-3 mr-1" />
-                                    Reveal LinkedIn
-                                  </Button>
-                                </div>
-                              )}
-                            </div>
+                            {revealedLinkedIns.has(contact.id) ? (
+                              <div className="flex items-center gap-2">
+                                <Linkedin className="h-3 w-3 text-muted-foreground" />
+                                <a 
+                                  href={contact.linkedin || generateDummyLinkedIn(contact)} 
+                                  target="_blank" 
+                                  rel="noopener noreferrer"
+                                  className="text-sm text-foreground hover:text-primary"
+                                >
+                                  Profile
+                                </a>
+                              </div>
+                            ) : (
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => handleRevealLinkedIn(contact.id)}
+                                className="h-6 px-2 text-xs bg-primary/10 hover:bg-primary/20 border-primary/20"
+                              >
+                                <Eye className="h-3 w-3 mr-1" />
+                                Reveal LinkedIn
+                              </Button>
+                            )}
                           </TableCell>
                           <TableCell className="text-right">
                             <Button
