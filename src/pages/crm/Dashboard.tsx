@@ -191,7 +191,7 @@ const Dashboard = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <FileText className="h-5 w-5 text-primary" />
-              Tenders & RFPs
+              Tenders/RFPs
             </CardTitle>
             <CardDescription>
               Active procurement opportunities in sports industry
@@ -245,15 +245,15 @@ const Dashboard = () => {
           </CardContent>
         </Card>
 
-        {/* Market Signals */}
+        {/* Signals */}
         <Card className="shadow-soft border-border">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Zap className="h-5 w-5 text-primary" />
-              Market Signals
+              Signals
             </CardTitle>
             <CardDescription>
-              AI-powered insights and opportunities
+              AI-powered insights and market intelligence
             </CardDescription>
           </CardHeader>
           <CardContent>
