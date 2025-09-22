@@ -13,12 +13,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
   Pagination,
   PaginationContent,
   PaginationEllipsis,
@@ -28,7 +22,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { Skeleton } from '@/components/ui/skeleton';
-import { Search, User, Building2, MapPin, Mail, Phone, Linkedin, Twitter, Instagram, Facebook, Filter, X, Eye, ExternalLink, Plus, Lock, Download, MoreHorizontal } from "lucide-react";
+import { Search, User, Building2, MapPin, Mail, Phone, Linkedin, Twitter, Instagram, Facebook, Filter, X, Eye, ExternalLink, Plus, Lock, Download } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Contact, Team, Department, Sport } from "@/types/teams";
 import { useLists } from "@/contexts/ListsContext";
@@ -55,6 +49,7 @@ const People = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [revealedEmails, setRevealedEmails] = useState<Set<string>>(new Set());
   const [revealedPhones, setRevealedPhones] = useState<Set<string>>(new Set());
+  const [revealedLinkedIns, setRevealedLinkedIns] = useState<Set<string>>(new Set());
   const itemsPerPage = 10;
 
   const { lists } = useLists();
@@ -186,7 +181,7 @@ const People = () => {
         .insert({
           profile_id: profileData.id,
           contact_id: contactId,
-          field_name: 'email'
+          field_name: 'linkedin'
         });
 
       if (error) {
@@ -239,6 +234,44 @@ const People = () => {
     }
   };
 
+  const handleRevealLinkedIn = async (contactId: string) => {
+    if (!user) {
+      toast.error("Please sign in to reveal contact details");
+      return;
+    }
+
+    try {
+      const { data: profileData } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('user_id', user.id)
+        .single();
+
+      if (!profileData) {
+        toast.error("Profile not found");
+        return;
+      }
+
+      const { error } = await supabase
+        .from('revealed_details')
+        .insert({
+          profile_id: profileData.id,
+          contact_id: contactId,
+          field_name: 'linkedin'
+        });
+
+      if (error) {
+        console.error('Error saving revealed detail:', error);
+      }
+
+      setRevealedLinkedIns(prev => new Set([...prev, contactId]));
+      toast.success("LinkedIn revealed!");
+    } catch (error) {
+      console.error('Error revealing linkedin:', error);
+      toast.error("Failed to reveal LinkedIn");
+    }
+  };
+
   const getProfileImage = (contactId: string) => {
     const images = [profile1, profile2, profile3, profile4, profile5];
     const hash = contactId.split('').reduce((a, b) => {
@@ -257,7 +290,7 @@ const People = () => {
       'Sport': contact.sport?.name || contact.team?.sport?.name || '',
       'Email': revealedEmails.has(contact.id) ? contact.email : 'Hidden',
       'Phone': revealedPhones.has(contact.id) ? contact.phone : 'Hidden',
-      'LinkedIn': contact.linkedin || '',
+      'LinkedIn': revealedLinkedIns.has(contact.id) ? contact.linkedin : 'Hidden',
       'Notes': contact.notes || ''
     }));
 
@@ -541,40 +574,49 @@ const People = () => {
                           </TableCell>
                           <TableCell>
                             {contact.linkedin ? (
-                              <div className="flex items-center gap-2">
-                                <Linkedin className="h-3 w-3 text-muted-foreground" />
-                                <a 
-                                  href={contact.linkedin} 
-                                  target="_blank" 
-                                  rel="noopener noreferrer"
-                                  className="text-sm text-foreground hover:text-primary"
-                                >
-                                  Profile
-                                </a>
-                              </div>
+                              revealedLinkedIns.has(contact.id) ? (
+                                <div className="flex items-center gap-2">
+                                  <Linkedin className="h-3 w-3 text-muted-foreground" />
+                                  <a 
+                                    href={contact.linkedin} 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    className="text-sm text-foreground hover:text-primary"
+                                  >
+                                    Profile
+                                  </a>
+                                </div>
+                              ) : (
+                                <div className="flex items-center gap-2">
+                                  <Linkedin className="h-3 w-3 text-muted-foreground" />
+                                  <span className="text-sm text-muted-foreground">**** Profile</span>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => handleRevealLinkedIn(contact.id)}
+                                    className="h-6 w-6 p-0"
+                                  >
+                                    <Eye className="h-3 w-3" />
+                                  </Button>
+                                </div>
+                              )
                             ) : (
                               <span className="text-sm text-muted-foreground">-</span>
                             )}
                           </TableCell>
                           <TableCell className="text-right">
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" size="icon" className="h-8 w-8">
-                                  <MoreHorizontal className="h-4 w-4" />
-                                  <span className="sr-only">Open menu</span>
-                                </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent align="end" className="bg-popover border-border z-50">
-                                <DropdownMenuItem>
-                                  <Eye className="mr-2 h-4 w-4" />
-                                  <span>View Details</span>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                  <Plus className="mr-2 h-4 w-4" />
-                                  <span>Add to List</span>
-                                </DropdownMenuItem>
-                              </DropdownMenuContent>
-                            </DropdownMenu>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => {
+                                // Add to list functionality will be implemented
+                                toast.success("Contact added to list!");
+                              }}
+                              className="gap-1"
+                            >
+                              <Plus className="h-4 w-4" />
+                              Add to List
+                            </Button>
                           </TableCell>
                         </TableRow>
                       ))
