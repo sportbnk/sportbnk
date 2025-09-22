@@ -28,7 +28,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { Skeleton } from '@/components/ui/skeleton';
-import { Search, User, Building2, MapPin, Mail, Phone, Linkedin, Twitter, Instagram, Facebook, Filter, X, Eye, ExternalLink, Plus, Lock, Download } from "lucide-react";
+import { Search, User, Building2, MapPin, Mail, Phone, Linkedin, Twitter, Instagram, Facebook, Filter, X, Eye, ExternalLink, Plus, Lock, Download, MoreHorizontal } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Contact, Team, Department, Sport } from "@/types/teams";
 import { useLists } from "@/contexts/ListsContext";
@@ -154,6 +154,15 @@ const People = () => {
     setCurrentPage(1);
   };
 
+  const clearFilters = () => {
+    setSearchQuery("");
+    setSelectedTeam("");
+    setSelectedRole("");
+    setSelectedSport("");
+  };
+
+  const hasActiveFilters = searchQuery || selectedTeam || selectedRole || selectedSport;
+
   const handleRevealEmail = async (contactId: string) => {
     if (!user) {
       toast.error("Please sign in to reveal contact details");
@@ -230,15 +239,6 @@ const People = () => {
     }
   };
 
-  const generateDummyPhone = (contactId: string) => {
-    const hash = contactId.split('').reduce((a, b) => {
-      a = ((a << 5) - a) + b.charCodeAt(0);
-      return a & a;
-    }, 0);
-    const phoneNumber = Math.abs(hash).toString().padStart(10, '0').slice(0, 10);
-    return `+44 ${phoneNumber.slice(0, 4)} ${phoneNumber.slice(4, 7)} ${phoneNumber.slice(7)}`;
-  };
-
   const getProfileImage = (contactId: string) => {
     const images = [profile1, profile2, profile3, profile4, profile5];
     const hash = contactId.split('').reduce((a, b) => {
@@ -275,199 +275,233 @@ const People = () => {
 
   if (loading) {
     return (
-      <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <Skeleton className="h-8 w-32 mb-2" />
-            <Skeleton className="h-4 w-64" />
-          </div>
+      <div className="flex gap-6 h-full">
+        {/* Sidebar Skeleton */}
+        <div className="w-80 space-y-4">
+          <Skeleton className="h-10 w-full" />
+          <Skeleton className="h-40 w-full" />
+          <Skeleton className="h-32 w-full" />
         </div>
-        <div className="grid grid-cols-1 gap-4">
-          {[...Array(5)].map((_, i) => (
-            <Skeleton key={i} className="h-16 w-full" />
-          ))}
+        {/* Content Skeleton */}
+        <div className="flex-1 space-y-4">
+          <Skeleton className="h-8 w-48" />
+          <Skeleton className="h-96 w-full" />
         </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold">People</h1>
-          <p className="text-muted-foreground">Contact Directory</p>
-        </div>
-      </div>
-
-      <div className="space-y-6">
-        <div className="flex h-full">
-          {/* Left Sidebar - Filters */}
-          <div className="w-80 border-r p-6 bg-muted/30 rounded-lg mr-6">
-            <div className="space-y-6">
-              <div>
-                <h3 className="text-lg font-semibold mb-3">Search & Filter</h3>
-                
-                {/* Search Input */}
-                <div className="relative mb-4">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-                  <Input
-                    placeholder="Search people..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10"
-                  />
-                </div>
-
-                {/* Team Filter */}
-                <div className="mb-4">
-                  <label className="text-sm font-medium mb-2 block">Team</label>
-                  <Select value={selectedTeam} onValueChange={setSelectedTeam}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="All teams" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All teams</SelectItem>
-                      {teams.map((team) => (
-                        <SelectItem key={team.id} value={team.id}>
-                          {team.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                {/* Role Filter */}
-                <div className="mb-4">
-                  <label className="text-sm font-medium mb-2 block">Role</label>
-                  <Select value={selectedRole} onValueChange={setSelectedRole}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="All roles" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All roles</SelectItem>
-                      <SelectItem value="Manager">Manager</SelectItem>
-                      <SelectItem value="Director">Director</SelectItem>
-                      <SelectItem value="CEO">CEO</SelectItem>
-                      <SelectItem value="Head of Marketing">Head of Marketing</SelectItem>
-                      <SelectItem value="Commercial Director">Commercial Director</SelectItem>
-                      <SelectItem value="Communications Manager">Communications Manager</SelectItem>
-                      <SelectItem value="Marketing Manager">Marketing Manager</SelectItem>
-                      <SelectItem value="Operations Manager">Operations Manager</SelectItem>
-                      <SelectItem value="Secretary">Secretary</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                {/* Sport Filter */}
-                <div className="mb-4">
-                  <label className="text-sm font-medium mb-2 block">Sport</label>
-                  <Select value={selectedSport} onValueChange={setSelectedSport}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="All sports" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All sports</SelectItem>
-                      {sports.map((sport) => (
-                        <SelectItem key={sport.id} value={sport.id}>
-                          {sport.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="pt-4 border-t">
-                  <p className="text-sm text-muted-foreground">
-                    {filteredContacts.length} contacts found
-                  </p>
-                </div>
+    <div className="flex gap-4 h-full">
+      {/* Left Sidebar - Filters */}
+      <div className="w-64 flex-shrink-0">
+        <Card className="shadow-sm border-border sticky top-4">
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center gap-2 text-foreground text-base">
+              <Filter className="h-4 w-4 text-primary" />
+              Filters
+              {hasActiveFilters && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={clearFilters}
+                  className="ml-auto h-6 px-2 text-xs"
+                >
+                  <X className="h-3 w-3 mr-1" />
+                  Clear
+                </Button>
+              )}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {/* Search */}
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-foreground">Search</label>
+              <div className="relative">
+                <Search className="absolute left-2.5 top-1/2 transform -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+                <Input
+                  placeholder="Search people..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-8 bg-background border-border h-8 text-xs"
+                />
               </div>
             </div>
+
+            {/* Team Filter */}
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-foreground">Team</label>
+              <Select value={selectedTeam} onValueChange={setSelectedTeam}>
+                <SelectTrigger className="bg-background border-border h-8 text-xs">
+                  <SelectValue placeholder="All Teams" />
+                </SelectTrigger>
+                <SelectContent className="bg-popover border-border z-50">
+                  <SelectItem value="all">All Teams</SelectItem>
+                  {teams.map((team) => (
+                    <SelectItem key={team.id} value={team.id}>
+                      {team.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Role Filter */}
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-foreground">Role</label>
+              <Select value={selectedRole} onValueChange={setSelectedRole}>
+                <SelectTrigger className="bg-background border-border h-8 text-xs">
+                  <SelectValue placeholder="All Roles" />
+                </SelectTrigger>
+                <SelectContent className="bg-popover border-border z-50">
+                  <SelectItem value="all">All Roles</SelectItem>
+                  <SelectItem value="Manager">Manager</SelectItem>
+                  <SelectItem value="Director">Director</SelectItem>
+                  <SelectItem value="CEO">CEO</SelectItem>
+                  <SelectItem value="Head of Marketing">Head of Marketing</SelectItem>
+                  <SelectItem value="Commercial Director">Commercial Director</SelectItem>
+                  <SelectItem value="Communications Manager">Communications Manager</SelectItem>
+                  <SelectItem value="Marketing Manager">Marketing Manager</SelectItem>
+                  <SelectItem value="Operations Manager">Operations Manager</SelectItem>
+                  <SelectItem value="Secretary">Secretary</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Sport Filter */}
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-foreground">Sport</label>
+              <Select value={selectedSport} onValueChange={setSelectedSport}>
+                <SelectTrigger className="bg-background border-border h-8 text-xs">
+                  <SelectValue placeholder="All Sports" />
+                </SelectTrigger>
+                <SelectContent className="bg-popover border-border z-50">
+                  <SelectItem value="all">All Sports</SelectItem>
+                  {sports.map((sport) => (
+                    <SelectItem key={sport.id} value={sport.id}>
+                      {sport.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="pt-3 border-t">
+              <p className="text-xs text-muted-foreground">
+                {filteredContacts.length} contacts found
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Main Content */}
+      <div className="flex-1 min-w-0">
+        <div className="space-y-4">
+          {/* Header */}
+          <div className="flex justify-between items-center">
+            <div>
+              <h1 className="text-2xl font-bold text-foreground">People</h1>
+              <p className="text-sm text-muted-foreground">Browse and manage sports industry contacts</p>
+            </div>
+            <Button onClick={exportToExcel} variant="outline" size="sm" className="gap-2">
+              <Download className="h-4 w-4" />
+              Export
+            </Button>
           </div>
 
-          {/* Main Content */}
-          <div className="flex-1">
-            <div className="space-y-6">
-              {/* Header */}
-              <div className="flex justify-between items-center">
-                <div>
-                  <h2 className="text-2xl font-bold">Contact Directory</h2>
-                  <p className="text-muted-foreground">Browse and manage sports industry contacts</p>
-                </div>
-                <Button onClick={exportToExcel} className="gap-2">
-                  <Download className="h-4 w-4" />
-                  Export to Excel
-                </Button>
-              </div>
-
-              {/* Contact Table */}
-              <Card>
-                <CardContent className="p-0">
-                  <Table>
-                    <TableHeader>
+          {/* Contact Table */}
+          <Card className="shadow-sm border-border">
+            <CardContent className="p-0">
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow className="bg-muted/30">
+                      <TableHead className="font-semibold">Name</TableHead>
+                      <TableHead className="font-semibold">Role</TableHead>
+                      <TableHead className="font-semibold">Team</TableHead>
+                      <TableHead className="font-semibold">Sport</TableHead>
+                      <TableHead className="font-semibold">Email</TableHead>
+                      <TableHead className="font-semibold">Phone</TableHead>
+                      <TableHead className="font-semibold">LinkedIn</TableHead>
+                      <TableHead className="font-semibold text-right">Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {currentContacts.length === 0 ? (
                       <TableRow>
-                        <TableHead className="p-1">Name</TableHead>
-                        <TableHead className="p-1">Role</TableHead>
-                        <TableHead className="p-1">Team</TableHead>
-                        <TableHead className="p-1">Sport</TableHead>
-                        <TableHead className="p-1">Email</TableHead>
-                        <TableHead className="p-1">Phone</TableHead>
-                        <TableHead className="p-1">LinkedIn</TableHead>
-                        <TableHead className="p-1">Action</TableHead>
+                        <TableCell colSpan={8} className="text-center py-12">
+                          <div className="flex flex-col items-center gap-3">
+                            <User className="h-12 w-12 text-muted-foreground" />
+                            <div>
+                              <p className="font-medium text-foreground">No contacts found</p>
+                              <p className="text-sm text-muted-foreground">
+                                Try adjusting your filters or search terms
+                              </p>
+                            </div>
+                          </div>
+                        </TableCell>
                       </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {currentContacts.map((contact) => (
-                        <TableRow key={contact.id}>
-                          <TableCell className="p-1">
-                            <div className="flex items-center gap-1">
+                    ) : (
+                      currentContacts.map((contact) => (
+                        <TableRow 
+                          key={contact.id} 
+                          className="hover:bg-muted/50 transition-colors"
+                        >
+                          <TableCell>
+                            <div className="flex items-center gap-3">
                               <Avatar className="h-8 w-8">
                                 <AvatarImage src={getProfileImage(contact.id)} />
                                 <AvatarFallback className="text-xs">
                                   {contact.first_name[0]}{contact.last_name[0]}
                                 </AvatarFallback>
                               </Avatar>
-                              <div className="font-medium text-sm">
-                                {contact.first_name} {contact.last_name}
+                              <div>
+                                <p className="font-medium text-foreground text-sm">
+                                  {contact.first_name} {contact.last_name}
+                                </p>
                               </div>
                             </div>
                           </TableCell>
-                          <TableCell className="p-1">
-                            <Badge variant="secondary" className="text-xs">
+                          <TableCell>
+                            <Badge variant="secondary" className="font-medium text-xs">
                               {contact.position || "Not specified"}
                             </Badge>
                           </TableCell>
-                          <TableCell className="p-1">
-                            <div className="flex items-center gap-1 text-sm">
+                          <TableCell>
+                            <div className="flex items-center gap-2">
                               <Building2 className="h-3 w-3 text-muted-foreground" />
-                              <span className="truncate">{contact.team?.name || "No team"}</span>
+                              <span className="text-sm text-foreground truncate">
+                                {contact.team?.name || "No team"}
+                              </span>
                             </div>
                           </TableCell>
-                          <TableCell className="p-1">
-                            <Badge variant="outline" className="text-xs">
+                          <TableCell>
+                            <Badge variant="outline" className="font-medium text-xs">
                               {contact.sport?.name || contact.team?.sport?.name || "No sport"}
                             </Badge>
                           </TableCell>
-                          <TableCell className="p-1">
+                          <TableCell>
                             {contact.email && (
                               revealedEmails.has(contact.id) ? (
-                                <div className="flex items-center gap-1 text-xs">
-                                  <Mail className="h-3 w-3" />
-                                  <a href={`mailto:${contact.email}`} className="hover:text-primary truncate">
+                                <div className="flex items-center gap-2">
+                                  <Mail className="h-3 w-3 text-muted-foreground" />
+                                  <a 
+                                    href={`mailto:${contact.email}`} 
+                                    className="text-sm text-foreground hover:text-primary truncate"
+                                  >
                                     {contact.email}
                                   </a>
                                 </div>
                               ) : (
-                                <div className="flex items-center gap-1 text-xs">
-                                  <Mail className="h-3 w-3" />
-                                  <span className="text-muted-foreground">****@****.com</span>
+                                <div className="flex items-center gap-2">
+                                  <Mail className="h-3 w-3 text-muted-foreground" />
+                                  <span className="text-sm text-muted-foreground">****@****.com</span>
                                   <Button
                                     variant="ghost"
                                     size="sm"
                                     onClick={() => handleRevealEmail(contact.id)}
-                                    className="h-5 w-5 p-0"
+                                    className="h-6 w-6 p-0"
                                   >
                                     <Eye className="h-3 w-3" />
                                   </Button>
@@ -475,59 +509,62 @@ const People = () => {
                               )
                             )}
                           </TableCell>
-                          <TableCell className="p-1">
+                          <TableCell>
                             {contact.phone ? (
                               revealedPhones.has(contact.id) ? (
-                                <div className="flex items-center gap-1 text-xs">
-                                  <Phone className="h-3 w-3" />
-                                  <a href={`tel:${contact.phone}`} className="hover:text-primary">
+                                <div className="flex items-center gap-2">
+                                  <Phone className="h-3 w-3 text-muted-foreground" />
+                                  <a 
+                                    href={`tel:${contact.phone}`} 
+                                    className="text-sm text-foreground hover:text-primary"
+                                  >
                                     {contact.phone}
                                   </a>
                                 </div>
                               ) : (
-                                <div className="flex items-center gap-1 text-xs">
-                                  <Phone className="h-3 w-3" />
-                                  <span className="text-muted-foreground">+44 **** *** ***</span>
+                                <div className="flex items-center gap-2">
+                                  <Phone className="h-3 w-3 text-muted-foreground" />
+                                  <span className="text-sm text-muted-foreground">+44 **** *** ***</span>
                                   <Button
                                     variant="ghost"
                                     size="sm"
                                     onClick={() => handleRevealPhone(contact.id)}
-                                    className="h-5 w-5 p-0"
+                                    className="h-6 w-6 p-0"
                                   >
                                     <Eye className="h-3 w-3" />
                                   </Button>
                                 </div>
                               )
                             ) : (
-                              <span className="text-muted-foreground text-xs">-</span>
+                              <span className="text-sm text-muted-foreground">-</span>
                             )}
                           </TableCell>
-                          <TableCell className="p-1">
+                          <TableCell>
                             {contact.linkedin ? (
-                              <a 
-                                href={contact.linkedin} 
-                                target="_blank" 
-                                rel="noopener noreferrer"
-                                className="flex items-center gap-1 text-xs hover:text-primary"
-                              >
-                                <Linkedin className="h-3 w-3" />
-                                <span>Profile</span>
-                              </a>
+                              <div className="flex items-center gap-2">
+                                <Linkedin className="h-3 w-3 text-muted-foreground" />
+                                <a 
+                                  href={contact.linkedin} 
+                                  target="_blank" 
+                                  rel="noopener noreferrer"
+                                  className="text-sm text-foreground hover:text-primary"
+                                >
+                                  Profile
+                                </a>
+                              </div>
                             ) : (
-                              <span className="text-muted-foreground text-xs">-</span>
+                              <span className="text-sm text-muted-foreground">-</span>
                             )}
                           </TableCell>
-                          <TableCell className="p-1">
+                          <TableCell className="text-right">
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+                                <Button variant="ghost" size="icon" className="h-8 w-8">
+                                  <MoreHorizontal className="h-4 w-4" />
                                   <span className="sr-only">Open menu</span>
-                                  <svg className="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
-                                  </svg>
                                 </Button>
                               </DropdownMenuTrigger>
-                              <DropdownMenuContent align="end">
+                              <DropdownMenuContent align="end" className="bg-popover border-border z-50">
                                 <DropdownMenuItem>
                                   <Eye className="mr-2 h-4 w-4" />
                                   <span>View Details</span>
@@ -540,25 +577,34 @@ const People = () => {
                             </DropdownMenu>
                           </TableCell>
                         </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </CardContent>
-              </Card>
+                      ))
+                    )}
+                  </TableBody>
+                </Table>
+              </div>
+            </CardContent>
+          </Card>
 
-              {/* Pagination */}
-              {totalPages > 1 && (
-                <div className="flex justify-center">
-                  <Pagination>
-                    <PaginationContent>
-                      <PaginationItem>
-                        <PaginationPrevious 
-                          onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-                          className={currentPage === 1 ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
-                        />
-                      </PaginationItem>
-                      
-                      {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="flex justify-center">
+              <Pagination>
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious 
+                      onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                      className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                    />
+                  </PaginationItem>
+                  
+                  {[...Array(totalPages)].map((_, i) => {
+                    const page = i + 1;
+                    if (
+                      page === 1 ||
+                      page === totalPages ||
+                      (page >= currentPage - 1 && page <= currentPage + 1)
+                    ) {
+                      return (
                         <PaginationItem key={page}>
                           <PaginationLink
                             onClick={() => setCurrentPage(page)}
@@ -568,20 +614,30 @@ const People = () => {
                             {page}
                           </PaginationLink>
                         </PaginationItem>
-                      ))}
-                      
-                      <PaginationItem>
-                        <PaginationNext 
-                          onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
-                          className={currentPage === totalPages ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
-                        />
-                      </PaginationItem>
-                    </PaginationContent>
-                  </Pagination>
-                </div>
-              )}
+                      );
+                    } else if (
+                      page === currentPage - 2 ||
+                      page === currentPage + 2
+                    ) {
+                      return (
+                        <PaginationItem key={page}>
+                          <PaginationEllipsis />
+                        </PaginationItem>
+                      );
+                    }
+                    return null;
+                  })}
+                  
+                  <PaginationItem>
+                    <PaginationNext 
+                      onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+                      className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>
