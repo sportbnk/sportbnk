@@ -9,7 +9,9 @@ import {
   User,
   Settings,
   LogOut,
-  Bot
+  Bot,
+  FileText,
+  Zap
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -32,6 +34,8 @@ const mainNavItems = [
   { title: 'Organisations', url: '/crm/teams', icon: Building2 },
   { title: 'People', url: '/crm/people', icon: Users },
   { title: 'Lists', url: '/crm/lists', icon: List },
+  { title: 'Tenders/RFPs', url: '/crm/tenders', icon: FileText },
+  { title: 'Signals', url: '/crm/signals', icon: Zap },
   { title: 'Integrations', url: '/crm/integrations', icon: Puzzle },
 ];
 

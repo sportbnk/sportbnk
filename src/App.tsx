@@ -35,6 +35,8 @@ import Teams from "./pages/crm/Teams";
 import TeamDetails from "./pages/crm/TeamDetails";
 import People from "./pages/crm/People";
 import Lists from "./pages/crm/Lists";
+import Tenders from "./pages/crm/Tenders";
+import SignalsPage from "./pages/crm/SignalsPage";
 import Integrations from "./pages/crm/Integrations";
 import CrmLayout from "./components/CrmLayout";
 
@@ -104,6 +106,8 @@ function App() {
                       <Route path="/crm/teams/:id" element={<ProtectedRoute><CrmLayout pageTitle="Organisation Details"><TeamDetails /></CrmLayout></ProtectedRoute>} />
                       <Route path="/crm/people" element={<ProtectedRoute><CrmLayout pageTitle="People"><People /></CrmLayout></ProtectedRoute>} />
                       <Route path="/crm/lists" element={<ProtectedRoute><CrmLayout pageTitle="Lists"><Lists /></CrmLayout></ProtectedRoute>} />
+                      <Route path="/crm/tenders" element={<ProtectedRoute><CrmLayout pageTitle="Tenders/RFPs"><Tenders /></CrmLayout></ProtectedRoute>} />
+                      <Route path="/crm/signals" element={<ProtectedRoute><CrmLayout pageTitle="Signals"><SignalsPage /></CrmLayout></ProtectedRoute>} />
                       <Route path="/crm/integrations" element={<ProtectedRoute><CrmLayout pageTitle="Integrations"><Integrations /></CrmLayout></ProtectedRoute>} />
                       
                       {/* Product sub-pages */}
