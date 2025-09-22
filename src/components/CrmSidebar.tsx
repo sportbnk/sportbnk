@@ -34,7 +34,7 @@ const mainNavItems = [
   { title: 'Organisations', url: '/crm/teams', icon: Building2 },
   { title: 'People', url: '/crm/people', icon: Users },
   { title: 'Lists', url: '/crm/lists', icon: List },
-  { title: 'Tenders/RFPs', url: '/crm/tenders', icon: FileText },
+  { title: 'Tenders', url: '/crm/tenders', icon: FileText },
   { title: 'Signals', url: '/crm/signals', icon: Zap },
   { title: 'Integrations', url: '/crm/integrations', icon: Puzzle },
 ];
