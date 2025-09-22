@@ -408,48 +408,48 @@ const People = () => {
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead className="w-8 p-1"></TableHead>
-                        <TableHead className="w-32 p-1">Name</TableHead>
-                        <TableHead className="w-24 p-1">Role</TableHead>
-                        <TableHead className="w-28 p-1">Club</TableHead>
-                        <TableHead className="w-20 p-1">Sport</TableHead>
-                        <TableHead className="w-32 p-1">Contact Details</TableHead>
-                        <TableHead className="w-16 p-1">Actions</TableHead>
+                        <TableHead className="w-12"></TableHead>
+                        <TableHead className="w-48">Name</TableHead>
+                        <TableHead className="w-36">Role</TableHead>
+                        <TableHead className="w-40">Club</TableHead>
+                        <TableHead className="w-28">Sport</TableHead>
+                        <TableHead className="w-60">Contact Details</TableHead>
+                        <TableHead className="w-24">Actions</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {currentContacts.map((contact) => (
-                        <TableRow key={contact.id}>
-                          <TableCell className="p-1">
-                            <Avatar className="h-6 w-6">
+                        <TableRow key={contact.id} className="h-16">
+                          <TableCell>
+                            <Avatar className="h-8 w-8">
                               <AvatarImage src={getProfileImage(contact.id)} />
-                              <AvatarFallback className="text-xs">
+                              <AvatarFallback className="text-sm">
                                 {contact.first_name[0]}{contact.last_name[0]}
                               </AvatarFallback>
                             </Avatar>
                           </TableCell>
-                          <TableCell className="p-1">
-                            <div className="text-sm font-medium">
+                          <TableCell>
+                            <div className="font-medium">
                               {contact.first_name} {contact.last_name}
                             </div>
                           </TableCell>
-                          <TableCell className="p-1">
-                            <Badge variant="secondary" className="text-xs px-1 py-0">
+                          <TableCell>
+                            <Badge variant="secondary" className="text-sm">
                               {contact.position || "Not specified"}
                             </Badge>
                           </TableCell>
-                          <TableCell className="p-1">
-                            <div className="flex items-center gap-1 text-xs">
-                              <Building2 className="h-3 w-3 text-muted-foreground" />
+                          <TableCell>
+                            <div className="flex items-center gap-2">
+                              <Building2 className="h-4 w-4 text-muted-foreground" />
                               <span className="truncate">{contact.team?.name || "No team"}</span>
                             </div>
                           </TableCell>
-                          <TableCell className="p-1">
-                            <Badge variant="outline" className="text-xs px-1 py-0">
+                          <TableCell>
+                            <Badge variant="outline" className="text-sm">
                               {contact.sport?.name || contact.team?.sport?.name || "No sport"}
                             </Badge>
                           </TableCell>
-                          <TableCell className="p-1">
+                          <TableCell>
                             <div className="space-y-1">
                               {contact.email && (
                                 revealedEmails.has(contact.id) ? (
