@@ -408,142 +408,136 @@ const People = () => {
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead className="w-12"></TableHead>
-                        <TableHead className="w-48">Name</TableHead>
-                        <TableHead className="w-36">Role</TableHead>
-                        <TableHead className="w-40">Club</TableHead>
-                        <TableHead className="w-28">Sport</TableHead>
-                        <TableHead className="w-60">Contact Details</TableHead>
-                        <TableHead className="w-24">Actions</TableHead>
+                        <TableHead className="p-1">Name</TableHead>
+                        <TableHead className="p-1">Role</TableHead>
+                        <TableHead className="p-1">Team</TableHead>
+                        <TableHead className="p-1">Sport</TableHead>
+                        <TableHead className="p-1">Email</TableHead>
+                        <TableHead className="p-1">Phone</TableHead>
+                        <TableHead className="p-1">LinkedIn</TableHead>
+                        <TableHead className="p-1">Action</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {currentContacts.map((contact) => (
-                        <TableRow key={contact.id} className="h-16">
-                          <TableCell>
-                            <Avatar className="h-8 w-8">
-                              <AvatarImage src={getProfileImage(contact.id)} />
-                              <AvatarFallback className="text-sm">
-                                {contact.first_name[0]}{contact.last_name[0]}
-                              </AvatarFallback>
-                            </Avatar>
-                          </TableCell>
-                          <TableCell>
-                            <div className="font-medium">
-                              {contact.first_name} {contact.last_name}
+                        <TableRow key={contact.id}>
+                          <TableCell className="p-1">
+                            <div className="flex items-center gap-1">
+                              <Avatar className="h-8 w-8">
+                                <AvatarImage src={getProfileImage(contact.id)} />
+                                <AvatarFallback className="text-xs">
+                                  {contact.first_name[0]}{contact.last_name[0]}
+                                </AvatarFallback>
+                              </Avatar>
+                              <div className="font-medium text-sm">
+                                {contact.first_name} {contact.last_name}
+                              </div>
                             </div>
                           </TableCell>
-                          <TableCell>
-                            <Badge variant="secondary" className="text-sm">
+                          <TableCell className="p-1">
+                            <Badge variant="secondary" className="text-xs">
                               {contact.position || "Not specified"}
                             </Badge>
                           </TableCell>
-                          <TableCell>
-                            <div className="flex items-center gap-2">
-                              <Building2 className="h-4 w-4 text-muted-foreground" />
+                          <TableCell className="p-1">
+                            <div className="flex items-center gap-1 text-sm">
+                              <Building2 className="h-3 w-3 text-muted-foreground" />
                               <span className="truncate">{contact.team?.name || "No team"}</span>
                             </div>
                           </TableCell>
-                          <TableCell>
-                            <Badge variant="outline" className="text-sm">
+                          <TableCell className="p-1">
+                            <Badge variant="outline" className="text-xs">
                               {contact.sport?.name || contact.team?.sport?.name || "No sport"}
                             </Badge>
                           </TableCell>
-                          <TableCell>
-                            <div className="space-y-1">
-                              {contact.email && (
-                                revealedEmails.has(contact.id) ? (
-                                  <div className="flex items-center gap-1 text-xs">
-                                    <Mail className="h-3 w-3" />
-                                    <a href={`mailto:${contact.email}`} className="hover:text-primary truncate">
-                                      {contact.email}
-                                    </a>
-                                  </div>
-                                ) : (
-                                  <div className="flex items-center gap-1 text-xs">
-                                    <Mail className="h-3 w-3" />
-                                    <span className="text-muted-foreground">****@****.com</span>
-                                    <Button
-                                      variant="ghost"
-                                      size="sm"
-                                      onClick={() => handleRevealEmail(contact.id)}
-                                      className="h-4 w-4 p-0"
-                                    >
-                                      <Eye className="h-3 w-3" />
-                                    </Button>
-                                  </div>
-                                )
-                              )}
-                              {revealedPhones.has(contact.id) ? (
+                          <TableCell className="p-1">
+                            {contact.email && (
+                              revealedEmails.has(contact.id) ? (
+                                <div className="flex items-center gap-1 text-xs">
+                                  <Mail className="h-3 w-3" />
+                                  <a href={`mailto:${contact.email}`} className="hover:text-primary truncate">
+                                    {contact.email}
+                                  </a>
+                                </div>
+                              ) : (
+                                <div className="flex items-center gap-1 text-xs">
+                                  <Mail className="h-3 w-3" />
+                                  <span className="text-muted-foreground">****@****.com</span>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => handleRevealEmail(contact.id)}
+                                    className="h-5 w-5 p-0"
+                                  >
+                                    <Eye className="h-3 w-3" />
+                                  </Button>
+                                </div>
+                              )
+                            )}
+                          </TableCell>
+                          <TableCell className="p-1">
+                            {contact.phone ? (
+                              revealedPhones.has(contact.id) ? (
                                 <div className="flex items-center gap-1 text-xs">
                                   <Phone className="h-3 w-3" />
-                                  <a href={`tel:${generateDummyPhone(contact.id)}`} className="hover:text-primary">
-                                    {generateDummyPhone(contact.id)}
+                                  <a href={`tel:${contact.phone}`} className="hover:text-primary">
+                                    {contact.phone}
                                   </a>
                                 </div>
                               ) : (
                                 <div className="flex items-center gap-1 text-xs">
                                   <Phone className="h-3 w-3" />
-                                  <span className="text-muted-foreground">+44 *** ***</span>
+                                  <span className="text-muted-foreground">+44 **** *** ***</span>
                                   <Button
                                     variant="ghost"
                                     size="sm"
                                     onClick={() => handleRevealPhone(contact.id)}
-                                    className="h-4 w-4 p-0"
+                                    className="h-5 w-5 p-0"
                                   >
                                     <Eye className="h-3 w-3" />
                                   </Button>
                                 </div>
-                              )}
-                            </div>
+                              )
+                            ) : (
+                              <span className="text-muted-foreground text-xs">-</span>
+                            )}
                           </TableCell>
                           <TableCell className="p-1">
-                            <div className="flex items-center gap-1">
-                              {contact.linkedin && (
-                                <Button variant="ghost" size="sm" asChild className="h-6 w-6 p-0">
-                                  <a href={contact.linkedin} target="_blank" rel="noopener noreferrer">
-                                    <Linkedin className="h-3 w-3" />
-                                  </a>
+                            {contact.linkedin ? (
+                              <a 
+                                href={contact.linkedin} 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-1 text-xs hover:text-primary"
+                              >
+                                <Linkedin className="h-3 w-3" />
+                                <span>Profile</span>
+                              </a>
+                            ) : (
+                              <span className="text-muted-foreground text-xs">-</span>
+                            )}
+                          </TableCell>
+                          <TableCell className="p-1">
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+                                  <span className="sr-only">Open menu</span>
+                                  <svg className="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+                                  </svg>
                                 </Button>
-                              )}
-                              <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                  <Button variant="ghost" className="h-6 w-6 p-0">
-                                    <span className="sr-only">Open menu</span>
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      width="12"
-                                      height="12"
-                                      viewBox="0 0 24 24"
-                                      fill="none"
-                                      stroke="currentColor"
-                                      strokeWidth="2"
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      className="h-3 w-3"
-                                    >
-                                      <circle cx="12" cy="12" r="1" />
-                                      <circle cx="12" cy="5" r="1" />
-                                      <circle cx="12" cy="19" r="1" />
-                                    </svg>
-                                  </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end">
-                                  <DropdownMenuItem>
-                                    <Eye className="mr-2 h-4 w-4" />
-                                    View profile
-                                  </DropdownMenuItem>
-                                  <DropdownMenuItem>
-                                    <Mail className="mr-2 h-4 w-4" />
-                                    Send email
-                                  </DropdownMenuItem>
-                                  <DropdownMenuItem>
-                                    <Plus className="mr-2 h-4 w-4" />
-                                    Add to list
-                                  </DropdownMenuItem>
-                                </DropdownMenuContent>
-                              </DropdownMenu>
-                            </div>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end">
+                                <DropdownMenuItem>
+                                  <Eye className="mr-2 h-4 w-4" />
+                                  <span>View Details</span>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                  <Plus className="mr-2 h-4 w-4" />
+                                  <span>Add to List</span>
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
                           </TableCell>
                         </TableRow>
                       ))}
