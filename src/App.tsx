@@ -19,7 +19,7 @@ import NotFound from "./pages/NotFound";
 import Products from "./pages/Products";
 import Data from "./pages/Data";
 import Company from "./pages/Company";
-import Resources from "./pages/Resources";
+
 import Pricing from "./pages/Pricing";
 import BookDemo from "./pages/BookDemo";
 import ContactUs from "./pages/ContactUs";
@@ -87,7 +87,7 @@ function App() {
                       <Route path="/products" element={<Products />} />
                       <Route path="/data" element={<Data />} />
                       <Route path="/company" element={<Company />} />
-                      <Route path="/resources" element={<Resources />} />
+                      
                       <Route path="/pricing" element={<Pricing />} />
                       <Route path="/book-demo" element={<BookDemo />} />
                       <Route path="/contact" element={<ContactUs />} />
