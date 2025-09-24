@@ -1,8 +1,9 @@
 import PageLayout from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
-import { UserCheck, Building, Handshake, Phone } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
-import MeetTheTeam from "@/components/MeetTheTeam";
+import { Building, Phone, Trophy, Users, Globe, ChartBar } from "lucide-react";
+import { TeamMember } from "@/components/MeetTheTeam";
+import { Link } from "react-router-dom";
+import { Card } from "@/components/ui/card";
 
 const CompanySection = ({ 
   title, 
@@ -50,53 +51,80 @@ const CompanyValueCard = ({
 
 const Company = () => {
   return (
-    <PageLayout pageTitle="Our Company">
+    <PageLayout 
+      pageTitle="About SportBnk - The Leading B2B Sports Intelligence Platform" 
+      metaDescription="Learn about SportBnk (not SportBank), the premier sports intelligence platform founded in 2025. Discover how we're transforming sports data intelligence with 360,000+ competitions and 750,000+ teams worldwide."
+      metaKeywords="SportBnk, SportBank, sports data platform, sports intelligence, B2B sports data, sports industry database"
+    >
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4 md:px-6">
-          <CompanySection 
-            title="About Sportsbnk"
-            description="Sportsbnk is an innovative B2B sales intelligence platform specifically tailored to the sports industry. Our platform harnesses the power of data analytics to provide businesses with highly accurate and compliant contact information, empowering them to effectively reach out to sports organisations, professionals, and stakeholders. With a data-driven approach and industry-specific insights, we aim to be the go-to platform for organisations in the sports space looking to enhance their business development, recruitment, and marketing efforts."
-            image="/lovable-uploads/1d95a70d-8230-4647-9c16-d5c94a124864.png"
-          />
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <h2 className="text-3xl md:text-4xl font-bold text-sportbnk-navy mb-4">
+                Our Story
+              </h2>
+              <p className="text-lg text-gray-600 mb-6">
+                Founded in 2025, SportBnk (distinct from SportBank) emerged as a revolutionary force in the sports data intelligence industry. Our founders recognized a crucial gap: while various sales intelligence platforms existed for general B2B sales, none were specifically tailored to the unique challenges and opportunities within the sports industry.
+              </p>
+              <p className="text-lg text-gray-600 mb-6">
+                What began as a specialized database has evolved into a comprehensive suite of tools designed to help businesses connect, engage, and grow within the sports ecosystem. Today, SportBnk provides unparalleled access to data from over 360,000 competitions and 750,000 teams worldwide.
+              </p>
+            </div>
+            <div>
+              <img 
+                src="/lovable-uploads/a245226e-4025-4fa7-8740-1e60792be2ef.png" 
+                alt="Cricket stadium showing the global reach of sports data" 
+                className="rounded-lg shadow-lg"
+              />
+            </div>
+          </div>
         </div>
       </section>
       
       <section className="py-16 bg-sportbnk-lightGrey">
         <div className="container mx-auto px-4 md:px-6">
-          <h2 className="text-3xl font-bold text-sportbnk-navy mb-12 text-center">Our Mission & Values</h2>
+          <h2 className="text-3xl font-bold text-sportbnk-navy mb-12 text-center">
+            Why Choose SportBnk?
+          </h2>
           
-          <div className="mb-12 p-8 bg-white rounded-lg shadow-sm text-center max-w-3xl mx-auto">
-            <h3 className="text-xl font-bold text-sportbnk-navy mb-3">Our Mission</h3>
-            <p className="text-lg text-gray-600 italic">
+          <div className="grid md:grid-cols-3 gap-8 mb-12">
+            <Card className="p-6">
+              <Trophy className="h-8 w-8 text-sportbnk-green mb-4" />
+              <h3 className="text-xl font-bold mb-2">Industry Leadership</h3>
+              <p className="text-gray-600">
+                As the premier sports intelligence platform, we're setting new standards in data quality and accessibility.
+              </p>
+            </Card>
+            
+            <Card className="p-6">
+              <Globe className="h-8 w-8 text-sportbnk-green mb-4" />
+              <h3 className="text-xl font-bold mb-2">Global Reach</h3>
+              <p className="text-gray-600">
+                Access comprehensive data from 360,000+ competitions and 750,000+ teams worldwide.
+              </p>
+            </Card>
+            
+            <Card className="p-6">
+              <ChartBar className="h-8 w-8 text-sportbnk-green mb-4" />
+              <h3 className="text-xl font-bold mb-2">Advanced Analytics</h3>
+              <p className="text-gray-600">
+                Leverage AI-driven insights and machine learning predictions for better decision-making.
+              </p>
+            </Card>
+          </div>
+
+          <div className="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-sm text-center mt-12">
+            <div className="inline-block p-3 bg-sportbnk-green/10 rounded-lg mb-4">
+              <Building className="h-8 w-8 text-sportbnk-green" />
+            </div>
+            <p className="text-xl text-gray-600 italic">
               "To empower businesses in the sports industry by providing them with precise, actionable, 
               and compliant data solutions that foster meaningful connections and drive sustainable 
               growth through intelligent sales, marketing, and hiring strategies."
             </p>
           </div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <CompanyValueCard 
-              icon={<Building size={24} />}
-              title="Industry Focus"
-              description="We are dedicated exclusively to the sports sector, allowing us to build a deep understanding of your unique needs."
-            />
-            
-            <CompanyValueCard 
-              icon={<UserCheck size={24} />}
-              title="Data Accuracy"
-              description="We maintain the highest levels of data accuracy to ensure you connect with the right decision-makers."
-            />
-            
-            <CompanyValueCard 
-              icon={<Handshake size={24} />}
-              title="Partnership Approach"
-              description="We see ourselves as partners in your success, not just another service provider."
-            />
-          </div>
         </div>
       </section>
-      
-      <MeetTheTeam />
       
       <section className="py-16 bg-sportbnk-navy text-white">
         <div className="container mx-auto px-4 md:px-6">
@@ -109,15 +137,15 @@ const Company = () => {
                 </p>
                 <div className="flex items-center mb-2">
                   <Phone size={18} className="mr-2" />
-                  <span>+44 (0) 123 456 7890</span>
+                  <span>+44 7935 969611</span>
                 </div>
                 <div className="flex items-center">
                   <span className="mr-2">✉</span>
                   <span>info@sportbnk.com</span>
                 </div>
               </div>
-              <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white px-8 py-6 text-lg">
-                Get In Touch
+              <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white px-8 py-6 text-lg" asChild>
+                <Link to="/contact">Get In Touch</Link>
               </Button>
             </div>
           </div>
