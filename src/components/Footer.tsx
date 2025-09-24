@@ -23,13 +23,12 @@ const Footer = () => {
           </div>
           
           <div>
-            <h3 className="font-semibold text-sportbnk-navy mb-4">Links</h3>
+            <h3 className="font-semibold text-sportbnk-navy mb-4">Products</h3>
             <ul className="space-y-2">
-              <li><Link to="/" className="text-gray-600 hover:text-sportbnk-green transition-colors">Home</Link></li>
-              <li><Link to="/products" className="text-gray-600 hover:text-sportbnk-green transition-colors">Product</Link></li>
-              <li><Link to="/data" className="text-gray-600 hover:text-sportbnk-green transition-colors">Data</Link></li>
-              <li><Link to="/company" className="text-gray-600 hover:text-sportbnk-green transition-colors">Company</Link></li>
-              <li><Link to="/pricing" className="text-gray-600 hover:text-sportbnk-green transition-colors">Pricing</Link></li>
+              <li><Link to="/products/discover" className="text-gray-600 hover:text-sportbnk-green transition-colors">Discover</Link></li>
+              <li><Link to="/products/boost" className="text-gray-600 hover:text-sportbnk-green transition-colors">Boost</Link></li>
+              <li><Link to="/products/recruit" className="text-gray-600 hover:text-sportbnk-green transition-colors">Recruit</Link></li>
+              <li><Link to="/products/api" className="text-gray-600 hover:text-sportbnk-green transition-colors">API</Link></li>
             </ul>
           </div>
           
