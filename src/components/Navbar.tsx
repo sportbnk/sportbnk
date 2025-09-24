@@ -152,7 +152,45 @@ const Navbar = () => {
                   </NavigationMenuContent>
                 </NavigationMenuItem>
                 
-                
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger className="text-sm font-medium text-sportbnk-navy hover:text-sportbnk-green">
+                    Resources
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="grid w-[400px] gap-3 p-4 md:w-[600px] md:grid-cols-2 lg:w-[700px]">
+                      <li>
+                        <NavigationMenuLink asChild>
+                          <Link to="/resources/startups" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
+                            <div className="text-sm font-medium text-sportbnk-navy flex items-center">
+                              <Rocket className="h-4 w-4 mr-2" /> SportsBnk for Startups
+                            </div>
+                            <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Resources for growing businesses</p>
+                          </Link>
+                        </NavigationMenuLink>
+                      </li>
+                      <li>
+                        <NavigationMenuLink asChild>
+                          <Link to="/resources/community" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
+                            <div className="text-sm font-medium text-sportbnk-navy flex items-center">
+                              <Users2 className="h-4 w-4 mr-2" /> Community
+                            </div>
+                            <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Join our sports data community</p>
+                          </Link>
+                        </NavigationMenuLink>
+                      </li>
+                      <li>
+                        <NavigationMenuLink asChild>
+                          <Link to="/resources/help-center" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
+                            <div className="text-sm font-medium text-sportbnk-navy flex items-center">
+                              <HelpCircle className="h-4 w-4 mr-2" /> Help Center
+                            </div>
+                            <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Support and documentation</p>
+                          </Link>
+                        </NavigationMenuLink>
+                      </li>
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
                 <NavigationMenuItem>
                   <NavigationMenuLink asChild>
                     <Link 
@@ -246,7 +284,28 @@ const Navbar = () => {
               </DropdownMenuContent>
             </DropdownMenu>
             
-            
+            <DropdownMenu>
+              <DropdownMenuTrigger className="flex items-center justify-between w-full py-2 text-left text-sportbnk-navy">
+                <span className="flex items-center">Resources</span> <ChevronDown size={16} />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-full">
+                <DropdownMenuItem>
+                  <Link to="/resources/startups" className="w-full flex items-center">
+                    <Rocket className="h-4 w-4 mr-2" />SportsBnk for Startups
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link to="/resources/community" className="w-full flex items-center">
+                    <Users2 className="h-4 w-4 mr-2" />Community
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link to="/resources/help-center" className="w-full flex items-center">
+                    <HelpCircle className="h-4 w-4 mr-2" />Help Center
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <div className="py-2 w-full">
               <Link to="/pricing" className="text-sportbnk-navy w-full block flex items-center">
                 Pricing
