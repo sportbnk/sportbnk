@@ -13,7 +13,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Search, TrendingUp, TrendingDown, AlertTriangle, Target, Building2, Calendar, Eye, Zap, Users, DollarSign, Plus } from "lucide-react";
+import { Search, TrendingUp, TrendingDown, AlertTriangle, Target, Building2, Calendar, Zap, Users, DollarSign, Plus } from "lucide-react";
 import { format } from "date-fns";
 import { useLists } from "@/contexts/ListsContext";
 import { useNavigate } from "react-router-dom";
@@ -62,7 +62,7 @@ const mockSignals: Signal[] = [
   {
     id: "3",
     title: "Youth Academy Investment",
-    organization: "Chelsea FC",
+    organization: "Chelsea",
     sport: "Football",
     type: "Trend",
     priority: "Medium",
@@ -70,7 +70,7 @@ const mockSignals: Signal[] = [
     date: new Date("2024-09-18"),
     value: "£25M",
     category: "Development",
-    teamId: "chelsea-fc"
+    teamId: "chelsea"
   },
   {
     id: "4",
@@ -87,7 +87,7 @@ const mockSignals: Signal[] = [
   {
     id: "5",
     title: "Technology Partnership Opportunity",
-    organization: "England Cricket Board",
+    organization: "Essex CCC",
     sport: "Cricket",
     type: "Opportunity",
     priority: "Medium",
@@ -95,7 +95,7 @@ const mockSignals: Signal[] = [
     date: new Date("2024-09-17"),
     value: "£5M+",
     category: "Technology",
-    teamId: "england-cricket-board"
+    teamId: "essex-ccc"
   },
   {
     id: "6",
@@ -126,14 +126,14 @@ const mockSignals: Signal[] = [
   {
     id: "8",
     title: "Sustainability Initiative Launch",
-    organization: "Arsenal FC",
+    organization: "Arsenal",
     sport: "Football",
     type: "Trend",
     priority: "Low",
     description: "New environmental sustainability program requiring technology partners",
     date: new Date("2024-09-14"),
     category: "Sustainability",
-    teamId: "arsenal-fc"
+    teamId: "arsenal"
   }
 ];
 
@@ -381,21 +381,15 @@ const Signals = () => {
                     </div>
                   </TableCell>
                    <TableCell className="text-right">
-                     <div className="flex items-center gap-2 justify-end">
-                       <Button variant="outline" size="sm" className="gap-2">
-                         <Eye className="h-4 w-4" />
-                         Details
-                       </Button>
-                       <Button 
-                         variant="ghost" 
-                         size="sm" 
-                         onClick={() => openAddToListDialog(signal)}
-                         className="gap-1"
-                       >
-                         <Plus className="h-4 w-4" />
-                         Add to List
-                       </Button>
-                     </div>
+                     <Button 
+                       variant="ghost" 
+                       size="sm" 
+                       onClick={() => openAddToListDialog(signal)}
+                       className="gap-1"
+                     >
+                       <Plus className="h-4 w-4" />
+                       Add to List
+                     </Button>
                    </TableCell>
                 </TableRow>
               ))}
