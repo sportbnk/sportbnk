@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { 
   Table,
   TableBody,
@@ -12,8 +13,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Search, Calendar, DollarSign, Clock, Building2, FileText, ExternalLink } from "lucide-react";
+import { Search, Calendar, DollarSign, Clock, Building2, FileText, ExternalLink, Plus } from "lucide-react";
 import { format } from "date-fns";
+import { useLists } from "@/contexts/ListsContext";
+import { useNavigate } from "react-router-dom";
 
 interface Tender {
   id: string;
@@ -26,32 +29,35 @@ interface Tender {
   status: "Open" | "Closing Soon" | "Closed";
   description: string;
   requirements: string[];
+  teamId?: string; // For linking to team details
 }
 
 const mockTenders: Tender[] = [
   {
     id: "1",
     title: "Stadium Lighting System Upgrade",
-    organization: "Arsenal FC",
+    organization: "Arsenal",
     sport: "Football",
     category: "Infrastructure",
     budget: "£2.5M - £3.2M",
     deadline: new Date("2024-10-15"),
     status: "Open",
     description: "Complete LED lighting system upgrade for Emirates Stadium",
-    requirements: ["LED Technology", "Energy Efficiency", "UEFA Compliance"]
+    requirements: ["LED Technology", "Energy Efficiency", "UEFA Compliance"],
+    teamId: "arsenal"
   },
   {
     id: "2",
     title: "Digital Marketing Platform",
-    organization: "England Cricket Board",
+    organization: "Essex CCC",
     sport: "Cricket",
     category: "Technology",
     budget: "£800K - £1.2M",
     deadline: new Date("2024-09-30"),
     status: "Closing Soon",
     description: "Comprehensive digital marketing and fan engagement platform",
-    requirements: ["CRM Integration", "Mobile App", "Analytics Dashboard"]
+    requirements: ["CRM Integration", "Mobile App", "Analytics Dashboard"],
+    teamId: "essex-ccc"
   },
   {
     id: "3",
@@ -63,19 +69,21 @@ const mockTenders: Tender[] = [
     deadline: new Date("2024-11-20"),
     status: "Open",
     description: "Advanced turf management and pitch maintenance systems",
-    requirements: ["Automated Systems", "Weather Monitoring", "Soil Analysis"]
+    requirements: ["Automated Systems", "Weather Monitoring", "Soil Analysis"],
+    teamId: "manchester-united"
   },
   {
     id: "4",
     title: "Player Performance Analytics",
-    organization: "Liverpool FC",
+    organization: "Liverpool",
     sport: "Football",
     category: "Technology",
     budget: "£500K - £750K",
     deadline: new Date("2024-09-25"),
     status: "Closing Soon",
     description: "AI-powered player performance tracking and analytics suite",
-    requirements: ["Real-time Tracking", "Injury Prevention", "Data Visualization"]
+    requirements: ["Real-time Tracking", "Injury Prevention", "Data Visualization"],
+    teamId: "liverpool"
   },
   {
     id: "5",
@@ -87,19 +95,21 @@ const mockTenders: Tender[] = [
     deadline: new Date("2024-12-01"),
     status: "Open",
     description: "Premium hospitality areas and corporate facilities renovation",
-    requirements: ["Luxury Finishes", "AV Systems", "Catering Facilities"]
+    requirements: ["Luxury Finishes", "AV Systems", "Catering Facilities"],
+    teamId: "tottenham-hotspur"
   },
   {
     id: "6",
     title: "Security System Overhaul",
-    organization: "Wembley Stadium",
-    sport: "Multi-Sport",
+    organization: "Chelsea",
+    sport: "Football",
     category: "Security",
     budget: "£3.2M - £4.1M",
     deadline: new Date("2024-10-08"),
     status: "Open",
-    description: "Complete security infrastructure upgrade for national stadium",
-    requirements: ["Facial Recognition", "Access Control", "Emergency Systems"]
+    description: "Complete security infrastructure upgrade for Stamford Bridge",
+    requirements: ["Facial Recognition", "Access Control", "Emergency Systems"],
+    teamId: "chelsea"
   }
 ];
 
@@ -108,6 +118,11 @@ const TendersRFPs = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedStatus, setSelectedStatus] = useState<string>("");
   const [tenders] = useState<Tender[]>(mockTenders);
+  const [selectedTenderForList, setSelectedTenderForList] = useState<Tender | null>(null);
+  const [isAddToListDialogOpen, setIsAddToListDialogOpen] = useState(false);
+
+  const { lists, addItemToList } = useLists();
+  const navigate = useNavigate();
 
   const filteredTenders = tenders.filter(tender => {
     const matchesSearch = tender.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -135,6 +150,20 @@ const TendersRFPs = () => {
       case "Equipment": return <Clock className="h-4 w-4" />;
       default: return <FileText className="h-4 w-4" />;
     }
+  };
+
+  const handleAddToList = async (listId: string) => {
+    if (!selectedTenderForList) return;
+    
+    setIsAddToListDialogOpen(false);
+    setSelectedTenderForList(null);
+    // This would require mapping organization to actual team IDs
+    // await addItemToList(listId, undefined, teamId);
+  };
+
+  const openAddToListDialog = (tender: Tender) => {
+    setSelectedTenderForList(tender);
+    setIsAddToListDialogOpen(true);
   };
 
   return (
@@ -222,12 +251,17 @@ const TendersRFPs = () => {
                       <div className="text-sm text-muted-foreground">{tender.sport}</div>
                     </div>
                   </TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                      <Building2 className="h-4 w-4 text-muted-foreground" />
-                      {tender.organization}
-                    </div>
-                  </TableCell>
+                   <TableCell>
+                     <div className="flex items-center gap-2">
+                       <Building2 className="h-4 w-4 text-muted-foreground" />
+                       <button 
+                         onClick={() => navigate(`/crm/teams/${tender.teamId || tender.organization.toLowerCase().replace(/\s+/g, '-')}`)}
+                         className="font-medium text-primary hover:underline text-left"
+                       >
+                         {tender.organization}
+                       </button>
+                     </div>
+                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
                       {getCategoryIcon(tender.category)}
@@ -251,18 +285,76 @@ const TendersRFPs = () => {
                       {tender.status}
                     </Badge>
                   </TableCell>
-                  <TableCell className="text-right">
-                    <Button variant="outline" size="sm" className="gap-2">
-                      <ExternalLink className="h-4 w-4" />
-                      View Details
-                    </Button>
-                  </TableCell>
+                   <TableCell className="text-right">
+                     <Button 
+                       variant="ghost" 
+                       size="sm" 
+                       onClick={() => openAddToListDialog(tender)}
+                       className="gap-1"
+                     >
+                       <Plus className="h-4 w-4" />
+                       Add to List
+                     </Button>
+                   </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </CardContent>
       </Card>
+
+      {/* Add to List Dialog */}
+      <Dialog open={isAddToListDialogOpen} onOpenChange={setIsAddToListDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              Add {selectedTenderForList?.organization} to List
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            {lists.length === 0 ? (
+              <div className="text-center py-8">
+                <p className="text-muted-foreground mb-4">You don't have any lists yet.</p>
+                <Button 
+                  onClick={() => {
+                    setIsAddToListDialogOpen(false);
+                    navigate('/crm/lists');
+                  }}
+                  variant="outline"
+                >
+                  Create Your First List
+                </Button>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <p className="text-sm text-muted-foreground">Select a list to add this organization to:</p>
+                {lists.map((list) => (
+                  <div
+                    key={list.id}
+                    className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/50 cursor-pointer"
+                    onClick={() => handleAddToList(list.id)}
+                  >
+                    <div>
+                      <h4 className="font-medium">{list.name}</h4>
+                      {list.description && (
+                        <p className="text-sm text-muted-foreground">{list.description}</p>
+                      )}
+                    </div>
+                    <Badge variant="secondary">
+                      {list.list_items?.length || 0} items
+                    </Badge>
+                  </div>
+                ))}
+              </div>
+            )}
+            <div className="flex justify-end">
+              <Button variant="outline" onClick={() => setIsAddToListDialogOpen(false)}>
+                Cancel
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
