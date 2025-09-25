@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { 
   Table,
   TableBody,
@@ -27,6 +28,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Contact, Team, Department, Sport } from "@/types/teams";
 import { useLists } from "@/contexts/ListsContext";
 import { useAuth } from "@/components/auth/AuthContext";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import * as XLSX from 'xlsx';
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -50,10 +52,13 @@ const People = () => {
   const [revealedEmails, setRevealedEmails] = useState<Set<string>>(new Set());
   const [revealedPhones, setRevealedPhones] = useState<Set<string>>(new Set());
   const [revealedLinkedIns, setRevealedLinkedIns] = useState<Set<string>>(new Set());
+  const [selectedContactForList, setSelectedContactForList] = useState<Contact | null>(null);
+  const [isAddToListDialogOpen, setIsAddToListDialogOpen] = useState(false);
   const itemsPerPage = 10;
 
-  const { lists } = useLists();
+  const { lists, addItemToList } = useLists();
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   const fetchData = async () => {
     try {
@@ -270,6 +275,19 @@ const People = () => {
       console.error('Error revealing linkedin:', error);
       toast.error("Failed to reveal LinkedIn");
     }
+  };
+
+  const handleAddToList = async (listId: string) => {
+    if (!selectedContactForList) return;
+    
+    await addItemToList(listId, selectedContactForList.id);
+    setIsAddToListDialogOpen(false);
+    setSelectedContactForList(null);
+  };
+
+  const openAddToListDialog = (contact: Contact) => {
+    setSelectedContactForList(contact);
+    setIsAddToListDialogOpen(true);
   };
 
   const getProfileImage = (contactId: string) => {
@@ -613,10 +631,7 @@ const People = () => {
                             <Button
                               variant="ghost"
                               size="sm"
-                              onClick={() => {
-                                // Add to list functionality will be implemented
-                                toast.success("Contact added to list!");
-                              }}
+                              onClick={() => openAddToListDialog(contact)}
                               className="gap-1"
                             >
                               <Plus className="h-4 w-4" />
@@ -687,6 +702,59 @@ const People = () => {
           )}
         </div>
       </div>
+
+      {/* Add to List Dialog */}
+      <Dialog open={isAddToListDialogOpen} onOpenChange={setIsAddToListDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              Add {selectedContactForList?.first_name} {selectedContactForList?.last_name} to List
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            {lists.length === 0 ? (
+              <div className="text-center py-8">
+                <p className="text-muted-foreground mb-4">You don't have any lists yet.</p>
+                <Button 
+                  onClick={() => {
+                    setIsAddToListDialogOpen(false);
+                    navigate('/crm/lists');
+                  }}
+                  variant="outline"
+                >
+                  Create Your First List
+                </Button>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <p className="text-sm text-muted-foreground">Select a list to add this contact to:</p>
+                {lists.map((list) => (
+                  <div
+                    key={list.id}
+                    className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/50 cursor-pointer"
+                    onClick={() => handleAddToList(list.id)}
+                  >
+                    <div>
+                      <h4 className="font-medium">{list.name}</h4>
+                      {list.description && (
+                        <p className="text-sm text-muted-foreground">{list.description}</p>
+                      )}
+                    </div>
+                    <Badge variant="secondary">
+                      {list.list_items?.length || 0} items
+                    </Badge>
+                  </div>
+                ))}
+              </div>
+            )}
+            <div className="flex justify-end">
+              <Button variant="outline" onClick={() => setIsAddToListDialogOpen(false)}>
+                Cancel
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
