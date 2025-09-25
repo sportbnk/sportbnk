@@ -557,7 +557,7 @@ const People = () => {
                                 className="h-6 px-2 text-xs bg-primary/10 hover:bg-primary/20 border-primary/20"
                               >
                                 <Eye className="h-3 w-3 mr-1" />
-                                Reveal Email
+                                Reveal
                               </Button>
                             )}
                           </TableCell>
@@ -580,7 +580,7 @@ const People = () => {
                                 className="h-6 px-2 text-xs bg-primary/10 hover:bg-primary/20 border-primary/20"
                               >
                                 <Eye className="h-3 w-3 mr-1" />
-                                Reveal Phone
+                                Reveal
                               </Button>
                             )}
                           </TableCell>
@@ -605,7 +605,7 @@ const People = () => {
                                 className="h-6 px-2 text-xs bg-primary/10 hover:bg-primary/20 border-primary/20"
                               >
                                 <Eye className="h-3 w-3 mr-1" />
-                                Reveal LinkedIn
+                                Reveal
                               </Button>
                             )}
                           </TableCell>
