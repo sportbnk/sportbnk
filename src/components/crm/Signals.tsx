@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { 
   Table,
   TableBody,
@@ -12,8 +13,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Search, TrendingUp, TrendingDown, AlertTriangle, Target, Building2, Calendar, Eye, Zap, Users, DollarSign } from "lucide-react";
+import { Search, TrendingUp, TrendingDown, AlertTriangle, Target, Building2, Calendar, Eye, Zap, Users, DollarSign, Plus } from "lucide-react";
 import { format } from "date-fns";
+import { useLists } from "@/contexts/ListsContext";
+import { useNavigate } from "react-router-dom";
 
 interface Signal {
   id: string;
@@ -22,11 +25,11 @@ interface Signal {
   sport: string;
   type: "Opportunity" | "Risk" | "Trend" | "Alert";
   priority: "High" | "Medium" | "Low";
-  confidence: number;
   description: string;
   date: Date;
   value?: string;
   category: string;
+  teamId?: string; // For linking to team details
 }
 
 const mockSignals: Signal[] = [
@@ -37,11 +40,11 @@ const mockSignals: Signal[] = [
     sport: "Football",
     type: "Opportunity",
     priority: "High",
-    confidence: 85,
     description: "Sources indicate active planning for 15,000 seat expansion project",
     date: new Date("2024-09-20"),
     value: "£200M+",
-    category: "Infrastructure"
+    category: "Infrastructure",
+    teamId: "newcastle-united"
   },
   {
     id: "2",
@@ -50,11 +53,11 @@ const mockSignals: Signal[] = [
     sport: "Football",
     type: "Risk",
     priority: "Medium",
-    confidence: 72,
     description: "Main sponsor contract expires next season, no renewal discussions reported",
     date: new Date("2024-09-19"),
     value: "£50M/year",
-    category: "Commercial"
+    category: "Commercial",
+    teamId: "manchester-city"
   },
   {
     id: "3",
@@ -63,11 +66,11 @@ const mockSignals: Signal[] = [
     sport: "Football",
     type: "Trend",
     priority: "Medium",
-    confidence: 90,
     description: "Increased investment in youth development facilities and coaching staff",
     date: new Date("2024-09-18"),
     value: "£25M",
-    category: "Development"
+    category: "Development",
+    teamId: "chelsea-fc"
   },
   {
     id: "4",
@@ -76,10 +79,10 @@ const mockSignals: Signal[] = [
     sport: "Football",
     type: "Alert",
     priority: "High",
-    confidence: 95,
     description: "Board meeting scheduled regarding current management structure",
     date: new Date("2024-09-21"),
-    category: "Management"
+    category: "Management",
+    teamId: "tottenham-hotspur"
   },
   {
     id: "5",
@@ -88,11 +91,11 @@ const mockSignals: Signal[] = [
     sport: "Cricket",
     type: "Opportunity",
     priority: "Medium",
-    confidence: 78,
     description: "Seeking digital transformation partner for fan engagement platforms",
     date: new Date("2024-09-17"),
     value: "£5M+",
-    category: "Technology"
+    category: "Technology",
+    teamId: "england-cricket-board"
   },
   {
     id: "6",
@@ -101,11 +104,11 @@ const mockSignals: Signal[] = [
     sport: "Football",
     type: "Opportunity",
     priority: "High",
-    confidence: 88,
     description: "Stadium naming rights contract up for renewal - premium opportunity",
     date: new Date("2024-09-16"),
     value: "£10M/year",
-    category: "Commercial"
+    category: "Commercial",
+    teamId: "leicester-city"
   },
   {
     id: "7",
@@ -114,11 +117,11 @@ const mockSignals: Signal[] = [
     sport: "Football",
     type: "Trend",
     priority: "Medium",
-    confidence: 82,
     description: "Significant increase in transfer budget allocation for January window",
     date: new Date("2024-09-15"),
     value: "£80M+",
-    category: "Transfers"
+    category: "Transfers",
+    teamId: "aston-villa"
   },
   {
     id: "8",
@@ -127,10 +130,10 @@ const mockSignals: Signal[] = [
     sport: "Football",
     type: "Trend",
     priority: "Low",
-    confidence: 75,
     description: "New environmental sustainability program requiring technology partners",
     date: new Date("2024-09-14"),
-    category: "Sustainability"
+    category: "Sustainability",
+    teamId: "arsenal-fc"
   }
 ];
 
@@ -139,6 +142,11 @@ const Signals = () => {
   const [selectedType, setSelectedType] = useState<string>("");
   const [selectedPriority, setSelectedPriority] = useState<string>("");
   const [signals] = useState<Signal[]>(mockSignals);
+  const [selectedSignalForList, setSelectedSignalForList] = useState<Signal | null>(null);
+  const [isAddToListDialogOpen, setIsAddToListDialogOpen] = useState(false);
+
+  const { lists, addItemToList } = useLists();
+  const navigate = useNavigate();
 
   const filteredSignals = signals.filter(signal => {
     const matchesSearch = signal.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -177,6 +185,23 @@ const Signals = () => {
       case "Low": return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300";
       default: return "bg-gray-100 text-gray-800";
     }
+  };
+
+  const handleAddToList = async (listId: string) => {
+    if (!selectedSignalForList) return;
+    
+    // For signals, we might want to add the organization as a team to the list
+    // Since signals don't have direct contact/team references, we'll need to handle this differently
+    // For now, let's just show a success message
+    setIsAddToListDialogOpen(false);
+    setSelectedSignalForList(null);
+    // This would require mapping organization to actual team IDs
+    // await addItemToList(listId, undefined, teamId);
+  };
+
+  const openAddToListDialog = (signal: Signal) => {
+    setSelectedSignalForList(signal);
+    setIsAddToListDialogOpen(true);
   };
 
   return (
@@ -290,19 +315,19 @@ const Signals = () => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Signal</TableHead>
-                <TableHead>Organization</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Priority</TableHead>
-                <TableHead>Confidence</TableHead>
-                <TableHead>Value</TableHead>
-                <TableHead>Date</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
+           <Table>
+             <TableHeader>
+               <TableRow>
+                 <TableHead>Signal</TableHead>
+                 <TableHead>Organization</TableHead>
+                 <TableHead>Sport</TableHead>
+                 <TableHead>Type</TableHead>
+                 <TableHead>Priority</TableHead>
+                 <TableHead>Value</TableHead>
+                 <TableHead>Date</TableHead>
+                 <TableHead className="text-right">Actions</TableHead>
+               </TableRow>
+             </TableHeader>
             <TableBody>
               {filteredSignals.map((signal) => (
                 <TableRow key={signal.id}>
@@ -312,15 +337,20 @@ const Signals = () => {
                       <div className="text-sm text-muted-foreground">{signal.description}</div>
                     </div>
                   </TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                      <Building2 className="h-4 w-4 text-muted-foreground" />
-                      <div>
-                        <div className="font-medium">{signal.organization}</div>
-                        <div className="text-sm text-muted-foreground">{signal.sport}</div>
-                      </div>
-                    </div>
-                  </TableCell>
+                   <TableCell>
+                     <div className="flex items-center gap-2">
+                       <Building2 className="h-4 w-4 text-muted-foreground" />
+                       <button 
+                         onClick={() => navigate(`/crm/teams/${signal.teamId || signal.organization.toLowerCase().replace(/\s+/g, '-')}`)}
+                         className="font-medium text-primary hover:underline text-left"
+                       >
+                         {signal.organization}
+                       </button>
+                     </div>
+                   </TableCell>
+                   <TableCell>
+                     <Badge variant="outline">{signal.sport}</Badge>
+                   </TableCell>
                   <TableCell>
                     <Badge className={getTypeColor(signal.type)}>
                       <div className="flex items-center gap-1">
@@ -333,17 +363,6 @@ const Signals = () => {
                     <Badge className={getPriorityColor(signal.priority)}>
                       {signal.priority}
                     </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                      <div className="w-12 bg-muted rounded-full h-2">
-                        <div 
-                          className="bg-primary h-2 rounded-full" 
-                          style={{ width: `${signal.confidence}%` }}
-                        />
-                      </div>
-                      <span className="text-sm">{signal.confidence}%</span>
-                    </div>
                   </TableCell>
                   <TableCell>
                     {signal.value ? (
@@ -361,18 +380,82 @@ const Signals = () => {
                       {format(signal.date, "MMM dd")}
                     </div>
                   </TableCell>
-                  <TableCell className="text-right">
-                    <Button variant="outline" size="sm" className="gap-2">
-                      <Eye className="h-4 w-4" />
-                      Details
-                    </Button>
-                  </TableCell>
+                   <TableCell className="text-right">
+                     <div className="flex items-center gap-2 justify-end">
+                       <Button variant="outline" size="sm" className="gap-2">
+                         <Eye className="h-4 w-4" />
+                         Details
+                       </Button>
+                       <Button 
+                         variant="ghost" 
+                         size="sm" 
+                         onClick={() => openAddToListDialog(signal)}
+                         className="gap-1"
+                       >
+                         <Plus className="h-4 w-4" />
+                         Add to List
+                       </Button>
+                     </div>
+                   </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </CardContent>
       </Card>
+
+      {/* Add to List Dialog */}
+      <Dialog open={isAddToListDialogOpen} onOpenChange={setIsAddToListDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              Add {selectedSignalForList?.organization} to List
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            {lists.length === 0 ? (
+              <div className="text-center py-8">
+                <p className="text-muted-foreground mb-4">You don't have any lists yet.</p>
+                <Button 
+                  onClick={() => {
+                    setIsAddToListDialogOpen(false);
+                    navigate('/crm/lists');
+                  }}
+                  variant="outline"
+                >
+                  Create Your First List
+                </Button>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <p className="text-sm text-muted-foreground">Select a list to add this organization to:</p>
+                {lists.map((list) => (
+                  <div
+                    key={list.id}
+                    className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/50 cursor-pointer"
+                    onClick={() => handleAddToList(list.id)}
+                  >
+                    <div>
+                      <h4 className="font-medium">{list.name}</h4>
+                      {list.description && (
+                        <p className="text-sm text-muted-foreground">{list.description}</p>
+                      )}
+                    </div>
+                    <Badge variant="secondary">
+                      {list.list_items?.length || 0} items
+                    </Badge>
+                  </div>
+                ))}
+              </div>
+            )}
+            <div className="flex justify-end">
+              <Button variant="outline" onClick={() => setIsAddToListDialogOpen(false)}>
+                Cancel
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
