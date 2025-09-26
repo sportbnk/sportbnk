@@ -133,7 +133,7 @@ const Dashboard = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Clock className="h-5 w-5 text-primary" />
-              Insights in Sports World
+              Signals in Sports World
             </CardTitle>
             <CardDescription>
               Latest industry movements and hiring trends
