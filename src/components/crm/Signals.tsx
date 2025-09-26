@@ -23,7 +23,7 @@ interface Signal {
   title: string;
   organization: string;
   sport: string;
-  type: "Opportunity" | "Risk" | "Trend" | "Alert";
+  type: "Opportunity" | "Risk" | "Trend" | "Alert" | "Tender";
   priority: "High" | "Medium" | "Low";
   description: string;
   date: Date;
@@ -35,6 +35,84 @@ interface Signal {
 const mockSignals: Signal[] = [
   {
     id: "1",
+    title: "Stadium Lighting System Upgrade",
+    organization: "Arsenal",
+    sport: "Football",
+    type: "Tender",
+    priority: "High",
+    description: "Complete LED lighting system upgrade for Emirates Stadium",
+    date: new Date("2024-10-15"),
+    value: "£2.5M - £3.2M",
+    category: "Infrastructure",
+    teamId: "arsenal"
+  },
+  {
+    id: "2",
+    title: "Digital Marketing Platform",
+    organization: "Essex CCC",
+    sport: "Cricket",
+    type: "Tender",
+    priority: "High",
+    description: "Comprehensive digital marketing and fan engagement platform",
+    date: new Date("2024-09-30"),
+    value: "£800K - £1.2M",
+    category: "Technology",
+    teamId: "essex-ccc"
+  },
+  {
+    id: "3",
+    title: "Pitch Maintenance Equipment",
+    organization: "Manchester United",
+    sport: "Football",
+    type: "Tender",
+    priority: "Medium",
+    description: "Advanced turf management and pitch maintenance systems",
+    date: new Date("2024-11-20"),
+    value: "£150K - £250K",
+    category: "Equipment",
+    teamId: "manchester-united"
+  },
+  {
+    id: "4",
+    title: "Player Performance Analytics",
+    organization: "Liverpool",
+    sport: "Football",
+    type: "Tender",
+    priority: "High",
+    description: "AI-powered player performance tracking and analytics suite",
+    date: new Date("2024-09-25"),
+    value: "£500K - £750K",
+    category: "Technology",
+    teamId: "liverpool"
+  },
+  {
+    id: "5",
+    title: "Hospitality Suite Renovation",
+    organization: "Tottenham Hotspur",
+    sport: "Football",
+    type: "Tender",
+    priority: "Medium",
+    description: "Premium hospitality areas and corporate facilities renovation",
+    date: new Date("2024-12-01"),
+    value: "£1.8M - £2.5M",
+    category: "Construction",
+    teamId: "tottenham-hotspur"
+  },
+  {
+    id: "6",
+    title: "Security System Overhaul",
+    organization: "Chelsea",
+    sport: "Football",
+    type: "Tender",
+    priority: "High",
+    description: "Complete security infrastructure upgrade for Stamford Bridge",
+    date: new Date("2024-10-08"),
+    value: "£3.2M - £4.1M",
+    category: "Security",
+    teamId: "chelsea"
+  },
+  {
+    id: "7",
     title: "Stadium Expansion Planning",
     organization: "Newcastle United",
     sport: "Football",
@@ -47,7 +125,7 @@ const mockSignals: Signal[] = [
     teamId: "newcastle-united"
   },
   {
-    id: "2",
+    id: "8",
     title: "Sponsorship Deal Renewal Risk",
     organization: "Manchester City",
     sport: "Football",
@@ -60,7 +138,7 @@ const mockSignals: Signal[] = [
     teamId: "manchester-city"
   },
   {
-    id: "3",
+    id: "9",
     title: "Youth Academy Investment",
     organization: "Chelsea",
     sport: "Football",
@@ -73,7 +151,7 @@ const mockSignals: Signal[] = [
     teamId: "chelsea"
   },
   {
-    id: "4",
+    id: "10",
     title: "Management Change Alert",
     organization: "Tottenham Hotspur",
     sport: "Football",
@@ -83,57 +161,6 @@ const mockSignals: Signal[] = [
     date: new Date("2024-09-21"),
     category: "Management",
     teamId: "tottenham-hotspur"
-  },
-  {
-    id: "5",
-    title: "Technology Partnership Opportunity",
-    organization: "Essex CCC",
-    sport: "Cricket",
-    type: "Opportunity",
-    priority: "Medium",
-    description: "Seeking digital transformation partner for fan engagement platforms",
-    date: new Date("2024-09-17"),
-    value: "£5M+",
-    category: "Technology",
-    teamId: "essex-ccc"
-  },
-  {
-    id: "6",
-    title: "Venue Naming Rights Available",
-    organization: "Leicester City",
-    sport: "Football",
-    type: "Opportunity",
-    priority: "High",
-    description: "Stadium naming rights contract up for renewal - premium opportunity",
-    date: new Date("2024-09-16"),
-    value: "£10M/year",
-    category: "Commercial",
-    teamId: "leicester-city"
-  },
-  {
-    id: "7",
-    title: "Player Transfer Budget Increase",
-    organization: "Aston Villa",
-    sport: "Football",
-    type: "Trend",
-    priority: "Medium",
-    description: "Significant increase in transfer budget allocation for January window",
-    date: new Date("2024-09-15"),
-    value: "£80M+",
-    category: "Transfers",
-    teamId: "aston-villa"
-  },
-  {
-    id: "8",
-    title: "Sustainability Initiative Launch",
-    organization: "Arsenal",
-    sport: "Football",
-    type: "Trend",
-    priority: "Low",
-    description: "New environmental sustainability program requiring technology partners",
-    date: new Date("2024-09-14"),
-    category: "Sustainability",
-    teamId: "arsenal"
   }
 ];
 

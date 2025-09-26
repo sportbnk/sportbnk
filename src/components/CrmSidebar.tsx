@@ -30,12 +30,10 @@ import {
 } from "@/components/ui/sidebar";
 
 const mainNavItems = [
-  { title: 'Dashboard', url: '/crm/dashboard', icon: LayoutDashboard },
+  { title: 'Signals', url: '/crm/signals', icon: Zap },
   { title: 'Organisations', url: '/crm/teams', icon: Building2 },
   { title: 'People', url: '/crm/people', icon: Users },
   { title: 'Lists', url: '/crm/lists', icon: List },
-  { title: 'Tenders', url: '/crm/tenders', icon: FileText },
-  { title: 'Signals', url: '/crm/signals', icon: Zap },
   { title: 'Integrations', url: '/crm/integrations', icon: Puzzle },
 ];
 

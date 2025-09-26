@@ -30,12 +30,10 @@ import FreeTrial from "./pages/FreeTrial";
 
 import Profile from "./pages/crm/Profile";
 import CrmSettings from "./pages/crm/Settings";
-import Dashboard from "./pages/crm/Dashboard";
 import Teams from "./pages/crm/Teams";
 import TeamDetails from "./pages/crm/TeamDetails";
 import People from "./pages/crm/People";
 import Lists from "./pages/crm/Lists";
-import Tenders from "./pages/crm/Tenders";
 import SignalsPage from "./pages/crm/SignalsPage";
 import Integrations from "./pages/crm/Integrations";
 import CrmLayout from "./components/CrmLayout";
@@ -98,17 +96,15 @@ function App() {
                       
                       
                       
-                      {/* CRM System - Protected with Trial Guard */}
-                      <Route path="/crm/dashboard" element={<ProtectedRoute><CrmLayout pageTitle="Dashboard"><Dashboard /></CrmLayout></ProtectedRoute>} />
-                      <Route path="/crm/profile" element={<ProtectedRoute><CrmLayout pageTitle="Profile"><Profile /></CrmLayout></ProtectedRoute>} />
-                      <Route path="/crm/settings" element={<ProtectedRoute><CrmLayout pageTitle="Settings"><CrmSettings /></CrmLayout></ProtectedRoute>} />
-                      <Route path="/crm/teams" element={<ProtectedRoute><CrmLayout pageTitle="Organisations"><Teams /></CrmLayout></ProtectedRoute>} />
-                      <Route path="/crm/teams/:id" element={<ProtectedRoute><CrmLayout pageTitle="Organisation Details"><TeamDetails /></CrmLayout></ProtectedRoute>} />
-                      <Route path="/crm/people" element={<ProtectedRoute><CrmLayout pageTitle="People"><People /></CrmLayout></ProtectedRoute>} />
-                      <Route path="/crm/lists" element={<ProtectedRoute><CrmLayout pageTitle="Lists"><Lists /></CrmLayout></ProtectedRoute>} />
-                      <Route path="/crm/tenders" element={<ProtectedRoute><CrmLayout pageTitle="Tenders/RFPs"><Tenders /></CrmLayout></ProtectedRoute>} />
-                      <Route path="/crm/signals" element={<ProtectedRoute><CrmLayout pageTitle="Signals"><SignalsPage /></CrmLayout></ProtectedRoute>} />
-                      <Route path="/crm/integrations" element={<ProtectedRoute><CrmLayout pageTitle="Integrations"><Integrations /></CrmLayout></ProtectedRoute>} />
+                       {/* CRM System - Protected with Trial Guard */}
+                       <Route path="/crm/profile" element={<ProtectedRoute><CrmLayout pageTitle="Profile"><Profile /></CrmLayout></ProtectedRoute>} />
+                       <Route path="/crm/settings" element={<ProtectedRoute><CrmLayout pageTitle="Settings"><CrmSettings /></CrmLayout></ProtectedRoute>} />
+                       <Route path="/crm/teams" element={<ProtectedRoute><CrmLayout pageTitle="Organisations"><Teams /></CrmLayout></ProtectedRoute>} />
+                       <Route path="/crm/teams/:id" element={<ProtectedRoute><CrmLayout pageTitle="Organisation Details"><TeamDetails /></CrmLayout></ProtectedRoute>} />
+                       <Route path="/crm/people" element={<ProtectedRoute><CrmLayout pageTitle="People"><People /></CrmLayout></ProtectedRoute>} />
+                       <Route path="/crm/lists" element={<ProtectedRoute><CrmLayout pageTitle="Lists"><Lists /></CrmLayout></ProtectedRoute>} />
+                       <Route path="/crm/signals" element={<ProtectedRoute><CrmLayout pageTitle="Signals Feed"><SignalsPage /></CrmLayout></ProtectedRoute>} />
+                       <Route path="/crm/integrations" element={<ProtectedRoute><CrmLayout pageTitle="Integrations"><Integrations /></CrmLayout></ProtectedRoute>} />
                       
                       {/* Product sub-pages */}
                       <Route path="/products/discover" element={<Discover />} />
