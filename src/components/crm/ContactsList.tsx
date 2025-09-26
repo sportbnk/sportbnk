@@ -92,15 +92,15 @@ const mockContacts: Contact[] = [
 
 const ContactsList = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedDepartment, setSelectedDepartment] = useState<string>("");
-  const [selectedOrganization, setSelectedOrganization] = useState<string>("");
+  const [selectedDepartment, setSelectedDepartment] = useState<string>("all");
+  const [selectedOrganization, setSelectedOrganization] = useState<string>("all");
 
   const filteredContacts = mockContacts.filter(contact => {
     const matchesSearch = contact.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          contact.position.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          contact.organization.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesDepartment = !selectedDepartment || contact.department === selectedDepartment;
-    const matchesOrganization = !selectedOrganization || contact.organization === selectedOrganization;
+    const matchesDepartment = selectedDepartment === "all" || contact.department === selectedDepartment;
+    const matchesOrganization = selectedOrganization === "all" || contact.organization === selectedOrganization;
     
     return matchesSearch && matchesDepartment && matchesOrganization;
   });
@@ -193,7 +193,7 @@ const ContactsList = () => {
                 <SelectValue placeholder="All Departments" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Departments</SelectItem>
+                <SelectItem value="all">All Departments</SelectItem>
                 {departments.map((dept) => (
                   <SelectItem key={dept} value={dept}>{dept}</SelectItem>
                 ))}
@@ -204,7 +204,7 @@ const ContactsList = () => {
                 <SelectValue placeholder="All Organizations" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Organizations</SelectItem>
+                <SelectItem value="all">All Organizations</SelectItem>
                 {organizations.map((org) => (
                   <SelectItem key={org} value={org}>{org}</SelectItem>
                 ))}
