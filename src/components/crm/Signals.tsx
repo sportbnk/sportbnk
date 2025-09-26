@@ -245,51 +245,6 @@ const Signals = () => {
         </Button>
       </div>
 
-      {/* My ICPs Section */}
-      <div className="space-y-4">
-        <div>
-          <h2 className="text-2xl font-semibold text-foreground">My ICPs</h2>
-          <p className="text-muted-foreground">Your Ideal Customer Profiles and saved segments</p>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Card className="p-4 hover:shadow-md transition-shadow cursor-pointer">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-primary/10 rounded-lg">
-                <Building2 className="h-5 w-5 text-primary" />
-              </div>
-              <div>
-                <h3 className="font-medium">Premier League Clubs</h3>
-                <p className="text-sm text-muted-foreground">20 organisations</p>
-              </div>
-            </div>
-          </Card>
-          
-          <Card className="p-4 hover:shadow-md transition-shadow cursor-pointer">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-accent/10 rounded-lg">
-                <Users className="h-5 w-5 text-accent" />
-              </div>
-              <div>
-                <h3 className="font-medium">Commercial Directors</h3>
-                <p className="text-sm text-muted-foreground">145 contacts</p>
-              </div>
-            </div>
-          </Card>
-          
-          <Card className="p-4 hover:shadow-md transition-shadow cursor-pointer">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-chart-1/10 rounded-lg">
-                <Target className="h-5 w-5 text-chart-1" />
-              </div>
-              <div>
-                <h3 className="font-medium">Tech Innovators</h3>
-                <p className="text-sm text-muted-foreground">52 organisations</p>
-              </div>
-            </div>
-          </Card>
-        </div>
-      </div>
 
       {/* Quick Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
