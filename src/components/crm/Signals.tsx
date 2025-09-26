@@ -30,6 +30,8 @@ interface Signal {
   datePosted: string;
   urgency: "New" | "Expiring Soon" | "Normal";
   teamId?: string;
+  description: string;
+  source?: string;
 }
 
 interface Contact {
@@ -73,7 +75,9 @@ const mockSignals: Signal[] = [
     budget: "£1.2M",
     datePosted: "3 days ago",
     urgency: "Normal",
-    teamId: "manchester-united"
+    teamId: "manchester-united",
+    description: "Official kit supplier tender for 2025-2030 seasons. Seeking premium sports apparel partner for first team, academy, and retail operations.",
+    source: "UEFA Procurement Portal"
   },
   {
     id: "2",
@@ -86,7 +90,9 @@ const mockSignals: Signal[] = [
     budget: "£250k",
     datePosted: "Today",
     urgency: "New",
-    teamId: "surrey-ccc"
+    teamId: "surrey-ccc",
+    description: "Title sponsorship opportunity for 2024 County Championship campaign. Includes shirt branding, ground naming rights, and hospitality packages.",
+    source: "ECB Commercial Network"
   },
   {
     id: "3",
@@ -97,9 +103,11 @@ const mockSignals: Signal[] = [
     region: "Ireland",
     signalType: "Procurement",
     budget: "£75k",
+    description: "Advanced recovery technology procurement for player wellness center. Seeking cryotherapy, compression therapy, and sports science equipment suppliers.",
     datePosted: "1 week ago",
     urgency: "Normal",
-    teamId: "leinster-rugby"
+    teamId: "leinster-rugby",
+    source: "Irish Rugby Union"
   },
   {
     id: "4",
@@ -112,7 +120,9 @@ const mockSignals: Signal[] = [
     budget: "£20k",
     datePosted: "2 days ago",
     urgency: "Normal",
-    teamId: "cork-city-fc"
+    teamId: "cork-city-fc",
+    description: "Grassroots development grant from FAI Community Football Programme. Funding for youth academy infrastructure and coaching development.",
+    source: "Football Association of Ireland"
   },
   {
     id: "5",
@@ -125,7 +135,9 @@ const mockSignals: Signal[] = [
     budget: "€60k",
     datePosted: "5 days ago",
     urgency: "Expiring Soon",
-    teamId: "real-madrid-basketball"
+    teamId: "real-madrid-basketball",
+    description: "Performance Analyst position for first team operations. Analytics expertise in player performance, game strategy, and opponent scouting required.",
+    source: "EuroLeague Career Portal"
   },
   {
     id: "6",
@@ -138,7 +150,9 @@ const mockSignals: Signal[] = [
     budget: "£2.5M",
     datePosted: "1 day ago",
     urgency: "New",
-    teamId: "arsenal"
+    teamId: "arsenal",
+    description: "Emirates Stadium sound system upgrade tender. Next-generation audio technology for enhanced matchday experience and commercial events.",
+    source: "Premier League Suppliers Network"
   },
   {
     id: "7",
@@ -151,7 +165,9 @@ const mockSignals: Signal[] = [
     budget: "£180k",
     datePosted: "4 days ago",
     urgency: "Normal",
-    teamId: "essex-ccc"
+    teamId: "essex-ccc",
+    description: "Training ground sponsorship at Cloudy Bay Oval. Includes facility naming rights, coaching clinic branding, and digital marketing opportunities.",
+    source: "County Cricket Partnership"
   },
   {
     id: "8",
@@ -164,7 +180,9 @@ const mockSignals: Signal[] = [
     budget: "£500k",
     datePosted: "6 days ago",
     urgency: "Expiring Soon",
-    teamId: "liverpool"
+    teamId: "liverpool",
+    description: "Anfield pitch maintenance equipment procurement. Specialized turf management systems for optimal playing surface throughout the season.",
+    source: "Grounds Management Association"
   }
 ];
 
@@ -408,6 +426,18 @@ const Signals = () => {
                       <Badge variant="outline" className={getSignalTypeColor(signal.signalType)}>
                         {signal.signalType}
                       </Badge>
+                    </div>
+
+                    {/* Signal Description */}
+                    <div className="mb-3">
+                      <p className="text-sm text-gray-700 leading-relaxed">
+                        {signal.description}
+                      </p>
+                      {signal.source && (
+                        <p className="text-xs text-gray-500 mt-1">
+                          Source: {signal.source}
+                        </p>
+                      )}
                     </div>
 
                     <div className="flex items-center gap-6 mb-4">
