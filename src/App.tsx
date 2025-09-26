@@ -36,6 +36,7 @@ import People from "./pages/crm/People";
 import Lists from "./pages/crm/Lists";
 import SignalsPage from "./pages/crm/SignalsPage";
 import ICPs from "./pages/crm/ICPs";
+import Contacts from "./pages/crm/Contacts";
 import Integrations from "./pages/crm/Integrations";
 import CrmLayout from "./components/CrmLayout";
 
@@ -106,6 +107,7 @@ function App() {
                        <Route path="/crm/lists" element={<ProtectedRoute><CrmLayout pageTitle="Lists"><Lists /></CrmLayout></ProtectedRoute>} />
                        <Route path="/crm/signals" element={<ProtectedRoute><CrmLayout pageTitle="Signals Feed"><SignalsPage /></CrmLayout></ProtectedRoute>} />
                        <Route path="/crm/icps" element={<ProtectedRoute><CrmLayout pageTitle="My ICPs"><ICPs /></CrmLayout></ProtectedRoute>} />
+                       <Route path="/crm/contacts" element={<ProtectedRoute><CrmLayout pageTitle="Contacts"><Contacts /></CrmLayout></ProtectedRoute>} />
                        <Route path="/crm/integrations" element={<ProtectedRoute><CrmLayout pageTitle="Integrations"><Integrations /></CrmLayout></ProtectedRoute>} />
                       
                       {/* Product sub-pages */}

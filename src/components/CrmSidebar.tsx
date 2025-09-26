@@ -33,6 +33,7 @@ import {
 const mainNavItems = [
   { title: 'Signals', url: '/crm/signals', icon: Zap },
   { title: 'My ICPs', url: '/crm/icps', icon: Target },
+  { title: 'Contacts', url: '/crm/contacts', icon: Users },
   { title: 'Organisations', url: '/crm/teams', icon: Building2 },
   { title: 'People', url: '/crm/people', icon: Users },
   { title: 'Lists', url: '/crm/lists', icon: List },
