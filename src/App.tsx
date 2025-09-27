@@ -108,7 +108,7 @@ function App() {
                        <Route path="/crm/settings" element={<ProtectedRoute><CrmLayout pageTitle="Settings"><CrmSettings /></CrmLayout></ProtectedRoute>} />
                        <Route path="/crm/teams" element={<ProtectedRoute><CrmLayout pageTitle="Organisations"><Teams /></CrmLayout></ProtectedRoute>} />
                        <Route path="/crm/teams/:id" element={<ProtectedRoute><CrmLayout pageTitle="Organisation Details"><TeamDetails /></CrmLayout></ProtectedRoute>} />
-                       <Route path="/crm/people" element={<ProtectedRoute><CrmLayout pageTitle="People"><People /></CrmLayout></ProtectedRoute>} />
+                       <Route path="/crm/my-contacts" element={<ProtectedRoute><CrmLayout pageTitle="My Contacts"><People /></CrmLayout></ProtectedRoute>} />
                        <Route path="/crm/lists" element={<ProtectedRoute><CrmLayout pageTitle="Lists"><Lists /></CrmLayout></ProtectedRoute>} />
                        <Route path="/crm/signals" element={<ProtectedRoute><CrmLayout pageTitle="Signals Feed"><SignalsPage /></CrmLayout></ProtectedRoute>} />
                        <Route path="/crm/icps" element={<ProtectedRoute><CrmLayout pageTitle="My ICPs"><ICPs /></CrmLayout></ProtectedRoute>} />
