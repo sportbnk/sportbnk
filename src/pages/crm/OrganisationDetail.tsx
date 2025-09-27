@@ -46,6 +46,14 @@ import southamptonLogo from "@/assets/team-logos/west-ham.png"; // Using as plac
 import westHamLogo from "@/assets/team-logos/west-ham.png";
 import wolvesLogo from "@/assets/team-logos/wolves.png";
 
+// Import cricket team logos
+import somersetLogo from "@/assets/team-logos/somerset-cricket.png";
+import surreyLogo from "@/assets/team-logos/surrey-cricket.png";
+import hampshireLogo from "@/assets/team-logos/hampshire-cricket.png";
+import middlesexLogo from "@/assets/team-logos/middlesex-cricket.png";
+import warwickshireLogo from "@/assets/team-logos/warwickshire-cricket.png";
+import ecbLogo from "@/assets/team-logos/england-cricket-national.png";
+
 interface Organisation {
   id: string;
   name: string;
@@ -584,6 +592,157 @@ const organisationsData: Record<string, Organisation> = {
       instagram: 'https://instagram.com/wolves',
       linkedin: 'https://linkedin.com/company/wolverhampton-wanderers-fc',
       youtube: 'https://youtube.com/user/OfficialWolves'
+    }
+  },
+  // Cricket Teams
+  '21': {
+    id: '21',
+    name: 'Somerset County Cricket Club',
+    type: 'Cricket Club',
+    sport: 'Cricket',
+    league: 'County Championship',
+    location: 'Taunton',
+    country: 'England',
+    foundedYear: 1875,
+    employees: '100-200',
+    website: 'https://www.somersetcricket.co.uk',
+    email: 'info@somersetcricket.co.uk',
+    phone: '+44 1823 425 301',
+    description: 'Somerset County Cricket Club is a first-class county cricket club based in Taunton, Somerset, England. Founded in 1875, the club competes in the County Championship and various limited-overs competitions. Known for developing world-class players and maintaining strong community ties.',
+    stadium: 'The County Ground',
+    capacity: 8500,
+    manager: 'Jason Kerr (Head Coach)',
+    socialMedia: {
+      twitter: 'https://twitter.com/SomersetCCC',
+      facebook: 'https://facebook.com/SomersetCountyCricketClub',
+      instagram: 'https://instagram.com/somersetccc',
+      linkedin: 'https://linkedin.com/company/somerset-cricket',
+      youtube: 'https://youtube.com/channel/SomersetCricket'
+    }
+  },
+  '22': {
+    id: '22',
+    name: 'Surrey County Cricket Club',
+    type: 'Cricket Club',
+    sport: 'Cricket',
+    league: 'County Championship',
+    location: 'London',
+    country: 'England',
+    foundedYear: 1845,
+    employees: '200-500',
+    website: 'https://www.surreycricket.com',
+    email: 'info@surreycricket.com',
+    phone: '+44 20 8643 8613',
+    description: 'Surrey County Cricket Club is one of eighteen first-class county clubs within the domestic cricket structure of England and Wales. Based at The Oval in Kennington, London, Surrey is the most successful county in the history of county cricket, having won the official County Championship 21 times.',
+    stadium: 'The Oval',
+    capacity: 25500,
+    manager: 'Gareth Batty (Head Coach)',
+    socialMedia: {
+      twitter: 'https://twitter.com/surreycricket',
+      facebook: 'https://facebook.com/SurreyCricket',
+      instagram: 'https://instagram.com/surreycricket',
+      linkedin: 'https://linkedin.com/company/surrey-cricket',
+      youtube: 'https://youtube.com/user/SurreyCricket'
+    }
+  },
+  '23': {
+    id: '23',
+    name: 'Hampshire County Cricket Club',
+    type: 'Cricket Club',
+    sport: 'Cricket',
+    league: 'County Championship',
+    location: 'Southampton',
+    country: 'England',
+    foundedYear: 1863,
+    employees: '100-200',
+    website: 'https://www.hampshirecricket.co.uk',
+    email: 'enquiries@hampshirecricket.co.uk',
+    phone: '+44 23 8047 2002',
+    description: 'Hampshire County Cricket Club is one of eighteen first-class county clubs within the domestic cricket structure of England and Wales. Based in Southampton, the club has a rich history and has won the County Championship twice and various limited-overs competitions.',
+    stadium: 'The Ageas Bowl',
+    capacity: 25000,
+    manager: 'Adrian Birrell (Head Coach)',
+    socialMedia: {
+      twitter: 'https://twitter.com/hantscricket',
+      facebook: 'https://facebook.com/HampshireCricket',
+      instagram: 'https://instagram.com/hantscricket',
+      linkedin: 'https://linkedin.com/company/hampshire-cricket',
+      youtube: 'https://youtube.com/user/HampshireCricket'
+    }
+  },
+  '24': {
+    id: '24',
+    name: 'Middlesex County Cricket Club',
+    type: 'Cricket Club',
+    sport: 'Cricket',
+    league: 'County Championship',
+    location: 'London',
+    country: 'England',
+    foundedYear: 1864,
+    employees: '100-200',
+    website: 'https://www.middlesexccc.com',
+    email: 'enquiries@middlesexccc.com',
+    phone: '+44 20 7289 1300',
+    description: 'Middlesex County Cricket Club is one of eighteen first-class county clubs within the domestic cricket structure of England and Wales. Based at Lord\'s Cricket Ground in London, Middlesex has won the County Championship 13 times and has a proud tradition of developing international cricketers.',
+    stadium: 'Lord\'s Cricket Ground',
+    capacity: 30000,
+    manager: 'Alan Coleman (Head Coach)',
+    socialMedia: {
+      twitter: 'https://twitter.com/MiddlesexCCC',
+      facebook: 'https://facebook.com/MiddlesexCCC',
+      instagram: 'https://instagram.com/middlesexccc',
+      linkedin: 'https://linkedin.com/company/middlesex-cricket',
+      youtube: 'https://youtube.com/user/MiddlesexCCC'
+    }
+  },
+  '25': {
+    id: '25',
+    name: 'Warwickshire County Cricket Club',
+    type: 'Cricket Club',
+    sport: 'Cricket',
+    league: 'County Championship',
+    location: 'Birmingham',
+    country: 'England',
+    foundedYear: 1882,
+    employees: '100-200',
+    website: 'https://www.warwickshireccc.com',
+    email: 'info@warwickshireccc.com',
+    phone: '+44 121 446 4422',
+    description: 'Warwickshire County Cricket Club is one of eighteen first-class county clubs within the domestic cricket structure of England and Wales. Based at Edgbaston in Birmingham, the club has won the County Championship 8 times and hosts international cricket matches.',
+    stadium: 'Edgbaston',
+    capacity: 25000,
+    manager: 'Mark Robinson (Head Coach)',
+    socialMedia: {
+      twitter: 'https://twitter.com/WarwickshireCCC',
+      facebook: 'https://facebook.com/WarwickshireCricket',
+      instagram: 'https://instagram.com/warwickshireccc',
+      linkedin: 'https://linkedin.com/company/warwickshire-cricket',
+      youtube: 'https://youtube.com/user/WarwickshireCCC'
+    }
+  },
+  '26': {
+    id: '26',
+    name: 'England and Wales Cricket Board',
+    type: 'Governing Body',
+    sport: 'Cricket',
+    league: 'National Governing Body',
+    location: 'London',
+    country: 'England',
+    foundedYear: 1997,
+    employees: '500-1000',
+    website: 'https://www.ecb.co.uk',
+    email: 'feedback@ecb.co.uk',
+    phone: '+44 20 7432 1200',
+    description: 'The England and Wales Cricket Board (ECB) is the national governing body for cricket in England and Wales. Formed in 1997, the ECB is responsible for the professional game, recreational cricket, and the England national teams. The organization oversees county cricket, international tours, and grassroots development.',
+    stadium: 'Lord\'s Cricket Ground (HQ)',
+    capacity: 30000,
+    manager: 'Richard Gould (Chief Executive)',
+    socialMedia: {
+      twitter: 'https://twitter.com/englandcricket',
+      facebook: 'https://facebook.com/englandcricket',
+      instagram: 'https://instagram.com/englandcricket',
+      linkedin: 'https://linkedin.com/company/ecb-cricket',
+      youtube: 'https://youtube.com/user/englandcricket'
     }
   }
 };
@@ -1124,6 +1283,239 @@ const employeesData: Record<string, Employee[]> = {
       joinedDate: 'Aug 2019',
       isKeyContact: true
     }
+  ],
+  // Cricket Teams Employee Data
+  '21': [
+    {
+      id: 'c1',
+      name: 'Andy Hurry',
+      position: 'Chief Executive',
+      department: 'Executive',
+      email: 'a.hurry@somersetcricket.co.uk',
+      phone: '+44 1823 425 302',
+      linkedin: 'https://linkedin.com/in/andyhurry',
+      joinedDate: 'Mar 2018',
+      isKeyContact: true
+    },
+    {
+      id: 'c2',
+      name: 'Steve Pearce',
+      position: 'Commercial Manager',
+      department: 'Commercial',
+      email: 's.pearce@somersetcricket.co.uk',
+      phone: '+44 1823 425 303',
+      joinedDate: 'Jun 2020',
+      isKeyContact: true
+    },
+    {
+      id: 'c3',
+      name: 'Lewis McManus',
+      position: 'Marketing Director',
+      department: 'Marketing',
+      email: 'l.mcmanus@somersetcricket.co.uk',
+      phone: '+44 1823 425 304',
+      joinedDate: 'Jan 2021',
+      isKeyContact: false
+    }
+  ],
+  '22': [
+    {
+      id: 'c4',
+      name: 'Steve Elworthy',
+      position: 'Chief Executive',
+      department: 'Executive',
+      email: 's.elworthy@surreycricket.com',
+      phone: '+44 20 8643 8614',
+      linkedin: 'https://linkedin.com/in/steveelworthy',
+      joinedDate: 'Feb 2017',
+      isKeyContact: true
+    },
+    {
+      id: 'c5',
+      name: 'Oli Slipper',
+      position: 'Commercial Director',
+      department: 'Commercial',
+      email: 'o.slipper@surreycricket.com',
+      phone: '+44 20 8643 8615',
+      linkedin: 'https://linkedin.com/in/olislipper',
+      joinedDate: 'Aug 2019',
+      isKeyContact: true
+    },
+    {
+      id: 'c6',
+      name: 'Brian Murgatroyd',
+      position: 'Communications Manager',
+      department: 'Marketing',
+      email: 'b.murgatroyd@surreycricket.com',
+      phone: '+44 20 8643 8616',
+      joinedDate: 'May 2018',
+      isKeyContact: false
+    },
+    {
+      id: 'c7',
+      name: 'Richard Thompson',
+      position: 'Head of Partnerships',
+      department: 'Commercial',
+      email: 'r.thompson@surreycricket.com',
+      phone: '+44 20 8643 8617',
+      joinedDate: 'Nov 2020',
+      isKeyContact: true
+    }
+  ],
+  '23': [
+    {
+      id: 'c8',
+      name: 'Tim Tremlett',
+      position: 'Chief Executive',
+      department: 'Executive',
+      email: 't.tremlett@hampshirecricket.co.uk',
+      phone: '+44 23 8047 2003',
+      linkedin: 'https://linkedin.com/in/timtremlett',
+      joinedDate: 'Jan 2020',
+      isKeyContact: true
+    },
+    {
+      id: 'c9',
+      name: 'David Mann',
+      position: 'Commercial Director',
+      department: 'Commercial',
+      email: 'd.mann@hampshirecricket.co.uk',
+      phone: '+44 23 8047 2004',
+      joinedDate: 'Mar 2018',
+      isKeyContact: true
+    },
+    {
+      id: 'c10',
+      name: 'Tony Baker',
+      position: 'Operations Manager',
+      department: 'Operations',
+      email: 't.baker@hampshirecricket.co.uk',
+      phone: '+44 23 8047 2005',
+      joinedDate: 'Jul 2019',
+      isKeyContact: false
+    }
+  ],
+  '24': [
+    {
+      id: 'c11',
+      name: 'Andrew Cornish',
+      position: 'Chief Executive',
+      department: 'Executive',
+      email: 'a.cornish@middlesexccc.com',
+      phone: '+44 20 7289 1301',
+      linkedin: 'https://linkedin.com/in/andrewcornish',
+      joinedDate: 'Sep 2019',
+      isKeyContact: true
+    },
+    {
+      id: 'c12',
+      name: 'James Pipe',
+      position: 'Commercial Manager',
+      department: 'Commercial',
+      email: 'j.pipe@middlesexccc.com',
+      phone: '+44 20 7289 1302',
+      joinedDate: 'Feb 2021',
+      isKeyContact: true
+    },
+    {
+      id: 'c13',
+      name: 'Michael Vockins',
+      position: 'Marketing Director',
+      department: 'Marketing',
+      email: 'm.vockins@middlesexccc.com',
+      phone: '+44 20 7289 1303',
+      joinedDate: 'Oct 2020',
+      isKeyContact: false
+    }
+  ],
+  '25': [
+    {
+      id: 'c14',
+      name: 'Stuart Cain',
+      position: 'Chief Executive',
+      department: 'Executive',
+      email: 's.cain@warwickshireccc.com',
+      phone: '+44 121 446 4423',
+      linkedin: 'https://linkedin.com/in/stuartcain',
+      joinedDate: 'Apr 2017',
+      isKeyContact: true
+    },
+    {
+      id: 'c15',
+      name: 'Craig Flindall',
+      position: 'Commercial Director',
+      department: 'Commercial',
+      email: 'c.flindall@warwickshireccc.com',
+      phone: '+44 121 446 4424',
+      joinedDate: 'Jan 2019',
+      isKeyContact: true
+    },
+    {
+      id: 'c16',
+      name: 'Paul Farbrace',
+      position: 'Strategy & Operations',
+      department: 'Operations',
+      email: 'p.farbrace@warwickshireccc.com',
+      phone: '+44 121 446 4425',
+      linkedin: 'https://linkedin.com/in/paulfarbrace',
+      joinedDate: 'Jun 2021',
+      isKeyContact: false
+    }
+  ],
+  '26': [
+    {
+      id: 'c17',
+      name: 'Richard Gould',
+      position: 'Chief Executive',
+      department: 'Executive',
+      email: 'r.gould@ecb.co.uk',
+      phone: '+44 20 7432 1201',
+      linkedin: 'https://linkedin.com/in/richardgould',
+      joinedDate: 'Jan 2024',
+      isKeyContact: true
+    },
+    {
+      id: 'c18',
+      name: 'Vikram Banerjee',
+      position: 'Commercial Director',
+      department: 'Commercial',
+      email: 'v.banerjee@ecb.co.uk',
+      phone: '+44 20 7432 1202',
+      linkedin: 'https://linkedin.com/in/vikrambanerjee',
+      joinedDate: 'Sep 2021',
+      isKeyContact: true
+    },
+    {
+      id: 'c19',
+      name: 'Danny Reuben',
+      position: 'Head of Communications',
+      department: 'Marketing',
+      email: 'd.reuben@ecb.co.uk',
+      phone: '+44 20 7432 1203',
+      joinedDate: 'Mar 2020',
+      isKeyContact: false
+    },
+    {
+      id: 'c20',
+      name: 'Beth Barrett-Wild',
+      position: 'Strategy & Insights Director',
+      department: 'Operations',
+      email: 'b.barrett-wild@ecb.co.uk',
+      phone: '+44 20 7432 1204',
+      linkedin: 'https://linkedin.com/in/bethbarrettwild',
+      joinedDate: 'Nov 2019',
+      isKeyContact: true
+    },
+    {
+      id: 'c21',
+      name: 'David Mahoney',
+      position: 'Partnerships Director',
+      department: 'Commercial',
+      email: 'd.mahoney@ecb.co.uk',
+      phone: '+44 20 7432 1205',
+      joinedDate: 'Jul 2018',
+      isKeyContact: true
+    }
   ]
 };
 
@@ -1148,7 +1540,14 @@ const getTeamLogo = (teamName: string) => {
     'Nottingham Forest FC': nottinghamForestLogo,
     'Southampton FC': southamptonLogo,
     'West Ham United FC': westHamLogo,
-    'Wolverhampton Wanderers FC': wolvesLogo
+    'Wolverhampton Wanderers FC': wolvesLogo,
+    // Cricket teams
+    'Somerset County Cricket Club': somersetLogo,
+    'Surrey County Cricket Club': surreyLogo,
+    'Hampshire County Cricket Club': hampshireLogo,
+    'Middlesex County Cricket Club': middlesexLogo,
+    'Warwickshire County Cricket Club': warwickshireLogo,
+    'England and Wales Cricket Board': ecbLogo
   };
   return logoMap[teamName] || arsenalLogo;
 };
