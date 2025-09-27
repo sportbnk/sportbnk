@@ -318,6 +318,20 @@ const premierLeagueTeams: Organisation[] = [
     phone: '+44 20 8548 2748'
   },
   {
+    id: '19',
+    name: 'West Ham United FC',
+    type: 'Football Club',
+    sport: 'Football',
+    league: 'Premier League',
+    location: 'London',
+    country: 'England',
+    foundedYear: 1895,
+    employees: '200-500',
+    website: 'https://www.whufc.com',
+    email: 'info@whufc.com',
+    phone: '+44 20 8548 2748'
+  },
+  {
     id: '20',
     name: 'Wolverhampton Wanderers FC',
     type: 'Football Club',

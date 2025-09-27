@@ -111,6 +111,106 @@ const organisationsData: Record<string, Organisation> = {
       youtube: 'https://youtube.com/user/ArsenalTour'
     }
   },
+  '2': {
+    id: '2',
+    name: 'Aston Villa FC',
+    type: 'Football Club',
+    sport: 'Football',
+    league: 'Premier League',
+    location: 'Birmingham',
+    country: 'England',
+    foundedYear: 1874,
+    employees: '200-500',
+    website: 'https://www.avfc.co.uk',
+    email: 'enquiries@avfc.co.uk',
+    phone: '+44 121 327 2299',
+    description: 'Aston Villa Football Club is a professional football club based in Aston, Birmingham, England. The club competes in the Premier League and is one of the oldest and most successful clubs in English football, having won seven league titles and seven FA Cups.',
+    stadium: 'Villa Park',
+    capacity: 42682,
+    manager: 'Unai Emery',
+    socialMedia: {
+      twitter: 'https://twitter.com/AVFCOfficial',
+      facebook: 'https://facebook.com/OfficialAVFC',
+      instagram: 'https://instagram.com/avfcofficial',
+      linkedin: 'https://linkedin.com/company/aston-villa-football-club',
+      youtube: 'https://youtube.com/user/AVFCOfficial'
+    }
+  },
+  '3': {
+    id: '3',
+    name: 'AFC Bournemouth',
+    type: 'Football Club',
+    sport: 'Football',
+    league: 'Premier League',
+    location: 'Bournemouth',
+    country: 'England',
+    foundedYear: 1899,
+    employees: '100-200',
+    website: 'https://www.afcb.co.uk',
+    email: 'enquiries@afcb.co.uk',
+    phone: '+44 1202 726 300',
+    description: 'AFC Bournemouth is a professional football club based in Kings Park, Boscombe, a suburb of Bournemouth, Dorset, England. The club competes in the Premier League and has experienced a remarkable rise through the English football pyramid.',
+    stadium: 'Vitality Stadium',
+    capacity: 11379,
+    manager: 'Andoni Iraola',
+    socialMedia: {
+      twitter: 'https://twitter.com/afcbournemouth',
+      facebook: 'https://facebook.com/OfficialAFCB',
+      instagram: 'https://instagram.com/afcbournemouth',
+      linkedin: 'https://linkedin.com/company/afc-bournemouth',
+      youtube: 'https://youtube.com/user/AFCBournemouthTV'
+    }
+  },
+  '4': {
+    id: '4',
+    name: 'Brentford FC',
+    type: 'Football Club',
+    sport: 'Football',
+    league: 'Premier League',
+    location: 'London',
+    country: 'England',
+    foundedYear: 1889,
+    employees: '100-200',
+    website: 'https://www.brentfordfc.com',
+    email: 'enquiries@brentfordfc.com',
+    phone: '+44 20 8847 2511',
+    description: 'Brentford Football Club is a professional football club based in Brentford, West London, England. The club competes in the Premier League and is known for its innovative approach to football analytics and player recruitment.',
+    stadium: 'Brentford Community Stadium',
+    capacity: 17250,
+    manager: 'Thomas Frank',
+    socialMedia: {
+      twitter: 'https://twitter.com/BrentfordFC',
+      facebook: 'https://facebook.com/BrentfordFC',
+      instagram: 'https://instagram.com/brentfordfc',
+      linkedin: 'https://linkedin.com/company/brentford-fc',
+      youtube: 'https://youtube.com/user/BrentfordFCOfficial'
+    }
+  },
+  '5': {
+    id: '5',
+    name: 'Brighton & Hove Albion FC',
+    type: 'Football Club',
+    sport: 'Football',
+    league: 'Premier League',
+    location: 'Brighton',
+    country: 'England',
+    foundedYear: 1901,
+    employees: '200-500',
+    website: 'https://www.brightonandhovealbion.com',
+    email: 'seagulls@brightonandhovealbion.com',
+    phone: '+44 1273 695 400',
+    description: 'Brighton & Hove Albion Football Club, commonly referred to as Brighton, is a professional football club based in Brighton and Hove, East Sussex, England. The club competes in the Premier League and plays at the American Express Community Stadium.',
+    stadium: 'American Express Community Stadium',
+    capacity: 31800,
+    manager: 'Fabian Hürzeler',
+    socialMedia: {
+      twitter: 'https://twitter.com/OfficialBHAFC',
+      facebook: 'https://facebook.com/BrightonHoveAlbionFC',
+      instagram: 'https://instagram.com/officialbhafc',
+      linkedin: 'https://linkedin.com/company/brighton-hove-albion-fc',
+      youtube: 'https://youtube.com/user/OfficialBHAFC'
+    }
+  },
   '6': {
     id: '6',
     name: 'Chelsea FC',
@@ -127,13 +227,138 @@ const organisationsData: Record<string, Organisation> = {
     description: 'Chelsea Football Club is an English professional football club based in Fulham, West London. Founded in 1905, they play their home games at Stamford Bridge. The club competes in the Premier League and has won six league titles, eight FA Cups, five League Cups, and two UEFA Champions League titles.',
     stadium: 'Stamford Bridge',
     capacity: 40341,
-    manager: 'Mauricio Pochettino',
+    manager: 'Enzo Maresca',
     socialMedia: {
       twitter: 'https://twitter.com/ChelseaFC',
       facebook: 'https://facebook.com/ChelseaFC',
       instagram: 'https://instagram.com/chelseafc',
       linkedin: 'https://linkedin.com/company/chelsea-football-club',
       youtube: 'https://youtube.com/user/chelseafc'
+    }
+  },
+  '7': {
+    id: '7',
+    name: 'Crystal Palace FC',
+    type: 'Football Club',
+    sport: 'Football',
+    league: 'Premier League',
+    location: 'London',
+    country: 'England',
+    foundedYear: 1905,
+    employees: '200-500',
+    website: 'https://www.cpfc.co.uk',
+    email: 'info@cpfc.co.uk',
+    phone: '+44 20 8768 6000',
+    description: 'Crystal Palace Football Club is a professional football club based in Selhurst, South London, England. The club competes in the Premier League and is known for its passionate fanbase and impressive academy system.',
+    stadium: 'Selhurst Park',
+    capacity: 25486,
+    manager: 'Oliver Glasner',
+    socialMedia: {
+      twitter: 'https://twitter.com/CPFC',
+      facebook: 'https://facebook.com/OfficialCPFC',
+      instagram: 'https://instagram.com/cpfc',
+      linkedin: 'https://linkedin.com/company/crystal-palace-fc',
+      youtube: 'https://youtube.com/user/CPFCOfficial'
+    }
+  },
+  '8': {
+    id: '8',
+    name: 'Everton FC',
+    type: 'Football Club',
+    sport: 'Football',
+    league: 'Premier League',
+    location: 'Liverpool',
+    country: 'England',
+    foundedYear: 1878,
+    employees: '200-500',
+    website: 'https://www.evertonfc.com',
+    email: 'info@evertonfc.com',
+    phone: '+44 151 556 1878',
+    description: 'Everton Football Club is an English professional football club based in Liverpool that competes in the Premier League. The club has competed in the top division for a record 121 seasons and has won nine league titles, five FA Cups, and one European Cup Winners\' Cup.',
+    stadium: 'Goodison Park',
+    capacity: 39414,
+    manager: 'Sean Dyche',
+    socialMedia: {
+      twitter: 'https://twitter.com/Everton',
+      facebook: 'https://facebook.com/Everton',
+      instagram: 'https://instagram.com/everton',
+      linkedin: 'https://linkedin.com/company/everton-football-club',
+      youtube: 'https://youtube.com/user/EvertonTV'
+    }
+  },
+  '9': {
+    id: '9',
+    name: 'Fulham FC',
+    type: 'Football Club',
+    sport: 'Football',
+    league: 'Premier League',
+    location: 'London',
+    country: 'England',
+    foundedYear: 1879,
+    employees: '200-500',
+    website: 'https://www.fulhamfc.com',
+    email: 'enquiries@fulhamfc.com',
+    phone: '+44 843 208 1222',
+    description: 'Fulham Football Club is a professional football club based in Fulham, West London, England. The club competes in the Premier League and is known for its historic Craven Cottage stadium, located on the banks of the River Thames.',
+    stadium: 'Craven Cottage',
+    capacity: 19359,
+    manager: 'Marco Silva',
+    socialMedia: {
+      twitter: 'https://twitter.com/FulhamFC',
+      facebook: 'https://facebook.com/FulhamFootballClub',
+      instagram: 'https://instagram.com/fulhamfc',
+      linkedin: 'https://linkedin.com/company/fulham-football-club',
+      youtube: 'https://youtube.com/user/FulhamFCOfficial'
+    }
+  },
+  '10': {
+    id: '10',
+    name: 'Ipswich Town FC',
+    type: 'Football Club',
+    sport: 'Football',
+    league: 'Premier League',
+    location: 'Ipswich',
+    country: 'England',
+    foundedYear: 1878,
+    employees: '100-200',
+    website: 'https://www.itfc.co.uk',
+    email: 'enquiries@itfc.co.uk',
+    phone: '+44 1473 400 500',
+    description: 'Ipswich Town Football Club is a professional football club based in Ipswich, Suffolk, England. The club competes in the Premier League and has won the First Division once, the FA Cup once, and the UEFA Cup once.',
+    stadium: 'Portman Road',
+    capacity: 30311,
+    manager: 'Kieran McKenna',
+    socialMedia: {
+      twitter: 'https://twitter.com/IpswichTown',
+      facebook: 'https://facebook.com/IpswichTown',
+      instagram: 'https://instagram.com/ipswichtown',
+      linkedin: 'https://linkedin.com/company/ipswich-town-fc',
+      youtube: 'https://youtube.com/user/IpswichTownTV'
+    }
+  },
+  '11': {
+    id: '11',
+    name: 'Leicester City FC',
+    type: 'Football Club',
+    sport: 'Football',
+    league: 'Premier League',
+    location: 'Leicester',
+    country: 'England',
+    foundedYear: 1884,
+    employees: '200-500',
+    website: 'https://www.lcfc.com',
+    email: 'reception@lcfc.co.uk',
+    phone: '+44 344 815 5000',
+    description: 'Leicester City Football Club is an English professional football club based in Leicester in the East Midlands. The club competes in the Premier League and famously won their first Premier League title in the 2015-16 season against 5000-1 odds.',
+    stadium: 'King Power Stadium',
+    capacity: 32312,
+    manager: 'Steve Cooper',
+    socialMedia: {
+      twitter: 'https://twitter.com/LCFC',
+      facebook: 'https://facebook.com/LCFCOfficial',
+      instagram: 'https://instagram.com/lcfc',
+      linkedin: 'https://linkedin.com/company/leicester-city-football-club',
+      youtube: 'https://youtube.com/user/LCFCOfficial'
     }
   },
   '12': {
@@ -152,13 +377,38 @@ const organisationsData: Record<string, Organisation> = {
     description: 'Liverpool Football Club is a professional football club based in Liverpool, England. The club competes in the Premier League and is one of the most successful clubs in English football history, having won 19 league titles, 8 FA Cups, 10 League Cups, and 6 European Cups.',
     stadium: 'Anfield',
     capacity: 61276,
-    manager: 'Jürgen Klopp',
+    manager: 'Arne Slot',
     socialMedia: {
       twitter: 'https://twitter.com/LFC',
       facebook: 'https://facebook.com/LiverpoolFC',
       instagram: 'https://instagram.com/liverpoolfc',
       linkedin: 'https://linkedin.com/company/liverpool-football-club',
       youtube: 'https://youtube.com/user/LiverpoolFC'
+    }
+  },
+  '13': {
+    id: '13',
+    name: 'Manchester City FC',
+    type: 'Football Club',
+    sport: 'Football',
+    league: 'Premier League',
+    location: 'Manchester',
+    country: 'England',
+    foundedYear: 1880,
+    employees: '500-1000',
+    website: 'https://www.mancity.com',
+    email: 'mancity@mancity.com',
+    phone: '+44 161 444 1894',
+    description: 'Manchester City Football Club is an English football club based in Manchester that competes in the Premier League. The club has won nine league titles, seven FA Cups, and one UEFA Champions League title.',
+    stadium: 'Etihad Stadium',
+    capacity: 55097,
+    manager: 'Pep Guardiola',
+    socialMedia: {
+      twitter: 'https://twitter.com/ManCity',
+      facebook: 'https://facebook.com/mcfcofficial',
+      instagram: 'https://instagram.com/mancity',
+      linkedin: 'https://linkedin.com/company/manchester-city-football-club',
+      youtube: 'https://youtube.com/user/mcfcofficial'
     }
   },
   '14': {
@@ -184,6 +434,156 @@ const organisationsData: Record<string, Organisation> = {
       instagram: 'https://instagram.com/manchesterunited',
       linkedin: 'https://linkedin.com/company/manchester-united',
       youtube: 'https://youtube.com/user/manutd'
+    }
+  },
+  '15': {
+    id: '15',
+    name: 'Newcastle United FC',
+    type: 'Football Club',
+    sport: 'Football',
+    league: 'Premier League',
+    location: 'Newcastle',
+    country: 'England',
+    foundedYear: 1892,
+    employees: '200-500',
+    website: 'https://www.nufc.co.uk',
+    email: 'admin@nufc.co.uk',
+    phone: '+44 191 201 8400',
+    description: 'Newcastle United Football Club is an English professional football club based in Newcastle upon Tyne. The club competes in the Premier League and has won four league titles, six FA Cups, and one UEFA Intertoto Cup.',
+    stadium: 'St. James\' Park',
+    capacity: 52305,
+    manager: 'Eddie Howe',
+    socialMedia: {
+      twitter: 'https://twitter.com/NUFC',
+      facebook: 'https://facebook.com/NewcastleUnited',
+      instagram: 'https://instagram.com/nufc',
+      linkedin: 'https://linkedin.com/company/newcastle-united-football-club',
+      youtube: 'https://youtube.com/user/NUFCTV'
+    }
+  },
+  '16': {
+    id: '16',
+    name: 'Nottingham Forest FC',
+    type: 'Football Club',
+    sport: 'Football',
+    league: 'Premier League',
+    location: 'Nottingham',
+    country: 'England',
+    foundedYear: 1865,
+    employees: '100-200',
+    website: 'https://www.nottinghamforest.co.uk',
+    email: 'info@nottinghamforest.co.uk',
+    phone: '+44 115 982 4444',
+    description: 'Nottingham Forest Football Club is a professional football club based in West Bridgford, Nottinghamshire, England. The club competes in the Premier League and has won one league title, two FA Cups, and two European Cups.',
+    stadium: 'The City Ground',
+    capacity: 30445,
+    manager: 'Nuno Espírito Santo',
+    socialMedia: {
+      twitter: 'https://twitter.com/NFFC',
+      facebook: 'https://facebook.com/OfficialNottinghamForest',
+      instagram: 'https://instagram.com/nottinghamforest',
+      linkedin: 'https://linkedin.com/company/nottingham-forest-fc',
+      youtube: 'https://youtube.com/user/OfficialNFFC'
+    }
+  },
+  '17': {
+    id: '17',
+    name: 'Southampton FC',
+    type: 'Football Club',
+    sport: 'Football',
+    league: 'Premier League',
+    location: 'Southampton',
+    country: 'England',
+    foundedYear: 1885,
+    employees: '200-500',
+    website: 'https://www.southamptonfc.com',
+    email: 'sfc@southamptonfc.com',
+    phone: '+44 23 8022 8575',
+    description: 'Southampton Football Club is an English professional football club based in Southampton, Hampshire. The club competes in the Premier League and has won one FA Cup and is known for its excellent youth academy.',
+    stadium: 'St. Mary\'s Stadium',
+    capacity: 32384,
+    manager: 'Russell Martin',
+    socialMedia: {
+      twitter: 'https://twitter.com/SouthamptonFC',
+      facebook: 'https://facebook.com/SouthamptonFC',
+      instagram: 'https://instagram.com/southamptonfc',
+      linkedin: 'https://linkedin.com/company/southampton-football-club',
+      youtube: 'https://youtube.com/user/SouthamptonFC'
+    }
+  },
+  '18': {
+    id: '18',
+    name: 'Tottenham Hotspur FC',
+    type: 'Football Club',
+    sport: 'Football',
+    league: 'Premier League',
+    location: 'London',
+    country: 'England',
+    foundedYear: 1882,
+    employees: '500-1000',
+    website: 'https://www.tottenhamhotspur.com',
+    email: 'customer.care@tottenhamhotspur.com',
+    phone: '+44 344 499 5000',
+    description: 'Tottenham Hotspur Football Club is an English professional football club based in Tottenham, North London. The club competes in the Premier League and has won two league titles, eight FA Cups, and two UEFA Cups.',
+    stadium: 'Tottenham Hotspur Stadium',
+    capacity: 62850,
+    manager: 'Ange Postecoglou',
+    socialMedia: {
+      twitter: 'https://twitter.com/SpursOfficial',
+      facebook: 'https://facebook.com/TottenhamHotspur',
+      instagram: 'https://instagram.com/spursofficial',
+      linkedin: 'https://linkedin.com/company/tottenham-hotspur',
+      youtube: 'https://youtube.com/user/spursofficial'
+    }
+  },
+  '19': {
+    id: '19',
+    name: 'West Ham United FC',
+    type: 'Football Club',
+    sport: 'Football',
+    league: 'Premier League',
+    location: 'London',
+    country: 'England',
+    foundedYear: 1895,
+    employees: '200-500',
+    website: 'https://www.whufc.com',
+    email: 'info@whufc.com',
+    phone: '+44 20 8548 2748',
+    description: 'West Ham United Football Club is an English professional football club based in Stratford, East London. The club competes in the Premier League and has won three FA Cups and one European Cup Winners\' Cup.',
+    stadium: 'London Stadium',
+    capacity: 66000,
+    manager: 'Julen Lopetegui',
+    socialMedia: {
+      twitter: 'https://twitter.com/WestHam',
+      facebook: 'https://facebook.com/WestHamUnited',
+      instagram: 'https://instagram.com/westham',
+      linkedin: 'https://linkedin.com/company/west-ham-united',
+      youtube: 'https://youtube.com/user/WestHamUnited'
+    }
+  },
+  '20': {
+    id: '20',
+    name: 'Wolverhampton Wanderers FC',
+    type: 'Football Club',
+    sport: 'Football',
+    league: 'Premier League',
+    location: 'Wolverhampton',
+    country: 'England',
+    foundedYear: 1877,
+    employees: '200-500',
+    website: 'https://www.wolves.co.uk',
+    email: 'info@wolves.co.uk',
+    phone: '+44 871 222 2220',
+    description: 'Wolverhampton Wanderers Football Club, commonly known as Wolves, is a professional football club based in Wolverhampton, England. The club competes in the Premier League and has won three league titles and four FA Cups.',
+    stadium: 'Molineux Stadium',
+    capacity: 31700,
+    manager: 'Gary O\'Neil',
+    socialMedia: {
+      twitter: 'https://twitter.com/Wolves',
+      facebook: 'https://facebook.com/OfficialWolves',
+      instagram: 'https://instagram.com/wolves',
+      linkedin: 'https://linkedin.com/company/wolverhampton-wanderers-fc',
+      youtube: 'https://youtube.com/user/OfficialWolves'
     }
   }
 };
@@ -245,9 +645,99 @@ const employeesData: Record<string, Employee[]> = {
       isKeyContact: false
     }
   ],
-  '6': [
+  '2': [
     {
       id: 'e6',
+      name: 'Monchi',
+      position: 'President of Football Operations',
+      department: 'Executive',
+      email: 'monchi@avfc.co.uk',
+      phone: '+44 121 327 2201',
+      linkedin: 'https://linkedin.com/in/monchi',
+      joinedDate: 'Oct 2022',
+      isKeyContact: true
+    },
+    {
+      id: 'e7',
+      name: 'Chris Heck',
+      position: 'Chief Commercial Officer',
+      department: 'Commercial',
+      email: 'c.heck@avfc.co.uk',
+      phone: '+44 121 327 2202',
+      joinedDate: 'Jul 2021',
+      isKeyContact: true
+    }
+  ],
+  '3': [
+    {
+      id: 'e8',
+      name: 'Neill Blake',
+      position: 'Chief Executive',
+      department: 'Executive',
+      email: 'n.blake@afcb.co.uk',
+      phone: '+44 1202 726 301',
+      joinedDate: 'Jun 2019',
+      isKeyContact: true
+    },
+    {
+      id: 'e9',
+      name: 'Rob Mitchell',
+      position: 'Commercial Director',
+      department: 'Commercial',
+      email: 'r.mitchell@afcb.co.uk',
+      phone: '+44 1202 726 302',
+      joinedDate: 'Aug 2020',
+      isKeyContact: true
+    }
+  ],
+  '4': [
+    {
+      id: 'e10',
+      name: 'Jon Varney',
+      position: 'Chief Executive',
+      department: 'Executive',
+      email: 'j.varney@brentfordfc.com',
+      phone: '+44 20 8847 2501',
+      joinedDate: 'May 2017',
+      isKeyContact: true
+    },
+    {
+      id: 'e11',
+      name: 'Susie Louis',
+      position: 'Commercial Director',
+      department: 'Commercial',
+      email: 's.louis@brentfordfc.com',
+      phone: '+44 20 8847 2502',
+      joinedDate: 'Jan 2019',
+      isKeyContact: true
+    }
+  ],
+  '5': [
+    {
+      id: 'e12',
+      name: 'Paul Barber',
+      position: 'Chief Executive',
+      department: 'Executive',
+      email: 'p.barber@brightonandhovealbion.com',
+      phone: '+44 1273 695 401',
+      linkedin: 'https://linkedin.com/in/paulbarber',
+      joinedDate: 'Aug 2012',
+      isKeyContact: true
+    },
+    {
+      id: 'e13',
+      name: 'Richard Hebberd',
+      position: 'Commercial Director',
+      department: 'Commercial',
+      email: 'r.hebberd@brightonandhovealbion.com',
+      phone: '+44 1273 695 402',
+      joinedDate: 'Mar 2018',
+      isKeyContact: true
+    }
+  ],
+  '6': [
+    {
+      id: 'e14',
       name: 'Chris Jurasek',
       position: 'Chief Executive',
       department: 'Executive',
@@ -258,7 +748,7 @@ const employeesData: Record<string, Employee[]> = {
       isKeyContact: true
     },
     {
-      id: 'e7',
+      id: 'e15',
       name: 'David Barnard',
       position: 'Commercial Director',
       department: 'Commercial',
@@ -268,7 +758,7 @@ const employeesData: Record<string, Employee[]> = {
       isKeyContact: true
     },
     {
-      id: 'e8',
+      id: 'e16',
       name: 'Steve Atkins',
       position: 'Communications Director',
       department: 'Marketing',
@@ -279,9 +769,120 @@ const employeesData: Record<string, Employee[]> = {
       isKeyContact: false
     }
   ],
+  '7': [
+    {
+      id: 'e17',
+      name: 'Barry Webber',
+      position: 'Chairman',
+      department: 'Executive',
+      email: 'b.webber@cpfc.co.uk',
+      phone: '+44 20 8768 6001',
+      joinedDate: 'Nov 2018',
+      isKeyContact: true
+    },
+    {
+      id: 'e18',
+      name: 'Jim Rodwell',
+      position: 'Commercial Director',
+      department: 'Commercial',
+      email: 'j.rodwell@cpfc.co.uk',
+      phone: '+44 20 8768 6002',
+      joinedDate: 'Feb 2020',
+      isKeyContact: true
+    }
+  ],
+  '8': [
+    {
+      id: 'e19',
+      name: 'Colin Chong',
+      position: 'Chief Executive',
+      department: 'Executive',
+      email: 'c.chong@evertonfc.com',
+      phone: '+44 151 556 1801',
+      joinedDate: 'Jan 2021',
+      isKeyContact: true
+    },
+    {
+      id: 'e20',
+      name: 'Richard Kenyon',
+      position: 'Commercial Director',
+      department: 'Commercial',
+      email: 'r.kenyon@evertonfc.com',
+      phone: '+44 151 556 1802',
+      joinedDate: 'Jun 2019',
+      isKeyContact: true
+    }
+  ],
+  '9': [
+    {
+      id: 'e21',
+      name: 'Alistair Mackintosh',
+      position: 'Chief Executive',
+      department: 'Executive',
+      email: 'a.mackintosh@fulhamfc.com',
+      phone: '+44 843 208 1201',
+      joinedDate: 'Jul 2017',
+      isKeyContact: true
+    },
+    {
+      id: 'e22',
+      name: 'Jon Don-Carolis',
+      position: 'Commercial Director',
+      department: 'Commercial',
+      email: 'j.doncarolis@fulhamfc.com',
+      phone: '+44 843 208 1202',
+      joinedDate: 'Sep 2020',
+      isKeyContact: true
+    }
+  ],
+  '10': [
+    {
+      id: 'e23',
+      name: 'Mark Ashton',
+      position: 'Chief Executive',
+      department: 'Executive',
+      email: 'm.ashton@itfc.co.uk',
+      phone: '+44 1473 400 501',
+      joinedDate: 'Nov 2021',
+      isKeyContact: true
+    },
+    {
+      id: 'e24',
+      name: 'Mike Noye',
+      position: 'Commercial Director',
+      department: 'Commercial',
+      email: 'm.noye@itfc.co.uk',
+      phone: '+44 1473 400 502',
+      joinedDate: 'Mar 2019',
+      isKeyContact: true
+    }
+  ],
+  '11': [
+    {
+      id: 'e25',
+      name: 'Susan Whelan',
+      position: 'Chief Executive',
+      department: 'Executive',
+      email: 's.whelan@lcfc.co.uk',
+      phone: '+44 344 815 5001',
+      linkedin: 'https://linkedin.com/in/susanwhelan',
+      joinedDate: 'Jun 2021',
+      isKeyContact: true
+    },
+    {
+      id: 'e26',
+      name: 'Louise Rushen',
+      position: 'Commercial Director',
+      department: 'Commercial',
+      email: 'l.rushen@lcfc.co.uk',
+      phone: '+44 344 815 5002',
+      joinedDate: 'Jan 2020',
+      isKeyContact: true
+    }
+  ],
   '12': [
     {
-      id: 'e9',
+      id: 'e27',
       name: 'Billy Hogan',
       position: 'Chief Executive Officer',
       department: 'Executive',
@@ -292,7 +893,7 @@ const employeesData: Record<string, Employee[]> = {
       isKeyContact: true
     },
     {
-      id: 'e10',
+      id: 'e28',
       name: 'Drew Crisp',
       position: 'Commercial Director',
       department: 'Commercial',
@@ -302,7 +903,7 @@ const employeesData: Record<string, Employee[]> = {
       isKeyContact: true
     },
     {
-      id: 'e11',
+      id: 'e29',
       name: 'Matt McCann',
       position: 'Communications Director',
       department: 'Marketing',
@@ -313,9 +914,42 @@ const employeesData: Record<string, Employee[]> = {
       isKeyContact: false
     }
   ],
+  '13': [
+    {
+      id: 'e30',
+      name: 'Ferran Soriano',
+      position: 'Chief Executive Officer',
+      department: 'Executive',
+      email: 'f.soriano@mancity.com',
+      phone: '+44 161 444 1801',
+      linkedin: 'https://linkedin.com/in/ferransoriano',
+      joinedDate: 'Sep 2012',
+      isKeyContact: true
+    },
+    {
+      id: 'e31',
+      name: 'Tom Glick',
+      position: 'Chief Operating Officer',
+      department: 'Operations',
+      email: 't.glick@mancity.com',
+      phone: '+44 161 444 1802',
+      joinedDate: 'Oct 2019',
+      isKeyContact: true
+    },
+    {
+      id: 'e32',
+      name: 'Nuria Tarre',
+      position: 'Marketing Director',
+      department: 'Marketing',
+      email: 'n.tarre@mancity.com',
+      phone: '+44 161 444 1803',
+      joinedDate: 'May 2021',
+      isKeyContact: false
+    }
+  ],
   '14': [
     {
-      id: 'e12',
+      id: 'e33',
       name: 'Omar Berrada',
       position: 'Chief Executive Officer',
       department: 'Executive',
@@ -326,7 +960,7 @@ const employeesData: Record<string, Employee[]> = {
       isKeyContact: true
     },
     {
-      id: 'e13',
+      id: 'e34',
       name: 'Collette Roche',
       position: 'Chief Operating Officer',
       department: 'Operations',
@@ -336,7 +970,7 @@ const employeesData: Record<string, Employee[]> = {
       isKeyContact: true
     },
     {
-      id: 'e14',
+      id: 'e35',
       name: 'Victoria Timpson',
       position: 'Chief Communications Officer',
       department: 'Marketing',
@@ -345,6 +979,150 @@ const employeesData: Record<string, Employee[]> = {
       linkedin: 'https://linkedin.com/in/victoriatimpson',
       joinedDate: 'Jun 2021',
       isKeyContact: false
+    }
+  ],
+  '15': [
+    {
+      id: 'e36',
+      name: 'Darren Eales',
+      position: 'Chief Executive Officer',
+      department: 'Executive',
+      email: 'd.eales@nufc.co.uk',
+      phone: '+44 191 201 8401',
+      linkedin: 'https://linkedin.com/in/darreneales',
+      joinedDate: 'Jun 2022',
+      isKeyContact: true
+    },
+    {
+      id: 'e37',
+      name: 'Peter Silverstone',
+      position: 'Chief Commercial Officer',
+      department: 'Commercial',
+      email: 'p.silverstone@nufc.co.uk',
+      phone: '+44 191 201 8402',
+      joinedDate: 'Jan 2023',
+      isKeyContact: true
+    }
+  ],
+  '16': [
+    {
+      id: 'e38',
+      name: 'Dane Murphy',
+      position: 'Chief Executive Officer',
+      department: 'Executive',
+      email: 'd.murphy@nottinghamforest.co.uk',
+      phone: '+44 115 982 4401',
+      joinedDate: 'Aug 2020',
+      isKeyContact: true
+    },
+    {
+      id: 'e39',
+      name: 'David Cook',
+      position: 'Commercial Director',
+      department: 'Commercial',
+      email: 'd.cook@nottinghamforest.co.uk',
+      phone: '+44 115 982 4402',
+      joinedDate: 'Feb 2021',
+      isKeyContact: true
+    }
+  ],
+  '17': [
+    {
+      id: 'e40',
+      name: 'Phil Parsons',
+      position: 'Chief Executive Officer',
+      department: 'Executive',
+      email: 'p.parsons@southamptonfc.com',
+      phone: '+44 23 8022 8501',
+      joinedDate: 'Mar 2022',
+      isKeyContact: true
+    },
+    {
+      id: 'e41',
+      name: 'David Thomas',
+      position: 'Commercial Director',
+      department: 'Commercial',
+      email: 'd.thomas@southamptonfc.com',
+      phone: '+44 23 8022 8502',
+      joinedDate: 'Sep 2020',
+      isKeyContact: true
+    }
+  ],
+  '18': [
+    {
+      id: 'e42',
+      name: 'Daniel Levy',
+      position: 'Chairman',
+      department: 'Executive',
+      email: 'd.levy@tottenhamhotspur.com',
+      phone: '+44 344 499 5001',
+      linkedin: 'https://linkedin.com/in/daniellevy',
+      joinedDate: 'Feb 2001',
+      isKeyContact: true
+    },
+    {
+      id: 'e43',
+      name: 'Todd Kline',
+      position: 'Chief Commercial Officer',
+      department: 'Commercial',
+      email: 't.kline@tottenhamhotspur.com',
+      phone: '+44 344 499 5002',
+      joinedDate: 'Jul 2019',
+      isKeyContact: true
+    },
+    {
+      id: 'e44',
+      name: 'Simon Felstein',
+      position: 'Communications Director',
+      department: 'Marketing',
+      email: 's.felstein@tottenhamhotspur.com',
+      phone: '+44 344 499 5003',
+      joinedDate: 'Jan 2018',
+      isKeyContact: false
+    }
+  ],
+  '19': [
+    {
+      id: 'e45',
+      name: 'Nathan Thompson',
+      position: 'Chief Executive Officer',
+      department: 'Executive',
+      email: 'n.thompson@whufc.com',
+      phone: '+44 20 8548 2701',
+      joinedDate: 'May 2023',
+      isKeyContact: true
+    },
+    {
+      id: 'e46',
+      name: 'Karim Virani',
+      position: 'Commercial Director',
+      department: 'Commercial',
+      email: 'k.virani@whufc.com',
+      phone: '+44 20 8548 2702',
+      joinedDate: 'Nov 2020',
+      isKeyContact: true
+    }
+  ],
+  '20': [
+    {
+      id: 'e47',
+      name: 'Russell Jones',
+      position: 'Chief Executive Officer',
+      department: 'Executive',
+      email: 'r.jones@wolves.co.uk',
+      phone: '+44 871 222 2201',
+      joinedDate: 'Jun 2016',
+      isKeyContact: true
+    },
+    {
+      id: 'e48',
+      name: 'Laurie Dalrymple',
+      position: 'Commercial Director',
+      department: 'Commercial',
+      email: 'l.dalrymple@wolves.co.uk',
+      phone: '+44 871 222 2202',
+      joinedDate: 'Aug 2019',
+      isKeyContact: true
     }
   ]
 };
