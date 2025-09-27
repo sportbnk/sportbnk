@@ -34,22 +34,22 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 
-const findNavItems = [
+const prospectingNavItems = [
   { title: 'Signals Feed', url: '/crm/signals', icon: Zap },
-  { title: 'My ICPs', url: '/crm/icps', icon: Target },
   { title: 'Discover', url: '/crm/contacts', icon: Users },
+  { title: 'My ICPs', url: '/crm/icps', icon: Target },
 ];
 
-const myContactsNavItems = [
+const leadsNavItems = [
   { title: 'Enrich', url: '/crm/enrich', icon: Sparkles },
+  { title: 'People', url: '/crm/people', icon: User },
   { title: 'Organisations', url: '/crm/organisations', icon: Building2 },
-  { title: 'People', url: '/crm/people', icon: Users },
 ];
 
-const dealsNavItems = [
-  { title: 'Emails', url: '/crm/emails', icon: Mail },
-  { title: 'Meetings', url: '/crm/meetings', icon: Calendar },
+const pipelineNavItems = [
   { title: 'Tasks', url: '/crm/tasks', icon: CheckSquare },
+  { title: 'Meetings', url: '/crm/meetings', icon: Calendar },
+  { title: 'Emails', url: '/crm/emails', icon: Mail },
 ];
 
 const bottomNavItems = [
@@ -98,18 +98,18 @@ export function CrmSidebar() {
       </div>
 
       <SidebarContent className="flex-1 py-4">
-        {/* Find Section */}
+        {/* Prospecting Section */}
         {open && (
           <div className="px-6 pt-2 pb-[3px]">
             <h3 className="text-sidebar-foreground font-semibold text-sm uppercase tracking-wide">
-              Find
+              Prospecting
             </h3>
           </div>
         )}
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu className={cn(open ? "px-3" : "px-1")}>
-              {findNavItems.map((item) => (
+              {prospectingNavItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <NavLink 
@@ -132,18 +132,18 @@ export function CrmSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        {/* My Contacts Section */}
+        {/* Leads Section */}
         {open && (
           <div className="px-6 pt-3 pb-[3px]">
             <h3 className="text-sidebar-foreground font-semibold text-sm uppercase tracking-wide">
-              My Contacts
+              Leads
             </h3>
           </div>
         )}
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu className={cn(open ? "px-3" : "px-1")}>
-              {myContactsNavItems.map((item) => (
+              {leadsNavItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <NavLink 
@@ -170,14 +170,14 @@ export function CrmSidebar() {
         {open && (
           <div className="px-6 pt-3 pb-1">
             <h3 className="text-sidebar-foreground font-semibold text-sm uppercase tracking-wide">
-              Deals
+              Pipeline
             </h3>
           </div>
         )}
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu className={cn(open ? "px-3" : "px-1")}>
-              {dealsNavItems.map((item) => (
+              {pipelineNavItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <NavLink 
