@@ -16,7 +16,7 @@ import ProtectedRoute from "./components/auth/ProtectedRoute";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
-import Products from "./pages/Products";
+
 import Data from "./pages/Data";
 import Company from "./pages/Company";
 
@@ -97,7 +97,7 @@ function App() {
                       <Route path="/auth" element={<Auth />} />
                       
                       {/* Main menu pages */}
-                      <Route path="/products" element={<Products />} />
+                      
                       <Route path="/data" element={<Data />} />
                       <Route path="/company" element={<Company />} />
                       
