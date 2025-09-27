@@ -6,7 +6,7 @@ import { ThemeProvider } from '@/contexts/ThemeContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Bot, Menu, User, LogOut, Settings, HelpCircle, Crown } from 'lucide-react';
+import { Bot, Menu, User, LogOut, Settings, HelpCircle, Crown, Puzzle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/components/auth/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -86,7 +86,7 @@ const CrmLayout: React.FC<CrmLayoutProps> = ({ children, pageTitle }) => {
                         Log Out
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => navigate('/crm/integrations')}>
-                        <Settings className="mr-2 h-4 w-4" />
+                        <Puzzle className="mr-2 h-4 w-4" />
                         Integrations
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => navigate('/crm/settings')}>
