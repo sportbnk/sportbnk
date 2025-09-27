@@ -3,7 +3,6 @@ import { Helmet } from 'react-helmet-async';
 import { CrmSidebar } from '@/components/CrmSidebar';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { ThemeProvider } from '@/contexts/ThemeContext';
-import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -66,9 +65,6 @@ const CrmLayout: React.FC<CrmLayoutProps> = ({ children, pageTitle }) => {
                 </div>
                 
                 <div className="flex items-center gap-3">
-                  {/* Theme Toggle */}
-                  <ThemeToggle />
-                  
                   {/* Profile Dropdown */}
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
