@@ -40,6 +40,7 @@ import Organisations from "./pages/crm/Organisations";
 import SignalsPage from "./pages/crm/SignalsPage";
 import ICPs from "./pages/crm/ICPs";
 import Discover from "./pages/crm/Discover";
+import OrganisationDetail from "./pages/crm/OrganisationDetail";
 import Integrations from "./pages/crm/Integrations";
 import Enrich from "./pages/crm/Enrich";
 import Tasks from "./pages/crm/Tasks";
@@ -118,7 +119,8 @@ function App() {
                        
                        <Route path="/crm/my-contacts" element={<ProtectedRoute><CrmLayout pageTitle="My Contacts"><People /></CrmLayout></ProtectedRoute>} />
                        <Route path="/crm/my-organisations" element={<ProtectedRoute><CrmLayout pageTitle="My Lists"><Organisations /></CrmLayout></ProtectedRoute>} />
-                        <Route path="/crm/discover" element={<ProtectedRoute><CrmLayout pageTitle="Discover"><Discover /></CrmLayout></ProtectedRoute>} />
+                         <Route path="/crm/discover" element={<ProtectedRoute><CrmLayout pageTitle="Discover"><Discover /></CrmLayout></ProtectedRoute>} />
+                         <Route path="/crm/discover/organisation/:id" element={<ProtectedRoute><CrmLayout pageTitle="Organisation Details"><OrganisationDetail /></CrmLayout></ProtectedRoute>} />
                         <Route path="/crm/my-organisations" element={<ProtectedRoute><CrmLayout pageTitle="My Organisations"><Organisations /></CrmLayout></ProtectedRoute>} />
                        <Route path="/crm/enrich" element={<ProtectedRoute><CrmLayout pageTitle="Data Enrichment"><Enrich /></CrmLayout></ProtectedRoute>} />
                        <Route path="/crm/tasks" element={<ProtectedRoute><CrmLayout pageTitle="Tasks"><Tasks /></CrmLayout></ProtectedRoute>} />

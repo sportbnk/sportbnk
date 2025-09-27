@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -432,6 +433,7 @@ const mockPeople: Person[] = [
 ];
 
 const Discover = () => {
+  const navigate = useNavigate();
   const { toast } = useToast();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedOrganisations, setSelectedOrganisations] = useState<string[]>([]);
@@ -644,10 +646,15 @@ const Discover = () => {
                             <div className="flex items-center justify-center w-8 h-8 rounded bg-gray-100">
                               <Building2 className="h-4 w-4 text-blue-600" />
                             </div>
-                            <div>
-                              <div className="font-medium text-gray-900">{org.name}</div>
-                              <div className="text-sm text-gray-500">Est. {org.foundedYear}</div>
-                            </div>
+                             <div>
+                               <button 
+                                 onClick={() => navigate(`/crm/discover/organisation/${org.id}`)}
+                                 className="font-medium text-gray-900 hover:text-blue-600 transition-colors cursor-pointer text-left"
+                               >
+                                 {org.name}
+                               </button>
+                               <div className="text-sm text-gray-500">Est. {org.foundedYear}</div>
+                             </div>
                           </div>
                         </TableCell>
                         <TableCell>
