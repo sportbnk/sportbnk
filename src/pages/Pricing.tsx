@@ -2,12 +2,11 @@ import { useState } from "react";
 import PageLayout from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Check, Star } from "lucide-react";
+import { Check, Star, Shield } from "lucide-react";
 import { Link } from "react-router-dom";
 import { PricingToggle } from "@/components/PricingToggle";
 import { CurrencySelector } from "@/components/CurrencySelector";
-import { useToast } from "@/hooks/use-toast";
-import { usePricing } from "@/contexts/PricingContext";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { WaitlistDialog } from "@/components/WaitlistDialog";
 
 const PricingCard = ({ 
@@ -20,7 +19,9 @@ const PricingCard = ({
   highlighted = false,
   isFree = false,
   isEnterprise = false,
-  isAnnual = false
+  isAnnual = false,
+  buttonText,
+  trialDays
 }: { 
   title: string;
   price: string;
@@ -32,10 +33,17 @@ const PricingCard = ({
   isFree?: boolean;
   isEnterprise?: boolean;
   isAnnual?: boolean;
+  buttonText: string;
+  trialDays?: string;
 }) => {
   
   return (
-    <Card className={`border ${highlighted ? 'border-sportbnk-green border-2' : 'border-gray-200'} shadow-lg max-w-md mx-auto`}>
+    <Card className={`border ${highlighted ? 'border-sportbnk-green border-2 relative' : 'border-gray-200'} shadow-lg max-w-md mx-auto h-full flex flex-col`}>
+      {highlighted && (
+        <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-sportbnk-green text-white px-4 py-1 rounded-full text-sm font-medium">
+          Most Popular
+        </div>
+      )}
       <CardHeader className="pb-4 text-center">
         <CardTitle className="text-2xl font-bold text-sportbnk-navy">{title}</CardTitle>
         <div className="mt-4">
@@ -49,8 +57,11 @@ const PricingCard = ({
           )}
         </div>
         <p className="text-gray-600 mt-4">{description}</p>
+        {trialDays && (
+          <p className="text-sm text-sportbnk-green font-medium mt-2">{trialDays}</p>
+        )}
       </CardHeader>
-      <CardContent>
+      <CardContent className="flex-grow">
         <ul className="space-y-3">
           {features.map((feature, index) => (
             <li key={index} className="flex items-start">
@@ -62,6 +73,21 @@ const PricingCard = ({
           ))}
         </ul>
       </CardContent>
+      <CardFooter className="pt-6">
+        {isEnterprise ? (
+          <WaitlistDialog>
+            <Button className="w-full bg-sportbnk-navy hover:bg-sportbnk-navy/90 text-white">
+              {buttonText}
+            </Button>
+          </WaitlistDialog>
+        ) : (
+          <WaitlistDialog>
+            <Button className={`w-full ${highlighted ? 'bg-sportbnk-green hover:bg-sportbnk-green/90' : 'bg-sportbnk-navy hover:bg-sportbnk-navy/90'} text-white`}>
+              {buttonText}
+            </Button>
+          </WaitlistDialog>
+        )}
+      </CardFooter>
     </Card>
   );
 };
@@ -69,19 +95,7 @@ const PricingCard = ({
 const Pricing = () => {
   const [isAnnual, setIsAnnual] = useState(false);
   const [currency, setCurrency] = useState("GBP");
-  const { toast } = useToast();
-  const { freeTrialFeatures, standardFeatures, proFeatures, enterpriseFeatures } = usePricing();
   
-  const handleSelectPlan = (planName: string, planPrice: string) => {
-    toast({
-      title: "Payment processing",
-      description: `You've selected the ${planName} plan (${planPrice}). Stripe integration will be added soon.`,
-      duration: 5000,
-    });
-    
-    console.log(`Selected plan: ${planName}, Price: ${planPrice}`);
-  };
-
   // Currency conversion rates and symbols
   const currencyData = {
     GBP: { symbol: "£", rate: 1 },
@@ -93,17 +107,107 @@ const Pricing = () => {
     const symbol = currencyData[currency as keyof typeof currencyData].symbol;
     return `${symbol}${convertedPrice}`;
   };
+
+  const freeTrialFeatures = [
+    "Access to Discover tool (basic filters)",
+    "Limited data enrichment with Enrich",
+    "5 searches per day",
+    "Export up to 50 contacts per month",
+    "Email support",
+    "14-day access"
+  ];
+
+  const standardFeatures = [
+    "Full access to Discover tool (all filters)",
+    "Enrich tool for deeper contact insights",
+    "Unlimited searches",
+    "Export up to 1,000 contacts per month",
+    "CRM integration (HubSpot, Salesforce, Pipedrive)",
+    "Real-time Signals (basic tier)",
+    "Email + chat support",
+    "Cancel anytime"
+  ];
+
+  const proFeatures = [
+    "All Standard features",
+    "Export up to 5,000 contacts per month",
+    "Advanced analytics dashboard",
+    "Real-time Signals (premium tier: tenders, hiring, sponsorships, funding)",
+    "API access for integrations",
+    "Team collaboration tools",
+    "Custom training sessions",
+    "Priority support response",
+    "Dedicated account manager"
+  ];
+
+  const enterpriseFeatures = [
+    "All Pro features",
+    "Unlimited data exports",
+    "Custom data models and integrations",
+    "Advanced security & compliance features",
+    "SLA guarantees",
+    "Dedicated enterprise support team",
+    "White-label options",
+    "Priority feature development",
+    "Strategic onboarding + custom training programme"
+  ];
+
+  const boltOns = [
+    {
+      title: "Extra Exports",
+      description: "Purchase additional contact exports as you need them"
+    },
+    {
+      title: "Signals Packs",
+      description: "Unlock sector-specific intelligence (e.g. sponsorships, grants, tech procurement)"
+    },
+    {
+      title: "API Credits",
+      description: "Scale up your integrations with extra usage"
+    },
+    {
+      title: "Custom Data Projects",
+      description: "Commission bespoke research tailored to your ICP"
+    }
+  ];
+
+  const faqs = [
+    {
+      question: "How does the free trial work?",
+      answer: "Our 14-day free trial gives you access to core features with limited searches and exports. No credit card required."
+    },
+    {
+      question: "Can I cancel my subscription at any time?",
+      answer: "Yes — you can cancel anytime. You'll retain access until the end of your billing cycle."
+    },
+    {
+      question: "What payment methods do you accept?",
+      answer: "We accept Visa, Mastercard, American Express, and bank transfer for Enterprise accounts."
+    },
+    {
+      question: "Do you offer discounts for annual billing?",
+      answer: "Yes — annual subscriptions save 20% across all paid plans."
+    },
+    {
+      question: "Can I scale my plan as my team grows?",
+      answer: "Absolutely — you can upgrade, downgrade, or add bolt-ons at any time."
+    }
+  ];
   
   return (
-    <PageLayout pageTitle="Pricing">
+    <PageLayout 
+      pageTitle="Pricing - Sportbnk Plans & Pricing" 
+      metaDescription="Simple, transparent pricing for Sportbnk. Choose from Free Trial, Standard, Pro, or Enterprise plans. Save 20% with annual billing."
+      metaKeywords="Sportbnk pricing, sports data pricing, sports intelligence plans, subscription plans"
+    >
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-sportbnk-navy mb-4">
+            <h1 className="text-4xl md:text-5xl font-bold text-sportbnk-navy mb-4">
               Simple, Transparent Pricing
-            </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
-              Choose the plan that works best for your business needs.
+            </h1>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-8">
+              Choose the plan that fits your business needs.
             </p>
             
             <div className="flex items-center justify-center gap-8 mb-8">
@@ -112,65 +216,80 @@ const Pricing = () => {
             </div>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto relative">
-            {/* Most Popular label above the grid */}
-            <div className="absolute -top-6 left-1/2 lg:left-[62.5%] transform -translate-x-1/2 z-10">
-              <div className="bg-sportbnk-green text-white text-center py-2 px-6 text-sm font-medium rounded-t-lg border-2 border-sportbnk-green relative">
-                Most Popular
-                {/* Small triangle connector */}
-                <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-[6px] border-r-[6px] border-t-[6px] border-l-transparent border-r-transparent border-t-sportbnk-green"></div>
-              </div>
-            </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
             <PricingCard 
               title="Free Trial"
-              price="£0"
-              description="Try our platform with limited features at no cost"
+              price={formatPrice(0)}
+              description="Explore Sportbnk with limited access — no credit card required"
               features={freeTrialFeatures}
               isFree={true}
               isAnnual={isAnnual}
+              buttonText="Start Free Trial"
+              trialDays="14-day access"
             />
             
             <PricingCard 
               title="Standard Plan"
               price={formatPrice(49)}
-              annualPrice={formatPrice(470)}
-              description="All the features you need to grow your business in the sports industry"
+              annualPrice={formatPrice(isAnnual ? 470 : 49)}
+              description="Everything you need to start selling smarter in sport"
               features={standardFeatures}
               isAnnual={isAnnual}
+              buttonText="Get Started"
             />
             
             <PricingCard 
               title="Pro Plan"
               price={formatPrice(99)}
-              annualPrice={formatPrice(950)}
-              description="Enhanced features and support for growing teams and enterprises"
+              annualPrice={formatPrice(isAnnual ? 950 : 99)}
+              description="Advanced features and intelligence for growing teams"
               features={proFeatures}
               highlighted={true}
               isAnnual={isAnnual}
+              buttonText="Upgrade to Pro"
             />
 
             <PricingCard 
               title="Enterprise"
-              price="Custom"
+              price="Custom Pricing"
               period=""
               description="Tailored solutions for large organisations with custom requirements"
               features={enterpriseFeatures}
               isEnterprise={true}
               isAnnual={isAnnual}
+              buttonText="Contact Sales"
             />
           </div>
+        </div>
+      </section>
+
+      {/* Bolt-Ons Section */}
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-sportbnk-navy mb-4">
+              Bolt-Ons
+            </h2>
+            <p className="text-lg text-gray-600">
+              Enhance any plan with optional add-ons:
+            </p>
+          </div>
           
-          <div className="text-center mt-12">
-            <WaitlistDialog>
-              <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white px-12 py-4 text-lg">
-                Join Waitlist
-              </Button>
-            </WaitlistDialog>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+            {boltOns.map((addon, index) => (
+              <Card key={index} className="border-gray-200 shadow-sm">
+                <CardContent className="p-6">
+                  <h3 className="text-lg font-bold text-sportbnk-navy mb-3">{addon.title}</h3>
+                  <p className="text-gray-600 text-sm">{addon.description}</p>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </div>
       </section>
       
-      <section className="py-16 bg-sportbnk-lightGrey">
+      {/* FAQ Section */}
+      <section className="py-16">
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-sportbnk-navy mb-4">
@@ -178,60 +297,19 @@ const Pricing = () => {
             </h2>
           </div>
           
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <h3 className="text-lg font-bold text-sportbnk-navy mb-2">
-                How does the 7-day free trial work?
-              </h3>
-              <p className="text-gray-600">
-                Our 7-day free trial gives you full access to all features. No credit card is required to start, and you can upgrade to the paid plan at any time.
-              </p>
-            </div>
-            
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <h3 className="text-lg font-bold text-sportbnk-navy mb-2">
-                Can I cancel my subscription at any time?
-              </h3>
-              <p className="text-gray-600">
-                Yes, you can cancel your subscription at any time. If you cancel, you'll still have access to your plan until the end of your billing period.
-              </p>
-            </div>
-            
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <h3 className="text-lg font-bold text-sportbnk-navy mb-2">
-                What payment methods do you accept?
-              </h3>
-              <p className="text-gray-600">
-                We accept all major credit cards, including Visa, Mastercard, and American Express.
-              </p>
-            </div>
-            
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <h3 className="text-lg font-bold text-sportbnk-navy mb-2">
-                Do you offer discounts for annual billing?
-              </h3>
-              <p className="text-gray-600">
-                Yes, we offer a 20% discount when you choose annual billing for either plan. Contact our sales team for more details.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-      
-      <section className="py-16 bg-sportbnk-navy text-white">
-        <div className="container mx-auto px-4 md:px-6">
-          <div className="text-center max-w-3xl mx-auto">
-            <h2 className="text-3xl font-bold mb-6">
-              Have questions about our pricing?
-            </h2>
-            <p className="text-lg mb-8 opacity-90">
-              Our team is here to help you determine if our solution is right for your business.
-            </p>
-            <Button className="bg-sportbnk-green hover:bg-sportbnk-green/90 text-white px-8 py-6 text-lg" asChild>
-              <Link to="/contact">
-                Contact Us
-              </Link>
-            </Button>
+          <div className="max-w-3xl mx-auto">
+            <Accordion type="single" collapsible className="w-full">
+              {faqs.map((faq, index) => (
+                <AccordionItem key={index} value={`item-${index}`}>
+                  <AccordionTrigger className="text-left font-semibold text-sportbnk-navy hover:text-sportbnk-green">
+                    {faq.question}
+                  </AccordionTrigger>
+                  <AccordionContent className="text-gray-600 leading-relaxed">
+                    {faq.answer}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
           </div>
         </div>
       </section>
