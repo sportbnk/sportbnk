@@ -31,10 +31,10 @@ const Solutions = () => {
       <div className="container mx-auto px-4 md:px-6">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-sportbnk-navy mb-4">
-            Want to see how Sportbnk uses AI signals to help businesses build stronger pipelines?
+            Everything you need to sell, scale, and succeed in the sports industry.
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Our mission is to create a single platform where sports organisations and suppliers can access real-time intelligence, discover opportunities, and power growth — all through innovative AI technology.
+            Our mission is to transform the way sports organisations and their partners use data — turning intelligence into strategic advantage and sustainable growth.
           </p>
         </div>
         
