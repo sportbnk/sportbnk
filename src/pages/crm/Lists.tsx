@@ -1,25 +1,27 @@
-import React, { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Badge } from "@/components/ui/badge";
-import { Plus, List, Trash2, Edit2, User, Building2, Download, UserPlus } from "lucide-react";
-import { useLists } from "@/contexts/ListsContext";
-import { useToast } from "@/components/ui/use-toast";
+import React, { useState } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Trash2, Edit2, Plus, Users, Download, Loader2, Building2 } from 'lucide-react';
+import { useLists } from '@/contexts/ListsContext';
+import { toast } from '@/hooks/use-toast';
+import { Skeleton } from '@/components/ui/skeleton';
 import * as XLSX from 'xlsx';
 
-const Lists = () => {
+const MyContacts = () => {
   const { lists, loading, createList, deleteList, updateList, removeItemFromList } = useLists();
-  const { toast } = useToast();
-  const [newListName, setNewListName] = useState("");
-  const [newListDescription, setNewListDescription] = useState("");
-  const [editingList, setEditingList] = useState<string | null>(null);
-  const [editName, setEditName] = useState("");
-  const [editDescription, setEditDescription] = useState("");
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [newListName, setNewListName] = useState('');
+  const [newListDescription, setNewListDescription] = useState('');
+  const [editingList, setEditingList] = useState<any>(null);
+  const [editListName, setEditListName] = useState('');
+  const [editListDescription, setEditListDescription] = useState('');
+  const [activeTab, setActiveTab] = useState('organizations');
 
   const handleCreateList = async () => {
     if (!newListName.trim()) {
@@ -32,13 +34,13 @@ const Lists = () => {
     }
 
     await createList(newListName, newListDescription);
-    setNewListName("");
-    setNewListDescription("");
+    setNewListName('');
+    setNewListDescription('');
     setIsCreateDialogOpen(false);
   };
 
   const handleEditList = async () => {
-    if (!editName.trim() || !editingList) {
+    if (!editListName.trim() || !editingList) {
       toast({
         title: "Error",
         description: "List name is required",
@@ -47,170 +49,148 @@ const Lists = () => {
       return;
     }
 
-    await updateList(editingList, editName, editDescription);
+    await updateList(editingList.id, editListName, editListDescription);
     setEditingList(null);
-    setEditName("");
-    setEditDescription("");
+    setEditListName('');
+    setEditListDescription('');
     setIsEditDialogOpen(false);
   };
 
   const startEdit = (list: any) => {
-    setEditingList(list.id);
-    setEditName(list.name);
-    setEditDescription(list.description || "");
+    setEditingList(list);
+    setEditListName(list.name);
+    setEditListDescription(list.description || '');
     setIsEditDialogOpen(true);
   };
 
   const handleDeleteList = async (listId: string) => {
-    if (window.confirm("Are you sure you want to delete this list?")) {
+    if (window.confirm('Are you sure you want to delete this list?')) {
       await deleteList(listId);
     }
   };
 
-  const handleRemoveItem = async (itemId: string) => {
-    if (window.confirm("Are you sure you want to remove this item from the list?")) {
+  const handleRemoveItem = async (listId: string, itemId: string) => {
+    if (window.confirm('Are you sure you want to remove this item from the list?')) {
       await removeItemFromList(itemId);
     }
   };
 
-  const exportListToCSV = (list: any) => {
-    if (!list.list_items || list.list_items.length === 0) {
+  const exportContacts = (type: 'organizations' | 'people') => {
+    try {
+      const filteredLists = lists.filter(list => {
+        const items = list.list_items || [];
+        return items.some((item: any) => 
+          type === 'organizations' ? item.team : item.contact
+        );
+      });
+
+      if (filteredLists.length === 0) {
+        toast({
+          title: "No data to export",
+          description: `No ${type} found in your lists.`,
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Collect all items of the specified type from all lists
+      const allItems: any[] = [];
+      filteredLists.forEach(list => {
+        const items = list.list_items || [];
+        items.forEach((item: any) => {
+          if ((type === 'organizations' && item.team) || (type === 'people' && item.contact)) {
+            allItems.push({ ...item, listName: list.name });
+          }
+        });
+      });
+
+      // Prepare data with dummy information for missing fields
+      const exportData = allItems.map((item: any, index: number) => {
+        const baseData = {
+          'List Name': item.listName,
+          Name: item.team?.name || item.contact?.name || `Contact ${index + 1}`,
+        };
+
+        if (type === 'organizations' && item.team) {
+          return {
+            ...baseData,
+            Industry: item.team.industry || 'Technology',
+            Location: item.team.location || 'London, UK',
+            Website: item.team.website || `https://www.${(item.team.name || 'company').toLowerCase().replace(/\s+/g, '')}.com`,
+            Phone: item.team.phone || `+44 20 ${Math.floor(Math.random() * 9000) + 1000} ${Math.floor(Math.random() * 9000) + 1000}`,
+            Email: item.team.email || `contact@${(item.team.name || 'company').toLowerCase().replace(/\s+/g, '')}.com`,
+            'LinkedIn': item.team.linkedin || `https://linkedin.com/company/${(item.team.name || 'company').toLowerCase().replace(/\s+/g, '-')}`,
+            Employees: Math.floor(Math.random() * 10000) + 10,
+            Revenue: `$${(Math.floor(Math.random() * 100) + 1)}M`,
+            'Founded Year': Math.floor(Math.random() * 30) + 1990,
+          };
+        } else if (type === 'people' && item.contact) {
+          const firstName = item.contact?.name?.split(' ')[0] || 'John';
+          const lastName = item.contact?.name?.split(' ')[1] || 'Doe';
+          const domain = 'company.com';
+          
+          return {
+            ...baseData,
+            'First Name': firstName,
+            'Last Name': lastName,
+            Title: item.contact?.title || 'Sales Manager',
+            Company: item.contact?.company || 'Tech Solutions Ltd',
+            Email: item.contact?.email || `${firstName.toLowerCase()}.${lastName.toLowerCase()}@${domain}`,
+            Phone: item.contact?.phone || `+44 7${Math.floor(Math.random() * 900) + 100} ${Math.floor(Math.random() * 900000) + 100000}`,
+            'LinkedIn': item.contact?.linkedin || `https://linkedin.com/in/${firstName.toLowerCase()}-${lastName.toLowerCase()}`,
+            Location: item.contact?.location || 'London, UK',
+            Industry: item.contact?.industry || 'Technology',
+            'Years Experience': Math.floor(Math.random() * 20) + 1,
+          };
+        }
+      }).filter(Boolean);
+
+      if (exportData.length === 0) {
+        toast({
+          title: "No data to export",
+          description: `No ${type} data found.`,
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Create workbook and worksheet
+      const wb = XLSX.utils.book_new();
+      const ws = XLSX.utils.json_to_sheet(exportData);
+      
+      // Add the worksheet to the workbook
+      XLSX.utils.book_append_sheet(wb, ws, type === 'organizations' ? 'Organizations' : 'People');
+      
+      // Generate filename with timestamp
+      const timestamp = new Date().toISOString().split('T')[0];
+      const filename = `my_${type}_${timestamp}.xlsx`;
+      
+      // Save the file
+      XLSX.writeFile(wb, filename);
+      
       toast({
-        title: "No data to export",
-        description: "This list is empty",
+        title: "Export successful",
+        description: `${exportData.length} ${type} exported to ${filename}`,
+      });
+    } catch (error) {
+      console.error('Export error:', error);
+      toast({
+        title: "Export failed",
+        description: `There was an error exporting your ${type}.`,
         variant: "destructive",
       });
-      return;
     }
-
-    // Prepare data for CSV
-    const csvData = list.list_items.map((item: any) => {
-      if (item.contact) {
-        // Generate dummy phone if not available
-        const generateDummyPhone = (contactId: string) => {
-          const hash = contactId.split('').reduce((a, b) => {
-            a = ((a << 5) - a) + b.charCodeAt(0);
-            return a & a;
-          }, 0);
-          const phoneNumber = Math.abs(hash) % 10000000000;
-          return `+44 ${phoneNumber.toString().padStart(10, '0').replace(/(\d{4})(\d{3})(\d{3})/, '$1 $2 $3')}`;
-        };
-
-        // Generate LinkedIn URL if not available
-        const linkedinUrl = item.contact.linkedin || 
-          `https://linkedin.com/in/${item.contact.first_name.toLowerCase()}-${item.contact.last_name.toLowerCase()}`;
-
-        return {
-          Type: 'Contact',
-          Name: `${item.contact.first_name} ${item.contact.last_name}`,
-          Role: item.contact.position || item.contact.department?.name || '',
-          Team: item.contact.team?.name || '',
-          Email: item.contact.email || 'Email not revealed',
-          Phone: item.contact.phone || item.contact.mobile || generateDummyPhone(item.contact.id),
-          LinkedIn: linkedinUrl,
-          Notes: item.contact.notes || ''
-        };
-      } else if (item.team) {
-        // Generate dummy contact info for teams
-        const generateDummyEmail = (teamName: string) => {
-          return `info@${teamName.toLowerCase().replace(/\s+/g, '')}.com`;
-        };
-
-        const generateDummyPhone = (teamId: string) => {
-          const hash = teamId.split('').reduce((a, b) => {
-            a = ((a << 5) - a) + b.charCodeAt(0);
-            return a & a;
-          }, 0);
-          const phoneNumber = Math.abs(hash) % 10000000000;
-          return `+44 ${phoneNumber.toString().padStart(10, '0').replace(/(\d{4})(\d{3})(\d{3})/, '$1 $2 $3')}`;
-        };
-
-        return {
-          Type: 'Team',
-          Name: item.team.name,
-          Role: 'Organization',
-          Team: item.team.name,
-          Email: item.team.email || generateDummyEmail(item.team.name),
-          Phone: item.team.phone || generateDummyPhone(item.team.id),
-          LinkedIn: `https://linkedin.com/company/${item.team.name.toLowerCase().replace(/\s+/g, '-')}`,
-          Notes: item.team.description || ''
-        };
-      }
-      return {};
-    });
-
-    // Create workbook and worksheet
-    const ws = XLSX.utils.json_to_sheet(csvData);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "List Data");
-
-    // Set column widths for better readability
-    const wscols = [
-      { wch: 10 }, // Type
-      { wch: 25 }, // Name
-      { wch: 20 }, // Role
-      { wch: 20 }, // Team
-      { wch: 30 }, // Email
-      { wch: 15 }, // Phone
-      { wch: 40 }, // LinkedIn
-      { wch: 30 }  // Notes
-    ];
-    ws['!cols'] = wscols;
-
-    // Generate filename with list name and current date
-    const date = new Date().toISOString().split('T')[0];
-    const filename = `${list.name.replace(/[^a-z0-9]/gi, '_')}_${date}.xlsx`;
-
-    // Save file
-    XLSX.writeFile(wb, filename);
-
-    toast({
-      title: "Export successful",
-      description: `List exported as ${filename}`,
-    });
   };
 
-  if (loading) {
-    return (
-      <div className="space-y-4 pt-6">
-        <h1 className="text-2xl font-bold">Lists</h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {[1, 2, 3].map((i) => (
-            <Card key={i} className="animate-pulse">
-              <CardHeader>
-                <div className="h-4 bg-muted rounded w-3/4"></div>
-                <div className="h-3 bg-muted rounded w-1/2"></div>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2">
-                  <div className="h-3 bg-muted rounded"></div>
-                  <div className="h-3 bg-muted rounded w-2/3"></div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="space-y-6 pt-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Lists</h1>
-        <div className="flex gap-3">
-          <Button
-            variant="outline"
-            onClick={() => {
-              toast({
-                title: "Success",
-                description: "Contact added to CRM successfully!",
-              });
-            }}
-          >
-            <UserPlus className="h-4 w-4 mr-2" />
-            Add to CRM
-          </Button>
+    <div className="p-6">
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <h1 className="text-2xl font-bold mb-2">My Contacts</h1>
+          <p className="text-muted-foreground">Manage your contact and organization lists</p>
+        </div>
+        
+        <div className="flex gap-2">
           <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
             <DialogTrigger asChild>
               <Button>
@@ -221,31 +201,39 @@ const Lists = () => {
             <DialogContent>
               <DialogHeader>
                 <DialogTitle>Create New List</DialogTitle>
+                <DialogDescription>
+                  Create a new list to organize your contacts and organizations.
+                </DialogDescription>
               </DialogHeader>
               <div className="space-y-4">
                 <div>
-                  <label className="text-sm font-medium">Name</label>
+                  <Label htmlFor="name">List Name</Label>
                   <Input
+                    id="name"
                     value={newListName}
                     onChange={(e) => setNewListName(e.target.value)}
                     placeholder="Enter list name"
                   />
                 </div>
                 <div>
-                  <label className="text-sm font-medium">Description (optional)</label>
+                  <Label htmlFor="description">Description</Label>
                   <Textarea
+                    id="description"
                     value={newListDescription}
                     onChange={(e) => setNewListDescription(e.target.value)}
                     placeholder="Enter list description"
-                    rows={3}
                   />
                 </div>
-                <div className="flex gap-2 justify-end">
-                  <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
+                <div className="flex justify-end space-x-2">
+                  <Button variant="outline" onClick={() => {
+                    setIsCreateDialogOpen(false);
+                    setNewListName('');
+                    setNewListDescription('');
+                  }}>
                     Cancel
                   </Button>
                   <Button onClick={handleCreateList}>
-                    Create
+                    Create List
                   </Button>
                 </div>
               </div>
@@ -254,167 +242,288 @@ const Lists = () => {
         </div>
       </div>
 
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-6">
+        <div className="flex justify-between items-center">
+          <TabsList>
+            <TabsTrigger value="organizations" className="flex items-center gap-2">
+              <Building2 className="h-4 w-4" />
+              Organizations
+            </TabsTrigger>
+            <TabsTrigger value="people" className="flex items-center gap-2">
+              <Users className="h-4 w-4" />
+              People
+            </TabsTrigger>
+          </TabsList>
+          
+          <div className="flex gap-2">
+            <Button 
+              variant="outline" 
+              onClick={() => exportContacts(activeTab as 'organizations' | 'people')}
+              className="flex items-center gap-2"
+            >
+              <Download className="h-4 w-4" />
+              Export {activeTab === 'organizations' ? 'Organizations' : 'People'}
+            </Button>
+            <Button variant="outline" className="flex items-center gap-2">
+              <Plus className="h-4 w-4" />
+              Add to CRM
+            </Button>
+          </div>
+        </div>
+      </Tabs>
+
+      <TabsContent value="organizations">
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <Card key={i}>
+                <CardHeader>
+                  <Skeleton className="h-6 w-3/4" />
+                  <Skeleton className="h-4 w-full" />
+                </CardHeader>
+                <CardContent>
+                  <Skeleton className="h-20 w-full" />
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        ) : lists.filter(list => list.list_items?.some((item: any) => item.team)).length === 0 ? (
+          <div className="text-center py-12">
+            <Building2 className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
+            <h3 className="text-lg font-medium mb-2">No organizations yet</h3>
+            <p className="text-muted-foreground mb-4">
+              Your organization lists will appear here once you start adding companies to your lists.
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {lists.filter(list => list.list_items?.some((item: any) => item.team)).map((list) => {
+              const items = list.list_items || [];
+              const teamCount = items.filter((item: any) => item.team).length;
+              
+              return (
+                <Card key={list.id} className="hover:shadow-md transition-shadow">
+                  <CardHeader className="pb-3">
+                    <div className="flex justify-between items-start">
+                      <div className="flex-1">
+                        <CardTitle className="text-lg">{list.name}</CardTitle>
+                        {list.description && (
+                          <CardDescription className="mt-1">
+                            {list.description}
+                          </CardDescription>
+                        )}
+                      </div>
+                      <div className="flex space-x-1 ml-2">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => startEdit(list)}
+                          className="h-8 w-8"
+                        >
+                          <Edit2 className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => handleDeleteList(list.id)}
+                          className="h-8 w-8 text-destructive hover:text-destructive"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  
+                  <CardContent>
+                    <div className="space-y-3">
+                      <div className="flex justify-between text-sm">
+                        <span className="text-muted-foreground">Organizations:</span>
+                        <span className="font-medium">{teamCount}</span>
+                      </div>
+                      
+                      {teamCount > 0 && (
+                        <div className="mt-4 space-y-2">
+                          <div className="text-xs text-muted-foreground font-medium">Organizations:</div>
+                          {items.filter((item: any) => item.team).slice(0, 3).map((item: any, index: number) => (
+                            <div key={index} className="flex items-center justify-between text-xs bg-muted/50 rounded p-2">
+                              <span className="truncate flex-1">
+                                {item.team?.name || 'Unknown Organization'}
+                              </span>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => handleRemoveItem(list.id, item.id)}
+                                className="h-6 w-6 text-muted-foreground hover:text-destructive"
+                              >
+                                <Trash2 className="h-3 w-3" />
+                              </Button>
+                            </div>
+                          ))}
+                          {teamCount > 3 && (
+                            <div className="text-xs text-muted-foreground text-center">
+                              +{teamCount - 3} more organizations
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+        )}
+      </TabsContent>
+
+      <TabsContent value="people">
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <Card key={i}>
+                <CardHeader>
+                  <Skeleton className="h-6 w-3/4" />
+                  <Skeleton className="h-4 w-full" />
+                </CardHeader>
+                <CardContent>
+                  <Skeleton className="h-20 w-full" />
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        ) : lists.filter(list => list.list_items?.some((item: any) => item.contact)).length === 0 ? (
+          <div className="text-center py-12">
+            <Users className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
+            <h3 className="text-lg font-medium mb-2">No people yet</h3>
+            <p className="text-muted-foreground mb-4">
+              Your contact lists will appear here once you start adding people to your lists.
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {lists.filter(list => list.list_items?.some((item: any) => item.contact)).map((list) => {
+              const items = list.list_items || [];
+              const contactCount = items.filter((item: any) => item.contact).length;
+              
+              return (
+                <Card key={list.id} className="hover:shadow-md transition-shadow">
+                  <CardHeader className="pb-3">
+                    <div className="flex justify-between items-start">
+                      <div className="flex-1">
+                        <CardTitle className="text-lg">{list.name}</CardTitle>
+                        {list.description && (
+                          <CardDescription className="mt-1">
+                            {list.description}
+                          </CardDescription>
+                        )}
+                      </div>
+                      <div className="flex space-x-1 ml-2">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => startEdit(list)}
+                          className="h-8 w-8"
+                        >
+                          <Edit2 className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => handleDeleteList(list.id)}
+                          className="h-8 w-8 text-destructive hover:text-destructive"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  
+                  <CardContent>
+                    <div className="space-y-3">
+                      <div className="flex justify-between text-sm">
+                        <span className="text-muted-foreground">People:</span>
+                        <span className="font-medium">{contactCount}</span>
+                      </div>
+                      
+                      {contactCount > 0 && (
+                        <div className="mt-4 space-y-2">
+                          <div className="text-xs text-muted-foreground font-medium">People:</div>
+                          {items.filter((item: any) => item.contact).slice(0, 3).map((item: any, index: number) => (
+                            <div key={index} className="flex items-center justify-between text-xs bg-muted/50 rounded p-2">
+                              <span className="truncate flex-1">
+                                {item.contact?.name || 'Unknown Contact'}
+                              </span>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => handleRemoveItem(list.id, item.id)}
+                                className="h-6 w-6 text-muted-foreground hover:text-destructive"
+                              >
+                                <Trash2 className="h-3 w-3" />
+                              </Button>
+                            </div>
+                          ))}
+                          {contactCount > 3 && (
+                            <div className="text-xs text-muted-foreground text-center">
+                              +{contactCount - 3} more people
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+        )}
+      </TabsContent>
+
       {/* Edit Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Edit List</DialogTitle>
+            <DialogDescription>
+              Update your list information.
+            </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div>
-              <label className="text-sm font-medium">Name</label>
+              <Label htmlFor="editName">List Name</Label>
               <Input
-                value={editName}
-                onChange={(e) => setEditName(e.target.value)}
+                id="editName"
+                value={editListName}
+                onChange={(e) => setEditListName(e.target.value)}
                 placeholder="Enter list name"
               />
             </div>
             <div>
-              <label className="text-sm font-medium">Description (optional)</label>
+              <Label htmlFor="editDescription">Description</Label>
               <Textarea
-                value={editDescription}
-                onChange={(e) => setEditDescription(e.target.value)}
+                id="editDescription"
+                value={editListDescription}
+                onChange={(e) => setEditListDescription(e.target.value)}
                 placeholder="Enter list description"
-                rows={3}
               />
             </div>
-            <div className="flex gap-2 justify-end">
-              <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+            <div className="flex justify-end space-x-2">
+              <Button variant="outline" onClick={() => {
+                setIsEditDialogOpen(false);
+                setEditingList(null);
+                setEditListName('');
+                setEditListDescription('');
+              }}>
                 Cancel
               </Button>
               <Button onClick={handleEditList}>
-                Update
+                Update List
               </Button>
             </div>
           </div>
         </DialogContent>
       </Dialog>
-
-      {/* Lists Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {lists.map((list) => (
-          <Card key={list.id}>
-            <CardHeader>
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <CardTitle className="text-lg flex items-center gap-2">
-                    <List className="h-5 w-5 text-primary" />
-                    {list.name}
-                  </CardTitle>
-                  {list.description && (
-                    <p className="text-sm text-muted-foreground mt-2">
-                      {list.description}
-                    </p>
-                  )}
-                </div>
-                <div className="flex gap-1">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => startEdit(list)}
-                  >
-                    <Edit2 className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => handleDeleteList(list.id)}
-                  >
-                    <Trash2 className="h-4 w-4 text-destructive" />
-                  </Button>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <Badge variant="secondary">
-                    {list.list_items?.length || 0} item{(list.list_items?.length || 0) !== 1 ? 's' : ''}
-                  </Badge>
-                </div>
-
-                {/* List Items */}
-                <div className="space-y-2 max-h-48 overflow-y-auto">
-                  {list.list_items?.map((item) => (
-                    <div key={item.id} className="flex items-center justify-between p-2 bg-muted rounded-md">
-                      <div className="flex items-center gap-2 flex-1 min-w-0">
-                        {item.contact ? (
-                          <>
-                            <User className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-                            <span className="text-sm truncate">
-                              {item.contact.first_name} {item.contact.last_name}
-                            </span>
-                          </>
-                        ) : item.team ? (
-                          <>
-                            <Building2 className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-                            <span className="text-sm truncate">
-                              {item.team.name}
-                            </span>
-                          </>
-                        ) : (
-                          <span className="text-sm text-muted-foreground">Unknown item</span>
-                        )}
-                      </div>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleRemoveItem(item.id)}
-                        className="flex-shrink-0"
-                      >
-                        <Trash2 className="h-3 w-3 text-destructive" />
-                      </Button>
-                    </div>
-                  ))}
-
-                  {(!list.list_items || list.list_items.length === 0) && (
-                    <p className="text-sm text-muted-foreground text-center py-4">
-                      No items in this list yet
-                    </p>
-                  )}
-                </div>
-
-                {/* Export Button */}
-                {list.list_items && list.list_items.length > 0 && (
-                  <div className="pt-3 border-t border-border">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => exportListToCSV(list)}
-                      className="w-full"
-                    >
-                      <Download className="h-4 w-4 mr-2" />
-                      Export to Excel
-                    </Button>
-                  </div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
-      {lists.length === 0 && !loading && (
-        <Card>
-          <CardContent className="flex flex-col items-center justify-center py-12">
-            <List className="h-12 w-12 text-muted-foreground mb-4" />
-            <h3 className="text-lg font-semibold mb-2">No lists yet</h3>
-            <p className="text-muted-foreground text-center mb-4">
-              Create your first list to organize your contacts and teams.
-            </p>
-            <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
-              <DialogTrigger asChild>
-                <Button>
-                  <Plus className="h-4 w-4 mr-2" />
-                  Create Your First List
-                </Button>
-              </DialogTrigger>
-            </Dialog>
-          </CardContent>
-        </Card>
-      )}
     </div>
   );
 };
 
-export default Lists;
+export default MyContacts;

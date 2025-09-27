@@ -37,9 +37,9 @@ import {
 const mainNavItems = [
   { title: 'Signals', url: '/crm/signals', icon: Zap },
   { title: 'My ICPs', url: '/crm/icps', icon: Target },
-  { title: 'Contacts', url: '/crm/contacts', icon: Users },
+  { title: 'Search', url: '/crm/contacts', icon: Users },
   { title: 'Enrich', url: '/crm/enrich', icon: Sparkles },
-  { title: 'Lists', url: '/crm/lists', icon: List },
+  { title: 'My Contacts', url: '/crm/lists', icon: List },
 ];
 
 const dealsNavItems = [
