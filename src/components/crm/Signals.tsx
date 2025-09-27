@@ -22,7 +22,6 @@ import surreyCricketLogo from "@/assets/team-logos/surrey-cricket.png";
 interface Signal {
   id: string;
   sport: string;
-  sportIcon: string;
   clubName: string;
   competition: string;
   region: string;
@@ -68,7 +67,6 @@ const mockSignals: Signal[] = [
   {
     id: "1",
     sport: "Football",
-    sportIcon: "⚽",
     clubName: "Manchester United",
     competition: "Premier League",
     region: "UK",
@@ -83,7 +81,6 @@ const mockSignals: Signal[] = [
   {
     id: "2",
     sport: "Cricket",
-    sportIcon: "🏏",
     clubName: "Surrey County Cricket Club",
     competition: "England Cricket",
     region: "UK",
@@ -98,7 +95,6 @@ const mockSignals: Signal[] = [
   {
     id: "3",
     sport: "Rugby",
-    sportIcon: "🏉",
     clubName: "Leinster Rugby",
     competition: "Pro14",
     region: "Ireland",
@@ -113,7 +109,6 @@ const mockSignals: Signal[] = [
   {
     id: "4",
     sport: "Football",
-    sportIcon: "⚽",
     clubName: "Cork City FC",
     competition: "League of Ireland",
     region: "Ireland",
@@ -128,7 +123,6 @@ const mockSignals: Signal[] = [
   {
     id: "5",
     sport: "Basketball",
-    sportIcon: "🏀",
     clubName: "Real Madrid Basketball",
     competition: "EuroLeague",
     region: "Spain",
@@ -143,7 +137,6 @@ const mockSignals: Signal[] = [
   {
     id: "6",
     sport: "Football",
-    sportIcon: "⚽",
     clubName: "Arsenal",
     competition: "Premier League",
     region: "UK",
@@ -158,7 +151,6 @@ const mockSignals: Signal[] = [
   {
     id: "7",
     sport: "Cricket",
-    sportIcon: "🏏",
     clubName: "Essex CCC",
     competition: "County Championship",
     region: "UK",
@@ -173,7 +165,6 @@ const mockSignals: Signal[] = [
   {
     id: "8",
     sport: "Football",
-    sportIcon: "⚽",
     clubName: "Liverpool",
     competition: "Premier League",
     region: "UK",
@@ -397,16 +388,13 @@ const Signals = () => {
             <Card key={signal.id} className="hover:shadow-lg transition-shadow border border-gray-200 bg-white">
               <CardContent className="p-6">
                 <div className="flex items-start gap-4">
-                  {/* Club Logo & Sport Icon */}
-                  <div className="flex flex-col items-center gap-2 flex-shrink-0">
+                  {/* Club Logo */}
+                  <div className="flex-shrink-0">
                     <img 
                       src={getTeamLogo(signal.clubName)} 
                       alt={`${signal.clubName} logo`}
                       className="w-12 h-12 object-contain rounded-lg border border-gray-200"
                     />
-                    <div className="text-2xl">
-                      {signal.sportIcon}
-                    </div>
                   </div>
 
                   {/* Main Content */}
