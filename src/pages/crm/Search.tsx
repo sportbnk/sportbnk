@@ -660,7 +660,7 @@ const Discover = () => {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="all">All Countries</SelectItem>
-                      {countries.map((country) => (
+                      {countries.filter(country => country.name.toLowerCase() !== 'multi nation').map((country) => (
                         <SelectItem key={country.id} value={country.id}>
                           {country.name}
                         </SelectItem>
