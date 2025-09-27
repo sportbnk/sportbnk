@@ -65,6 +65,11 @@ const CrmLayout: React.FC<CrmLayoutProps> = ({ children, pageTitle }) => {
                 </div>
                 
                 <div className="flex items-center gap-3">
+                  {/* Usage Counter */}
+                  <div className="text-sm text-muted-foreground font-medium">
+                    Usage: 10/50
+                  </div>
+                  
                   {/* Profile Dropdown */}
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
