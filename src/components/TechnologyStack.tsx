@@ -1,6 +1,6 @@
 
 import { useEffect, useRef } from 'react';
-import { Database, Clock, Filter, ListChecks, FileText, TrendingUp } from 'lucide-react';
+import { Database, Activity, Filter, ListChecks, FileText, TrendingUp, Download } from 'lucide-react';
 
 const TechnologyStack = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -33,7 +33,7 @@ const TechnologyStack = () => {
             Powered by Enterprise Technology
           </h2>
           <p className="text-gray-600 max-w-3xl mx-auto text-lg">
-            Our platform is built on cutting-edge technologies to ensure scalability, reliability, and performance.
+            Built on cutting-edge infrastructure to deliver scalability, reliability, and speed — ready to grow with your business.
           </p>
         </div>
         
@@ -47,17 +47,17 @@ const TechnologyStack = () => {
             </div>
             <h3 className="text-xl font-semibold mb-3 text-sportbnk-navy">Accurate & Compliant Data</h3>
             <p className="text-gray-600">
-              Access verified, up-to-date sports industry contact information that meets global compliance standards including GDPR and CCPA.
+              Access verified, up-to-date contacts and insights across the sports industry, with full compliance to GDPR and CCPA.
             </p>
           </div>
           
           <div className="bg-white rounded-xl p-8 border border-gray-200 shadow-sm">
             <div className="mb-4">
-              <Clock className="text-sportbnk-green w-10 h-10" />
+              <Activity className="text-sportbnk-green w-10 h-10" />
             </div>
-            <h3 className="text-xl font-semibold mb-3 text-sportbnk-navy">Job Changes</h3>
+            <h3 className="text-xl font-semibold mb-3 text-sportbnk-navy">Signals & Job Changes</h3>
             <p className="text-gray-600">
-              Stay informed about personnel movements within the sports industry with automated notifications about relevant job changes.
+              Track key movements and buying signals across clubs, sponsors, and decision-makers with real-time updates.
             </p>
           </div>
           
@@ -65,9 +65,9 @@ const TechnologyStack = () => {
             <div className="mb-4">
               <Filter className="text-sportbnk-green w-10 h-10" />
             </div>
-            <h3 className="text-xl font-semibold mb-3 text-sportbnk-navy">Filtering System</h3>
+            <h3 className="text-xl font-semibold mb-3 text-sportbnk-navy">Smart Filtering</h3>
             <p className="text-gray-600">
-              Use advanced filtering capabilities to narrow down your search and find exactly the sports professionals you need.
+              Quickly narrow searches with advanced filters to find the exact people, organisations, or opportunities you need.
             </p>
           </div>
           
@@ -75,19 +75,19 @@ const TechnologyStack = () => {
             <div className="mb-4">
               <ListChecks className="text-sportbnk-green w-10 h-10" />
             </div>
-            <h3 className="text-xl font-semibold mb-3 text-sportbnk-navy">List Building</h3>
+            <h3 className="text-xl font-semibold mb-3 text-sportbnk-navy">Targeted List Building</h3>
             <p className="text-gray-600">
-              Create highly targeted lists of sports organisations and professionals using our advanced segmentation tools.
+              Create precise, segmented lists of sports organisations and professionals to fuel smarter outreach.
             </p>
           </div>
           
           <div className="bg-white rounded-xl p-8 border border-gray-200 shadow-sm">
             <div className="mb-4">
-              <FileText className="text-sportbnk-green w-10 h-10" />
+              <Download className="text-sportbnk-green w-10 h-10" />
             </div>
-            <h3 className="text-xl font-semibold mb-3 text-sportbnk-navy">CSV Export</h3>
+            <h3 className="text-xl font-semibold mb-3 text-sportbnk-navy">Easy Export & Integrations</h3>
             <p className="text-gray-600">
-              Export your contact lists and data in CSV format for seamless integration with your existing CRM and marketing tools.
+              Export data to CSV or connect directly into your CRM and marketing stack for seamless workflows.
             </p>
           </div>
           
@@ -95,9 +95,9 @@ const TechnologyStack = () => {
             <div className="mb-4">
               <TrendingUp className="text-sportbnk-green w-10 h-10" />
             </div>
-            <h3 className="text-xl font-semibold mb-3 text-sportbnk-navy">Increasing Your Sales</h3>
+            <h3 className="text-xl font-semibold mb-3 text-sportbnk-navy">Sales Intelligence</h3>
             <p className="text-gray-600">
-              Boost your sales performance with data-driven insights and targeted outreach to the right sports industry contacts.
+              Turn insights into action — driving pipeline growth, stronger conversions, and better ROI.
             </p>
           </div>
         </div>
