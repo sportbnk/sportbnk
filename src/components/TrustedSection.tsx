@@ -66,9 +66,7 @@ const TrustedSection = () => {
             The Sports Industry's Most Trusted Intelligence Platform
           </h2>
           <p className="text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
-            SportBnk connects you with comprehensive data from the global sports ecosystem. 
-            Our platform gives you the right information, smart insights, 
-            and easy connections - making it simple for sports professionals to get things done.
+            Sportbnk connects you with real-time signals and comprehensive data from the global sports ecosystem. Our platform delivers the right information, actionable insights, and direct connections — making it easier for sports professionals to move faster and achieve more.
           </p>
         </div>
         
