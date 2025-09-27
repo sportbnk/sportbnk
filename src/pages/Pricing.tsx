@@ -121,7 +121,7 @@ const Pricing = () => {
     "Define up to 3 ICPs",
     "All Discover filters",
     "10 intent searches per day",
-    "Export up to 250 contacts per month",
+    "Export up to 750 contacts per month",
     "Basic Signals (hiring + sponsorship)",
     "Email + chat support"
   ];
@@ -129,7 +129,7 @@ const Pricing = () => {
   const proFeatures = [
     "Define up to 10 ICPs",
     "25 intent searches per day",
-    "Export up to 1,000 contacts per month",
+    "Export up to 2,500 contacts per month",
     "Advanced Signals (tenders, grants, procurement, funding)",
     "CRM integrations (HubSpot, Salesforce, Pipedrive)",
     "Priority support"
@@ -222,7 +222,7 @@ const Pricing = () => {
             <PricingCard 
               title="Standard Plan"
               price={formatPrice(49)}
-              annualPrice={formatPrice(isAnnual ? 750 : 49)}
+              annualPrice={formatPrice(isAnnual ? 470 : 49)}
               description="For small teams starting to target and sell in sport."
               features={standardFeatures}
               isAnnual={isAnnual}
@@ -232,7 +232,7 @@ const Pricing = () => {
             <PricingCard 
               title="Pro Plan"
               price={formatPrice(99)}
-              annualPrice={formatPrice(isAnnual ? 2500 : 99)}
+              annualPrice={formatPrice(isAnnual ? 950 : 99)}
               description="For growing teams who need deeper signals and integrations."
               features={proFeatures}
               highlighted={true}
