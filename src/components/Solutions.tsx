@@ -31,11 +31,10 @@ const Solutions = () => {
       <div className="container mx-auto px-4 md:px-6">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-sportbnk-navy mb-4">
-            Want to see how Sportbnk is helping businesses build stronger pipelines?
+            Want to see how Sportbnk uses AI signals to help businesses build stronger pipelines?
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            The mission of SportBnk is creating a single space to find sports-data solutions for all
-            industries with one click, using the most innovative technologies.
+            Our mission is to create a single platform where sports organisations and suppliers can access real-time intelligence, discover opportunities, and power growth — all through innovative AI technology.
           </p>
         </div>
         
@@ -49,7 +48,7 @@ const Solutions = () => {
             </div>
             <h3 className="text-xl font-semibold mb-3 text-sportbnk-navy">Sales</h3>
             <p className="text-gray-600 mb-6">Find qualified leads and decision-makers within sports organisations to expand your customer base and drive revenue growth.</p>
-            <Link to="/products/discover" className="inline-flex items-center text-sportbnk-green font-medium hover:underline">
+            <Link to="/cases/sales" className="inline-flex items-center text-sportbnk-green font-medium hover:underline">
               Learn more <ArrowRight className="ml-2 w-4 h-4" />
             </Link>
           </div>
@@ -60,7 +59,7 @@ const Solutions = () => {
             </div>
             <h3 className="text-xl font-semibold mb-3 text-sportbnk-navy">Marketing</h3>
             <p className="text-gray-600 mb-6">Target and engage with the right audience in the sports industry to build brand awareness and enhance marketing campaigns.</p>
-            <Link to="/products/boost" className="inline-flex items-center text-sportbnk-green font-medium hover:underline">
+            <Link to="/cases/marketing" className="inline-flex items-center text-sportbnk-green font-medium hover:underline">
               Learn more <ArrowRight className="ml-2 w-4 h-4" />
             </Link>
           </div>
@@ -71,7 +70,7 @@ const Solutions = () => {
             </div>
             <h3 className="text-xl font-semibold mb-3 text-sportbnk-navy">Hiring</h3>
             <p className="text-gray-600 mb-6">Connect with top talent in the sports industry to build high-performing teams with specialized knowledge and experience.</p>
-            <Link to="/products/recruit" className="inline-flex items-center text-sportbnk-green font-medium hover:underline">
+            <Link to="/cases/hiring" className="inline-flex items-center text-sportbnk-green font-medium hover:underline">
               Learn more <ArrowRight className="ml-2 w-4 h-4" />
             </Link>
           </div>
