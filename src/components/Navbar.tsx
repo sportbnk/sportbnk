@@ -94,7 +94,7 @@ const Navbar = () => {
                             <NavigationMenuLink asChild>
                               <Link to="/products/api" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
                                 <div className="text-sm font-medium text-sportbnk-navy flex items-center">
-                                  <Code className="h-4 w-4 mr-2" /> API
+                                  <Code className="h-4 w-4 mr-2" /> SportBnk API
                                 </div>
                                 <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Integrate sports data via API</p>
                               </Link>
@@ -289,7 +289,7 @@ const Navbar = () => {
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                   <Link to="/products/api" className="w-full flex items-center">
-                    <Code className="h-4 w-4 mr-2" />API
+                    <Code className="h-4 w-4 mr-2" />SportBnk API
                   </Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>

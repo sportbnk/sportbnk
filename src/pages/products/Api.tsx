@@ -8,7 +8,7 @@ import { WaitlistDialog } from "@/components/WaitlistDialog";
 const Api = () => {
   return (
     <PageLayout 
-      pageTitle="Sportbnk API"
+      pageTitle="SportBnk API"
       metaDescription="Integrate sports data directly into your applications with SportsBnk's comprehensive REST API. Access real-time sports organizations, teams, and professional data programmatically."
       metaKeywords="sports API, REST API, sports data integration, developer API, sports organizations API, teams data API, real-time sports data, sports database API"
     >
@@ -20,7 +20,7 @@ const Api = () => {
                 <Code className="h-8 w-8 text-sportbnk-green" />
               </div>
               <h2 className="text-3xl md:text-4xl font-bold text-sportbnk-navy mb-4">
-                Sportbnk API
+                SportBnk API
               </h2>
               <p className="text-lg text-gray-600 mb-6">
                 Integrate comprehensive sports industry data directly into your applications with our robust REST API. 
@@ -49,7 +49,7 @@ const Api = () => {
             <div>
               <img 
                 src="/lovable-uploads/eb79c886-efce-4f58-9a00-a8855589b3d2.png" 
-                alt="Sports stadium showcasing the scale of sports data available through Sportbnk API" 
+                alt="Sports stadium showcasing the scale of sports data available through SportBnk API"
                 className="rounded-lg shadow-lg"
               />
             </div>
