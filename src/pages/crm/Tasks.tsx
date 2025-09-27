@@ -1,547 +1,233 @@
 import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { 
-  CheckSquare, 
-  Plus, 
-  Calendar, 
-  Bot, 
-  Zap, 
+  CheckSquare,
+  Plus,
   Clock,
-  CheckCircle,
+  User,
+  Calendar,
   AlertCircle,
-  Trash2,
-  Edit2
+  FileText,
+  Settings
 } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
 
 interface Task {
   id: string;
   title: string;
   description: string;
-  priority: 'low' | 'medium' | 'high';
-  status: 'pending' | 'in-progress' | 'completed';
   dueDate: string;
-  assignedTo: string;
-  createdAt: string;
-  aiGenerated?: boolean;
+  priority: 'High' | 'Medium' | 'Low';
+  status: 'To Do' | 'In Progress' | 'Completed';
+  assignee: string;
+  category: string;
 }
 
+const mockTasks: Task[] = [
+  {
+    id: '1',
+    title: 'Follow up with Arsenal FC',
+    description: 'Send partnership proposal and schedule follow-up meeting',
+    dueDate: '2024-01-16',
+    priority: 'High',
+    status: 'To Do',
+    assignee: 'Sarah Johnson',
+    category: 'Sales'
+  },
+  {
+    id: '2',
+    title: 'Contract review - Manchester United',
+    description: 'Review contract terms and prepare feedback document',
+    dueDate: '2024-01-15',
+    priority: 'High',
+    status: 'In Progress',
+    assignee: 'David Martinez',
+    category: 'Legal'
+  },
+  {
+    id: '3',
+    title: 'Prepare quarterly report',
+    description: 'Compile Q4 sales data and create presentation',
+    dueDate: '2024-01-20',
+    priority: 'Medium',
+    status: 'To Do',
+    assignee: 'Emma Thompson',
+    category: 'Reporting'
+  },
+  {
+    id: '4',
+    title: 'Client onboarding - Liverpool FC',
+    description: 'Set up client portal and send welcome package',
+    dueDate: '2024-01-12',
+    priority: 'Medium',
+    status: 'Completed',
+    assignee: 'James Wilson',
+    category: 'Onboarding'
+  },
+  {
+    id: '5',
+    title: 'Update CRM database',
+    description: 'Clean up duplicate contacts and update missing information',
+    dueDate: '2024-01-18',
+    priority: 'Low',
+    status: 'To Do',
+    assignee: 'Maria Rodriguez',
+    category: 'Admin'
+  }
+];
+
 const Tasks = () => {
-  const { toast } = useToast();
-  const [tasks, setTasks] = useState<Task[]>([
-    {
-      id: '1',
-      title: 'Follow up with Arsenal FC',
-      description: 'Schedule a call to discuss sponsorship opportunities',
-      priority: 'high',
-      status: 'pending',
-      dueDate: '2024-01-15',
-      assignedTo: 'John Doe',
-      createdAt: '2024-01-10',
-      aiGenerated: true
-    },
-    {
-      id: '2',
-      title: 'Prepare proposal for Manchester United',
-      description: 'Create comprehensive sponsorship proposal including media rights',
-      priority: 'high',
-      status: 'in-progress',
-      dueDate: '2024-01-20',
-      assignedTo: 'Jane Smith',
-      createdAt: '2024-01-08'
-    },
-    {
-      id: '3',
-      title: 'Research potential cricket partnerships',
-      description: 'Identify opportunities with county cricket teams',
-      priority: 'medium',
-      status: 'pending',
-      dueDate: '2024-01-25',
-      assignedTo: 'Mike Johnson',
-      createdAt: '2024-01-05'
-    }
-  ]);
+  const [tasks, setTasks] = useState<Task[]>(mockTasks);
 
-  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
-  const [isAiDialogOpen, setIsAiDialogOpen] = useState(false);
-  const [aiPrompt, setAiPrompt] = useState('');
-  const [newTask, setNewTask] = useState({
-    title: '',
-    description: '',
-    priority: 'medium' as const,
-    dueDate: '',
-    assignedTo: ''
-  });
+  const handleNewTask = () => {
+    console.log('New task clicked');
+  };
 
-  const handleCreateTask = () => {
-    if (!newTask.title.trim()) {
-      toast({
-        title: "Error",
-        description: "Task title is required",
-        variant: "destructive",
-      });
-      return;
-    }
+  const handleTaskSettings = () => {
+    console.log('Task settings clicked');
+  };
 
-    const task: Task = {
-      id: Date.now().toString(),
-      ...newTask,
-      status: 'pending',
-      createdAt: new Date().toISOString().split('T')[0]
+  const getStatusColor = (status: string) => {
+    const colors: Record<string, string> = {
+      'To Do': 'bg-gray-100 text-gray-800',
+      'In Progress': 'bg-blue-100 text-blue-800',
+      'Completed': 'bg-green-100 text-green-800'
     };
-
-    setTasks(prev => [task, ...prev]);
-    setNewTask({
-      title: '',
-      description: '',
-      priority: 'medium',
-      dueDate: '',
-      assignedTo: ''
-    });
-    setIsCreateDialogOpen(false);
-
-    toast({
-      title: "Task created",
-      description: "New task has been added successfully",
-    });
-  };
-
-  const generateAiTasks = () => {
-    if (!aiPrompt.trim()) {
-      toast({
-        title: "Error",
-        description: "Please enter a prompt for AI task generation",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    // Mock AI-generated tasks based on prompt
-    const aiTasks: Task[] = [
-      {
-        id: Date.now().toString(),
-        title: `Research ${aiPrompt} opportunities`,
-        description: `Conduct market research and identify potential partnerships related to ${aiPrompt}`,
-        priority: 'medium',
-        status: 'pending',
-        dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-        assignedTo: 'AI Assistant',
-        createdAt: new Date().toISOString().split('T')[0],
-        aiGenerated: true
-      },
-      {
-        id: (Date.now() + 1).toString(),
-        title: `Create outreach strategy for ${aiPrompt}`,
-        description: `Develop a comprehensive outreach plan and timeline for ${aiPrompt} initiatives`,
-        priority: 'high',
-        status: 'pending',
-        dueDate: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-        assignedTo: 'AI Assistant',
-        createdAt: new Date().toISOString().split('T')[0],
-        aiGenerated: true
-      }
-    ];
-
-    setTasks(prev => [...aiTasks, ...prev]);
-    setAiPrompt('');
-    setIsAiDialogOpen(false);
-
-    toast({
-      title: "AI tasks generated",
-      description: `Generated ${aiTasks.length} tasks based on your prompt`,
-    });
-  };
-
-  const updateTaskStatus = (taskId: string, newStatus: Task['status']) => {
-    setTasks(prev => 
-      prev.map(task => 
-        task.id === taskId ? { ...task, status: newStatus } : task
-      )
-    );
-
-    toast({
-      title: "Task updated",
-      description: "Task status has been updated",
-    });
-  };
-
-  const deleteTask = (taskId: string) => {
-    setTasks(prev => prev.filter(task => task.id !== taskId));
-    toast({
-      title: "Task deleted",
-      description: "Task has been removed",
-    });
+    return colors[status] || 'bg-gray-100 text-gray-800';
   };
 
   const getPriorityColor = (priority: string) => {
-    switch (priority) {
-      case 'high': return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300';
-      case 'medium': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300';
-      case 'low': return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300';
-      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300';
-    }
+    const colors: Record<string, string> = {
+      'High': 'bg-red-100 text-red-800',
+      'Medium': 'bg-yellow-100 text-yellow-800',
+      'Low': 'bg-green-100 text-green-800'
+    };
+    return colors[priority] || 'bg-gray-100 text-gray-800';
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'completed': return <CheckCircle className="h-4 w-4 text-green-500" />;
-      case 'in-progress': return <Clock className="h-4 w-4 text-blue-500" />;
-      case 'pending': return <AlertCircle className="h-4 w-4 text-yellow-500" />;
-      default: return <Clock className="h-4 w-4 text-gray-500" />;
+      case 'Completed':
+        return <CheckSquare className="h-4 w-4 text-green-600" />;
+      case 'In Progress':
+        return <Clock className="h-4 w-4 text-blue-600" />;
+      default:
+        return <FileText className="h-4 w-4 text-gray-600" />;
     }
   };
 
-  const pendingTasks = tasks.filter(task => task.status === 'pending');
-  const inProgressTasks = tasks.filter(task => task.status === 'in-progress');
-  const completedTasks = tasks.filter(task => task.status === 'completed');
+  const formatDate = (date: string) => {
+    return new Date(date).toLocaleDateString('en-GB', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric'
+    });
+  };
+
+  const isOverdue = (dueDate: string, status: string) => {
+    return new Date(dueDate) < new Date() && status !== 'Completed';
+  };
+
+  const getInitials = (name: string) => {
+    return name.split(' ').map(n => n[0]).join('').toUpperCase();
+  };
 
   return (
-    <div className="space-y-6 pt-6">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <CheckSquare className="h-8 w-8 text-primary" />
+    <div className="min-h-screen bg-gray-50 p-6" style={{ fontFamily: 'Poppins, sans-serif' }}>
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-2xl font-bold">Tasks</h1>
-            <p className="text-muted-foreground">Manage your tasks and let AI help you stay organized</p>
+            <h1 className="text-3xl font-bold text-gray-900">Tasks</h1>
+            <p className="text-gray-600 mt-1">Manage your tasks and stay organized</p>
+          </div>
+          <div className="flex items-center gap-3">
+            <Button 
+              onClick={handleNewTask}
+              className="bg-blue-600 hover:bg-blue-700"
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              New Task
+            </Button>
+            <Button 
+              onClick={handleTaskSettings}
+              variant="outline"
+            >
+              <Settings className="h-4 w-4 mr-2" />
+              Task Settings
+            </Button>
           </div>
         </div>
-        <div className="flex gap-3">
-          <Dialog open={isAiDialogOpen} onOpenChange={setIsAiDialogOpen}>
-            <DialogTrigger asChild>
-              <Button variant="outline">
-                <Bot className="h-4 w-4 mr-2" />
-                AI Generate
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Generate Tasks with AI</DialogTitle>
-              </DialogHeader>
-              <div className="space-y-4">
-                <div>
-                  <label className="text-sm font-medium">What would you like to work on?</label>
-                  <Textarea
-                    value={aiPrompt}
-                    onChange={(e) => setAiPrompt(e.target.value)}
-                    placeholder="e.g., 'football sponsorship deals', 'cricket team partnerships', 'esports opportunities'"
-                    rows={3}
-                  />
-                </div>
-                <div className="flex gap-2 justify-end">
-                  <Button variant="outline" onClick={() => setIsAiDialogOpen(false)}>
-                    Cancel
-                  </Button>
-                  <Button onClick={generateAiTasks}>
-                    <Zap className="h-4 w-4 mr-2" />
-                    Generate Tasks
-                  </Button>
-                </div>
-              </div>
-            </DialogContent>
-          </Dialog>
-          
-          <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
-            <DialogTrigger asChild>
-              <Button>
-                <Plus className="h-4 w-4 mr-2" />
-                New Task
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Create New Task</DialogTitle>
-              </DialogHeader>
-              <div className="space-y-4">
-                <div>
-                  <label className="text-sm font-medium">Title</label>
-                  <Input
-                    value={newTask.title}
-                    onChange={(e) => setNewTask(prev => ({ ...prev, title: e.target.value }))}
-                    placeholder="Enter task title"
-                  />
-                </div>
-                <div>
-                  <label className="text-sm font-medium">Description</label>
-                  <Textarea
-                    value={newTask.description}
-                    onChange={(e) => setNewTask(prev => ({ ...prev, description: e.target.value }))}
-                    placeholder="Enter task description"
-                    rows={3}
-                  />
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-sm font-medium">Priority</label>
-                    <Select value={newTask.priority} onValueChange={(value: any) => setNewTask(prev => ({ ...prev, priority: value }))}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="low">Low</SelectItem>
-                        <SelectItem value="medium">Medium</SelectItem>
-                        <SelectItem value="high">High</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium">Due Date</label>
-                    <Input
-                      type="date"
-                      value={newTask.dueDate}
-                      onChange={(e) => setNewTask(prev => ({ ...prev, dueDate: e.target.value }))}
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label className="text-sm font-medium">Assigned To</label>
-                  <Input
-                    value={newTask.assignedTo}
-                    onChange={(e) => setNewTask(prev => ({ ...prev, assignedTo: e.target.value }))}
-                    placeholder="Enter assignee name"
-                  />
-                </div>
-                <div className="flex gap-2 justify-end">
-                  <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
-                    Cancel
-                  </Button>
-                  <Button onClick={handleCreateTask}>
-                    Create Task
-                  </Button>
-                </div>
-              </div>
-            </DialogContent>
-          </Dialog>
-        </div>
-      </div>
 
-      {/* Task Statistics */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center gap-4">
-              <div className="p-3 bg-primary/10 rounded-lg">
-                <CheckSquare className="h-6 w-6 text-primary" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold">{tasks.length}</p>
-                <p className="text-sm text-muted-foreground">Total Tasks</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center gap-4">
-              <div className="p-3 bg-yellow-100 rounded-lg">
-                <Clock className="h-6 w-6 text-yellow-600" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold">{pendingTasks.length}</p>
-                <p className="text-sm text-muted-foreground">Pending</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center gap-4">
-              <div className="p-3 bg-blue-100 rounded-lg">
-                <Clock className="h-6 w-6 text-blue-600" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold">{inProgressTasks.length}</p>
-                <p className="text-sm text-muted-foreground">In Progress</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center gap-4">
-              <div className="p-3 bg-green-100 rounded-lg">
-                <CheckCircle className="h-6 w-6 text-green-600" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold">{completedTasks.length}</p>
-                <p className="text-sm text-muted-foreground">Completed</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Tasks List */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Pending Tasks */}
+        {/* Tasks List */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <AlertCircle className="h-5 w-5 text-yellow-500" />
-              Pending ({pendingTasks.length})
-            </CardTitle>
+            <CardTitle>All Tasks</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-3">
-            {pendingTasks.map((task) => (
-              <div key={task.id} className="p-4 border rounded-lg space-y-3">
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <h4 className="font-medium">{task.title}</h4>
-                    {task.aiGenerated && (
-                      <Badge variant="outline" className="text-xs mt-1">
-                        <Bot className="h-3 w-3 mr-1" />
-                        AI Generated
+          <CardContent className="p-0">
+            <div className="divide-y">
+              {tasks.map((task) => (
+                <div key={task.id} className="p-6 hover:bg-gray-50 transition-colors">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-start gap-4">
+                      <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-blue-100">
+                        {getStatusIcon(task.status)}
+                      </div>
+                      
+                      <div className="flex-1">
+                        <div className="flex items-start gap-2 mb-1">
+                          <h3 className="font-semibold text-gray-900">
+                            {task.title}
+                          </h3>
+                          {isOverdue(task.dueDate, task.status) && (
+                            <AlertCircle className="h-4 w-4 text-red-500 mt-0.5" />
+                          )}
+                        </div>
+                        
+                        <p className="text-sm text-gray-600 mb-2">
+                          {task.description}
+                        </p>
+                        
+                        <div className="flex items-center gap-4 text-sm text-gray-600 mb-2">
+                          <div className="flex items-center gap-1">
+                            <Calendar className="h-3 w-3" />
+                            <span className={isOverdue(task.dueDate, task.status) ? 'text-red-600 font-medium' : ''}>
+                              Due: {formatDate(task.dueDate)}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <User className="h-3 w-3" />
+                            <span>{task.assignee}</span>
+                          </div>
+                        </div>
+                        
+                        <Badge variant="outline" className="text-xs">
+                          {task.category}
+                        </Badge>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center gap-3">
+                      <Badge className={`text-xs ${getPriorityColor(task.priority)}`}>
+                        {task.priority}
                       </Badge>
-                    )}
-                  </div>
-                  <div className="flex gap-1">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => updateTaskStatus(task.id, 'in-progress')}
-                    >
-                      <Edit2 className="h-3 w-3" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => deleteTask(task.id)}
-                    >
-                      <Trash2 className="h-3 w-3 text-destructive" />
-                    </Button>
-                  </div>
-                </div>
-                <p className="text-sm text-muted-foreground">{task.description}</p>
-                <div className="flex items-center justify-between">
-                  <Badge className={getPriorityColor(task.priority)}>
-                    {task.priority}
-                  </Badge>
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <Calendar className="h-3 w-3" />
-                    {task.dueDate}
-                  </div>
-                </div>
-                <div className="text-xs text-muted-foreground">
-                  Assigned to: {task.assignedTo}
-                </div>
-              </div>
-            ))}
-            {pendingTasks.length === 0 && (
-              <p className="text-center text-muted-foreground py-8">No pending tasks</p>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* In Progress Tasks */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Clock className="h-5 w-5 text-blue-500" />
-              In Progress ({inProgressTasks.length})
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {inProgressTasks.map((task) => (
-              <div key={task.id} className="p-4 border rounded-lg space-y-3">
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <h4 className="font-medium">{task.title}</h4>
-                    {task.aiGenerated && (
-                      <Badge variant="outline" className="text-xs mt-1">
-                        <Bot className="h-3 w-3 mr-1" />
-                        AI Generated
+                      <Badge className={`text-xs ${getStatusColor(task.status)}`}>
+                        {task.status}
                       </Badge>
-                    )}
-                  </div>
-                  <div className="flex gap-1">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => updateTaskStatus(task.id, 'completed')}
-                    >
-                      <CheckCircle className="h-3 w-3" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => deleteTask(task.id)}
-                    >
-                      <Trash2 className="h-3 w-3 text-destructive" />
-                    </Button>
+                    </div>
                   </div>
                 </div>
-                <p className="text-sm text-muted-foreground">{task.description}</p>
-                <div className="flex items-center justify-between">
-                  <Badge className={getPriorityColor(task.priority)}>
-                    {task.priority}
-                  </Badge>
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <Calendar className="h-3 w-3" />
-                    {task.dueDate}
-                  </div>
-                </div>
-                <div className="text-xs text-muted-foreground">
-                  Assigned to: {task.assignedTo}
-                </div>
+              ))}
+            </div>
+            
+            {tasks.length === 0 && (
+              <div className="text-center py-12">
+                <CheckSquare className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-gray-900 mb-2">No tasks found</h3>
+                <p className="text-gray-600">Create your first task to get started</p>
               </div>
-            ))}
-            {inProgressTasks.length === 0 && (
-              <p className="text-center text-muted-foreground py-8">No tasks in progress</p>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Completed Tasks */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <CheckCircle className="h-5 w-5 text-green-500" />
-              Completed ({completedTasks.length})
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {completedTasks.map((task) => (
-              <div key={task.id} className="p-4 border rounded-lg space-y-3 opacity-75">
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <h4 className="font-medium line-through">{task.title}</h4>
-                    {task.aiGenerated && (
-                      <Badge variant="outline" className="text-xs mt-1">
-                        <Bot className="h-3 w-3 mr-1" />
-                        AI Generated
-                      </Badge>
-                    )}
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => deleteTask(task.id)}
-                  >
-                    <Trash2 className="h-3 w-3 text-destructive" />
-                  </Button>
-                </div>
-                <p className="text-sm text-muted-foreground">{task.description}</p>
-                <div className="flex items-center justify-between">
-                  <Badge className={getPriorityColor(task.priority)}>
-                    {task.priority}
-                  </Badge>
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <Calendar className="h-3 w-3" />
-                    {task.dueDate}
-                  </div>
-                </div>
-                <div className="text-xs text-muted-foreground">
-                  Assigned to: {task.assignedTo}
-                </div>
-              </div>
-            ))}
-            {completedTasks.length === 0 && (
-              <p className="text-center text-muted-foreground py-8">No completed tasks</p>
             )}
           </CardContent>
         </Card>
