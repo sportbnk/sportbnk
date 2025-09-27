@@ -4,6 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { 
   Table,
@@ -40,7 +41,9 @@ import {
   Users,
   Mail,
   Phone,
-  ExternalLink
+  ExternalLink,
+  Eye,
+  EyeOff
 } from 'lucide-react';
 import { Team, Sport, Country, City } from '@/types/teams';
 
@@ -426,6 +429,9 @@ const Discover = () => {
   const [peopleSearchQuery, setPeopleSearchQuery] = useState("");
   const [selectedTeam, setSelectedTeam] = useState<string>("all");
   const [selectedRole, setSelectedRole] = useState<string>("all");
+  
+  // Reveal state for people
+  const [revealedContacts, setRevealedContacts] = useState<Set<string>>(new Set());
 
   // Pagination for organizations
   const [currentPage, setCurrentPage] = useState(1);
@@ -541,6 +547,27 @@ const Discover = () => {
 
   // Get unique roles from contacts
   const uniqueRoles = Array.from(new Set(contacts.map(contact => contact.position).filter(Boolean)));
+  
+  // Generate dummy phone and LinkedIn data
+  const generateDummyPhone = (contactId: string) => {
+    const phones = ['+44 7700 900123', '+44 7700 900456', '+44 7700 900789', '+44 7700 900012'];
+    const hash = contactId.split('').reduce((a, b) => a + b.charCodeAt(0), 0);
+    return phones[hash % phones.length];
+  };
+  
+  const generateDummyLinkedIn = (firstName: string, lastName: string) => {
+    return `https://linkedin.com/in/${firstName.toLowerCase()}-${lastName.toLowerCase()}`;
+  };
+  
+  const toggleReveal = (contactId: string) => {
+    const newRevealed = new Set(revealedContacts);
+    if (newRevealed.has(contactId)) {
+      newRevealed.delete(contactId);
+    } else {
+      newRevealed.add(contactId);
+    }
+    setRevealedContacts(newRevealed);
+  };
 
   if (loading) {
     return (
@@ -866,56 +893,95 @@ const Discover = () => {
                           </TableRow>
                         </TableHeader>
                         <TableBody>
-                          {paginatedContacts.map((contact) => (
-                            <TableRow key={contact.id} className="hover:bg-muted/50">
-                              <TableCell className="font-medium">
-                                {contact.first_name} {contact.last_name}
-                              </TableCell>
-                              <TableCell>
-                                <Badge variant="secondary">
-                                  {contact.position || 'Not specified'}
-                                </Badge>
-                              </TableCell>
-                              <TableCell>{contact.teams?.name || 'Unknown'}</TableCell>
-                              <TableCell>
-                                {contact.email ? (
-                                  <div className="flex items-center gap-2">
-                                    <Mail className="h-4 w-4 text-muted-foreground" />
-                                    <span className="truncate max-w-[200px]">{contact.email}</span>
+                          {paginatedContacts.map((contact) => {
+                            const isRevealed = revealedContacts.has(contact.id);
+                            const dummyPhone = generateDummyPhone(contact.id);
+                            const dummyLinkedIn = generateDummyLinkedIn(contact.first_name, contact.last_name);
+                            
+                            return (
+                              <TableRow key={contact.id} className="hover:bg-muted/50">
+                                <TableCell className="font-medium">
+                                  <div className="flex items-center gap-3">
+                                    <Avatar className="h-8 w-8">
+                                      <AvatarImage src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${contact.first_name}${contact.last_name}`} />
+                                      <AvatarFallback className="text-xs">
+                                        {contact.first_name[0]}{contact.last_name[0]}
+                                      </AvatarFallback>
+                                    </Avatar>
+                                    <span>{contact.first_name} {contact.last_name}</span>
                                   </div>
-                                ) : (
-                                  <span className="text-muted-foreground">-</span>
-                                )}
-                              </TableCell>
-                              <TableCell>
-                                {contact.mobile || contact.phone ? (
+                                </TableCell>
+                                <TableCell>
+                                  <Badge variant="secondary">
+                                    {contact.position || 'Not specified'}
+                                  </Badge>
+                                </TableCell>
+                                <TableCell>{contact.teams?.name || 'Unknown'}</TableCell>
+                                <TableCell>
+                                  {contact.email ? (
+                                    <div className="flex items-center gap-2">
+                                      <Mail className="h-4 w-4 text-muted-foreground" />
+                                      <span className="truncate max-w-[200px]">{contact.email}</span>
+                                    </div>
+                                  ) : (
+                                    <span className="text-muted-foreground">-</span>
+                                  )}
+                                </TableCell>
+                                <TableCell>
+                                  {isRevealed ? (
+                                    <div className="flex items-center gap-2">
+                                      <Phone className="h-4 w-4 text-muted-foreground" />
+                                      <span>{dummyPhone}</span>
+                                    </div>
+                                  ) : (
+                                    <div className="flex items-center gap-2 bg-accent/30 px-2 py-1 rounded text-xs">
+                                      <Eye className="h-3 w-3" />
+                                      <span>Reveal</span>
+                                    </div>
+                                  )}
+                                </TableCell>
+                                <TableCell>
+                                  {isRevealed ? (
+                                    <Button variant="ghost" size="sm" asChild>
+                                      <a href={dummyLinkedIn} target="_blank" rel="noopener noreferrer">
+                                        <ExternalLink className="h-4 w-4" />
+                                      </a>
+                                    </Button>
+                                  ) : (
+                                    <div className="flex items-center gap-2 bg-accent/30 px-2 py-1 rounded text-xs">
+                                      <Eye className="h-3 w-3" />
+                                      <span>Reveal</span>
+                                    </div>
+                                  )}
+                                </TableCell>
+                                <TableCell>
                                   <div className="flex items-center gap-2">
-                                    <Phone className="h-4 w-4 text-muted-foreground" />
-                                    <span>{contact.mobile || contact.phone}</span>
+                                    <Button 
+                                      variant="outline" 
+                                      size="sm"
+                                      onClick={() => toggleReveal(contact.id)}
+                                    >
+                                      {isRevealed ? (
+                                        <>
+                                          <EyeOff className="h-4 w-4 mr-2" />
+                                          Hide Details
+                                        </>
+                                      ) : (
+                                        <>
+                                          <Eye className="h-4 w-4 mr-2" />
+                                          Reveal Details
+                                        </>
+                                      )}
+                                    </Button>
+                                    <Button variant="outline" size="sm">
+                                      <Plus className="h-4 w-4 mr-2" />
+                                      Add to List
+                                    </Button>
                                   </div>
-                                ) : (
-                                  <span className="text-muted-foreground">-</span>
-                                )}
-                              </TableCell>
-                              <TableCell>
-                                {contact.linkedin ? (
-                                  <Button variant="ghost" size="sm" asChild>
-                                    <a href={contact.linkedin} target="_blank" rel="noopener noreferrer">
-                                      <ExternalLink className="h-4 w-4" />
-                                    </a>
-                                  </Button>
-                                ) : (
-                                  <span className="text-muted-foreground">-</span>
-                                )}
-                              </TableCell>
-                              <TableCell>
-                                <Button variant="outline" size="sm">
-                                  <Plus className="h-4 w-4 mr-2" />
-                                  Add to List
-                                </Button>
-                              </TableCell>
-                            </TableRow>
-                          ))}
+                                </TableCell>
+                              </TableRow>
+                            );
+                          })}
                         </TableBody>
                       </Table>
                     </div>
