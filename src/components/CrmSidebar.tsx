@@ -36,7 +36,7 @@ import {
 
 const prospectingNavItems = [
   { title: 'Signals Feed', url: '/crm/signals', icon: Zap },
-  { title: 'Discover', url: '/crm/contacts', icon: Users },
+  { title: 'Discover', url: '/crm/discover', icon: Users },
   { title: 'My ICPs', url: '/crm/icps', icon: Target },
 ];
 
