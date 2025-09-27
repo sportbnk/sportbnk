@@ -100,7 +100,7 @@ export function CrmSidebar() {
       <SidebarContent className="flex-1 py-4">
         {/* Find Section */}
         {open && (
-          <div className="px-6 pt-2 pb-1">
+          <div className="px-6 pt-2 pb-[3px]">
             <h3 className="text-sidebar-foreground font-semibold text-sm uppercase tracking-wide">
               Find
             </h3>
