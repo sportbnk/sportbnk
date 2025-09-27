@@ -46,22 +46,22 @@ import liverpoolLogo from "@/assets/team-logos/liverpool.png";
 import manchesterUnitedLogo from "@/assets/team-logos/manchester-united.png";
 import manchesterCityLogo from "@/assets/team-logos/manchester-city.png";
 import tottenhamLogo from "@/assets/team-logos/tottenham.png";
-import astonVillaLogo from "@/assets/team-logos/aston-villa.png";
-import brentfordLogo from "@/assets/team-logos/brentford.png";
+import newcastleLogo from "@/assets/team-logos/newcastle.png";
 import brightonLogo from "@/assets/team-logos/brighton.png";
+import astonVillaLogo from "@/assets/team-logos/aston-villa.png";
+import westHamLogo from "@/assets/team-logos/west-ham.png";
+import brentfordLogo from "@/assets/team-logos/brentford.png";
 import crystalPalaceLogo from "@/assets/team-logos/crystal-palace.png";
 import evertonLogo from "@/assets/team-logos/everton.png";
 import fulhamLogo from "@/assets/team-logos/fulham.png";
-import newcastleLogo from "@/assets/team-logos/newcastle-united.png";
-import nottinghamLogo from "@/assets/team-logos/nottingham-forest.png";
-import westHamLogo from "@/assets/team-logos/west-ham.png";
-import wolvesLogo from "@/assets/team-logos/wolves.png";
 import bournemouthLogo from "@/assets/team-logos/bournemouth.png";
+import nottinghamForestLogo from "@/assets/team-logos/nottingham-forest.png";
+import wolvesLogo from "@/assets/team-logos/wolves.png";
+import leicesterLogo from "@/assets/team-logos/leicester.png";
 import burnleyLogo from "@/assets/team-logos/burnley.png";
-import lutonLogo from "@/assets/team-logos/luton-town.png";
-import sheffieldLogo from "@/assets/team-logos/sheffield-united.png";
+import sheffieldUnitedLogo from "@/assets/team-logos/sheffield-united.png";
 
-// Logo mapping function
+// Logo mapping function (simplified for demo)
 const getTeamLogo = (teamName: string) => {
   const logoMap: Record<string, string> = {
     'Arsenal': arsenalLogo,
@@ -70,20 +70,20 @@ const getTeamLogo = (teamName: string) => {
     'Manchester United': manchesterUnitedLogo,
     'Manchester City': manchesterCityLogo,
     'Tottenham Hotspur': tottenhamLogo,
-    'Aston Villa': astonVillaLogo,
-    'Brentford': brentfordLogo,
+    'Newcastle United': newcastleLogo,
     'Brighton & Hove Albion': brightonLogo,
+    'Aston Villa': astonVillaLogo,
+    'West Ham United': westHamLogo,
+    'Brentford': brentfordLogo,
     'Crystal Palace': crystalPalaceLogo,
     'Everton': evertonLogo,
     'Fulham': fulhamLogo,
-    'Newcastle United': newcastleLogo,
-    'Nottingham Forest': nottinghamLogo,
-    'West Ham United': westHamLogo,
+    'Bournemouth': bournemouthLogo,
+    'Nottingham Forest': nottinghamForestLogo,
     'Wolverhampton Wanderers': wolvesLogo,
-    'AFC Bournemouth': bournemouthLogo,
+    'Leicester City': leicesterLogo,
     'Burnley': burnleyLogo,
-    'Luton Town': lutonLogo,
-    'Sheffield United': sheffieldLogo,
+    'Sheffield United': sheffieldUnitedLogo,
   };
   
   return logoMap[teamName] || null;
@@ -120,81 +120,107 @@ const Discover = () => {
   const paginatedTeams = filteredTeams.slice(startIndex, endIndex);
 
   // Fetch data
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const { data: teamsData, error: teamsError } = await supabase
+  const fetchData = async () => {
+    try {
+      const [teamsResponse, sportsResponse, countriesResponse, citiesResponse] = await Promise.all([
+        supabase
           .from('teams')
-          .select('*');
-        if (teamsError) {
-          throw teamsError;
-        }
-        setTeams(teamsData || []);
-        setFilteredTeams(teamsData || []);
+          .select(`
+            *,
+            sport:sports(*),
+            city:cities(*),
+            country:countries(*)
+          `),
+        supabase.from('sports').select('*'),
+        supabase.from('countries').select('*'),
+        supabase.from('cities').select('*')
+      ]);
 
-        const { data: sportsData, error: sportsError } = await supabase
-          .from('sports')
-          .select('*');
-        if (sportsError) {
-          throw sportsError;
-        }
-        setSports(sportsData || []);
+      if (teamsResponse.error) throw teamsResponse.error;
+      if (sportsResponse.error) throw sportsResponse.error;
+      if (countriesResponse.error) throw countriesResponse.error;
+      if (citiesResponse.error) throw citiesResponse.error;
 
-        const { data: countriesData, error: countriesError } = await supabase
-          .from('countries')
-          .select('*');
-        if (countriesError) {
-          throw countriesError;
-        }
-        setCountries(countriesData || []);
+      setTeams(teamsResponse.data || []);
+      setSports((sportsResponse.data || []).filter(sport => sport.name.toLowerCase() !== 'rugby'));
+      setCountries((countriesResponse.data || []).filter(country => !country.name.toLowerCase().includes('multi')));
+      setCities(citiesResponse.data || []);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-        const { data: citiesData, error: citiesError } = await supabase
-          .from('cities')
-          .select('*');
-        if (citiesError) {
-          throw citiesError;
-        }
-        setCities(citiesData || []);
-      } catch (error: any) {
-        console.error("Error fetching data:", error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
+  useEffect(() => {
     fetchData();
   }, []);
 
   // Filter teams
   useEffect(() => {
-    let newFilteredTeams = [...teams];
+    let filtered = teams;
 
     if (searchQuery) {
-      newFilteredTeams = newFilteredTeams.filter(team =>
-        team.name.toLowerCase().includes(searchQuery.toLowerCase())
+      filtered = filtered.filter(team =>
+        team.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        team.league?.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
 
     if (selectedSport !== 'all') {
-      newFilteredTeams = newFilteredTeams.filter(team => team.sport_id === parseInt(selectedSport));
+      filtered = filtered.filter(team => team.sport_id === selectedSport);
     }
 
     if (selectedCountry !== 'all') {
-      newFilteredTeams = newFilteredTeams.filter(team => team.country_id === parseInt(selectedCountry));
+      filtered = filtered.filter(team => team.country_id === selectedCountry);
     }
 
     if (selectedCity !== 'all') {
-      newFilteredTeams = newFilteredTeams.filter(team => team.city_id === parseInt(selectedCity));
+      filtered = filtered.filter(team => team.city_id === selectedCity);
     }
 
-    if (selectedLevel !== 'all' && selectedLevel) {
-      newFilteredTeams = newFilteredTeams.filter(team => team.level === selectedLevel);
+    if (selectedLevel !== 'all') {
+      filtered = filtered.filter(team => team.level === selectedLevel);
     }
 
-    setFilteredTeams(newFilteredTeams);
-    setCurrentPage(1); // Reset to first page when filters change
+    setFilteredTeams(filtered);
   }, [teams, searchQuery, selectedSport, selectedCountry, selectedCity, selectedLevel]);
+  
+  useEffect(() => {
+    // Reset to first page when filters change
+    setCurrentPage(1);
+  }, [searchQuery, selectedSport, selectedCountry, selectedCity, selectedLevel]);
+
+  const clearFilters = () => {
+    setSearchQuery('');
+    setSelectedSport('all');
+    setSelectedCountry('all');
+    setSelectedCity('all');
+    setSelectedLevel('all');
+    setCurrentPage(1);
+  };
+
+  const hasActiveFilters = searchQuery || selectedSport !== 'all' || 
+                           selectedCountry !== 'all' || selectedCity !== 'all' || 
+                           selectedLevel !== 'all';
+
+  if (loading) {
+    return (
+      <div className="flex gap-6 h-full">
+        {/* Sidebar Skeleton */}
+        <div className="w-80 space-y-4">
+          <Skeleton className="h-10 w-full" />
+          <Skeleton className="h-40 w-full" />
+          <Skeleton className="h-32 w-full" />
+        </div>
+        {/* Content Skeleton */}
+        <div className="flex-1 space-y-4">
+          <Skeleton className="h-8 w-48" />
+          <Skeleton className="h-96 w-full" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex gap-4 h-full">
@@ -205,91 +231,119 @@ const Discover = () => {
             <CardTitle className="flex items-center gap-2 text-foreground text-base">
               <Filter className="h-4 w-4 text-primary" />
               Filters
+              {hasActiveFilters && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={clearFilters}
+                  className="ml-auto h-6 px-2 text-xs"
+                >
+                  <X className="h-3 w-3 mr-1" />
+                  Clear
+                </Button>
+              )}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            <div>
-              <Input
-                type="text"
-                placeholder="Search teams..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
+            {/* Search */}
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-foreground">Search</label>
+              <div className="relative">
+                <Search className="absolute left-2.5 top-1/2 transform -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+                <Input
+                  placeholder="Search teams..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-8 bg-background border-border h-8 text-xs"
+                />
+              </div>
             </div>
-            <div>
+
+            {/* Sport Filter */}
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-foreground">Sport</label>
               <Select value={selectedSport} onValueChange={setSelectedSport}>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select Sport" />
+                <SelectTrigger className="bg-background border-border h-8 text-xs">
+                  <SelectValue placeholder="All Sports" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-popover border-border">
                   <SelectItem value="all">All Sports</SelectItem>
                   {sports.map((sport) => (
-                    <SelectItem key={sport.id} value={sport.id.toString()}>
+                    <SelectItem key={sport.id} value={sport.id}>
                       {sport.name}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
-            <div>
+
+            {/* Country Filter */}
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-foreground">Country</label>
               <Select value={selectedCountry} onValueChange={setSelectedCountry}>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select Country" />
+                <SelectTrigger className="bg-background border-border h-8 text-xs">
+                  <SelectValue placeholder="All Countries" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-popover border-border">
                   <SelectItem value="all">All Countries</SelectItem>
                   {countries.map((country) => (
-                    <SelectItem key={country.id} value={country.id.toString()}>
+                    <SelectItem key={country.id} value={country.id}>
                       {country.name}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
-            <div>
+
+            {/* City Filter */}
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-foreground">City</label>
               <Select value={selectedCity} onValueChange={setSelectedCity}>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select City" />
+                <SelectTrigger className="bg-background border-border h-8 text-xs">
+                  <SelectValue placeholder="All Cities" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-popover border-border">
                   <SelectItem value="all">All Cities</SelectItem>
                   {cities.map((city) => (
-                    <SelectItem key={city.id} value={city.id.toString()}>
+                    <SelectItem key={city.id} value={city.id}>
                       {city.name}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
-            <div>
-              <Select value={selectedLevel} onValueChange={setSelectedLevel}>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select Level" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Levels</SelectItem>
-                  {levels.map((level) => (
-                    <SelectItem key={level} value={level}>
-                      {level}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+
+            {/* Level Filter */}
+            {levels.length > 0 && (
+              <div className="space-y-1">
+                <label className="text-xs font-medium text-foreground">Level</label>
+                <Select value={selectedLevel} onValueChange={setSelectedLevel}>
+                  <SelectTrigger className="bg-background border-border h-8 text-xs">
+                    <SelectValue placeholder="All Levels" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-popover border-border">
+                    <SelectItem value="all">All Levels</SelectItem>
+                    {levels.map((level) => (
+                      <SelectItem key={level} value={level}>
+                        {level}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+
+            {/* Results Count */}
+            <div className="pt-3 border-t border-border">
+              <p className="text-xs text-muted-foreground">
+                Showing {startIndex + 1}-{Math.min(endIndex, filteredTeams.length)} of {filteredTeams.length} organisations
+                {totalPages > 1 && (
+                  <span className="block mt-1">
+                    Page {currentPage} of {totalPages}
+                  </span>
+                )}
+              </p>
             </div>
-            <Button
-              variant="outline"
-              className="w-full justify-start text-muted-foreground"
-              onClick={() => {
-                setSearchQuery('');
-                setSelectedSport('all');
-                setSelectedCountry('all');
-                setSelectedCity('all');
-                setSelectedLevel('all');
-              }}
-            >
-              <X className="h-4 w-4 mr-2" />
-              Clear Filters
-            </Button>
           </CardContent>
         </Card>
       </div>
@@ -325,79 +379,149 @@ const Discover = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {loading ? (
-                  // Skeleton loading state
-                  [...Array(ITEMS_PER_PAGE)].map((_, i) => (
-                    <TableRow key={i}>
-                      <TableCell>
-                        <Skeleton className="h-4 w-[200px]" />
-                      </TableCell>
-                      <TableCell>
-                        <Skeleton className="h-4 w-[100px]" />
-                      </TableCell>
-                      <TableCell>
-                        <Skeleton className="h-4 w-[80px]" />
-                      </TableCell>
-                      <TableCell>
-                        <Skeleton className="h-4 w-[100px]" />
-                      </TableCell>
-                      <TableCell>
-                        <Skeleton className="h-4 w-[100px]" />
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <Skeleton className="h-4 w-[80px] ml-auto" />
-                      </TableCell>
-                    </TableRow>
-                  ))
-                ) : paginatedTeams.length > 0 ? (
-                  // Actual data rows
+                {paginatedTeams.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={6} className="text-center py-12">
+                      <div className="flex flex-col items-center gap-3">
+                        <Building2 className="h-12 w-12 text-muted-foreground" />
+                        <div>
+                          <p className="font-medium text-foreground">No organisations found</p>
+                          <p className="text-sm text-muted-foreground">
+                            Try adjusting your filters or search terms
+                          </p>
+                        </div>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ) : (
                   paginatedTeams.map((team) => (
-                    <TableRow key={team.id}>
-                      <TableCell className="font-medium">
-                        <div className="flex items-center gap-2">
-                          {getTeamLogo(team.name) && (
-                            <img
-                              src={getTeamLogo(team.name)}
-                              alt={`${team.name} Logo`}
-                              className="w-6 h-6 rounded-full object-cover"
-                            />
-                          )}
-                          {team.name}
+                    <TableRow 
+                      key={team.id} 
+                      className="hover:bg-muted/50 cursor-pointer transition-colors"
+                    >
+                      <TableCell>
+                        <div className="flex items-center gap-3">
+                          {(() => {
+                            const generatedLogo = getTeamLogo(team.name);
+                            if (generatedLogo) {
+                              return (
+                                <img 
+                                  src={generatedLogo} 
+                                  alt={`${team.name} logo`}
+                                  className="w-10 h-10 rounded-lg object-cover shadow-soft"
+                                />
+                              );
+                            } else if (team.logo_url) {
+                              return (
+                                <img 
+                                  src={team.logo_url} 
+                                  alt={`${team.name} logo`}
+                                  className="w-10 h-10 rounded-lg object-cover shadow-soft"
+                                  onError={(e) => {
+                                    e.currentTarget.style.display = 'none';
+                                  }}
+                                />
+                              );
+                            } else {
+                              return (
+                                <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center shadow-soft">
+                                  <Building2 className="h-5 w-5 text-muted-foreground" />
+                                </div>
+                              );
+                            }
+                          })()}
+                          <div>
+                            <p className="font-medium text-foreground">{team.name}</p>
+                          </div>
                         </div>
                       </TableCell>
                       <TableCell>
-                        {sports.find((sport) => sport.id === team.sport_id)?.name || 'N/A'}
+                        {team.sport?.name ? (
+                          <Badge variant="secondary" className="font-medium">
+                            {team.sport.name}
+                          </Badge>
+                        ) : (
+                          <span className="text-muted-foreground">-</span>
+                        )}
                       </TableCell>
-                      <TableCell>{team.level || 'N/A'}</TableCell>
                       <TableCell>
-                        {countries.find((country) => country.id === team.country_id)?.name || 'N/A'}
+                        <Badge variant="secondary" className="font-medium">
+                          {team.level || 'Professional'}
+                        </Badge>
                       </TableCell>
                       <TableCell>
-                        {cities.find((city) => city.id === team.city_id)?.name || 'N/A'}
+                        <span className="text-foreground font-medium">
+                          {team.country?.name || '-'}
+                        </span>
+                      </TableCell>
+                      <TableCell>
+                        <span className="text-foreground">
+                          {team.city?.name || '-'}
+                        </span>
                       </TableCell>
                       <TableCell className="text-right">
-                        <Button
-                          variant="outline"
-                          size="xs"
-                          onClick={() => navigate(`/crm/teams/${team.id}`)}
-                        >
-                          View
-                        </Button>
+                        <div className="flex items-center justify-end gap-2">
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              // Add to list functionality
+                            }}
+                            className="h-8 w-8"
+                          >
+                            <Plus className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </TableCell>
                     </TableRow>
                   ))
-                ) : (
-                  // No results found
-                  <TableRow>
-                    <TableCell colSpan={6} className="text-center">
-                      No teams found.
-                    </TableCell>
-                  </TableRow>
                 )}
               </TableBody>
             </Table>
           </div>
         </Card>
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="flex justify-center">
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious 
+                    className={currentPage <= 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
+                    onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                  />
+                </PaginationItem>
+                {[...Array(Math.min(5, totalPages))].map((_, i) => {
+                  const pageNumber = i + 1;
+                  return (
+                    <PaginationItem key={pageNumber}>
+                      <PaginationLink
+                        onClick={() => setCurrentPage(pageNumber)}
+                        isActive={currentPage === pageNumber}
+                        className="cursor-pointer"
+                      >
+                        {pageNumber}
+                      </PaginationLink>
+                    </PaginationItem>
+                  );
+                })}
+                {totalPages > 5 && (
+                  <PaginationItem>
+                    <PaginationEllipsis />
+                  </PaginationItem>
+                )}
+                <PaginationItem>
+                  <PaginationNext 
+                    className={currentPage >= totalPages ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
+                    onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          </div>
+        )}
       </div>
     </div>
   );
