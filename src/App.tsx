@@ -68,6 +68,7 @@ import ScottMcKecknieArticle from "./pages/company/ScottMcKecknieArticle";
 // Resources sub-pages
 import Startups from "./pages/resources/Startups";
 
+import Partnership from "./pages/resources/Partnership";
 import SportBnkVsSportBankArticle from "./pages/resources/SportBnkVsSportBankArticle";
 
 import HelpCenter from "./pages/resources/HelpCenter";
@@ -150,6 +151,7 @@ function App() {
                       <Route path="/resources/startups" element={<Startups />} />
                       
                       <Route path="/resources/articles/sportbnk-vs-sportbank" element={<SportBnkVsSportBankArticle />} />
+                      <Route path="/resources/partnership" element={<Partnership />} />
                       
                       <Route path="/resources/help-center" element={<HelpCenter />} />
                       

@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { Menu, X, ChevronDown, Package, BarChart3, Building, BookOpen, DollarSign, Calendar, Users, Rocket, Briefcase, Newspaper, Phone, BookmarkPlus, Users2, FileText, Video, Headphones, Clipboard, MessageSquare, HelpCircle, Code, TrendingUp, Target, Activity } from 'lucide-react';
+import { Menu, X, ChevronDown, Package, BarChart3, Building, BookOpen, DollarSign, Calendar, Users, Rocket, Briefcase, Newspaper, Phone, BookmarkPlus, Users2, FileText, Video, Headphones, Clipboard, MessageSquare, HelpCircle, Code, TrendingUp, Target, Activity, Handshake } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -210,6 +210,16 @@ const Navbar = () => {
                       </li>
                       <li>
                         <NavigationMenuLink asChild>
+                          <Link to="/resources/partnership" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
+                            <div className="text-sm font-medium text-sportbnk-navy flex items-center">
+                              <Handshake className="h-4 w-4 mr-2" /> Partner with Us
+                            </div>
+                            <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Join our partnership programs</p>
+                          </Link>
+                        </NavigationMenuLink>
+                      </li>
+                      <li>
+                        <NavigationMenuLink asChild>
                           <Link to="/resources/help-center" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
                             <div className="text-sm font-medium text-sportbnk-navy flex items-center">
                               <HelpCircle className="h-4 w-4 mr-2" /> Help Center
@@ -327,6 +337,11 @@ const Navbar = () => {
                 <DropdownMenuItem>
                   <Link to="/resources/help-center" className="w-full flex items-center">
                     <HelpCircle className="h-4 w-4 mr-2" />Help Center
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link to="/resources/partnership" className="w-full flex items-center">
+                    <Handshake className="h-4 w-4 mr-2" />Partner with Us
                   </Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
