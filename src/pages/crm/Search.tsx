@@ -918,13 +918,20 @@ const Discover = () => {
                                 </TableCell>
                                 <TableCell>{contact.teams?.name || 'Unknown'}</TableCell>
                                 <TableCell>
-                                  {contact.email ? (
-                                    <div className="flex items-center gap-2">
-                                      <Mail className="h-4 w-4 text-muted-foreground" />
-                                      <span className="truncate max-w-[200px]">{contact.email}</span>
-                                    </div>
+                                  {isRevealed ? (
+                                    contact.email ? (
+                                      <div className="flex items-center gap-2">
+                                        <Mail className="h-4 w-4 text-muted-foreground" />
+                                        <span className="truncate max-w-[200px]">{contact.email}</span>
+                                      </div>
+                                    ) : (
+                                      <span className="text-muted-foreground">-</span>
+                                    )
                                   ) : (
-                                    <span className="text-muted-foreground">-</span>
+                                    <div className="flex items-center gap-2 bg-accent/30 px-2 py-1 rounded text-xs">
+                                      <Eye className="h-3 w-3" />
+                                      <span>Reveal</span>
+                                    </div>
                                   )}
                                 </TableCell>
                                 <TableCell>
