@@ -41,9 +41,7 @@ import {
   Users,
   Mail,
   Phone,
-  ExternalLink,
-  Eye,
-  EyeOff
+  ExternalLink
 } from 'lucide-react';
 import { Team, Sport, Country, City } from '@/types/teams';
 
@@ -429,9 +427,6 @@ const Discover = () => {
   const [peopleSearchQuery, setPeopleSearchQuery] = useState("");
   const [selectedTeam, setSelectedTeam] = useState<string>("all");
   const [selectedRole, setSelectedRole] = useState<string>("all");
-  
-  // Reveal state for people
-  const [revealedContacts, setRevealedContacts] = useState<Set<string>>(new Set());
 
   // Pagination for organizations
   const [currentPage, setCurrentPage] = useState(1);
@@ -557,16 +552,6 @@ const Discover = () => {
   
   const generateDummyLinkedIn = (firstName: string, lastName: string) => {
     return `https://linkedin.com/in/${firstName.toLowerCase()}-${lastName.toLowerCase()}`;
-  };
-  
-  const toggleReveal = (contactId: string) => {
-    const newRevealed = new Set(revealedContacts);
-    if (newRevealed.has(contactId)) {
-      newRevealed.delete(contactId);
-    } else {
-      newRevealed.add(contactId);
-    }
-    setRevealedContacts(newRevealed);
   };
 
   if (loading) {
@@ -894,7 +879,6 @@ const Discover = () => {
                         </TableHeader>
                         <TableBody>
                           {paginatedContacts.map((contact) => {
-                            const isRevealed = revealedContacts.has(contact.id);
                             const dummyPhone = generateDummyPhone(contact.id);
                             const dummyLinkedIn = generateDummyLinkedIn(contact.first_name, contact.last_name);
                             
@@ -918,73 +902,33 @@ const Discover = () => {
                                 </TableCell>
                                 <TableCell>{contact.teams?.name || 'Unknown'}</TableCell>
                                 <TableCell>
-                                  {isRevealed ? (
-                                    contact.email ? (
-                                      <div className="flex items-center gap-2">
-                                        <Mail className="h-4 w-4 text-muted-foreground" />
-                                        <span className="truncate max-w-[200px]">{contact.email}</span>
-                                      </div>
-                                    ) : (
-                                      <span className="text-muted-foreground">-</span>
-                                    )
-                                  ) : (
-                                    <div className="flex items-center gap-2 bg-accent/30 px-2 py-1 rounded text-xs">
-                                      <Eye className="h-3 w-3" />
-                                      <span>Reveal</span>
-                                    </div>
-                                  )}
-                                </TableCell>
-                                <TableCell>
-                                  {isRevealed ? (
+                                  {contact.email ? (
                                     <div className="flex items-center gap-2">
-                                      <Phone className="h-4 w-4 text-muted-foreground" />
-                                      <span>{dummyPhone}</span>
+                                      <Mail className="h-4 w-4 text-muted-foreground" />
+                                      <span className="truncate max-w-[200px]">{contact.email}</span>
                                     </div>
                                   ) : (
-                                    <div className="flex items-center gap-2 bg-accent/30 px-2 py-1 rounded text-xs">
-                                      <Eye className="h-3 w-3" />
-                                      <span>Reveal</span>
-                                    </div>
-                                  )}
-                                </TableCell>
-                                <TableCell>
-                                  {isRevealed ? (
-                                    <Button variant="ghost" size="sm" asChild>
-                                      <a href={dummyLinkedIn} target="_blank" rel="noopener noreferrer">
-                                        <ExternalLink className="h-4 w-4" />
-                                      </a>
-                                    </Button>
-                                  ) : (
-                                    <div className="flex items-center gap-2 bg-accent/30 px-2 py-1 rounded text-xs">
-                                      <Eye className="h-3 w-3" />
-                                      <span>Reveal</span>
-                                    </div>
+                                    <span className="text-muted-foreground">-</span>
                                   )}
                                 </TableCell>
                                 <TableCell>
                                   <div className="flex items-center gap-2">
-                                    <Button 
-                                      variant="outline" 
-                                      size="sm"
-                                      onClick={() => toggleReveal(contact.id)}
-                                    >
-                                      {isRevealed ? (
-                                        <>
-                                          <EyeOff className="h-4 w-4 mr-2" />
-                                          Hide Details
-                                        </>
-                                      ) : (
-                                        <>
-                                          <Eye className="h-4 w-4 mr-2" />
-                                          Reveal Details
-                                        </>
-                                      )}
-                                    </Button>
-                                    <Button variant="outline" size="sm">
-                                      <Plus className="h-4 w-4 mr-2" />
-                                      Add to List
-                                    </Button>
+                                    <Phone className="h-4 w-4 text-muted-foreground" />
+                                    <span>{dummyPhone}</span>
                                   </div>
+                                </TableCell>
+                                <TableCell>
+                                  <Button variant="ghost" size="sm" asChild>
+                                    <a href={dummyLinkedIn} target="_blank" rel="noopener noreferrer">
+                                      <ExternalLink className="h-4 w-4" />
+                                    </a>
+                                  </Button>
+                                </TableCell>
+                                <TableCell>
+                                  <Button variant="outline" size="sm">
+                                    <Plus className="h-4 w-4 mr-2" />
+                                    Add to List
+                                  </Button>
                                 </TableCell>
                               </TableRow>
                             );
