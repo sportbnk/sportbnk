@@ -1,760 +1,393 @@
-import React, { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import React, { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { 
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
-import { Skeleton } from '@/components/ui/skeleton';
-import { Search, User, Building2, MapPin, Mail, Phone, Linkedin, Twitter, Instagram, Facebook, Filter, X, Eye, ExternalLink, Plus, Lock, Download } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
-import { Contact, Team, Department, Sport } from "@/types/teams";
-import { useLists } from "@/contexts/ListsContext";
-import { useAuth } from "@/components/auth/AuthContext";
-import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
-import * as XLSX from 'xlsx';
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import profile1 from "@/assets/profiles/profile-1.jpg";
-import profile2 from "@/assets/profiles/profile-2.jpg";
-import profile3 from "@/assets/profiles/profile-3.jpg";
-import profile4 from "@/assets/profiles/profile-4.jpg";
-import profile5 from "@/assets/profiles/profile-5.jpg";
+  Search, 
+  Download, 
+  Plus, 
+  Filter,
+  Users,
+  Building2,
+  Mail,
+  Phone,
+  MapPin,
+  ExternalLink
+} from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+
+interface Person {
+  id: string;
+  name: string;
+  position: string;
+  company: string;
+  email: string;
+  phone: string;
+  location: string;
+  sport: string;
+  department: string;
+  avatarUrl?: string;
+  linkedinUrl?: string;
+}
+
+const mockPeople: Person[] = [
+  {
+    id: '1',
+    name: 'Sarah Johnson',
+    position: 'Commercial Director',
+    company: 'Manchester United FC',
+    email: 's.johnson@manutd.com',
+    phone: '+44 161 868 8000',
+    location: 'Manchester, UK',
+    sport: 'Football',
+    department: 'Commercial',
+    linkedinUrl: 'https://linkedin.com/in/sarahjohnson'
+  },
+  {
+    id: '2',
+    name: 'David Martinez',
+    position: 'Head of Procurement',
+    company: 'Real Madrid CF',
+    email: 'd.martinez@realmadrid.com',
+    phone: '+34 91 398 4300',
+    location: 'Madrid, Spain',
+    sport: 'Football',
+    department: 'Operations'
+  },
+  {
+    id: '3',
+    name: 'Emma Thompson',
+    position: 'Marketing Director',
+    company: 'Surrey County Cricket Club',
+    email: 'e.thompson@surreyccc.co.uk',
+    phone: '+44 20 8398 1000',
+    location: 'London, UK',
+    sport: 'Cricket',
+    department: 'Marketing'
+  },
+  {
+    id: '4',
+    name: 'James Wilson',
+    position: 'Partnership Manager',
+    company: 'Liverpool FC',
+    email: 'j.wilson@liverpoolfc.com',
+    phone: '+44 151 263 2361',
+    location: 'Liverpool, UK',
+    sport: 'Football',
+    department: 'Partnerships'
+  },
+  {
+    id: '5',
+    name: 'Maria Rodriguez',
+    position: 'Head of Digital Marketing',
+    company: 'FC Barcelona',
+    email: 'm.rodriguez@fcbarcelona.com',
+    phone: '+34 93 496 3600',
+    location: 'Barcelona, Spain',
+    sport: 'Football',
+    department: 'Marketing'
+  },
+  {
+    id: '6',
+    name: 'Tom Brown',
+    position: 'Commercial Manager',
+    company: 'Yorkshire County Cricket Club',
+    email: 't.brown@yorkshireccc.com',
+    phone: '+44 113 278 7394',
+    location: 'Leeds, UK',
+    sport: 'Cricket',
+    department: 'Commercial'
+  }
+];
 
 const People = () => {
-  const [contacts, setContacts] = useState<Contact[]>([]);
-  const [filteredContacts, setFilteredContacts] = useState<Contact[]>([]);
-  const [teams, setTeams] = useState<Team[]>([]);
-  const [sports, setSports] = useState<Sport[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedTeam, setSelectedTeam] = useState("");
-  const [selectedRole, setSelectedRole] = useState("");
-  const [selectedSport, setSelectedSport] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [revealedEmails, setRevealedEmails] = useState<Set<string>>(new Set());
-  const [revealedPhones, setRevealedPhones] = useState<Set<string>>(new Set());
-  const [revealedLinkedIns, setRevealedLinkedIns] = useState<Set<string>>(new Set());
-  const [selectedContactForList, setSelectedContactForList] = useState<Contact | null>(null);
-  const [isAddToListDialogOpen, setIsAddToListDialogOpen] = useState(false);
-  const itemsPerPage = 10;
+  const { toast } = useToast();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedPeople, setSelectedPeople] = useState<string[]>([]);
+  const [people, setPeople] = useState<Person[]>(mockPeople);
 
-  const { lists, addItemToList } = useLists();
-  const { user } = useAuth();
-  const navigate = useNavigate();
+  const filteredPeople = people.filter(person =>
+    person.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    person.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    person.position.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    person.department.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-      
-      // Fetch contacts with related data
-      const { data: contactsData, error: contactsError } = await supabase
-        .from('contacts')
-        .select(`
-          *,
-          team:teams(
-            id,
-            name,
-            sport:sports(id, name)
-          ),
-          department:departments(id, name),
-          sport:sports(id, name)
-        `)
-        .order('first_name');
-
-      if (contactsError) {
-        console.error('Error fetching contacts:', contactsError);
-        return;
-      }
-
-      // Fetch teams
-      const { data: teamsData, error: teamsError } = await supabase
-        .from('teams')
-        .select('*')
-        .order('name');
-
-      if (teamsError) {
-        console.error('Error fetching teams:', teamsError);
-        return;
-      }
-
-      // Fetch sports
-      const { data: sportsData, error: sportsError } = await supabase
-        .from('sports')
-        .select('*')
-        .order('name');
-
-      if (sportsError) {
-        console.error('Error fetching sports:', sportsError);
-        return;
-      }
-
-      setContacts(contactsData as Contact[] || []);
-      setTeams(teamsData || []);
-      setSports(sportsData || []);
-    } catch (error) {
-      console.error('Error in fetchData:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    filterContacts();
-  }, [contacts, searchQuery, selectedTeam, selectedRole, selectedSport]);
-
-  const filterContacts = () => {
-    let filtered = contacts;
-
-    if (searchQuery) {
-      filtered = filtered.filter(contact =>
-        contact.first_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        contact.last_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        contact.position?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        contact.team?.name.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    }
-
-    if (selectedTeam && selectedTeam !== "all") {
-      filtered = filtered.filter(contact => contact.team_id === selectedTeam);
-    }
-
-    if (selectedRole && selectedRole !== "all") {
-      filtered = filtered.filter(contact => contact.position === selectedRole);
-    }
-
-    if (selectedSport && selectedSport !== "all") {
-      filtered = filtered.filter(contact => 
-        contact.sport_id === selectedSport || contact.team?.sport?.id === selectedSport
-      );
-    }
-
-    setFilteredContacts(filtered);
-    setCurrentPage(1);
-  };
-
-  const clearFilters = () => {
-    setSearchQuery("");
-    setSelectedTeam("");
-    setSelectedRole("");
-    setSelectedSport("");
-  };
-
-  const hasActiveFilters = searchQuery || selectedTeam || selectedRole || selectedSport;
-
-  const handleRevealEmail = async (contactId: string) => {
-    if (!user) {
-      toast.error("Please sign in to reveal contact details");
-      return;
-    }
-
-    try {
-      const { data: profileData } = await supabase
-        .from('profiles')
-        .select('id')
-        .eq('user_id', user.id)
-        .single();
-
-      if (!profileData) {
-        toast.error("Profile not found");
-        return;
-      }
-
-      const { error } = await supabase
-        .from('revealed_details')
-        .insert({
-          profile_id: profileData.id,
-          contact_id: contactId,
-          field_name: 'linkedin'
-        });
-
-      if (error) {
-        console.error('Error saving revealed detail:', error);
-      }
-
-      setRevealedEmails(prev => new Set([...prev, contactId]));
-      toast.success("Email revealed!");
-    } catch (error) {
-      console.error('Error revealing email:', error);
-      toast.error("Failed to reveal email");
-    }
-  };
-
-  const handleRevealPhone = async (contactId: string) => {
-    if (!user) {
-      toast.error("Please sign in to reveal contact details");
-      return;
-    }
-
-    try {
-      const { data: profileData } = await supabase
-        .from('profiles')
-        .select('id')
-        .eq('user_id', user.id)
-        .single();
-
-      if (!profileData) {
-        toast.error("Profile not found");
-        return;
-      }
-
-      const { error } = await supabase
-        .from('revealed_details')
-        .insert({
-          profile_id: profileData.id,
-          contact_id: contactId,
-          field_name: 'phone'
-        });
-
-      if (error) {
-        console.error('Error saving revealed detail:', error);
-      }
-
-      setRevealedPhones(prev => new Set([...prev, contactId]));
-      toast.success("Phone revealed!");
-    } catch (error) {
-      console.error('Error revealing phone:', error);
-      toast.error("Failed to reveal phone");
-    }
-  };
-
-  const handleRevealLinkedIn = async (contactId: string) => {
-    if (!user) {
-      toast.error("Please sign in to reveal contact details");
-      return;
-    }
-
-    try {
-      const { data: profileData } = await supabase
-        .from('profiles')
-        .select('id')
-        .eq('user_id', user.id)
-        .single();
-
-      if (!profileData) {
-        toast.error("Profile not found");
-        return;
-      }
-
-      const { error } = await supabase
-        .from('revealed_details')
-        .insert({
-          profile_id: profileData.id,
-          contact_id: contactId,
-          field_name: 'linkedin'
-        });
-
-      if (error) {
-        console.error('Error saving revealed detail:', error);
-      }
-
-      setRevealedLinkedIns(prev => new Set([...prev, contactId]));
-      toast.success("LinkedIn revealed!");
-    } catch (error) {
-      console.error('Error revealing linkedin:', error);
-      toast.error("Failed to reveal LinkedIn");
-    }
-  };
-
-  const handleAddToList = async (listId: string) => {
-    if (!selectedContactForList) return;
-    
-    await addItemToList(listId, selectedContactForList.id);
-    setIsAddToListDialogOpen(false);
-    setSelectedContactForList(null);
-  };
-
-  const openAddToListDialog = (contact: Contact) => {
-    setSelectedContactForList(contact);
-    setIsAddToListDialogOpen(true);
-  };
-
-  const getProfileImage = (contactId: string) => {
-    const images = [profile1, profile2, profile3, profile4, profile5];
-    const hash = contactId.split('').reduce((a, b) => {
-      a = ((a << 5) - a) + b.charCodeAt(0);
-      return a & a;
-    }, 0);
-    return images[Math.abs(hash) % images.length];
-  };
-
-  const generateDummyPhone = (contactId: string) => {
-    const hash = contactId.split('').reduce((a, b) => {
-      a = ((a << 5) - a) + b.charCodeAt(0);
-      return a & a;
-    }, 0);
-    const phoneNumber = Math.abs(hash).toString().padStart(10, '0').slice(0, 10);
-    return `+44 ${phoneNumber.slice(0, 4)} ${phoneNumber.slice(4, 7)} ${phoneNumber.slice(7)}`;
-  };
-
-  const generateDummyLinkedIn = (contact: Contact) => {
-    const firstName = contact.first_name.toLowerCase().replace(/\s+/g, '');
-    const lastName = contact.last_name.toLowerCase().replace(/\s+/g, '');
-    return `https://linkedin.com/in/${firstName}-${lastName}-${contact.id.slice(0, 8)}`;
-  };
-
-  const generateDummyEmail = (contact: Contact) => {
-    const firstName = contact.first_name.toLowerCase().replace(/\s+/g, '');
-    const lastName = contact.last_name.toLowerCase().replace(/\s+/g, '');
-    const domain = contact.team?.name ? 
-      contact.team.name.toLowerCase().replace(/\s+/g, '').replace(/[^a-z0-9]/g, '') + '.com' : 
-      'example.com';
-    return `${firstName}.${lastName}@${domain}`;
-  };
-
-  const exportToExcel = () => {
-    const exportData = filteredContacts.map(contact => ({
-      'First Name': contact.first_name,
-      'Last Name': contact.last_name,
-      'Position': contact.position || '',
-      'Team': contact.team?.name || '',
-      'Sport': contact.sport?.name || contact.team?.sport?.name || '',
-      'Email': revealedEmails.has(contact.id) ? contact.email : 'Hidden',
-      'Phone': revealedPhones.has(contact.id) ? contact.phone : 'Hidden',
-      'LinkedIn': revealedLinkedIns.has(contact.id) ? contact.linkedin : 'Hidden',
-      'Notes': contact.notes || ''
-    }));
-
-    const ws = XLSX.utils.json_to_sheet(exportData);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Contacts");
-    XLSX.writeFile(wb, "contacts_export.xlsx");
-    toast.success("Contacts exported successfully!");
-  };
-
-  const totalPages = Math.ceil(filteredContacts.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentContacts = filteredContacts.slice(startIndex, endIndex);
-
-  if (loading) {
-    return (
-      <div className="flex gap-6 h-full">
-        {/* Sidebar Skeleton */}
-        <div className="w-80 space-y-4">
-          <Skeleton className="h-10 w-full" />
-          <Skeleton className="h-40 w-full" />
-          <Skeleton className="h-32 w-full" />
-        </div>
-        {/* Content Skeleton */}
-        <div className="flex-1 space-y-4">
-          <Skeleton className="h-8 w-48" />
-          <Skeleton className="h-96 w-full" />
-        </div>
-      </div>
+  const handleSelectPerson = (personId: string) => {
+    setSelectedPeople(prev => 
+      prev.includes(personId) 
+        ? prev.filter(id => id !== personId)
+        : [...prev, personId]
     );
-  }
+  };
+
+  const handleSelectAll = () => {
+    if (selectedPeople.length === filteredPeople.length) {
+      setSelectedPeople([]);
+    } else {
+      setSelectedPeople(filteredPeople.map(person => person.id));
+    }
+  };
+
+  const handleAddToCRM = () => {
+    if (selectedPeople.length === 0) {
+      toast({
+        title: "No Selection",
+        description: "Please select people to add to CRM.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    toast({
+      title: "Added to CRM",
+      description: `Successfully added ${selectedPeople.length} ${selectedPeople.length === 1 ? 'person' : 'people'} to CRM.`,
+    });
+    
+    setSelectedPeople([]);
+  };
+
+  const handleExportCSV = () => {
+    if (selectedPeople.length === 0) {
+      toast({
+        title: "No Selection",
+        description: "Please select people to export.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    const selectedData = people.filter(person => selectedPeople.includes(person.id));
+    const csvContent = [
+      ['Name', 'Position', 'Company', 'Email', 'Phone', 'Location', 'Sport', 'Department'],
+      ...selectedData.map(person => [
+        person.name,
+        person.position,
+        person.company,
+        person.email,
+        person.phone,
+        person.location,
+        person.sport,
+        person.department
+      ])
+    ].map(row => row.join(',')).join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `people-export-${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
+    window.URL.revokeObjectURL(url);
+
+    toast({
+      title: "Export Successful",
+      description: `Exported ${selectedPeople.length} ${selectedPeople.length === 1 ? 'person' : 'people'} to CSV.`,
+    });
+  };
+
+  const getInitials = (name: string) => {
+    return name.split(' ').map(n => n[0]).join('').toUpperCase();
+  };
+
+  const getDepartmentColor = (department: string) => {
+    const colors: Record<string, string> = {
+      'Commercial': 'bg-blue-100 text-blue-800',
+      'Marketing': 'bg-green-100 text-green-800',
+      'Operations': 'bg-yellow-100 text-yellow-800',
+      'Partnerships': 'bg-purple-100 text-purple-800',
+      'Digital': 'bg-pink-100 text-pink-800'
+    };
+    return colors[department] || 'bg-gray-100 text-gray-800';
+  };
 
   return (
-    <div className="flex gap-4 h-full">
-      {/* Left Sidebar - Filters */}
-      <div className="w-64 flex-shrink-0">
-        <Card className="shadow-sm border-border sticky top-4">
-          <CardHeader className="pb-3">
-            <CardTitle className="flex items-center gap-2 text-foreground text-base">
-              <Filter className="h-4 w-4 text-primary" />
-              Filters
-              {hasActiveFilters && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={clearFilters}
-                  className="ml-auto h-6 px-2 text-xs"
-                >
-                  <X className="h-3 w-3 mr-1" />
-                  Clear
-                </Button>
-              )}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {/* Search */}
-            <div className="space-y-1">
-              <label className="text-xs font-medium text-foreground">Search</label>
-              <div className="relative">
-                <Search className="absolute left-2.5 top-1/2 transform -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+    <div className="min-h-screen bg-gray-50 p-6" style={{ fontFamily: 'Poppins, sans-serif' }}>
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">People</h1>
+            <p className="text-gray-600 mt-1">Build and manage your people lists</p>
+          </div>
+          <div className="flex items-center gap-3">
+            <Button 
+              onClick={handleAddToCRM}
+              disabled={selectedPeople.length === 0}
+              className="bg-blue-600 hover:bg-blue-700"
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Add to CRM ({selectedPeople.length})
+            </Button>
+            <Button 
+              onClick={handleExportCSV}
+              disabled={selectedPeople.length === 0}
+              variant="outline"
+            >
+              <Download className="h-4 w-4 mr-2" />
+              Export CSV
+            </Button>
+          </div>
+        </div>
+
+        {/* Search and Filters */}
+        <Card className="mb-6">
+          <CardContent className="p-4">
+            <div className="flex items-center gap-4">
+              <div className="flex-1 relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                 <Input
-                  placeholder="Search people..."
+                  placeholder="Search people by name, company, position, or department..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-8 bg-background border-border h-8 text-xs"
+                  className="pl-10"
                 />
               </div>
+              <Button variant="outline" size="sm">
+                <Filter className="h-4 w-4 mr-2" />
+                Filters
+              </Button>
             </div>
+            
+            {/* Selection Controls */}
+            {filteredPeople.length > 0 && (
+              <div className="flex items-center gap-4 mt-4 pt-4 border-t">
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="select-all"
+                    checked={selectedPeople.length === filteredPeople.length}
+                    onCheckedChange={handleSelectAll}
+                  />
+                  <label htmlFor="select-all" className="text-sm font-medium">
+                    Select All ({filteredPeople.length})
+                  </label>
+                </div>
+                {selectedPeople.length > 0 && (
+                  <Badge variant="secondary">
+                    {selectedPeople.length} selected
+                  </Badge>
+                )}
+              </div>
+            )}
+          </CardContent>
+        </Card>
 
-            {/* Team Filter */}
-            <div className="space-y-1">
-              <label className="text-xs font-medium text-foreground">Team</label>
-              <Select value={selectedTeam} onValueChange={setSelectedTeam}>
-                <SelectTrigger className="bg-background border-border h-8 text-xs">
-                  <SelectValue placeholder="All Teams" />
-                </SelectTrigger>
-                <SelectContent className="bg-popover border-border z-50">
-                  <SelectItem value="all">All Teams</SelectItem>
-                  {teams.map((team) => (
-                    <SelectItem key={team.id} value={team.id}>
-                      {team.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Role Filter */}
-            <div className="space-y-1">
-              <label className="text-xs font-medium text-foreground">Role</label>
-              <Select value={selectedRole} onValueChange={setSelectedRole}>
-                <SelectTrigger className="bg-background border-border h-8 text-xs">
-                  <SelectValue placeholder="All Roles" />
-                </SelectTrigger>
-                <SelectContent className="bg-popover border-border z-50">
-                  <SelectItem value="all">All Roles</SelectItem>
-                  <SelectItem value="Manager">Manager</SelectItem>
-                  <SelectItem value="Director">Director</SelectItem>
-                  <SelectItem value="CEO">CEO</SelectItem>
-                  <SelectItem value="Head of Marketing">Head of Marketing</SelectItem>
-                  <SelectItem value="Commercial Director">Commercial Director</SelectItem>
-                  <SelectItem value="Communications Manager">Communications Manager</SelectItem>
-                  <SelectItem value="Marketing Manager">Marketing Manager</SelectItem>
-                  <SelectItem value="Operations Manager">Operations Manager</SelectItem>
-                  <SelectItem value="Secretary">Secretary</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Sport Filter */}
-            <div className="space-y-1">
-              <label className="text-xs font-medium text-foreground">Sport</label>
-              <Select value={selectedSport} onValueChange={setSelectedSport}>
-                <SelectTrigger className="bg-background border-border h-8 text-xs">
-                  <SelectValue placeholder="All Sports" />
-                </SelectTrigger>
-                <SelectContent className="bg-popover border-border z-50">
-                  <SelectItem value="all">All Sports</SelectItem>
-                  {sports.map((sport) => (
-                    <SelectItem key={sport.id} value={sport.id}>
-                      {sport.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="pt-3 border-t">
-              <p className="text-xs text-muted-foreground">
-                {filteredContacts.length} contacts found
-              </p>
-            </div>
+        {/* People List */}
+        <Card>
+          <CardContent className="p-0">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-12">
+                    <Checkbox
+                      checked={selectedPeople.length === filteredPeople.length && filteredPeople.length > 0}
+                      onCheckedChange={handleSelectAll}
+                    />
+                  </TableHead>
+                  <TableHead>Person</TableHead>
+                  <TableHead>Position</TableHead>
+                  <TableHead>Company</TableHead>
+                  <TableHead>Department</TableHead>
+                  <TableHead>Sport</TableHead>
+                  <TableHead>Location</TableHead>
+                  <TableHead>Contact</TableHead>
+                  <TableHead className="w-20">LinkedIn</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredPeople.map((person) => (
+                  <TableRow key={person.id} className="hover:bg-gray-50">
+                    <TableCell>
+                      <Checkbox
+                        checked={selectedPeople.includes(person.id)}
+                        onCheckedChange={() => handleSelectPerson(person.id)}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-3">
+                        <Avatar className="h-8 w-8">
+                          <AvatarImage src={person.avatarUrl} />
+                          <AvatarFallback className="bg-blue-100 text-blue-700 text-sm">
+                            {getInitials(person.name)}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <div className="font-medium text-gray-900">{person.name}</div>
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <span className="text-sm text-gray-700">{person.position}</span>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-1">
+                        <Building2 className="h-3 w-3 text-gray-400" />
+                        <span className="text-sm text-gray-600">{person.company}</span>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <Badge className={`text-xs ${getDepartmentColor(person.department)}`}>
+                        {person.department}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant="outline" className="text-xs">
+                        {person.sport}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-1">
+                        <MapPin className="h-3 w-3 text-gray-400" />
+                        <span className="text-sm text-gray-600">{person.location}</span>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-1">
+                          <Mail className="h-3 w-3 text-gray-400" />
+                          <span className="text-xs text-gray-600 truncate max-w-32">
+                            {person.email}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Phone className="h-3 w-3 text-gray-400" />
+                          <span className="text-xs text-gray-600">
+                            {person.phone}
+                          </span>
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      {person.linkedinUrl && (
+                        <a
+                          href={person.linkedinUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 hover:text-blue-800"
+                        >
+                          <ExternalLink className="h-4 w-4" />
+                        </a>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+            
+            {filteredPeople.length === 0 && searchQuery && (
+              <div className="text-center py-12">
+                <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-gray-900 mb-2">No people found</h3>
+                <p className="text-gray-600">Try adjusting your search criteria</p>
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>
-
-      {/* Main Content */}
-      <div className="flex-1 min-w-0">
-        <div className="space-y-4">
-          {/* Header */}
-          <div className="flex justify-between items-center">
-            <div>
-              <h1 className="text-2xl font-bold text-foreground">People</h1>
-              <p className="text-sm text-muted-foreground">Browse and manage sports industry contacts</p>
-            </div>
-            <Button onClick={exportToExcel} variant="outline" size="sm" className="gap-2">
-              <Download className="h-4 w-4" />
-              Export
-            </Button>
-          </div>
-
-          {/* Contact Table */}
-          <Card className="shadow-sm border-border">
-            <CardContent className="p-0">
-              <div className="overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow className="bg-muted/30">
-                      <TableHead className="font-semibold">Name</TableHead>
-                      <TableHead className="font-semibold">Role</TableHead>
-                      <TableHead className="font-semibold">Team</TableHead>
-                      <TableHead className="font-semibold">Sport</TableHead>
-                      <TableHead className="font-semibold">Email</TableHead>
-                      <TableHead className="font-semibold">Phone</TableHead>
-                      <TableHead className="font-semibold">LinkedIn</TableHead>
-                      <TableHead className="font-semibold text-right">Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {currentContacts.length === 0 ? (
-                      <TableRow>
-                        <TableCell colSpan={8} className="text-center py-12">
-                          <div className="flex flex-col items-center gap-3">
-                            <User className="h-12 w-12 text-muted-foreground" />
-                            <div>
-                              <p className="font-medium text-foreground">No contacts found</p>
-                              <p className="text-sm text-muted-foreground">
-                                Try adjusting your filters or search terms
-                              </p>
-                            </div>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ) : (
-                      currentContacts.map((contact) => (
-                        <TableRow 
-                          key={contact.id} 
-                          className="hover:bg-muted/50 transition-colors"
-                        >
-                          <TableCell>
-                            <div className="flex items-center gap-3">
-                              <Avatar className="h-8 w-8">
-                                <AvatarImage src={getProfileImage(contact.id)} />
-                                <AvatarFallback className="text-xs">
-                                  {contact.first_name[0]}{contact.last_name[0]}
-                                </AvatarFallback>
-                              </Avatar>
-                              <div>
-                                <p className="font-medium text-foreground text-sm">
-                                  {contact.first_name} {contact.last_name}
-                                </p>
-                              </div>
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <Badge variant="secondary" className="font-medium text-xs">
-                              {contact.position || "Not specified"}
-                            </Badge>
-                          </TableCell>
-                          <TableCell>
-                            <div className="flex items-center gap-2">
-                              <Building2 className="h-3 w-3 text-muted-foreground" />
-                              <span className="text-sm text-foreground truncate">
-                                {contact.team?.name || "No team"}
-                              </span>
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <Badge variant="outline" className="font-medium text-xs">
-                              {contact.sport?.name || contact.team?.sport?.name || "No sport"}
-                            </Badge>
-                          </TableCell>
-                          <TableCell>
-                            {revealedEmails.has(contact.id) ? (
-                              <div className="flex items-center gap-2">
-                                <Mail className="h-3 w-3 text-muted-foreground" />
-                                <a 
-                                  href={`mailto:${contact.email || generateDummyEmail(contact)}`} 
-                                  className="text-sm text-foreground hover:text-primary truncate"
-                                >
-                                  {contact.email || generateDummyEmail(contact)}
-                                </a>
-                              </div>
-                            ) : (
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => handleRevealEmail(contact.id)}
-                                className="h-6 px-2 text-xs bg-primary/10 hover:bg-primary/20 border-primary/20"
-                              >
-                                <Eye className="h-3 w-3 mr-1" />
-                                Reveal
-                              </Button>
-                            )}
-                          </TableCell>
-                          <TableCell>
-                            {revealedPhones.has(contact.id) ? (
-                              <div className="flex items-center gap-2">
-                                <Phone className="h-3 w-3 text-muted-foreground" />
-                                <a 
-                                  href={`tel:${contact.phone || generateDummyPhone(contact.id)}`} 
-                                  className="text-sm text-foreground hover:text-primary"
-                                >
-                                  {contact.phone || generateDummyPhone(contact.id)}
-                                </a>
-                              </div>
-                            ) : (
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => handleRevealPhone(contact.id)}
-                                className="h-6 px-2 text-xs bg-primary/10 hover:bg-primary/20 border-primary/20"
-                              >
-                                <Eye className="h-3 w-3 mr-1" />
-                                Reveal
-                              </Button>
-                            )}
-                          </TableCell>
-                          <TableCell>
-                            {revealedLinkedIns.has(contact.id) ? (
-                              <div className="flex items-center gap-2">
-                                <Linkedin className="h-3 w-3 text-muted-foreground" />
-                                <a 
-                                  href={contact.linkedin || generateDummyLinkedIn(contact)} 
-                                  target="_blank" 
-                                  rel="noopener noreferrer"
-                                  className="text-sm text-foreground hover:text-primary"
-                                >
-                                  Profile
-                                </a>
-                              </div>
-                            ) : (
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => handleRevealLinkedIn(contact.id)}
-                                className="h-6 px-2 text-xs bg-primary/10 hover:bg-primary/20 border-primary/20"
-                              >
-                                <Eye className="h-3 w-3 mr-1" />
-                                Reveal
-                              </Button>
-                            )}
-                          </TableCell>
-                          <TableCell className="text-right">
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => openAddToListDialog(contact)}
-                              className="gap-1"
-                            >
-                              <Plus className="h-4 w-4" />
-                              Add to List
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      ))
-                    )}
-                  </TableBody>
-                </Table>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="flex justify-center">
-              <Pagination>
-                <PaginationContent>
-                  <PaginationItem>
-                    <PaginationPrevious 
-                      onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-                      className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
-                    />
-                  </PaginationItem>
-                  
-                  {[...Array(totalPages)].map((_, i) => {
-                    const page = i + 1;
-                    if (
-                      page === 1 ||
-                      page === totalPages ||
-                      (page >= currentPage - 1 && page <= currentPage + 1)
-                    ) {
-                      return (
-                        <PaginationItem key={page}>
-                          <PaginationLink
-                            onClick={() => setCurrentPage(page)}
-                            isActive={currentPage === page}
-                            className="cursor-pointer"
-                          >
-                            {page}
-                          </PaginationLink>
-                        </PaginationItem>
-                      );
-                    } else if (
-                      page === currentPage - 2 ||
-                      page === currentPage + 2
-                    ) {
-                      return (
-                        <PaginationItem key={page}>
-                          <PaginationEllipsis />
-                        </PaginationItem>
-                      );
-                    }
-                    return null;
-                  })}
-                  
-                  <PaginationItem>
-                    <PaginationNext 
-                      onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
-                      className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
-                    />
-                  </PaginationItem>
-                </PaginationContent>
-              </Pagination>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Add to List Dialog */}
-      <Dialog open={isAddToListDialogOpen} onOpenChange={setIsAddToListDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>
-              Add {selectedContactForList?.first_name} {selectedContactForList?.last_name} to List
-            </DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            {lists.length === 0 ? (
-              <div className="text-center py-8">
-                <p className="text-muted-foreground mb-4">You don't have any lists yet.</p>
-                <Button 
-                  onClick={() => {
-                    setIsAddToListDialogOpen(false);
-                    navigate('/crm/lists');
-                  }}
-                  variant="outline"
-                >
-                  Create Your First List
-                </Button>
-              </div>
-            ) : (
-              <div className="space-y-2">
-                <p className="text-sm text-muted-foreground">Select a list to add this contact to:</p>
-                {lists.map((list) => (
-                  <div
-                    key={list.id}
-                    className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/50 cursor-pointer"
-                    onClick={() => handleAddToList(list.id)}
-                  >
-                    <div>
-                      <h4 className="font-medium">{list.name}</h4>
-                      {list.description && (
-                        <p className="text-sm text-muted-foreground">{list.description}</p>
-                      )}
-                    </div>
-                    <Badge variant="secondary">
-                      {list.list_items?.length || 0} items
-                    </Badge>
-                  </div>
-                ))}
-              </div>
-            )}
-            <div className="flex justify-end">
-              <Button variant="outline" onClick={() => setIsAddToListDialogOpen(false)}>
-                Cancel
-              </Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 };
