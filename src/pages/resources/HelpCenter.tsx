@@ -5,46 +5,116 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { MessageSquare, Mail } from "lucide-react";
 
 const HelpCenter = () => {
-  const faqs = [
+  const faqSections = [
     {
-      question: "How do I get started with Sportbnk?",
-      answer: "Getting started is easy! Sign up for a free trial, choose your plan, and you'll have immediate access to our sports data platform. Our onboarding team will help guide you through the setup process."
+      title: "Getting Started",
+      questions: [
+        {
+          question: "How do I get started with Sportbnk?",
+          answer: "Simply create an account, choose your subscription plan, and you'll gain instant access to Sportbnk's platform, including real-time signals, data filters, and list-building tools."
+        },
+        {
+          question: "Do you offer a free trial or demo?",
+          answer: "Yes — we provide demos and trial access so you can explore the platform before committing to a plan. Contact our team to book your demo."
+        },
+        {
+          question: "Who is Sportbnk designed for?",
+          answer: "Sportbnk is built for suppliers, sponsors, agencies, and organisations looking to sell, market, or hire within the sports industry."
+        }
+      ]
     },
     {
-      question: "What sports data do you provide?",
-      answer: "We provide comprehensive data from 750k+ teams and 360k+ competitions across multiple sports including football, basketball, tennis, rugby, and many more. This includes player statistics, team performance, fixtures, results, and detailed analytics."
+      title: "Data & Signals",
+      questions: [
+        {
+          question: "What types of data and signals do you provide?",
+          answer: "We track real-time buying, hiring, and partnership signals, alongside verified contact details for sports organisations and decision-makers."
+        },
+        {
+          question: "Which sports and regions do you currently cover?",
+          answer: "Our MVP focuses on football and cricket in the UK, with rapid expansion planned across more sports and regions."
+        },
+        {
+          question: "How often is your data updated?",
+          answer: "Our system continuously updates through scraping, provider partnerships, and manual verification — ensuring data remains accurate and relevant."
+        },
+        {
+          question: "Is the data verified and compliant with GDPR/CCPA?",
+          answer: "Yes — every dataset is verified and meets global compliance standards, including GDPR and CCPA."
+        },
+        {
+          question: "Do you provide historical data as well as real-time signals?",
+          answer: "Yes — we maintain historical records to help identify trends and support long-term strategy."
+        }
+      ]
     },
     {
-      question: "How can I integrate Sportbnk data into my application?",
-      answer: "We offer robust APIs and SDKs that allow seamless integration into your existing systems. Our technical documentation provides detailed guides, and our support team can assist with custom integration requirements."
+      title: "Features & Use Cases",
+      questions: [
+        {
+          question: "How can Sportbnk help me drive sales, marketing, and hiring?",
+          answer: "Sportbnk delivers the right signals at the right time — whether you're looking to close deals, target marketing campaigns, or connect with top talent."
+        },
+        {
+          question: "Can I filter data to match my ideal customer profile (ICP)?",
+          answer: "Absolutely — you can refine searches by sport, geography, organisation type, role, and more."
+        },
+        {
+          question: "Can I build and export targeted lists?",
+          answer: "Yes — create segmented lists and export them to CSV, or sync them with your CRM and marketing tools."
+        }
+      ]
     },
     {
-      question: "What are the different pricing plans available?",
-      answer: "We offer flexible pricing plans to suit different needs - from individual developers to enterprise organisations. Visit our pricing page to see detailed plan comparisons and features included in each tier."
+      title: "Integrations & API",
+      questions: [
+        {
+          question: "How do I integrate Sportbnk with my CRM or marketing tools?",
+          answer: "Sportbnk supports CSV exports and direct API integrations with popular platforms like HubSpot, Salesforce, and Mailchimp."
+        },
+        {
+          question: "What support do you offer for developers?",
+          answer: "We provide full API documentation, usage guides, and technical support to help developers integrate Sportbnk quickly."
+        },
+        {
+          question: "How do I monitor my API usage and limits?",
+          answer: "You'll have a dashboard to track API calls, monitor limits, and upgrade your plan if needed."
+        },
+        {
+          question: "What happens if I exceed my API limits?",
+          answer: "You'll receive a notification, and you can either upgrade your plan or purchase additional credits."
+        }
+      ]
     },
     {
-      question: "How accurate and up-to-date is your sports data?",
-      answer: "Our data is sourced from reliable providers and updated in real-time. We maintain high accuracy standards with regular quality checks and provide data with timestamps so you know exactly when information was last updated."
+      title: "Pricing & Plans",
+      questions: [
+        {
+          question: "What subscription plans are available?",
+          answer: "We offer tiered plans for different needs — from startups to enterprises. Pricing starts at £49/month, with enterprise packages available for larger organisations."
+        },
+        {
+          question: "Do you offer custom enterprise solutions?",
+          answer: "Yes — we provide tailored solutions for enterprise clients who require advanced features or large-scale data access."
+        },
+        {
+          question: "Can I upgrade or downgrade my plan at any time?",
+          answer: "Yes — our plans are flexible, and you can adjust them as your business grows."
+        }
+      ]
     },
     {
-      question: "Can I customize the data feeds for my specific needs?",
-      answer: "Yes! Our Enterprise plans offer customizable data feeds. You can filter by specific leagues, teams, or data points that matter most to your application or business requirements."
-    },
-    {
-      question: "What support do you offer for developers?",
-      answer: "We provide comprehensive developer support including detailed API documentation, code examples, SDKs, and direct access to our technical support team. We also have a community WhatsApp group for quick questions."
-    },
-    {
-      question: "How do I monitor my API usage and limits?",
-      answer: "Your dashboard provides real-time monitoring of API calls, usage statistics, and remaining credits. You'll receive notifications before reaching your limits and can upgrade your plan as needed."
-    },
-    {
-      question: "What happens if I exceed my API limits?",
-      answer: "If you approach your limits, we'll notify you in advance. You can upgrade your plan or purchase additional credits. We don't immediately cut off access - we'll work with you to find the right solution."
-    },
-    {
-      question: "Do you offer historical sports data?",
-      answer: "Yes, we maintain extensive historical data going back several years for most sports and competitions. This includes past seasons, historical player statistics, and archived match data for trend analysis and research."
+      title: "Support & Security",
+      questions: [
+        {
+          question: "What kind of support do you provide?",
+          answer: "Our support team offers email assistance, onboarding sessions, and dedicated account management for enterprise clients."
+        },
+        {
+          question: "How secure is my data with Sportbnk?",
+          answer: "We use enterprise-grade security and encryption standards to ensure your data is always safe and protected."
+        }
+      ]
     }
   ];
 
@@ -62,18 +132,23 @@ const HelpCenter = () => {
                 Find answers to the most common questions about using Sportbnk.
               </p>
               
-              <Accordion type="single" collapsible className="w-full">
-                {faqs.map((faq, index) => (
-                  <AccordionItem key={index} value={`item-${index}`}>
-                    <AccordionTrigger className="text-left font-semibold text-sportbnk-navy hover:text-sportbnk-green">
-                      {faq.question}
-                    </AccordionTrigger>
-                    <AccordionContent className="text-gray-600 leading-relaxed">
-                      {faq.answer}
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
+              {faqSections.map((section, sectionIndex) => (
+                <div key={sectionIndex} className="mb-8">
+                  <h3 className="text-xl font-bold text-sportbnk-navy mb-4">{section.title}</h3>
+                  <Accordion type="single" collapsible className="w-full">
+                    {section.questions.map((faq, index) => (
+                      <AccordionItem key={index} value={`section-${sectionIndex}-item-${index}`}>
+                        <AccordionTrigger className="text-left font-semibold text-sportbnk-navy hover:text-sportbnk-green">
+                          {faq.question}
+                        </AccordionTrigger>
+                        <AccordionContent className="text-gray-600 leading-relaxed">
+                          {faq.answer}
+                        </AccordionContent>
+                      </AccordionItem>
+                    ))}
+                  </Accordion>
+                </div>
+              ))}
             </div>
 
             {/* Contact Support Section */}
@@ -86,9 +161,8 @@ const HelpCenter = () => {
               
               <div className="bg-white rounded-lg p-6 mb-8 max-w-md mx-auto">
                 <Mail className="h-8 w-8 text-sportbnk-green mx-auto mb-3" />
-                <h3 className="font-semibold text-sportbnk-navy mb-2">Email Support</h3>
-                <p className="text-gray-600 mb-4">Get detailed help via email</p>
-                <p className="text-sm text-gray-500">info@sportbnk.com</p>
+                <h3 className="font-semibold text-sportbnk-navy mb-2">📧 Email Support</h3>
+                <p className="text-gray-600 mb-4">info@sportbnk.com</p>
               </div>
               
             </div>
