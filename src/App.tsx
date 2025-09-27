@@ -36,7 +36,7 @@ import Upgrade from "./pages/crm/Upgrade";
 import TeamDetails from "./pages/crm/TeamDetails";
 import People from "./pages/crm/People";
 import Organisations from "./pages/crm/Organisations";
-import Lists from "./pages/crm/Lists";
+
 import SignalsPage from "./pages/crm/SignalsPage";
 import ICPs from "./pages/crm/ICPs";
 import Search from "./pages/crm/Search";
@@ -117,7 +117,7 @@ function App() {
                        
                        
                        <Route path="/crm/my-contacts" element={<ProtectedRoute><CrmLayout pageTitle="My Contacts"><People /></CrmLayout></ProtectedRoute>} />
-                       <Route path="/crm/lists" element={<ProtectedRoute><CrmLayout pageTitle="Lists"><Lists /></CrmLayout></ProtectedRoute>} />
+                       
                        <Route path="/crm/signals" element={<ProtectedRoute><CrmLayout pageTitle="Signals Feed"><SignalsPage /></CrmLayout></ProtectedRoute>} />
                        <Route path="/crm/icps" element={<ProtectedRoute><CrmLayout pageTitle="My ICPs"><ICPs /></CrmLayout></ProtectedRoute>} />
                         <Route path="/crm/discover" element={<ProtectedRoute><CrmLayout pageTitle="Discover"><Search /></CrmLayout></ProtectedRoute>} />
