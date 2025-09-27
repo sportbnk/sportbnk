@@ -34,18 +34,22 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 
-const mainNavItems = [
+const findNavItems = [
   { title: 'Signals', url: '/crm/signals', icon: Zap },
   { title: 'My ICPs', url: '/crm/icps', icon: Target },
   { title: 'Search', url: '/crm/contacts', icon: Users },
+];
+
+const myContactsNavItems = [
   { title: 'Enrich', url: '/crm/enrich', icon: Sparkles },
-  { title: 'My Contacts', url: '/crm/lists', icon: List },
+  { title: 'Organisations', url: '/crm/organisations', icon: Building2 },
+  { title: 'People', url: '/crm/people', icon: Users },
 ];
 
 const dealsNavItems = [
-  { title: 'Tasks', url: '/crm/tasks', icon: CheckSquare },
-  { title: 'Meetings', url: '/crm/meetings', icon: Calendar },
   { title: 'Emails', url: '/crm/emails', icon: Mail },
+  { title: 'Meetings', url: '/crm/meetings', icon: Calendar },
+  { title: 'Tasks', url: '/crm/tasks', icon: CheckSquare },
 ];
 
 const bottomNavItems = [
@@ -94,18 +98,52 @@ export function CrmSidebar() {
       </div>
 
       <SidebarContent className="flex-1 py-4">
-        {/* Main Section */}
+        {/* Find Section */}
         {open && (
           <div className="px-6 py-2">
             <h3 className="text-sidebar-foreground font-semibold text-sm uppercase tracking-wide">
-              Main
+              Find
             </h3>
           </div>
         )}
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu className={cn(open ? "px-3" : "px-1")}>
-              {mainNavItems.map((item) => (
+              {findNavItems.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    <NavLink 
+                      to={item.url} 
+                      className={({ isActive }) => cn(
+                        "flex items-center rounded-lg transition-all duration-200 font-medium w-full",
+                        open ? "gap-3 px-3 py-2.5" : "justify-center px-3 py-2.5",
+                        isActive 
+                          ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-soft" 
+                          : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                      )}
+                    >
+                      <item.icon className="h-4 w-4" />
+                      {open && <span className="text-sm">{item.title}</span>}
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        {/* My Contacts Section */}
+        {open && (
+          <div className="px-6 py-2 mt-4">
+            <h3 className="text-sidebar-foreground font-semibold text-sm uppercase tracking-wide">
+              My Contacts
+            </h3>
+          </div>
+        )}
+        <SidebarGroup>
+          <SidebarGroupContent>
+            <SidebarMenu className={cn(open ? "px-3" : "px-1")}>
+              {myContactsNavItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <NavLink 
