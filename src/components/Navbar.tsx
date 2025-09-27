@@ -62,6 +62,16 @@ const Navbar = () => {
                         <ul className="space-y-1">
                           <li>
                             <NavigationMenuLink asChild>
+                              <Link to="/products/signals" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
+                                <div className="text-sm font-medium text-sportbnk-navy flex items-center">
+                                  <Activity className="h-4 w-4 mr-2" /> Signals
+                                </div>
+                                <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Real-time sports insights</p>
+                              </Link>
+                            </NavigationMenuLink>
+                          </li>
+                          <li>
+                            <NavigationMenuLink asChild>
                               <Link to="/products/discover" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
                                 <div className="text-sm font-medium text-sportbnk-navy flex items-center">
                                   <Package className="h-4 w-4 mr-2" /> Discover
@@ -77,16 +87,6 @@ const Navbar = () => {
                                   <Rocket className="h-4 w-4 mr-2" /> Enrich
                                 </div>
                                 <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Enhance your sports data</p>
-                              </Link>
-                            </NavigationMenuLink>
-                          </li>
-                          <li>
-                            <NavigationMenuLink asChild>
-                              <Link to="/products/signals" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
-                                <div className="text-sm font-medium text-sportbnk-navy flex items-center">
-                                  <Activity className="h-4 w-4 mr-2" /> Signals
-                                </div>
-                                <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Real-time sports insights</p>
                               </Link>
                             </NavigationMenuLink>
                           </li>
@@ -273,6 +273,11 @@ const Navbar = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-full">
                 <DropdownMenuItem>
+                  <Link to="/products/signals" className="w-full flex items-center">
+                    <Activity className="h-4 w-4 mr-2" />Signals
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
                   <Link to="/products/discover" className="w-full flex items-center">
                     <Package className="h-4 w-4 mr-2" />Discover
                   </Link>
@@ -280,11 +285,6 @@ const Navbar = () => {
                 <DropdownMenuItem>
                   <Link to="/products/enrich" className="w-full flex items-center">
                     <Rocket className="h-4 w-4 mr-2" />Enrich
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Link to="/products/signals" className="w-full flex items-center">
-                    <Activity className="h-4 w-4 mr-2" />Signals
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
