@@ -959,22 +959,74 @@ const Discover = () => {
   const [selectedOrganisations, setSelectedOrganisations] = useState<string[]>([]);
   const [selectedPeople, setSelectedPeople] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState('organisations');
+  const [showFilters, setShowFilters] = useState(false);
 
-  const filteredOrganisations = premierLeagueTeams.filter(org =>
-    org.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    org.level.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    org.sport.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    org.league.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    org.location.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Organization filters
+  const [orgFilters, setOrgFilters] = useState({
+    sport: [] as string[],
+    level: [] as string[],
+    city: [] as string[],
+    country: [] as string[]
+  });
 
-  const filteredPeople = mockPeople.filter(person =>
-    `${person.firstName} ${person.lastName}`.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    person.position.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    person.organisation.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    person.department.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    person.location.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // People filters
+  const [peopleFilters, setPeopleFilters] = useState({
+    role: [] as string[],
+    team: [] as string[],
+    location: [] as string[]
+  });
+
+  // Get unique values for filter options
+  const getUniqueOrgValues = () => {
+    const sports = [...new Set(premierLeagueTeams.map(org => org.sport))];
+    const levels = [...new Set(premierLeagueTeams.map(org => org.level))];
+    const cities = [...new Set(premierLeagueTeams.map(org => org.location.split(',')[0].trim()))];
+    const countries = [...new Set(premierLeagueTeams.map(org => org.country))];
+    return { sports, levels, cities, countries };
+  };
+
+  const getUniquePeopleValues = () => {
+    const roles = [...new Set(mockPeople.map(person => person.position))];
+    const teams = [...new Set(mockPeople.map(person => person.organisation))];
+    const locations = [...new Set(mockPeople.map(person => person.location))];
+    return { roles, teams, locations };
+  };
+
+  const { sports, levels, cities, countries } = getUniqueOrgValues();
+  const { roles, teams, locations } = getUniquePeopleValues();
+
+  const filteredOrganisations = premierLeagueTeams.filter(org => {
+    // Search filter
+    const matchesSearch = org.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      org.level.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      org.sport.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      org.league.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      org.location.toLowerCase().includes(searchQuery.toLowerCase());
+
+    // Apply filters
+    const matchesSport = orgFilters.sport.length === 0 || orgFilters.sport.includes(org.sport);
+    const matchesLevel = orgFilters.level.length === 0 || orgFilters.level.includes(org.level);
+    const matchesCity = orgFilters.city.length === 0 || orgFilters.city.includes(org.location.split(',')[0].trim());
+    const matchesCountry = orgFilters.country.length === 0 || orgFilters.country.includes(org.country);
+
+    return matchesSearch && matchesSport && matchesLevel && matchesCity && matchesCountry;
+  });
+
+  const filteredPeople = mockPeople.filter(person => {
+    // Search filter
+    const matchesSearch = `${person.firstName} ${person.lastName}`.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      person.position.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      person.organisation.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      person.department.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      person.location.toLowerCase().includes(searchQuery.toLowerCase());
+
+    // Apply filters
+    const matchesRole = peopleFilters.role.length === 0 || peopleFilters.role.includes(person.position);
+    const matchesTeam = peopleFilters.team.length === 0 || peopleFilters.team.includes(person.organisation);
+    const matchesLocation = peopleFilters.location.length === 0 || peopleFilters.location.includes(person.location);
+
+    return matchesSearch && matchesRole && matchesTeam && matchesLocation;
+  });
 
   const handleSelectOrganisation = (orgId: string) => {
     setSelectedOrganisations(prev => 
@@ -982,6 +1034,46 @@ const Discover = () => {
         ? prev.filter(id => id !== orgId)
         : [...prev, orgId]
     );
+  };
+
+  const handleOrgFilterChange = (filterType: keyof typeof orgFilters, value: string) => {
+    setOrgFilters(prev => ({
+      ...prev,
+      [filterType]: prev[filterType].includes(value)
+        ? prev[filterType].filter(item => item !== value)
+        : [...prev[filterType], value]
+    }));
+  };
+
+  const handlePeopleFilterChange = (filterType: keyof typeof peopleFilters, value: string) => {
+    setPeopleFilters(prev => ({
+      ...prev,
+      [filterType]: prev[filterType].includes(value)
+        ? prev[filterType].filter(item => item !== value)
+        : [...prev[filterType], value]
+    }));
+  };
+
+  const clearAllFilters = () => {
+    setOrgFilters({
+      sport: [],
+      level: [],
+      city: [],
+      country: []
+    });
+    setPeopleFilters({
+      role: [],
+      team: [],
+      location: []
+    });
+  };
+
+  const getActiveFilterCount = () => {
+    if (activeTab === 'organisations') {
+      return Object.values(orgFilters).reduce((sum, filters) => sum + filters.length, 0);
+    } else {
+      return Object.values(peopleFilters).reduce((sum, filters) => sum + filters.length, 0);
+    }
   };
 
   const handleSelectPerson = (personId: string) => {
@@ -1099,11 +1191,170 @@ const Discover = () => {
                   className="pl-10"
                 />
               </div>
-              <Button variant="outline" size="sm">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={() => setShowFilters(!showFilters)}
+                className={getActiveFilterCount() > 0 ? "bg-blue-50 border-blue-200" : ""}
+              >
                 <Filter className="h-4 w-4 mr-2" />
                 Filters
+                {getActiveFilterCount() > 0 && (
+                  <Badge className="ml-2 h-5 w-5 p-0 flex items-center justify-center text-xs bg-blue-600">
+                    {getActiveFilterCount()}
+                  </Badge>
+                )}
               </Button>
+              {getActiveFilterCount() > 0 && (
+                <Button variant="ghost" size="sm" onClick={clearAllFilters}>
+                  Clear All
+                </Button>
+              )}
             </div>
+            
+            {/* Filter Panel */}
+            {showFilters && (
+              <div className="mt-4 p-4 bg-gray-50 rounded-lg border">
+                {activeTab === 'organisations' ? (
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    {/* Sport Filter */}
+                    <div>
+                      <label className="text-sm font-medium text-gray-700 mb-2 block">Sport</label>
+                      <div className="space-y-2">
+                        {sports.map(sport => (
+                          <div key={sport} className="flex items-center space-x-2">
+                            <Checkbox
+                              id={`sport-${sport}`}
+                              checked={orgFilters.sport.includes(sport)}
+                              onCheckedChange={() => handleOrgFilterChange('sport', sport)}
+                            />
+                            <label htmlFor={`sport-${sport}`} className="text-sm text-gray-600">
+                              {sport}
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Level Filter */}
+                    <div>
+                      <label className="text-sm font-medium text-gray-700 mb-2 block">Level</label>
+                      <div className="space-y-2">
+                        {levels.map(level => (
+                          <div key={level} className="flex items-center space-x-2">
+                            <Checkbox
+                              id={`level-${level}`}
+                              checked={orgFilters.level.includes(level)}
+                              onCheckedChange={() => handleOrgFilterChange('level', level)}
+                            />
+                            <label htmlFor={`level-${level}`} className="text-sm text-gray-600">
+                              {level}
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* City Filter */}
+                    <div>
+                      <label className="text-sm font-medium text-gray-700 mb-2 block">City</label>
+                      <div className="space-y-2 max-h-40 overflow-y-auto">
+                        {cities.map(city => (
+                          <div key={city} className="flex items-center space-x-2">
+                            <Checkbox
+                              id={`city-${city}`}
+                              checked={orgFilters.city.includes(city)}
+                              onCheckedChange={() => handleOrgFilterChange('city', city)}
+                            />
+                            <label htmlFor={`city-${city}`} className="text-sm text-gray-600">
+                              {city}
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Country Filter */}
+                    <div>
+                      <label className="text-sm font-medium text-gray-700 mb-2 block">Country</label>
+                      <div className="space-y-2">
+                        {countries.map(country => (
+                          <div key={country} className="flex items-center space-x-2">
+                            <Checkbox
+                              id={`country-${country}`}
+                              checked={orgFilters.country.includes(country)}
+                              onCheckedChange={() => handleOrgFilterChange('country', country)}
+                            />
+                            <label htmlFor={`country-${country}`} className="text-sm text-gray-600">
+                              {country}
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {/* Role Filter */}
+                    <div>
+                      <label className="text-sm font-medium text-gray-700 mb-2 block">Role</label>
+                      <div className="space-y-2 max-h-40 overflow-y-auto">
+                        {roles.map(role => (
+                          <div key={role} className="flex items-center space-x-2">
+                            <Checkbox
+                              id={`role-${role}`}
+                              checked={peopleFilters.role.includes(role)}
+                              onCheckedChange={() => handlePeopleFilterChange('role', role)}
+                            />
+                            <label htmlFor={`role-${role}`} className="text-sm text-gray-600">
+                              {role}
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Team Filter */}
+                    <div>
+                      <label className="text-sm font-medium text-gray-700 mb-2 block">Team</label>
+                      <div className="space-y-2 max-h-40 overflow-y-auto">
+                        {teams.map(team => (
+                          <div key={team} className="flex items-center space-x-2">
+                            <Checkbox
+                              id={`team-${team}`}
+                              checked={peopleFilters.team.includes(team)}
+                              onCheckedChange={() => handlePeopleFilterChange('team', team)}
+                            />
+                            <label htmlFor={`team-${team}`} className="text-sm text-gray-600">
+                              {team}
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Location Filter */}
+                    <div>
+                      <label className="text-sm font-medium text-gray-700 mb-2 block">Location</label>
+                      <div className="space-y-2 max-h-40 overflow-y-auto">
+                        {locations.map(location => (
+                          <div key={location} className="flex items-center space-x-2">
+                            <Checkbox
+                              id={`location-${location}`}
+                              checked={peopleFilters.location.includes(location)}
+                              onCheckedChange={() => handlePeopleFilterChange('location', location)}
+                            />
+                            <label htmlFor={`location-${location}`} className="text-sm text-gray-600">
+                              {location}
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
           </CardContent>
         </Card>
 
