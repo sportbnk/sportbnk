@@ -16,9 +16,12 @@ import {
   ExternalLink,
   Globe,
   Mail,
-  Phone
+  Phone,
+  Sparkles,
+  Loader2
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 interface Organisation {
   id: string;
@@ -122,6 +125,132 @@ const mockOrganisations: Organisation[] = [
     website: 'https://www.yorkshireccc.com',
     email: 'info@yorkshireccc.com',
     phone: '+44 113 278 7394'
+  },
+  {
+    id: '7',
+    name: 'Chennai Super Kings',
+    type: 'Cricket Team',
+    sport: 'Cricket',
+    league: 'IPL',
+    location: 'Chennai',
+    country: 'India',
+    foundedYear: 2008,
+    employees: '100-500',
+    website: 'https://www.chennaisuperkings.com',
+    email: 'info@csk.com',
+    phone: '+91 44 2811 0000'
+  },
+  {
+    id: '8',
+    name: 'Arsenal FC',
+    type: 'Football Club',
+    sport: 'Football',
+    league: 'Premier League',
+    location: 'London',
+    country: 'England',
+    foundedYear: 1886,
+    employees: '500-1000',
+    website: 'https://www.arsenal.com',
+    email: 'info@arsenal.co.uk',
+    phone: '+44 20 7619 5003'
+  },
+  {
+    id: '9',
+    name: 'Mumbai Indians',
+    type: 'Cricket Team',
+    sport: 'Cricket',
+    league: 'IPL',
+    location: 'Mumbai',
+    country: 'India',
+    foundedYear: 2008,
+    employees: '100-500',
+    website: 'https://www.mumbaiindians.com',
+    email: 'info@mumbaiindians.com',
+    phone: '+91 22 2675 0000'
+  },
+  {
+    id: '10',
+    name: 'Bayern Munich',
+    type: 'Football Club',
+    sport: 'Football',
+    league: 'Bundesliga',
+    location: 'Munich',
+    country: 'Germany',
+    foundedYear: 1900,
+    employees: '1000+',
+    website: 'https://fcbayern.com',
+    email: 'info@fcbayern.com',
+    phone: '+49 89 69931 0'
+  },
+  {
+    id: '11',
+    name: 'Kent County Cricket Club',
+    type: 'Cricket Club',
+    sport: 'Cricket',
+    league: 'County Championship',
+    location: 'Canterbury',
+    country: 'England',
+    foundedYear: 1859,
+    employees: '50-100',
+    website: 'https://www.kentcricket.co.uk',
+    email: 'info@kentcricket.co.uk',
+    phone: '+44 1227 456 886'
+  },
+  {
+    id: '12',
+    name: 'Juventus FC',
+    type: 'Football Club',
+    sport: 'Football',
+    league: 'Serie A',
+    location: 'Turin',
+    country: 'Italy',
+    foundedYear: 1897,
+    employees: '500-1000',
+    website: 'https://www.juventus.com',
+    email: 'info@juventus.com',
+    phone: '+39 011 6563111'
+  },
+  {
+    id: '13',
+    name: 'Royal Challengers Bangalore',
+    type: 'Cricket Team',
+    sport: 'Cricket',
+    league: 'IPL',
+    location: 'Bangalore',
+    country: 'India',
+    foundedYear: 2008,
+    employees: '50-100',
+    website: 'https://www.royalchallengers.com',
+    email: 'info@rcb.com',
+    phone: '+91 80 4092 0000'
+  },
+  {
+    id: '14',
+    name: 'Chelsea FC',
+    type: 'Football Club',
+    sport: 'Football',
+    league: 'Premier League',
+    location: 'London',
+    country: 'England',
+    foundedYear: 1905,
+    employees: '500-1000',
+    website: 'https://www.chelseafc.com',
+    email: 'info@chelseafc.com',
+    phone: '+44 871 984 1955'
+  },
+  {
+    id: '15',
+    name: 'Warwickshire County Cricket Club',
+    type: 'Cricket Club',
+    sport: 'Cricket',
+    league: 'County Championship',
+    location: 'Birmingham',
+    country: 'England',
+    foundedYear: 1882,
+    employees: '50-100',
+    website: 'https://www.warwickshireccc.com',
+    email: 'info@warwickshireccc.com',
+    phone: '+44 121 446 4422'
   }
 ];
 
@@ -130,6 +259,7 @@ const Organisations = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedOrganisations, setSelectedOrganisations] = useState<string[]>([]);
   const [organisations, setOrganisations] = useState<Organisation[]>(mockOrganisations);
+  const [isClassifying, setIsClassifying] = useState(false);
 
   const filteredOrganisations = organisations.filter(org =>
     org.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -229,6 +359,58 @@ const Organisations = () => {
     return <Building2 className="h-6 w-6 text-blue-600" />;
   };
 
+  const classifyAllSports = async () => {
+    setIsClassifying(true);
+    const updatedOrganisations = [...organisations];
+    
+    try {
+      for (let i = 0; i < updatedOrganisations.length; i++) {
+        const org = updatedOrganisations[i];
+        
+        try {
+          const { data, error } = await supabase.functions.invoke('classify-sport', {
+            body: {
+              organizationName: org.name,
+              type: org.type,
+              league: org.league,
+              location: org.location
+            }
+          });
+
+          if (error) {
+            console.error('Error classifying sport for', org.name, error);
+            continue;
+          }
+
+          if (data?.sport) {
+            updatedOrganisations[i] = {
+              ...org,
+              sport: data.sport,
+              type: data.sport === 'Cricket' ? 'Cricket Club' : 'Football Club'
+            };
+          }
+        } catch (err) {
+          console.error('Error classifying sport for', org.name, err);
+        }
+      }
+      
+      setOrganisations(updatedOrganisations);
+      toast({
+        title: "Classification Complete",
+        description: "All organizations have been classified using AI!",
+      });
+    } catch (error) {
+      console.error('Error during classification:', error);
+      toast({
+        title: "Classification Error",
+        description: "There was an error classifying the organizations.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsClassifying(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 p-6" style={{ fontFamily: 'Poppins, sans-serif' }}>
       <div className="max-w-7xl mx-auto">
@@ -239,6 +421,19 @@ const Organisations = () => {
             <p className="text-gray-600 mt-1">Build and manage your organisation lists</p>
           </div>
           <div className="flex items-center gap-3">
+            <Button 
+              onClick={classifyAllSports}
+              disabled={isClassifying}
+              variant="secondary"
+              className="bg-purple-600 hover:bg-purple-700 text-white"
+            >
+              {isClassifying ? (
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              ) : (
+                <Sparkles className="h-4 w-4 mr-2" />
+              )}
+              {isClassifying ? 'Classifying...' : 'AI Classify Sports'}
+            </Button>
             <Button 
               onClick={handleAddToCRM}
               disabled={selectedOrganisations.length === 0}
