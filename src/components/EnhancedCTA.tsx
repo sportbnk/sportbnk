@@ -13,7 +13,7 @@ const EnhancedCTA = () => {
             Join the Waitlist
           </h2>
           <p className="text-xl text-gray-300 mb-10 leading-relaxed">
-            Be the first to access our platform when we launch. Transform your sports data strategy with SportBnk.
+            Be the first to access Sportbnk. Power your growth with smarter sports intelligence.
           </p>
           
           <div className="flex justify-center">
