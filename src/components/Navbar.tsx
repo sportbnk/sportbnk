@@ -92,16 +92,6 @@ const Navbar = () => {
                           </li>
                           <li>
                             <NavigationMenuLink asChild>
-                              <Link to="/products/recruit" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
-                                <div className="text-sm font-medium text-sportbnk-navy flex items-center">
-                                  <Users className="h-4 w-4 mr-2" /> Recruit
-                                </div>
-                                <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Find talents in sports</p>
-                              </Link>
-                            </NavigationMenuLink>
-                          </li>
-                          <li>
-                            <NavigationMenuLink asChild>
                               <Link to="/products/api" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
                                 <div className="text-sm font-medium text-sportbnk-navy flex items-center">
                                   <Code className="h-4 w-4 mr-2" /> API
@@ -295,11 +285,6 @@ const Navbar = () => {
                 <DropdownMenuItem>
                   <Link to="/crm/signals" className="w-full flex items-center">
                     <Activity className="h-4 w-4 mr-2" />Signals
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Link to="/products/recruit" className="w-full flex items-center">
-                    <Users className="h-4 w-4 mr-2" />Recruit
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
