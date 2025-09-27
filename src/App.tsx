@@ -50,9 +50,14 @@ import CrmLayout from "./components/CrmLayout";
 
 // Product pages
 import Discover from "./pages/products/Discover";
-import Boost from "./pages/products/Boost";
+import ProductEnrich from "./pages/products/Enrich";
 import Recruit from "./pages/products/Recruit";
 import Api from "./pages/products/Api";
+
+// Case pages
+import Sales from "./pages/cases/Sales";
+import Marketing from "./pages/cases/Marketing";
+import Hiring from "./pages/cases/Hiring";
 
 // Company sub-pages
 import About from "./pages/company/About";
@@ -124,11 +129,16 @@ function App() {
                        <Route path="/crm/help" element={<ProtectedRoute><Help /></ProtectedRoute>} />
                        <Route path="/crm/upgrade" element={<ProtectedRoute><Upgrade /></ProtectedRoute>} />
                       
-                      {/* Product sub-pages */}
+                       {/* Product sub-pages */}
                       <Route path="/products/discover" element={<Discover />} />
-                      <Route path="/products/boost" element={<Boost />} />
+                      <Route path="/products/enrich" element={<ProductEnrich />} />
                       <Route path="/products/recruit" element={<Recruit />} />
                       <Route path="/products/api" element={<Api />} />
+                      
+                      {/* Case sub-pages */}
+                      <Route path="/cases/sales" element={<Sales />} />
+                      <Route path="/cases/marketing" element={<Marketing />} />
+                      <Route path="/cases/hiring" element={<Hiring />} />
                       
                       {/* Company sub-pages */}
                       <Route path="/company/about" element={<About />} />

@@ -4,11 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Rocket } from "lucide-react";
 import { WaitlistDialog } from "@/components/WaitlistDialog";
 
-const Boost = () => {
+const Enrich = () => {
   return (
     <PageLayout 
-      pageTitle="Boost Sports Data"
-      metaDescription="Enhance your existing customer databases with SportsBnk Boost. Update outdated information and fill gaps in your sports contact data for improved outreach success."
+      pageTitle="Enrich Sports Data"
+      metaDescription="Enhance your existing customer databases with SportsBnk Enrich. Update outdated information and fill gaps in your sports contact data for improved outreach success."
       metaKeywords="enhance sports data, update sports contacts, sports data enrichment, complete customer profiles, sports database enhancement, data appending service, sports industry database"
     >
       <section className="py-16 md:py-24">
@@ -22,7 +22,7 @@ const Boost = () => {
                 Enhance Your Existing Data
               </h2>
               <p className="text-lg text-gray-600 mb-6">
-                Boost your existing customer databases by appending missing or outdated information, ensuring you have the most complete and accurate profiles of your sports industry contacts.
+                Enrich your existing customer databases by appending missing or outdated information, ensuring you have the most complete and accurate profiles of your sports industry contacts.
               </p>
               <div className="space-y-4 mb-8">
                 <div className="flex items-start">
@@ -47,7 +47,7 @@ const Boost = () => {
             <div>
               <img 
                 src="/lovable-uploads/c5351de4-d54d-424f-99a5-b07ddc3fcc40.png" 
-                alt="Boost product" 
+                alt="Enrich product" 
                 className="rounded-lg shadow-lg"
               />
             </div>
@@ -95,4 +95,4 @@ const Boost = () => {
   );
 };
 
-export default Boost;
+export default Enrich;
