@@ -66,7 +66,7 @@ const Navbar = () => {
                                 <div className="text-sm font-medium text-sportbnk-navy flex items-center">
                                   <Activity className="h-4 w-4 mr-2" /> Signals
                                 </div>
-                                <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Real-time sports insights</p>
+                                <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Real-time buying intent alerts</p>
                               </Link>
                             </NavigationMenuLink>
                           </li>
@@ -76,7 +76,7 @@ const Navbar = () => {
                                 <div className="text-sm font-medium text-sportbnk-navy flex items-center">
                                   <Package className="h-4 w-4 mr-2" /> Discover
                                 </div>
-                                <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Explore our product offerings</p>
+                                <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Find the right person</p>
                               </Link>
                             </NavigationMenuLink>
                           </li>
@@ -86,7 +86,7 @@ const Navbar = () => {
                                 <div className="text-sm font-medium text-sportbnk-navy flex items-center">
                                   <Rocket className="h-4 w-4 mr-2" /> Enrich
                                 </div>
-                                <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Enhance your sports data</p>
+                                <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Enhance your current data</p>
                               </Link>
                             </NavigationMenuLink>
                           </li>
@@ -96,7 +96,7 @@ const Navbar = () => {
                                 <div className="text-sm font-medium text-sportbnk-navy flex items-center">
                                   <Code className="h-4 w-4 mr-2" /> SportBnk API
                                 </div>
-                                <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Integrate sports data via API</p>
+                                <p className="line-clamp-2 text-sm leading-snug text-sportbnk-navy/80">Seamless integration at scale</p>
                               </Link>
                             </NavigationMenuLink>
                           </li>
