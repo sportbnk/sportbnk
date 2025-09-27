@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { 
   Search, 
   Download, 
@@ -225,7 +226,6 @@ const Organisations = () => {
   };
 
   const getSportIcon = (sport: string) => {
-    // You could return different icons based on sport
     return <Building2 className="h-6 w-6 text-blue-600" />;
   };
 
@@ -300,28 +300,96 @@ const Organisations = () => {
           </CardContent>
         </Card>
 
-        {/* Organisations Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredOrganisations.map((org) => (
-            <Card key={org.id} className="hover:shadow-lg transition-shadow">
-              <CardContent className="p-6">
-                <div className="flex items-start gap-4">
-                  <div className="flex items-center space-x-2">
+        {/* Organisations List */}
+        <Card>
+          <CardContent className="p-0">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-12">
                     <Checkbox
-                      checked={selectedOrganisations.includes(org.id)}
-                      onCheckedChange={() => handleSelectOrganisation(org.id)}
+                      checked={selectedOrganisations.length === filteredOrganisations.length && filteredOrganisations.length > 0}
+                      onCheckedChange={handleSelectAll}
                     />
-                  </div>
-                  
-                  <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-gray-100">
-                    {getSportIcon(org.sport)}
-                  </div>
-                  
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <h3 className="font-semibold text-gray-900 truncate">
-                        {org.name}
-                      </h3>
+                  </TableHead>
+                  <TableHead>Organisation</TableHead>
+                  <TableHead>Type</TableHead>
+                  <TableHead>Sport</TableHead>
+                  <TableHead>League</TableHead>
+                  <TableHead>Location</TableHead>
+                  <TableHead>Employees</TableHead>
+                  <TableHead>Contact</TableHead>
+                  <TableHead className="w-20">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredOrganisations.map((org) => (
+                  <TableRow key={org.id} className="hover:bg-gray-50">
+                    <TableCell>
+                      <Checkbox
+                        checked={selectedOrganisations.includes(org.id)}
+                        onCheckedChange={() => handleSelectOrganisation(org.id)}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-3">
+                        <div className="flex items-center justify-center w-8 h-8 rounded bg-gray-100">
+                          <Building2 className="h-4 w-4 text-blue-600" />
+                        </div>
+                        <div>
+                          <div className="font-medium text-gray-900">{org.name}</div>
+                          <div className="text-sm text-gray-500">Est. {org.foundedYear}</div>
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <Badge className={`text-xs ${getTypeColor(org.type)}`}>
+                        {org.type}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant="outline" className="text-xs">
+                        {org.sport}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <span className="text-sm text-gray-700">{org.league}</span>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-1">
+                        <MapPin className="h-3 w-3 text-gray-400" />
+                        <span className="text-sm text-gray-600">
+                          {org.location}, {org.country}
+                        </span>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-1">
+                        <Users className="h-3 w-3 text-gray-400" />
+                        <span className="text-sm text-gray-600">{org.employees}</span>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="space-y-1">
+                        {org.email && (
+                          <div className="flex items-center gap-1">
+                            <Mail className="h-3 w-3 text-gray-400" />
+                            <span className="text-xs text-gray-600 truncate max-w-32">
+                              {org.email}
+                            </span>
+                          </div>
+                        )}
+                        {org.phone && (
+                          <div className="flex items-center gap-1">
+                            <Phone className="h-3 w-3 text-gray-400" />
+                            <span className="text-xs text-gray-600">
+                              {org.phone}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    </TableCell>
+                    <TableCell>
                       {org.website && (
                         <a
                           href={org.website}
@@ -332,68 +400,21 @@ const Organisations = () => {
                           <ExternalLink className="h-4 w-4" />
                         </a>
                       )}
-                    </div>
-                    
-                    <p className="text-sm text-gray-600 mb-2">
-                      {org.league}
-                    </p>
-                    
-                    <div className="space-y-1 mb-3">
-                      <div className="flex items-center gap-1">
-                        <MapPin className="h-3 w-3 text-gray-400" />
-                        <p className="text-xs text-gray-600">
-                          {org.location}, {org.country}
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Users className="h-3 w-3 text-gray-400" />
-                        <p className="text-xs text-gray-600">
-                          {org.employees} employees
-                        </p>
-                      </div>
-                      {org.email && (
-                        <div className="flex items-center gap-1">
-                          <Mail className="h-3 w-3 text-gray-400" />
-                          <p className="text-xs text-gray-600 truncate">
-                            {org.email}
-                          </p>
-                        </div>
-                      )}
-                      {org.phone && (
-                        <div className="flex items-center gap-1">
-                          <Phone className="h-3 w-3 text-gray-400" />
-                          <p className="text-xs text-gray-600">
-                            {org.phone}
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                    
-                    <div className="flex gap-2 flex-wrap">
-                      <Badge className={`text-xs ${getTypeColor(org.type)}`}>
-                        {org.type}
-                      </Badge>
-                      <Badge variant="outline" className="text-xs">
-                        {org.sport}
-                      </Badge>
-                      <Badge variant="secondary" className="text-xs">
-                        Est. {org.foundedYear}
-                      </Badge>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-
-        {filteredOrganisations.length === 0 && searchQuery && (
-          <div className="text-center py-12">
-            <Building2 className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No organisations found</h3>
-            <p className="text-gray-600">Try adjusting your search criteria</p>
-          </div>
-        )}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+            
+            {filteredOrganisations.length === 0 && searchQuery && (
+              <div className="text-center py-12">
+                <Building2 className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-gray-900 mb-2">No organisations found</h3>
+                <p className="text-gray-600">Try adjusting your search criteria</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
