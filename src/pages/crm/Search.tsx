@@ -46,6 +46,307 @@ import {
 } from 'lucide-react';
 import { Team, Sport, Country, City } from '@/types/teams';
 
+// Premier League Organizations data
+interface Organisation {
+  id: string;
+  name: string;
+  type: string;
+  sport: string;
+  league: string;
+  location: string;
+  country: string;
+  foundedYear: number;
+  employees: string;
+  website?: string;
+  email?: string;
+  phone?: string;
+  logoUrl?: string;
+  description?: string;
+}
+
+const premierLeagueTeams: Organisation[] = [
+  {
+    id: '1',
+    name: 'Arsenal FC',
+    type: 'Football Club',
+    sport: 'Football',
+    league: 'Premier League',
+    location: 'London',
+    country: 'England',
+    foundedYear: 1886,
+    employees: '500-1000',
+    website: 'https://www.arsenal.com',
+    email: 'info@arsenal.co.uk',
+    phone: '+44 20 7619 5003'
+  },
+  {
+    id: '2',
+    name: 'Aston Villa FC',
+    type: 'Football Club',
+    sport: 'Football',
+    league: 'Premier League',
+    location: 'Birmingham',
+    country: 'England',
+    foundedYear: 1874,
+    employees: '200-500',
+    website: 'https://www.avfc.co.uk',
+    email: 'enquiries@avfc.co.uk',
+    phone: '+44 121 327 2299'
+  },
+  {
+    id: '3',
+    name: 'AFC Bournemouth',
+    type: 'Football Club',
+    sport: 'Football',
+    league: 'Premier League',
+    location: 'Bournemouth',
+    country: 'England',
+    foundedYear: 1899,
+    employees: '100-200',
+    website: 'https://www.afcb.co.uk',
+    email: 'enquiries@afcb.co.uk',
+    phone: '+44 1202 726 300'
+  },
+  {
+    id: '4',
+    name: 'Brentford FC',
+    type: 'Football Club',
+    sport: 'Football',
+    league: 'Premier League',
+    location: 'London',
+    country: 'England',
+    foundedYear: 1889,
+    employees: '100-200',
+    website: 'https://www.brentfordfc.com',
+    email: 'enquiries@brentfordfc.com',
+    phone: '+44 20 8847 2511'
+  },
+  {
+    id: '5',
+    name: 'Brighton & Hove Albion FC',
+    type: 'Football Club',
+    sport: 'Football',
+    league: 'Premier League',
+    location: 'Brighton',
+    country: 'England',
+    foundedYear: 1901,
+    employees: '200-500',
+    website: 'https://www.brightonandhovealbion.com',
+    email: 'seagulls@brightonandhovealbion.com',
+    phone: '+44 1273 695 400'
+  },
+  {
+    id: '6',
+    name: 'Chelsea FC',
+    type: 'Football Club',
+    sport: 'Football',
+    league: 'Premier League',
+    location: 'London',
+    country: 'England',
+    foundedYear: 1905,
+    employees: '500-1000',
+    website: 'https://www.chelseafc.com',
+    email: 'info@chelseafc.com',
+    phone: '+44 871 984 1955'
+  },
+  {
+    id: '7',
+    name: 'Crystal Palace FC',
+    type: 'Football Club',
+    sport: 'Football',
+    league: 'Premier League',
+    location: 'London',
+    country: 'England',
+    foundedYear: 1905,
+    employees: '200-500',
+    website: 'https://www.cpfc.co.uk',
+    email: 'info@cpfc.co.uk',
+    phone: '+44 20 8768 6000'
+  },
+  {
+    id: '8',
+    name: 'Everton FC',
+    type: 'Football Club',
+    sport: 'Football',
+    league: 'Premier League',
+    location: 'Liverpool',
+    country: 'England',
+    foundedYear: 1878,
+    employees: '200-500',
+    website: 'https://www.evertonfc.com',
+    email: 'info@evertonfc.com',
+    phone: '+44 151 556 1878'
+  },
+  {
+    id: '9',
+    name: 'Fulham FC',
+    type: 'Football Club',
+    sport: 'Football',
+    league: 'Premier League',
+    location: 'London',
+    country: 'England',
+    foundedYear: 1879,
+    employees: '200-500',
+    website: 'https://www.fulhamfc.com',
+    email: 'enquiries@fulhamfc.com',
+    phone: '+44 843 208 1222'
+  },
+  {
+    id: '10',
+    name: 'Ipswich Town FC',
+    type: 'Football Club',
+    sport: 'Football',
+    league: 'Premier League',
+    location: 'Ipswich',
+    country: 'England',
+    foundedYear: 1878,
+    employees: '100-200',
+    website: 'https://www.itfc.co.uk',
+    email: 'enquiries@itfc.co.uk',
+    phone: '+44 1473 400 500'
+  },
+  {
+    id: '11',
+    name: 'Leicester City FC',
+    type: 'Football Club',
+    sport: 'Football',
+    league: 'Premier League',
+    location: 'Leicester',
+    country: 'England',
+    foundedYear: 1884,
+    employees: '200-500',
+    website: 'https://www.lcfc.com',
+    email: 'reception@lcfc.co.uk',
+    phone: '+44 344 815 5000'
+  },
+  {
+    id: '12',
+    name: 'Liverpool FC',
+    type: 'Football Club',
+    sport: 'Football',
+    league: 'Premier League',
+    location: 'Liverpool',
+    country: 'England',
+    foundedYear: 1892,
+    employees: '1000+',
+    website: 'https://www.liverpoolfc.com',
+    email: 'info@liverpoolfc.com',
+    phone: '+44 151 263 2361'
+  },
+  {
+    id: '13',
+    name: 'Manchester City FC',
+    type: 'Football Club',
+    sport: 'Football',
+    league: 'Premier League',
+    location: 'Manchester',
+    country: 'England',
+    foundedYear: 1880,
+    employees: '500-1000',
+    website: 'https://www.mancity.com',
+    email: 'mancity@mancity.com',
+    phone: '+44 161 444 1894'
+  },
+  {
+    id: '14',
+    name: 'Manchester United FC',
+    type: 'Football Club',
+    sport: 'Football',
+    league: 'Premier League',
+    location: 'Manchester',
+    country: 'England',
+    foundedYear: 1878,
+    employees: '1000+',
+    website: 'https://www.manutd.com',
+    email: 'info@manutd.com',
+    phone: '+44 161 868 8000'
+  },
+  {
+    id: '15',
+    name: 'Newcastle United FC',
+    type: 'Football Club',
+    sport: 'Football',
+    league: 'Premier League',
+    location: 'Newcastle',
+    country: 'England',
+    foundedYear: 1892,
+    employees: '200-500',
+    website: 'https://www.nufc.co.uk',
+    email: 'admin@nufc.co.uk',
+    phone: '+44 191 201 8400'
+  },
+  {
+    id: '16',
+    name: 'Nottingham Forest FC',
+    type: 'Football Club',
+    sport: 'Football',
+    league: 'Premier League',
+    location: 'Nottingham',
+    country: 'England',
+    foundedYear: 1865,
+    employees: '100-200',
+    website: 'https://www.nottinghamforest.co.uk',
+    email: 'info@nottinghamforest.co.uk',
+    phone: '+44 115 982 4444'
+  },
+  {
+    id: '17',
+    name: 'Southampton FC',
+    type: 'Football Club',
+    sport: 'Football',
+    league: 'Premier League',
+    location: 'Southampton',
+    country: 'England',
+    foundedYear: 1885,
+    employees: '200-500',
+    website: 'https://www.southamptonfc.com',
+    email: 'sfc@southamptonfc.com',
+    phone: '+44 23 8022 8575'
+  },
+  {
+    id: '18',
+    name: 'Tottenham Hotspur FC',
+    type: 'Football Club',
+    sport: 'Football',
+    league: 'Premier League',
+    location: 'London',
+    country: 'England',
+    foundedYear: 1882,
+    employees: '500-1000',
+    website: 'https://www.tottenhamhotspur.com',
+    email: 'customer.care@tottenhamhotspur.com',
+    phone: '+44 344 499 5000'
+  },
+  {
+    id: '19',
+    name: 'West Ham United FC',
+    type: 'Football Club',
+    sport: 'Football',
+    league: 'Premier League',
+    location: 'London',
+    country: 'England',
+    foundedYear: 1895,
+    employees: '200-500',
+    website: 'https://www.whufc.com',
+    email: 'info@westhamunited.co.uk',
+    phone: '+44 20 8548 2748'
+  },
+  {
+    id: '20',
+    name: 'Wolverhampton Wanderers FC',
+    type: 'Football Club',
+    sport: 'Football',
+    league: 'Premier League',
+    location: 'Wolverhampton',
+    country: 'England',
+    foundedYear: 1877,
+    employees: '200-500',
+    website: 'https://www.wolves.co.uk',
+    email: 'info@wolves.co.uk',
+    phone: '+44 871 222 2220'
+  }
+];
+
 // Contact type for people view
 type Contact = {
   id: string;
@@ -408,14 +709,14 @@ const fetchData = async () => {
 const Discover = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("organizations");
-  const [teams, setTeams] = useState<Team[]>([]);
+  const [teams, setTeams] = useState<Organisation[]>(premierLeagueTeams);
   const [contacts, setContacts] = useState<Contact[]>([]);
-  const [filteredTeams, setFilteredTeams] = useState<Team[]>([]);
+  const [filteredTeams, setFilteredTeams] = useState<Organisation[]>(premierLeagueTeams);
   const [filteredContacts, setFilteredContacts] = useState<Contact[]>([]);
   const [sports, setSports] = useState<Sport[]>([]);
   const [countries, setCountries] = useState<Country[]>([]);
   const [cities, setCities] = useState<City[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   
   // Filter states for organizations
   const [searchQuery, setSearchQuery] = useState("");
@@ -443,18 +744,8 @@ const Discover = () => {
 
   // Load data on component mount
   useEffect(() => {
-    const loadData = async () => {
-      setLoading(true);
-      const data = await fetchData();
-      setTeams(data.teams);
-      setContacts(data.contacts);
-      setSports(data.sports);
-      setCountries(data.countries);
-      setCities(data.cities);
-      setLoading(false);
-    };
-
-    loadData();
+    // No need to fetch data since we're using static Premier League data
+    setLoading(false);
   }, []);
 
   // Filter teams effect
@@ -464,30 +755,14 @@ const Discover = () => {
     if (searchQuery) {
       filtered = filtered.filter(team =>
         team.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        team.league?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        team.division?.toLowerCase().includes(searchQuery.toLowerCase())
+        team.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        team.location.toLowerCase().includes(searchQuery.toLowerCase())
       );
-    }
-
-    if (selectedSport && selectedSport !== "all") {
-      filtered = filtered.filter(team => team.sport_id === selectedSport);
-    }
-
-    if (selectedCountry && selectedCountry !== "all") {
-      filtered = filtered.filter(team => team.country_id === selectedCountry);
-    }
-
-    if (selectedCity && selectedCity !== "all") {
-      filtered = filtered.filter(team => team.city_id === selectedCity);
-    }
-
-    if (selectedLevel && selectedLevel !== "all") {
-      filtered = filtered.filter(team => team.level === selectedLevel);
     }
 
     setFilteredTeams(filtered);
     setCurrentPage(1);
-  }, [teams, searchQuery, selectedSport, selectedCountry, selectedCity, selectedLevel]);
+  }, [teams, searchQuery]);
 
   // Filter contacts effect
   useEffect(() => {
@@ -817,16 +1092,16 @@ const Discover = () => {
                                 <TableCell className="font-medium">{team.name}</TableCell>
                                 <TableCell>
                                   <Badge variant="secondary">
-                                    {team.sport?.name || 'Unknown'}
+                                    {team.sport || 'Football'}
                                   </Badge>
                                 </TableCell>
                                 <TableCell>
                                   <Badge variant="outline">
-                                    {team.level || 'Not specified'}
+                                    {team.league || 'Premier League'}
                                   </Badge>
                                 </TableCell>
-                                <TableCell>{team.country?.name || 'Unknown'}</TableCell>
-                                <TableCell>{team.city?.name || 'Unknown'}</TableCell>
+                                <TableCell>{team.country || 'England'}</TableCell>
+                                <TableCell>{team.location || 'Unknown'}</TableCell>
                               </TableRow>
                             );
                           })}
