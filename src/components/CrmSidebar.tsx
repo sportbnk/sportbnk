@@ -128,7 +128,7 @@ export function CrmSidebar() {
           variant="default"
           size="sm"
           className={cn(
-            "w-full font-medium bg-primary text-primary-foreground hover:bg-primary/90 mb-2",
+            "w-full font-medium bg-green-600 text-white hover:bg-green-700 mb-2",
             open ? "justify-start gap-3" : "justify-center px-3 py-3"
           )}
         >
