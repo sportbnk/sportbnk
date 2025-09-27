@@ -18,7 +18,7 @@ const Footer = () => {
               />
             </Link>
             <p className="text-gray-600 text-sm">
-              Reach decision makers within sport in seconds.
+              Real-time data and insights to help you win more business in sport.
             </p>
           </div>
           
