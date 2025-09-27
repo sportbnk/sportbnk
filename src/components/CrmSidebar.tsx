@@ -207,24 +207,40 @@ export function CrmSidebar() {
         open ? "p-3" : "p-1"
       )}>
         {/* Help and Upgrade */}
-        {bottomNavItems.map((item) => (
-          <NavLink
-            key={item.title}
-            to={item.url}
-            className={({ isActive }) => cn(
-              "flex items-center rounded-lg transition-all duration-200 font-medium w-full",
-              open ? "gap-3 px-3 py-3" : "justify-center px-3 py-3",
-              item.title === 'Upgrade'
-                ? "bg-green-600 text-white hover:bg-green-700"
-                : isActive 
+        {bottomNavItems.map((item) => {
+          if (item.title === 'Upgrade') {
+            return (
+              <NavLink
+                key={item.title}
+                to={item.url}
+                className={cn(
+                  "flex items-center rounded-lg transition-all duration-200 font-medium w-full bg-green-600 text-white hover:bg-green-700",
+                  open ? "gap-3 px-3 py-3" : "justify-center px-3 py-3"
+                )}
+              >
+                <item.icon className="h-5 w-5" />
+                {open && <span className="text-sm">{item.title}</span>}
+              </NavLink>
+            );
+          }
+          
+          return (
+            <NavLink
+              key={item.title}
+              to={item.url}
+              className={({ isActive }) => cn(
+                "flex items-center rounded-lg transition-all duration-200 font-medium w-full",
+                open ? "gap-3 px-3 py-3" : "justify-center px-3 py-3",
+                isActive 
                   ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-soft" 
                   : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-            )}
-          >
-            <item.icon className="h-5 w-5" />
-            {open && <span className="text-sm">{item.title}</span>}
-          </NavLink>
-        ))}
+              )}
+            >
+              <item.icon className="h-5 w-5" />
+              {open && <span className="text-sm">{item.title}</span>}
+            </NavLink>
+          );
+        })}
       </div>
     </Sidebar>
   );
