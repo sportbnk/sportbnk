@@ -100,7 +100,7 @@ export function CrmSidebar() {
       <SidebarContent className="flex-1 py-4">
         {/* Find Section */}
         {open && (
-          <div className="px-6 py-2">
+          <div className="px-6 pt-2 pb-1">
             <h3 className="text-sidebar-foreground font-semibold text-sm uppercase tracking-wide">
               Find
             </h3>
@@ -134,7 +134,7 @@ export function CrmSidebar() {
 
         {/* My Contacts Section */}
         {open && (
-          <div className="px-6 py-2 mt-4">
+          <div className="px-6 pt-3 pb-1">
             <h3 className="text-sidebar-foreground font-semibold text-sm uppercase tracking-wide">
               My Contacts
             </h3>
@@ -168,7 +168,7 @@ export function CrmSidebar() {
 
         {/* Deals Section */}
         {open && (
-          <div className="px-6 py-2 mt-4">
+          <div className="px-6 pt-3 pb-1">
             <h3 className="text-sidebar-foreground font-semibold text-sm uppercase tracking-wide">
               Deals
             </h3>
