@@ -12,7 +12,8 @@ import {
   Bot,
   FileText,
   Zap,
-  Target
+  Target,
+  Crown
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -122,6 +123,19 @@ export function CrmSidebar() {
         "border-t border-sidebar-border space-y-1",
         open ? "p-3" : "p-1"
       )}>
+        {/* Upgrade Button */}
+        <Button
+          variant="default"
+          size="sm"
+          className={cn(
+            "w-full font-medium bg-primary text-primary-foreground hover:bg-primary/90 mb-2",
+            open ? "justify-start gap-3" : "justify-center px-3 py-3"
+          )}
+        >
+          <Crown className="h-5 w-5" />
+          {open && <span>Upgrade</span>}
+        </Button>
+        
         {/* Profile and Settings */}
         {bottomNavItems.map((item) => (
           <NavLink
