@@ -417,15 +417,15 @@ const Discover = () => {
   
   // Filter states for organizations
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedSport, setSelectedSport] = useState<string>("");
-  const [selectedCountry, setSelectedCountry] = useState<string>("");
-  const [selectedCity, setSelectedCity] = useState<string>("");
-  const [selectedLevel, setSelectedLevel] = useState<string>("");
+  const [selectedSport, setSelectedSport] = useState<string>("all");
+  const [selectedCountry, setSelectedCountry] = useState<string>("all");
+  const [selectedCity, setSelectedCity] = useState<string>("all");
+  const [selectedLevel, setSelectedLevel] = useState<string>("all");
   
   // Filter states for people
   const [peopleSearchQuery, setPeopleSearchQuery] = useState("");
-  const [selectedTeam, setSelectedTeam] = useState<string>("");
-  const [selectedRole, setSelectedRole] = useState<string>("");
+  const [selectedTeam, setSelectedTeam] = useState<string>("all");
+  const [selectedRole, setSelectedRole] = useState<string>("all");
 
   // Pagination for organizations
   const [currentPage, setCurrentPage] = useState(1);
@@ -462,19 +462,19 @@ const Discover = () => {
       );
     }
 
-    if (selectedSport) {
+    if (selectedSport && selectedSport !== "all") {
       filtered = filtered.filter(team => team.sport_id === selectedSport);
     }
 
-    if (selectedCountry) {
+    if (selectedCountry && selectedCountry !== "all") {
       filtered = filtered.filter(team => team.country_id === selectedCountry);
     }
 
-    if (selectedCity) {
+    if (selectedCity && selectedCity !== "all") {
       filtered = filtered.filter(team => team.city_id === selectedCity);
     }
 
-    if (selectedLevel) {
+    if (selectedLevel && selectedLevel !== "all") {
       filtered = filtered.filter(team => team.level === selectedLevel);
     }
 
@@ -495,11 +495,11 @@ const Discover = () => {
       );
     }
 
-    if (selectedTeam) {
+    if (selectedTeam && selectedTeam !== "all") {
       filtered = filtered.filter(contact => contact.team_id === selectedTeam);
     }
 
-    if (selectedRole) {
+    if (selectedRole && selectedRole !== "all") {
       filtered = filtered.filter(contact => 
         contact.position?.toLowerCase().includes(selectedRole.toLowerCase())
       );
@@ -524,20 +524,20 @@ const Discover = () => {
   // Clear filters functions
   const clearFilters = () => {
     setSearchQuery("");
-    setSelectedSport("");
-    setSelectedCountry("");
-    setSelectedCity("");
-    setSelectedLevel("");
+    setSelectedSport("all");
+    setSelectedCountry("all");
+    setSelectedCity("all");
+    setSelectedLevel("all");
   };
 
   const clearPeopleFilters = () => {
     setPeopleSearchQuery("");
-    setSelectedTeam("");
-    setSelectedRole("");
+    setSelectedTeam("all");
+    setSelectedRole("all");
   };
 
-  const hasActiveFilters = searchQuery || selectedSport || selectedCountry || selectedCity || selectedLevel;
-  const hasPeopleActiveFilters = peopleSearchQuery || selectedTeam || selectedRole;
+  const hasActiveFilters = searchQuery || (selectedSport && selectedSport !== "all") || (selectedCountry && selectedCountry !== "all") || (selectedCity && selectedCity !== "all") || (selectedLevel && selectedLevel !== "all");
+  const hasPeopleActiveFilters = peopleSearchQuery || (selectedTeam && selectedTeam !== "all") || (selectedRole && selectedRole !== "all");
 
   // Get unique roles from contacts
   const uniqueRoles = Array.from(new Set(contacts.map(contact => contact.position).filter(Boolean)));
@@ -596,7 +596,7 @@ const Discover = () => {
                       <SelectValue placeholder="Select sport" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">All Sports</SelectItem>
+                      <SelectItem value="all">All Sports</SelectItem>
                       {sports.map((sport) => (
                         <SelectItem key={sport.id} value={sport.id}>
                           {sport.name}
@@ -610,7 +610,7 @@ const Discover = () => {
                       <SelectValue placeholder="Select country" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">All Countries</SelectItem>
+                      <SelectItem value="all">All Countries</SelectItem>
                       {countries.map((country) => (
                         <SelectItem key={country.id} value={country.id}>
                           {country.name}
@@ -624,7 +624,7 @@ const Discover = () => {
                       <SelectValue placeholder="Select city" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">All Cities</SelectItem>
+                      <SelectItem value="all">All Cities</SelectItem>
                       {cities.map((city) => (
                         <SelectItem key={city.id} value={city.id}>
                           {city.name}
@@ -638,7 +638,7 @@ const Discover = () => {
                       <SelectValue placeholder="Select level" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">All Levels</SelectItem>
+                      <SelectItem value="all">All Levels</SelectItem>
                       <SelectItem value="Professional">Professional</SelectItem>
                       <SelectItem value="Semi-Professional">Semi-Professional</SelectItem>
                       <SelectItem value="Amateur">Amateur</SelectItem>
@@ -675,7 +675,7 @@ const Discover = () => {
                       <SelectValue placeholder="Select team" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">All Teams</SelectItem>
+                      <SelectItem value="all">All Teams</SelectItem>
                       {teams.map((team) => (
                         <SelectItem key={team.id} value={team.id}>
                           {team.name}
@@ -689,7 +689,7 @@ const Discover = () => {
                       <SelectValue placeholder="Select role" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">All Roles</SelectItem>
+                      <SelectItem value="all">All Roles</SelectItem>
                       {uniqueRoles.map((role) => (
                         <SelectItem key={role} value={role}>
                           {role}
