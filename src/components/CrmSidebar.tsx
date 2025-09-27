@@ -53,8 +53,8 @@ const pipelineNavItems = [
 ];
 
 const bottomNavItems = [
-  { title: 'Help', url: '/crm/help', icon: HelpCircle },
   { title: 'Upgrade', url: '/crm/upgrade', icon: Crown },
+  { title: 'Help', url: '/crm/help', icon: HelpCircle },
 ];
 
 export function CrmSidebar() {
@@ -214,9 +214,11 @@ export function CrmSidebar() {
             className={({ isActive }) => cn(
               "flex items-center rounded-lg transition-all duration-200 font-medium w-full",
               open ? "gap-3 px-3 py-3" : "justify-center px-3 py-3",
-              isActive 
-                ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-soft" 
-                : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+              item.title === 'Upgrade'
+                ? "bg-green-600 text-white hover:bg-green-700"
+                : isActive 
+                  ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-soft" 
+                  : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
             )}
           >
             <item.icon className="h-5 w-5" />

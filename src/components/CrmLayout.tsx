@@ -70,7 +70,7 @@ const CrmLayout: React.FC<CrmLayoutProps> = ({ children, pageTitle }) => {
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost" className="relative h-9 w-9 rounded-full">
                         <Avatar className="h-9 w-9">
-                          <AvatarFallback className="bg-accent text-accent-foreground font-semibold">
+                          <AvatarFallback className="bg-blue-600 text-white font-semibold">
                             J
                           </AvatarFallback>
                         </Avatar>
