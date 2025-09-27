@@ -35,9 +35,9 @@ import {
 } from "@/components/ui/sidebar";
 
 const findNavItems = [
-  { title: 'Signals', url: '/crm/signals', icon: Zap },
+  { title: 'Signals Feed', url: '/crm/signals', icon: Zap },
   { title: 'My ICPs', url: '/crm/icps', icon: Target },
-  { title: 'Search', url: '/crm/contacts', icon: Users },
+  { title: 'Discover', url: '/crm/contacts', icon: Users },
 ];
 
 const myContactsNavItems = [
