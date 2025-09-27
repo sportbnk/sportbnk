@@ -47,7 +47,7 @@ import wolvesLogo from "@/assets/team-logos/wolves.png";
 interface Organisation {
   id: string;
   name: string;
-  type: string;
+  level: string;
   sport: string;
   league: string;
   location: string;
@@ -76,7 +76,7 @@ const premierLeagueTeams: Organisation[] = [
   {
     id: '1',
     name: 'Arsenal FC',
-    type: 'Football Club',
+    level: 'Professional',
     sport: 'Football',
     league: 'Premier League',
     location: 'London',
@@ -90,7 +90,7 @@ const premierLeagueTeams: Organisation[] = [
   {
     id: '2',
     name: 'Aston Villa FC',
-    type: 'Football Club',
+    level: 'Professional',
     sport: 'Football',
     league: 'Premier League',
     location: 'Birmingham',
@@ -104,7 +104,7 @@ const premierLeagueTeams: Organisation[] = [
   {
     id: '3',
     name: 'AFC Bournemouth',
-    type: 'Football Club',
+    level: 'Professional',
     sport: 'Football',
     league: 'Premier League',
     location: 'Bournemouth',
@@ -118,7 +118,7 @@ const premierLeagueTeams: Organisation[] = [
   {
     id: '4',
     name: 'Brentford FC',
-    type: 'Football Club',
+    level: 'Professional',
     sport: 'Football',
     league: 'Premier League',
     location: 'London',
@@ -132,7 +132,7 @@ const premierLeagueTeams: Organisation[] = [
   {
     id: '5',
     name: 'Brighton & Hove Albion FC',
-    type: 'Football Club',
+    level: 'Professional',
     sport: 'Football',
     league: 'Premier League',
     location: 'Brighton',
@@ -146,7 +146,7 @@ const premierLeagueTeams: Organisation[] = [
   {
     id: '6',
     name: 'Chelsea FC',
-    type: 'Football Club',
+    level: 'Professional',
     sport: 'Football',
     league: 'Premier League',
     location: 'London',
@@ -160,7 +160,7 @@ const premierLeagueTeams: Organisation[] = [
   {
     id: '7',
     name: 'Crystal Palace FC',
-    type: 'Football Club',
+    level: 'Professional',
     sport: 'Football',
     league: 'Premier League',
     location: 'London',
@@ -174,7 +174,7 @@ const premierLeagueTeams: Organisation[] = [
   {
     id: '8',
     name: 'Everton FC',
-    type: 'Football Club',
+    level: 'Professional',
     sport: 'Football',
     league: 'Premier League',
     location: 'Liverpool',
@@ -188,7 +188,7 @@ const premierLeagueTeams: Organisation[] = [
   {
     id: '9',
     name: 'Fulham FC',
-    type: 'Football Club',
+    level: 'Professional',
     sport: 'Football',
     league: 'Premier League',
     location: 'London',
@@ -202,7 +202,7 @@ const premierLeagueTeams: Organisation[] = [
   {
     id: '10',
     name: 'Ipswich Town FC',
-    type: 'Football Club',
+    level: 'Professional',
     sport: 'Football',
     league: 'Premier League',
     location: 'Ipswich',
@@ -216,7 +216,7 @@ const premierLeagueTeams: Organisation[] = [
   {
     id: '11',
     name: 'Leicester City FC',
-    type: 'Football Club',
+    level: 'Professional',
     sport: 'Football',
     league: 'Premier League',
     location: 'Leicester',
@@ -230,7 +230,7 @@ const premierLeagueTeams: Organisation[] = [
   {
     id: '12',
     name: 'Liverpool FC',
-    type: 'Football Club',
+    level: 'Professional',
     sport: 'Football',
     league: 'Premier League',
     location: 'Liverpool',
@@ -244,7 +244,7 @@ const premierLeagueTeams: Organisation[] = [
   {
     id: '13',
     name: 'Manchester City FC',
-    type: 'Football Club',
+    level: 'Professional',
     sport: 'Football',
     league: 'Premier League',
     location: 'Manchester',
@@ -258,7 +258,7 @@ const premierLeagueTeams: Organisation[] = [
   {
     id: '14',
     name: 'Manchester United FC',
-    type: 'Football Club',
+    level: 'Professional',
     sport: 'Football',
     league: 'Premier League',
     location: 'Manchester',
@@ -272,7 +272,7 @@ const premierLeagueTeams: Organisation[] = [
   {
     id: '15',
     name: 'Newcastle United FC',
-    type: 'Football Club',
+    level: 'Professional',
     sport: 'Football',
     league: 'Premier League',
     location: 'Newcastle',
@@ -286,7 +286,7 @@ const premierLeagueTeams: Organisation[] = [
   {
     id: '16',
     name: 'Nottingham Forest FC',
-    type: 'Football Club',
+    level: 'Professional',
     sport: 'Football',
     league: 'Premier League',
     location: 'Nottingham',
@@ -300,7 +300,7 @@ const premierLeagueTeams: Organisation[] = [
   {
     id: '17',
     name: 'Southampton FC',
-    type: 'Football Club',
+    level: 'Professional',
     sport: 'Football',
     league: 'Premier League',
     location: 'Southampton',
@@ -314,7 +314,7 @@ const premierLeagueTeams: Organisation[] = [
   {
     id: '18',
     name: 'Tottenham Hotspur FC',
-    type: 'Football Club',
+    level: 'Professional',
     sport: 'Football',
     league: 'Premier League',
     location: 'London',
@@ -328,7 +328,7 @@ const premierLeagueTeams: Organisation[] = [
   {
     id: '19',
     name: 'West Ham United FC',
-    type: 'Football Club',
+    level: 'Professional',
     sport: 'Football',
     league: 'Premier League',
     location: 'London',
@@ -342,7 +342,7 @@ const premierLeagueTeams: Organisation[] = [
   {
     id: '19',
     name: 'West Ham United FC',
-    type: 'Football Club',
+    level: 'Professional',
     sport: 'Football',
     league: 'Premier League',
     location: 'London',
@@ -356,7 +356,7 @@ const premierLeagueTeams: Organisation[] = [
   {
     id: '20',
     name: 'Wolverhampton Wanderers FC',
-    type: 'Football Club',
+    level: 'Professional',
     sport: 'Football',
     league: 'Premier League',
     location: 'Wolverhampton',
@@ -976,7 +976,7 @@ const Discover = () => {
 
   const filteredOrganisations = premierLeagueTeams.filter(org =>
     org.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    org.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    org.level.toLowerCase().includes(searchQuery.toLowerCase()) ||
     org.sport.toLowerCase().includes(searchQuery.toLowerCase()) ||
     org.league.toLowerCase().includes(searchQuery.toLowerCase()) ||
     org.location.toLowerCase().includes(searchQuery.toLowerCase())
@@ -1047,14 +1047,17 @@ const Discover = () => {
     }
   };
 
-  const getTypeColor = (type: string) => {
-    const colors: Record<string, string> = {
-      'Football Club': 'bg-green-100 text-green-800',
-      'Cricket Club': 'bg-blue-100 text-blue-800',
-      'Rugby Club': 'bg-purple-100 text-purple-800',
-      'Basketball Club': 'bg-orange-100 text-orange-800'
-    };
-    return colors[type] || 'bg-gray-100 text-gray-800';
+  const getLevelColor = (level: string) => {
+    switch (level) {
+      case 'Professional':
+        return 'bg-green-100 text-green-800';
+      case 'Semi-Professional':
+        return 'bg-blue-100 text-blue-800';
+      case 'Amateur':
+        return 'bg-gray-100 text-gray-800';
+      default:
+        return 'bg-green-100 text-green-800';
+    }
   };
 
   const getDepartmentColor = (department: string) => {
@@ -1158,7 +1161,7 @@ const Discover = () => {
                         />
                       </TableHead>
                       <TableHead>Organisation</TableHead>
-                      <TableHead>Type</TableHead>
+                      <TableHead>Level</TableHead>
                       <TableHead>Sport</TableHead>
                       <TableHead>League</TableHead>
                       <TableHead>Location</TableHead>
@@ -1184,21 +1187,20 @@ const Discover = () => {
                                  className="w-8 h-8 object-contain"
                                />
                              </div>
-                             <div>
-                               <button 
-                                 onClick={() => navigate(`/crm/discover/organisation/${org.id}`)}
-                                 className="font-medium text-gray-900 hover:text-blue-600 transition-colors cursor-pointer text-left"
-                               >
-                                 {org.name}
-                               </button>
-                               <div className="text-sm text-gray-500">Est. {org.foundedYear}</div>
+                              <div>
+                                <button 
+                                  onClick={() => navigate(`/crm/discover/organisation/${org.id}`)}
+                                  className="font-medium text-gray-900 hover:text-blue-600 transition-colors cursor-pointer text-left"
+                                >
+                                  {org.name}
+                                </button>
                              </div>
                           </div>
                         </TableCell>
-                        <TableCell>
-                          <Badge className={`text-xs ${getTypeColor(org.type)}`}>
-                            {org.type}
-                          </Badge>
+                         <TableCell>
+                           <Badge className={`text-xs ${getLevelColor(org.level)}`}>
+                             {org.level}
+                           </Badge>
                         </TableCell>
                         <TableCell>
                           <Badge variant="outline" className="text-xs">
