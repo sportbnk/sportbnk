@@ -94,7 +94,7 @@ const mockSignals: Signal[] = [
     datePosted: "Today",
     urgency: "New",
     teamId: "manchester-united",
-    description: "Academy Assistant Performance Analyst (Casual) – MUFC careers portal lists live roles across Football & Performance. Opens pathway contacts in analysis/medical; good wedge for performance tech & video tooling vendors.",
+    description: "Academy Assistant Performance Analyst (Casual) – MUFC careers portal lists live roles across Football & Performance. Intelligence suggestion: opens pathway contacts in analysis/medical; good wedge for performance tech & video tooling vendors.",
     source: "Manchester United careers portal",
     matchedICPs: ["High-Budget Premier League Clubs", "Technology Procurement Signals"]
   },
@@ -110,7 +110,7 @@ const mockSignals: Signal[] = [
     datePosted: "Today",
     urgency: "New",
     teamId: "arsenal",
-    description: "Licensing Manager (Commercial) – active vacancy. Licensing = merch, retail, IP partners; ideal for fan-merch, ecommerce, and brand collab vendors.",
+    description: "Licensing Manager (Commercial) – active vacancy. Intelligence suggestion: licensing = merch, retail, IP partners; ideal for fan-merch, ecommerce, and brand collab vendors.",
     source: "Arsenal Football Club jobs board",
     matchedICPs: ["High-Budget Premier League Clubs"]
   },
@@ -126,7 +126,7 @@ const mockSignals: Signal[] = [
     datePosted: "1 day ago",
     urgency: "New",
     teamId: "liverpool",
-    description: "LFCW Education & Player Care Lead and Casual Physio/Sports Therapist – both just posted. Direct entry to women's pathway staff; good ICP for player-care, edtech, and medical vendors.",
+    description: "LFCW Education & Player Care Lead and Casual Physio/Sports Therapist – both just posted. Intelligence suggestion: direct entry to women's pathway staff; good ICP for player-care, edtech, and medical vendors.",
     source: "jobsearch.liverpoolfc.com",
     matchedICPs: ["High-Budget Premier League Clubs", "Technology Procurement Signals"]
   },
@@ -142,7 +142,7 @@ const mockSignals: Signal[] = [
     datePosted: "1 day ago",
     urgency: "New",
     teamId: "chelsea",
-    description: "Social Inclusion Manager (Foundation) – active role. CSR/community budgets; opens doors for grassroots tech and measurement tools.",
+    description: "Social Inclusion Manager (Foundation) – active role. Intelligence suggestion: CSR/community budgets; opens doors for grassroots tech and measurement tools.",
     source: "Jobs In Football",
     matchedICPs: ["High-Budget Premier League Clubs"]
   },
@@ -158,7 +158,7 @@ const mockSignals: Signal[] = [
     datePosted: "Today",
     urgency: "New",
     teamId: "tottenham",
-    description: "Club publicly rebuffed US consortium takeover approach; must clarify by 24 Oct 2025. Stability/strategy signal; potential governance, finance, and advisory ICPs.",
+    description: "Club publicly rebuffed US consortium takeover approach; must clarify by 24 Oct 2025. Intelligence suggestion: stability/strategy signal; potential governance, finance, and advisory ICPs.",
     source: "The Guardian",
     matchedICPs: ["High-Budget Premier League Clubs"]
   },
@@ -174,7 +174,7 @@ const mockSignals: Signal[] = [
     datePosted: "2 months ago",
     urgency: "Normal",
     teamId: "manchester-city",
-    description: "New 10-year £1bn Puma kit deal reported this summer; OKX sleeve partnership confirmed/ongoing. Mega commercial cycle; procurement & hospitality scale-up often follows.",
+    description: "New 10-year £1bn Puma kit deal reported this summer; OKX sleeve partnership confirmed/ongoing. Intelligence suggestion: mega commercial cycle; procurement & hospitality scale-up often follows.",
     source: "The Guardian",
     matchedICPs: ["High-Budget Premier League Clubs"]
   },
@@ -190,7 +190,7 @@ const mockSignals: Signal[] = [
     datePosted: "3 days ago",
     urgency: "Expiring Soon",
     teamId: "newcastle",
-    description: "Security Officer (closing 30 Sept 2025) & Principal Scientist – both live. Direct ops & performance-science contacts.",
+    description: "Security Officer (closing 30 Sept 2025) & Principal Scientist – both live. Intelligence suggestion: direct ops & performance-science contacts.",
     source: "careers.newcastleunited.com",
     matchedICPs: ["High-Budget Premier League Clubs", "Technology Procurement Signals"]
   },
@@ -206,7 +206,7 @@ const mockSignals: Signal[] = [
     datePosted: "Today",
     urgency: "New",
     teamId: "aston-villa",
-    description: "Multiple live roles incl. Maintenance Technician (Plumbing) and Retail Supervisors. FM/estates procurement and retail systems conversations.",
+    description: "Multiple live roles incl. Maintenance Technician (Plumbing) and Retail Supervisors. Intelligence suggestion: FM/estates procurement and retail systems conversations.",
     source: "careers.avfc.co.uk",
     matchedICPs: ["High-Budget Premier League Clubs"]
   },
@@ -222,7 +222,7 @@ const mockSignals: Signal[] = [
     datePosted: "Today",
     urgency: "New",
     teamId: "west-ham",
-    description: "Head coach change – Nuno Espírito Santo appointed on 3-year deal. Backroom rebuild → analyst/med/ops hires, new vendor evaluations.",
+    description: "Head coach change – Nuno Espírito Santo appointed on 3-year deal. Intelligence suggestion: backroom rebuild → analyst/med/ops hires, new vendor evaluations.",
     source: "The Guardian",
     matchedICPs: ["High-Budget Premier League Clubs", "Technology Procurement Signals"]
   },
@@ -238,7 +238,7 @@ const mockSignals: Signal[] = [
     datePosted: "Today",
     urgency: "New",
     teamId: "everton",
-    description: "Club & Foundation vacancies page listing current roles. Community programs + matchday ops = event tech, ticketing, workforce mgmt.",
+    description: "Club & Foundation vacancies page listing current roles. Intelligence suggestion: community programs + matchday ops = event tech, ticketing, workforce mgmt.",
     source: "Everton FC",
     matchedICPs: ["High-Budget Premier League Clubs", "Technology Procurement Signals"]
   },
@@ -254,7 +254,7 @@ const mockSignals: Signal[] = [
     datePosted: "3 months ago",
     urgency: "Normal",
     teamId: "brentford",
-    description: "New multi-year Joma kit partnership began July 2025; current openings include Academy Director (closes 3 Oct). Fresh merchandise cycle + academy leadership hire = apparel/retail and pathway tech ICP.",
+    description: "New multi-year Joma kit partnership began July 2025; current openings include Academy Director (closes 3 Oct). Intelligence suggestion: fresh merchandise cycle + academy leadership hire = apparel/retail and pathway tech ICP.",
     source: "Brentford FC",
     matchedICPs: ["Technology Procurement Signals"]
   },
@@ -270,7 +270,7 @@ const mockSignals: Signal[] = [
     datePosted: "2 days ago",
     urgency: "New",
     teamId: "brighton",
-    description: "Technology Project & Governance Manager (FT) listed this week. Strong wedge for SaaS/infrastructure vendors.",
+    description: "Technology Project & Governance Manager (FT) listed this week. Intelligence suggestion: strong wedge for SaaS/infrastructure vendors.",
     source: "Jobs In Football",
     matchedICPs: ["Technology Procurement Signals"]
   },
@@ -286,7 +286,7 @@ const mockSignals: Signal[] = [
     datePosted: "1 day ago",
     urgency: "Expiring Soon",
     teamId: "crystal-palace",
-    description: "Head of Academy Player Recruitment (deadline 28 Sept 2025) + Women's Lead Physiotherapist. Direct recruitment/med contacts in academy & women's program.",
+    description: "Head of Academy Player Recruitment (deadline 28 Sept 2025) + Women's Lead Physiotherapist. Intelligence suggestion: direct recruitment/med contacts in academy & women's program.",
     source: "Crystal Palace F.C.",
     matchedICPs: ["Technology Procurement Signals"]
   },
@@ -302,7 +302,7 @@ const mockSignals: Signal[] = [
     datePosted: "Today",
     urgency: "New",
     teamId: "fulham",
-    description: "Multiple open roles incl. Academy Nutritionist and PDP Physiotherapist. Pathway science/performance ICP.",
+    description: "Multiple open roles incl. Academy Nutritionist and PDP Physiotherapist. Intelligence suggestion: pathway science/performance ICP.",
     source: "careers.fulhamfc.com",
     matchedICPs: ["Technology Procurement Signals"]
   },
@@ -318,7 +318,7 @@ const mockSignals: Signal[] = [
     datePosted: "Today",
     urgency: "New",
     teamId: "nottingham-forest",
-    description: "IT Support Technician + multiple academy coaching roles live on club careers. IT & academy procurement lines open.",
+    description: "IT Support Technician + multiple academy coaching roles live on club careers. Intelligence suggestion: IT & academy procurement lines open.",
     source: "Nottingham Forest Football Club",
     matchedICPs: ["Technology Procurement Signals"]
   },
@@ -334,7 +334,7 @@ const mockSignals: Signal[] = [
     datePosted: "1 month ago",
     urgency: "Normal",
     teamId: "leeds-united",
-    description: "New Red Bull front-of-shirt partner and Parimatch sleeve extension for 2025/26. Sponsor ecosystem refresh → brand activations & hospitality spend.",
+    description: "New Red Bull front-of-shirt partner and Parimatch sleeve extension for 2025/26. Intelligence suggestion: sponsor ecosystem refresh → brand activations & hospitality spend.",
     source: "Wikipedia",
     matchedICPs: ["Technology Procurement Signals"]
   },
@@ -350,7 +350,7 @@ const mockSignals: Signal[] = [
     datePosted: "Today",
     urgency: "New",
     teamId: "burnley",
-    description: "Castore kit deal + new front-of-shirt partner 96.com (both 2024); brand activity with Sure For Men (Sept 2025). Apparel & brand activation cycles in flight.",
+    description: "Castore kit deal + new front-of-shirt partner 96.com (both 2024); brand activity with Sure For Men (Sept 2025). Intelligence suggestion: apparel & brand activation cycles in flight.",
     source: "Wikipedia",
     matchedICPs: ["Technology Procurement Signals"]
   },
@@ -366,7 +366,7 @@ const mockSignals: Signal[] = [
     datePosted: "1 month ago",
     urgency: "Normal",
     teamId: "sunderland",
-    description: "Hummel kit; W88 front-of-shirt listed for 2025/26 season summaries. Sponsorship stack suggests active commercial team; good entry for betting/alcohol-alt compliance tech or replacements.",
+    description: "Hummel kit; W88 front-of-shirt listed for 2025/26 season summaries. Intelligence suggestion: sponsorship stack suggests active commercial team; good entry for betting/alcohol-alt compliance tech or replacements.",
     source: "Wikipedia",
     matchedICPs: ["Technology Procurement Signals"]
   },
@@ -382,7 +382,7 @@ const mockSignals: Signal[] = [
     datePosted: "1 week ago",
     urgency: "Normal",
     teamId: "wolves",
-    description: "Club in poor run of form per season data; likely pressure on staff changes (watchlist). Pre-trigger for hiring & vendor reshuffles.",
+    description: "Club in poor run of form per season data; likely pressure on staff changes (watchlist). Intelligence suggestion: pre-trigger for hiring & vendor reshuffles.",
     source: "Wikipedia",
     matchedICPs: ["High-Budget Premier League Clubs", "Technology Procurement Signals"]
   },
@@ -398,7 +398,7 @@ const mockSignals: Signal[] = [
     datePosted: "1 week ago",
     urgency: "Normal",
     teamId: "bournemouth",
-    description: "Club comms highlight Umbro kit and recent commercial partners; keep warm for retail & stadium ops hiring cycles.",
+    description: "Club comms highlight Umbro kit and recent commercial partners; keep warm for retail & stadium ops hiring cycles. Intelligence suggestion: ongoing commercial activity suggests openness to partnerships.",
     source: "Wikipedia",
     matchedICPs: ["Technology Procurement Signals"]
   },
@@ -414,7 +414,7 @@ const mockSignals: Signal[] = [
     datePosted: "1 month ago",
     urgency: "Normal",
     teamId: "ecb",
-    description: "Central careers hub and long-list of board/club roles; updated Governing Body Endorsement criteria for International Sportsperson route (effective 1 Sept 2025). HR & compliance contacts; immigration policy update affects staffing workflows and support vendors.",
+    description: "Central careers hub and long-list of board/club roles; updated Governing Body Endorsement criteria for International Sportsperson route (effective 1 Sept 2025). Intelligence suggestion: HR & compliance contacts; immigration policy update affects staffing workflows and support vendors.",
     source: "ECB",
     matchedICPs: ["Technology Procurement Signals"]
   },
@@ -430,7 +430,7 @@ const mockSignals: Signal[] = [
     datePosted: "1 week ago",
     urgency: "Normal",
     teamId: "surrey-ccc",
-    description: "Director of Operations (recent LinkedIn listing) plus multiple pathway roles on club careers. Operations + pathway = procurement across venues, scheduling, performance.",
+    description: "Director of Operations (recent LinkedIn listing) plus multiple pathway roles on club careers. Intelligence suggestion: operations + pathway = procurement across venues, scheduling, performance.",
     source: "Kia Oval",
     matchedICPs: ["Technology Procurement Signals"]
   },
@@ -446,7 +446,7 @@ const mockSignals: Signal[] = [
     datePosted: "4 days ago",
     urgency: "Expiring Soon",
     teamId: "somerset-ccc",
-    description: "Women's Head Coach (closes 1 Oct 2025) and Consultant Nutritionist on the Somerset careers hub. Direct performance & coaching contacts.",
+    description: "Women's Head Coach (closes 1 Oct 2025) and Consultant Nutritionist on the Somerset careers hub. Intelligence suggestion: direct performance & coaching contacts.",
     source: "The PCA",
     matchedICPs: ["Technology Procurement Signals"]
   },
@@ -462,7 +462,7 @@ const mockSignals: Signal[] = [
     datePosted: "2 days ago",
     urgency: "New",
     teamId: "hampshire-cricket",
-    description: "Group Financial Controller listed this week via venue careers page. Senior finance owner for multi-entity group → strong procurement gatekeeper.",
+    description: "Group Financial Controller listed this week via venue careers page. Intelligence suggestion: senior finance owner for multi-entity group → strong procurement gatekeeper.",
     source: "Utilita Bowl",
     matchedICPs: ["Technology Procurement Signals"]
   },
@@ -478,7 +478,7 @@ const mockSignals: Signal[] = [
     datePosted: "2 days ago",
     urgency: "New",
     teamId: "middlesex-cricket",
-    description: "Player Pathway Physiotherapist posted 2 days ago; club also in advanced talks to fund new Uxbridge ground (Aug 2025). Hiring + capex project → suppliers across performance, venue, and financing.",
+    description: "Player Pathway Physiotherapist posted 2 days ago; club also in advanced talks to fund new Uxbridge ground (Aug 2025). Intelligence suggestion: hiring + capex project → suppliers across performance, venue, and financing.",
     source: "Middlesex County Cricket Club",
     matchedICPs: ["Technology Procurement Signals"]
   },
@@ -494,7 +494,7 @@ const mockSignals: Signal[] = [
     datePosted: "3 days ago",
     urgency: "Normal",
     teamId: "warwickshire-cricket",
-    description: "Commercial Partnerships Manager – The Hundred, Birmingham Phoenix (recruiter-led); Community Schools Coach on Edgbaston site. Direct partnership & community budget owners.",
+    description: "Commercial Partnerships Manager – The Hundred, Birmingham Phoenix (recruiter-led); Community Schools Coach on Edgbaston site. Intelligence suggestion: direct partnership & community budget owners.",
     source: "LinkedIn",
     matchedICPs: ["Technology Procurement Signals"]
   }
