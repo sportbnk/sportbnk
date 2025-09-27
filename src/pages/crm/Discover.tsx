@@ -369,104 +369,576 @@ const premierLeagueTeams: Organisation[] = [
   }
 ];
 
-const mockPeople: Person[] = [
-  {
-    id: '1',
-    firstName: 'John',
-    lastName: 'Smith',
-    position: 'Chief Executive Officer',
-    organisation: 'Arsenal FC',
-    email: 'j.smith@arsenal.co.uk',
-    phone: '+44 20 7619 5001',
-    linkedin: 'https://linkedin.com/in/john-smith-arsenal',
-    location: 'London',
-    department: 'Executive'
-  },
-  {
-    id: '2',
-    firstName: 'Sarah',
-    lastName: 'Johnson',
-    position: 'Marketing Director',
-    organisation: 'Manchester United FC',
-    email: 's.johnson@manutd.com',
-    phone: '+44 161 868 8001',
-    linkedin: 'https://linkedin.com/in/sarah-johnson-mufc',
-    location: 'Manchester',
-    department: 'Marketing'
-  },
-  {
-    id: '3',
-    firstName: 'Michael',
-    lastName: 'Brown',
-    position: 'Head of Commercial',
-    organisation: 'Liverpool FC',
-    email: 'm.brown@liverpoolfc.com',
-    phone: '+44 151 263 2362',
-    linkedin: 'https://linkedin.com/in/michael-brown-lfc',
-    location: 'Liverpool',
-    department: 'Commercial'
-  },
-  {
-    id: '4',
-    firstName: 'Emma',
-    lastName: 'Wilson',
-    position: 'Communications Manager',
-    organisation: 'Chelsea FC',
-    email: 'e.wilson@chelseafc.com',
-    phone: '+44 871 984 1956',
-    linkedin: 'https://linkedin.com/in/emma-wilson-cfc',
-    location: 'London',
-    department: 'Communications'
-  },
-  {
-    id: '5',
-    firstName: 'David',
-    lastName: 'Taylor',
-    position: 'Stadium Operations Director',
-    organisation: 'Manchester City FC',
-    email: 'd.taylor@mancity.com',
-    phone: '+44 161 444 1895',
-    linkedin: 'https://linkedin.com/in/david-taylor-mcfc',
-    location: 'Manchester',
-    department: 'Operations'
-  },
-  {
-    id: '6',
-    firstName: 'Lisa',
-    lastName: 'Anderson',
-    position: 'Head of Youth Development',
-    organisation: 'Tottenham Hotspur FC',
-    email: 'l.anderson@tottenhamhotspur.com',
-    phone: '+44 344 499 5001',
-    linkedin: 'https://linkedin.com/in/lisa-anderson-thfc',
-    location: 'London',
-    department: 'Academy'
-  },
-  {
-    id: '7',
-    lastName: 'Garcia',
-    firstName: 'Carlos',
-    position: 'Head of Recruitment',
-    organisation: 'Brighton & Hove Albion FC',
-    email: 'c.garcia@brightonandhovealbion.com',
-    phone: '+44 1273 695 401',
-    linkedin: 'https://linkedin.com/in/carlos-garcia-bhafc',
-    location: 'Brighton',
-    department: 'Football Operations'
-  },
-  {
-    id: '8',
-    firstName: 'Rachel',
-    lastName: 'Thomas',
-    position: 'Finance Director',
-    organisation: 'Newcastle United FC',
-    email: 'r.thomas@nufc.co.uk',
-    phone: '+44 191 201 8401',
-    linkedin: 'https://linkedin.com/in/rachel-thomas-nufc',
-    location: 'Newcastle',
-    department: 'Finance'
-  }
-];
+// Import employee data from OrganisationDetail
+const employeesData: Record<string, any[]> = {
+  '1': [
+    {
+      id: 'e1',
+      name: 'Richard Garlick',
+      position: 'Managing Director',
+      department: 'Executive',
+      email: 'r.garlick@arsenal.co.uk',
+      phone: '+44 20 7619 5001',
+      linkedin: 'https://linkedin.com/in/richardgarlick',
+      joinedDate: 'Jan 2022',
+      isKeyContact: true
+    },
+    {
+      id: 'e2',
+      name: 'Peter Silverstone',
+      position: 'Commercial Director',
+      department: 'Commercial',
+      email: 'p.silverstone@arsenal.co.uk',
+      phone: '+44 20 7619 5002',
+      linkedin: 'https://linkedin.com/in/petersilverstone',
+      joinedDate: 'Mar 2021',
+      isKeyContact: true
+    },
+    {
+      id: 'e3',
+      name: 'Mark Gonella',
+      position: 'Communications Director',
+      department: 'Marketing',
+      email: 'm.gonella@arsenal.co.uk',
+      phone: '+44 20 7619 5003',
+      joinedDate: 'Jun 2020',
+      isKeyContact: false
+    },
+    {
+      id: 'e4',
+      name: 'Catherine Davies',
+      position: 'Head of Partnerships',
+      department: 'Commercial',
+      email: 'c.davies@arsenal.co.uk',
+      phone: '+44 20 7619 5004',
+      linkedin: 'https://linkedin.com/in/catherinedavies',
+      joinedDate: 'Sep 2019',
+      isKeyContact: true
+    },
+    {
+      id: 'e5',
+      name: 'Tim Lewis',
+      position: 'Operations Director',
+      department: 'Operations',
+      email: 't.lewis@arsenal.co.uk',
+      phone: '+44 20 7619 5005',
+      joinedDate: 'Feb 2020',
+      isKeyContact: false
+    }
+  ],
+  '2': [
+    {
+      id: 'e6',
+      name: 'Monchi',
+      position: 'President of Football Operations',
+      department: 'Executive',
+      email: 'monchi@avfc.co.uk',
+      phone: '+44 121 327 2201',
+      linkedin: 'https://linkedin.com/in/monchi',
+      joinedDate: 'Oct 2022',
+      isKeyContact: true
+    },
+    {
+      id: 'e7',
+      name: 'Chris Heck',
+      position: 'Chief Commercial Officer',
+      department: 'Commercial',
+      email: 'c.heck@avfc.co.uk',
+      phone: '+44 121 327 2202',
+      joinedDate: 'Jul 2021',
+      isKeyContact: true
+    }
+  ],
+  '3': [
+    {
+      id: 'e8',
+      name: 'Neill Blake',
+      position: 'Chief Executive',
+      department: 'Executive',
+      email: 'n.blake@afcb.co.uk',
+      phone: '+44 1202 726 301',
+      joinedDate: 'Jun 2019',
+      isKeyContact: true
+    },
+    {
+      id: 'e9',
+      name: 'Rob Mitchell',
+      position: 'Commercial Director',
+      department: 'Commercial',
+      email: 'r.mitchell@afcb.co.uk',
+      phone: '+44 1202 726 302',
+      joinedDate: 'Aug 2020',
+      isKeyContact: true
+    }
+  ],
+  '4': [
+    {
+      id: 'e10',
+      name: 'Jon Varney',
+      position: 'Chief Executive',
+      department: 'Executive',
+      email: 'j.varney@brentfordfc.com',
+      phone: '+44 20 8847 2501',
+      joinedDate: 'May 2017',
+      isKeyContact: true
+    },
+    {
+      id: 'e11',
+      name: 'Susie Louis',
+      position: 'Commercial Director',
+      department: 'Commercial',
+      email: 's.louis@brentfordfc.com',
+      phone: '+44 20 8847 2502',
+      joinedDate: 'Jan 2019',
+      isKeyContact: true
+    }
+  ],
+  '5': [
+    {
+      id: 'e12',
+      name: 'Paul Barber',
+      position: 'Chief Executive',
+      department: 'Executive',
+      email: 'p.barber@brightonandhovealbion.com',
+      phone: '+44 1273 695 401',
+      linkedin: 'https://linkedin.com/in/paulbarber',
+      joinedDate: 'Aug 2012',
+      isKeyContact: true
+    },
+    {
+      id: 'e13',
+      name: 'Richard Hebberd',
+      position: 'Commercial Director',
+      department: 'Commercial',
+      email: 'r.hebberd@brightonandhovealbion.com',
+      phone: '+44 1273 695 402',
+      joinedDate: 'Mar 2018',
+      isKeyContact: true
+    }
+  ],
+  '6': [
+    {
+      id: 'e14',
+      name: 'Chris Jurasek',
+      position: 'Chief Executive',
+      department: 'Executive',
+      email: 'c.jurasek@chelseafc.com',
+      phone: '+44 871 984 1901',
+      linkedin: 'https://linkedin.com/in/chrisjurasek',
+      joinedDate: 'Aug 2023',
+      isKeyContact: true
+    },
+    {
+      id: 'e15',
+      name: 'David Barnard',
+      position: 'Commercial Director',
+      department: 'Commercial',
+      email: 'd.barnard@chelseafc.com',
+      phone: '+44 871 984 1902',
+      joinedDate: 'Jan 2021',
+      isKeyContact: true
+    },
+    {
+      id: 'e16',
+      name: 'Steve Atkins',
+      position: 'Communications Director',
+      department: 'Marketing',
+      email: 's.atkins@chelseafc.com',
+      phone: '+44 871 984 1903',
+      linkedin: 'https://linkedin.com/in/steveatkins',
+      joinedDate: 'May 2018',
+      isKeyContact: false
+    }
+  ],
+  '7': [
+    {
+      id: 'e17',
+      name: 'Barry Webber',
+      position: 'Chairman',
+      department: 'Executive',
+      email: 'b.webber@cpfc.co.uk',
+      phone: '+44 20 8768 6001',
+      joinedDate: 'Nov 2018',
+      isKeyContact: true
+    },
+    {
+      id: 'e18',
+      name: 'Jim Rodwell',
+      position: 'Commercial Director',
+      department: 'Commercial',
+      email: 'j.rodwell@cpfc.co.uk',
+      phone: '+44 20 8768 6002',
+      joinedDate: 'Feb 2020',
+      isKeyContact: true
+    }
+  ],
+  '8': [
+    {
+      id: 'e19',
+      name: 'Colin Chong',
+      position: 'Chief Executive',
+      department: 'Executive',
+      email: 'c.chong@evertonfc.com',
+      phone: '+44 151 556 1801',
+      joinedDate: 'Jan 2021',
+      isKeyContact: true
+    },
+    {
+      id: 'e20',
+      name: 'Richard Kenyon',
+      position: 'Commercial Director',
+      department: 'Commercial',
+      email: 'r.kenyon@evertonfc.com',
+      phone: '+44 151 556 1802',
+      joinedDate: 'Jun 2019',
+      isKeyContact: true
+    }
+  ],
+  '9': [
+    {
+      id: 'e21',
+      name: 'Alistair Mackintosh',
+      position: 'Chief Executive',
+      department: 'Executive',
+      email: 'a.mackintosh@fulhamfc.com',
+      phone: '+44 843 208 1201',
+      joinedDate: 'Jul 2017',
+      isKeyContact: true
+    },
+    {
+      id: 'e22',
+      name: 'Jon Don-Carolis',
+      position: 'Commercial Director',
+      department: 'Commercial',
+      email: 'j.doncarolis@fulhamfc.com',
+      phone: '+44 843 208 1202',
+      joinedDate: 'Sep 2020',
+      isKeyContact: true
+    }
+  ],
+  '10': [
+    {
+      id: 'e23',
+      name: 'Mark Ashton',
+      position: 'Chief Executive',
+      department: 'Executive',
+      email: 'm.ashton@itfc.co.uk',
+      phone: '+44 1473 400 501',
+      joinedDate: 'Nov 2021',
+      isKeyContact: true
+    },
+    {
+      id: 'e24',
+      name: 'Mike Noye',
+      position: 'Commercial Director',
+      department: 'Commercial',
+      email: 'm.noye@itfc.co.uk',
+      phone: '+44 1473 400 502',
+      joinedDate: 'Mar 2019',
+      isKeyContact: true
+    }
+  ],
+  '11': [
+    {
+      id: 'e25',
+      name: 'Susan Whelan',
+      position: 'Chief Executive',
+      department: 'Executive',
+      email: 's.whelan@lcfc.co.uk',
+      phone: '+44 344 815 5001',
+      linkedin: 'https://linkedin.com/in/susanwhelan',
+      joinedDate: 'Jun 2021',
+      isKeyContact: true
+    },
+    {
+      id: 'e26',
+      name: 'Louise Rushen',
+      position: 'Commercial Director',
+      department: 'Commercial',
+      email: 'l.rushen@lcfc.co.uk',
+      phone: '+44 344 815 5002',
+      joinedDate: 'Jan 2020',
+      isKeyContact: true
+    }
+  ],
+  '12': [
+    {
+      id: 'e27',
+      name: 'Billy Hogan',
+      position: 'Chief Executive Officer',
+      department: 'Executive',
+      email: 'b.hogan@liverpoolfc.com',
+      phone: '+44 151 263 2301',
+      linkedin: 'https://linkedin.com/in/billyhogan',
+      joinedDate: 'Sep 2020',
+      isKeyContact: true
+    },
+    {
+      id: 'e28',
+      name: 'Drew Crisp',
+      position: 'Commercial Director',
+      department: 'Commercial',
+      email: 'd.crisp@liverpoolfc.com',
+      phone: '+44 151 263 2302',
+      joinedDate: 'Mar 2019',
+      isKeyContact: true
+    },
+    {
+      id: 'e29',
+      name: 'Matt McCann',
+      position: 'Communications Director',
+      department: 'Marketing',
+      email: 'm.mccann@liverpoolfc.com',
+      phone: '+44 151 263 2303',
+      linkedin: 'https://linkedin.com/in/mattmccann',
+      joinedDate: 'Jul 2017',
+      isKeyContact: false
+    }
+  ],
+  '13': [
+    {
+      id: 'e30',
+      name: 'Ferran Soriano',
+      position: 'Chief Executive Officer',
+      department: 'Executive',
+      email: 'f.soriano@mancity.com',
+      phone: '+44 161 444 1801',
+      linkedin: 'https://linkedin.com/in/ferransoriano',
+      joinedDate: 'Sep 2012',
+      isKeyContact: true
+    },
+    {
+      id: 'e31',
+      name: 'Tom Glick',
+      position: 'Chief Operating Officer',
+      department: 'Operations',
+      email: 't.glick@mancity.com',
+      phone: '+44 161 444 1802',
+      joinedDate: 'Oct 2019',
+      isKeyContact: true
+    },
+    {
+      id: 'e32',
+      name: 'Nuria Tarre',
+      position: 'Marketing Director',
+      department: 'Marketing',
+      email: 'n.tarre@mancity.com',
+      phone: '+44 161 444 1803',
+      joinedDate: 'May 2021',
+      isKeyContact: false
+    }
+  ],
+  '14': [
+    {
+      id: 'e33',
+      name: 'Omar Berrada',
+      position: 'Chief Executive Officer',
+      department: 'Executive',
+      email: 'o.berrada@manutd.com',
+      phone: '+44 161 868 8001',
+      linkedin: 'https://linkedin.com/in/omarberrada',
+      joinedDate: 'Jan 2024',
+      isKeyContact: true
+    },
+    {
+      id: 'e34',
+      name: 'Collette Roche',
+      position: 'Chief Operating Officer',
+      department: 'Operations',
+      email: 'c.roche@manutd.com',
+      phone: '+44 161 868 8002',
+      joinedDate: 'Nov 2019',
+      isKeyContact: true
+    },
+    {
+      id: 'e35',
+      name: 'Victoria Timpson',
+      position: 'Chief Communications Officer',
+      department: 'Marketing',
+      email: 'v.timpson@manutd.com',
+      phone: '+44 161 868 8003',
+      linkedin: 'https://linkedin.com/in/victoriatimpson',
+      joinedDate: 'Jun 2021',
+      isKeyContact: false
+    }
+  ],
+  '15': [
+    {
+      id: 'e36',
+      name: 'Darren Eales',
+      position: 'Chief Executive Officer',
+      department: 'Executive',
+      email: 'd.eales@nufc.co.uk',
+      phone: '+44 191 201 8401',
+      linkedin: 'https://linkedin.com/in/darreneales',
+      joinedDate: 'Jun 2022',
+      isKeyContact: true
+    },
+    {
+      id: 'e37',
+      name: 'Peter Silverstone',
+      position: 'Chief Commercial Officer',
+      department: 'Commercial',
+      email: 'p.silverstone@nufc.co.uk',
+      phone: '+44 191 201 8402',
+      joinedDate: 'Jan 2023',
+      isKeyContact: true
+    }
+  ],
+  '16': [
+    {
+      id: 'e38',
+      name: 'Dane Murphy',
+      position: 'Chief Executive Officer',
+      department: 'Executive',
+      email: 'd.murphy@nottinghamforest.co.uk',
+      phone: '+44 115 982 4401',
+      joinedDate: 'Aug 2020',
+      isKeyContact: true
+    },
+    {
+      id: 'e39',
+      name: 'David Cook',
+      position: 'Commercial Director',
+      department: 'Commercial',
+      email: 'd.cook@nottinghamforest.co.uk',
+      phone: '+44 115 982 4402',
+      joinedDate: 'Feb 2021',
+      isKeyContact: true
+    }
+  ],
+  '17': [
+    {
+      id: 'e40',
+      name: 'Phil Parsons',
+      position: 'Chief Executive Officer',
+      department: 'Executive',
+      email: 'p.parsons@southamptonfc.com',
+      phone: '+44 23 8022 8501',
+      joinedDate: 'Mar 2022',
+      isKeyContact: true
+    },
+    {
+      id: 'e41',
+      name: 'David Thomas',
+      position: 'Commercial Director',
+      department: 'Commercial',
+      email: 'd.thomas@southamptonfc.com',
+      phone: '+44 23 8022 8502',
+      joinedDate: 'Sep 2020',
+      isKeyContact: true
+    }
+  ],
+  '18': [
+    {
+      id: 'e42',
+      name: 'Daniel Levy',
+      position: 'Chairman',
+      department: 'Executive',
+      email: 'd.levy@tottenhamhotspur.com',
+      phone: '+44 344 499 5001',
+      linkedin: 'https://linkedin.com/in/daniellevy',
+      joinedDate: 'Feb 2001',
+      isKeyContact: true
+    },
+    {
+      id: 'e43',
+      name: 'Todd Kline',
+      position: 'Chief Commercial Officer',
+      department: 'Commercial',
+      email: 't.kline@tottenhamhotspur.com',
+      phone: '+44 344 499 5002',
+      joinedDate: 'Jul 2019',
+      isKeyContact: true
+    },
+    {
+      id: 'e44',
+      name: 'Simon Felstein',
+      position: 'Communications Director',
+      department: 'Marketing',
+      email: 's.felstein@tottenhamhotspur.com',
+      phone: '+44 344 499 5003',
+      joinedDate: 'Jan 2018',
+      isKeyContact: false
+    }
+  ],
+  '19': [
+    {
+      id: 'e45',
+      name: 'Nathan Thompson',
+      position: 'Chief Executive Officer',
+      department: 'Executive',
+      email: 'n.thompson@whufc.com',
+      phone: '+44 20 8548 2701',
+      joinedDate: 'May 2023',
+      isKeyContact: true
+    },
+    {
+      id: 'e46',
+      name: 'Karim Virani',
+      position: 'Commercial Director',
+      department: 'Commercial',
+      email: 'k.virani@whufc.com',
+      phone: '+44 20 8548 2702',
+      joinedDate: 'Nov 2020',
+      isKeyContact: true
+    }
+  ],
+  '20': [
+    {
+      id: 'e47',
+      name: 'Russell Jones',
+      position: 'Chief Executive Officer',
+      department: 'Executive',
+      email: 'r.jones@wolves.co.uk',
+      phone: '+44 871 222 2201',
+      joinedDate: 'Jun 2016',
+      isKeyContact: true
+    },
+    {
+      id: 'e48',
+      name: 'Laurie Dalrymple',
+      position: 'Commercial Director',
+      department: 'Commercial',
+      email: 'l.dalrymple@wolves.co.uk',
+      phone: '+44 871 222 2202',
+      joinedDate: 'Aug 2019',
+      isKeyContact: true
+    }
+  ]
+};
+
+// Function to convert employee data to Person format
+const convertEmployeesToPeople = (): Person[] => {
+  const people: Person[] = [];
+  
+  Object.entries(employeesData).forEach(([orgId, employees]) => {
+    const organization = premierLeagueTeams.find(org => org.id === orgId);
+    if (!organization) return;
+    
+    employees.forEach((employee) => {
+      const [firstName, ...lastNameParts] = employee.name.split(' ');
+      const lastName = lastNameParts.join(' ');
+      
+      people.push({
+        id: employee.id,
+        firstName,
+        lastName,
+        position: employee.position,
+        organisation: organization.name,
+        email: employee.email,
+        phone: employee.phone,
+        linkedin: employee.linkedin,
+        location: organization.location,
+        department: employee.department
+      });
+    });
+  });
+  
+  return people;
+};
+
+const mockPeople: Person[] = convertEmployeesToPeople();
 
 const getTeamLogo = (teamName: string) => {
   const logoMap: Record<string, string> = {
