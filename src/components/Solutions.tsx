@@ -47,7 +47,7 @@ const Solutions = () => {
               <Briefcase className="text-sportbnk-green w-8 h-8" />
             </div>
             <h3 className="text-xl font-semibold mb-3 text-sportbnk-navy">Sales</h3>
-            <p className="text-gray-600 mb-6">Find qualified leads and decision-makers within sports organisations to expand your customer base and drive revenue growth.</p>
+            <p className="text-gray-600 mb-6">Find qualified leads and decision-makers within sports organisations to expand your customer base and drive sustainable revenue growth.</p>
             <Link to="/cases/sales" className="inline-flex items-center text-sportbnk-green font-medium hover:underline">
               Learn more <ArrowRight className="ml-2 w-4 h-4" />
             </Link>
@@ -58,7 +58,7 @@ const Solutions = () => {
               <TrendingUp className="text-sportbnk-green w-8 h-8" />
             </div>
             <h3 className="text-xl font-semibold mb-3 text-sportbnk-navy">Marketing</h3>
-            <p className="text-gray-600 mb-6">Target and engage with the right audience in the sports industry to build brand awareness and enhance marketing campaigns.</p>
+            <p className="text-gray-600 mb-6">Target and engage the right audience in sport to build brand awareness and amplify your campaigns with greater precision.</p>
             <Link to="/cases/marketing" className="inline-flex items-center text-sportbnk-green font-medium hover:underline">
               Learn more <ArrowRight className="ml-2 w-4 h-4" />
             </Link>
@@ -69,7 +69,7 @@ const Solutions = () => {
               <Users className="text-sportbnk-green w-8 h-8" />
             </div>
             <h3 className="text-xl font-semibold mb-3 text-sportbnk-navy">Hiring</h3>
-            <p className="text-gray-600 mb-6">Connect with top talent in the sports industry to build high-performing teams with specialized knowledge and experience.</p>
+            <p className="text-gray-600 mb-6">Connect with top talent across the sports industry to build high-performing teams with the right knowledge and experience.</p>
             <Link to="/cases/hiring" className="inline-flex items-center text-sportbnk-green font-medium hover:underline">
               Learn more <ArrowRight className="ml-2 w-4 h-4" />
             </Link>
