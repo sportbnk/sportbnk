@@ -42,7 +42,7 @@ const prospectingNavItems = [
 
 const leadsNavItems = [
   { title: 'Enrich', url: '/crm/enrich', icon: Sparkles },
-  { title: 'People', url: '/crm/people', icon: User },
+  { title: 'My Contacts', url: '/crm/people', icon: User },
   { title: 'Organisations', url: '/crm/organisations', icon: Building2 },
 ];
 
