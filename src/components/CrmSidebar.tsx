@@ -13,7 +13,10 @@ import {
   Zap,
   Target,
   Crown,
-  Sparkles
+  Sparkles,
+  CheckSquare,
+  Calendar,
+  Mail
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -37,6 +40,12 @@ const mainNavItems = [
   { title: 'Contacts', url: '/crm/contacts', icon: Users },
   { title: 'Enrich', url: '/crm/enrich', icon: Sparkles },
   { title: 'Lists', url: '/crm/lists', icon: List },
+];
+
+const dealsNavItems = [
+  { title: 'Tasks', url: '/crm/tasks', icon: CheckSquare },
+  { title: 'Meetings', url: '/crm/meetings', icon: Calendar },
+  { title: 'Emails', url: '/crm/emails', icon: Mail },
 ];
 
 const bottomNavItems = [
@@ -95,6 +104,38 @@ export function CrmSidebar() {
           <SidebarGroupContent>
             <SidebarMenu className={cn(open ? "px-3" : "px-1")}>
               {mainNavItems.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    <NavLink 
+                      to={item.url} 
+                      className={({ isActive }) => cn(
+                        "flex items-center rounded-lg transition-all duration-200 font-medium w-full",
+                        open ? "gap-3 px-3 py-3" : "justify-center px-3 py-3",
+                        isActive 
+                          ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-soft" 
+                          : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                      )}
+                    >
+                      <item.icon className="h-5 w-5" />
+                      {open && <span>{item.title}</span>}
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        {/* Deals Navigation */}
+        <SidebarGroup>
+          {open && (
+            <SidebarGroupLabel className="text-sidebar-foreground/70 font-medium px-6 mb-2">
+              Deals
+            </SidebarGroupLabel>
+          )}
+          <SidebarGroupContent>
+            <SidebarMenu className={cn(open ? "px-3" : "px-1")}>
+              {dealsNavItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <NavLink 

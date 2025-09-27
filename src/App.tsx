@@ -39,6 +39,9 @@ import ICPs from "./pages/crm/ICPs";
 import Contacts from "./pages/crm/Contacts";
 import Integrations from "./pages/crm/Integrations";
 import Enrich from "./pages/crm/Enrich";
+import Tasks from "./pages/crm/Tasks";
+import Meetings from "./pages/crm/Meetings";
+import Emails from "./pages/crm/Emails";
 import CrmLayout from "./components/CrmLayout";
 
 
@@ -110,6 +113,9 @@ function App() {
                        <Route path="/crm/icps" element={<ProtectedRoute><CrmLayout pageTitle="My ICPs"><ICPs /></CrmLayout></ProtectedRoute>} />
                        <Route path="/crm/contacts" element={<ProtectedRoute><CrmLayout pageTitle="Contacts"><Contacts /></CrmLayout></ProtectedRoute>} />
                        <Route path="/crm/enrich" element={<ProtectedRoute><CrmLayout pageTitle="Data Enrichment"><Enrich /></CrmLayout></ProtectedRoute>} />
+                       <Route path="/crm/tasks" element={<ProtectedRoute><CrmLayout pageTitle="Tasks"><Tasks /></CrmLayout></ProtectedRoute>} />
+                       <Route path="/crm/meetings" element={<ProtectedRoute><CrmLayout pageTitle="Meetings"><Meetings /></CrmLayout></ProtectedRoute>} />
+                       <Route path="/crm/emails" element={<ProtectedRoute><CrmLayout pageTitle="Emails"><Emails /></CrmLayout></ProtectedRoute>} />
                        <Route path="/crm/integrations" element={<ProtectedRoute><CrmLayout pageTitle="Integrations"><Integrations /></CrmLayout></ProtectedRoute>} />
                       
                       {/* Product sub-pages */}
