@@ -82,80 +82,421 @@ const getTeamLogo = (teamName: string) => {
 };
 
 const mockSignals: Signal[] = [
+  // Manchester United
   {
     id: "1",
     sport: "Football",
     clubName: "Manchester United",
     competition: "Premier League",
     region: "UK",
-    signalType: "Tender",
-    budget: "£1.2M",
-    datePosted: "3 days ago",
-    urgency: "Normal",
-    teamId: "manchester-united",
-    description: "Official kit supplier tender for 2025-2030 seasons. Seeking premium sports apparel partner for first team, academy, and retail operations.",
-    source: "UEFA Procurement Portal",
-    matchedICPs: ["High-Budget Premier League Clubs"]
-  },
-  {
-    id: "2",
-    sport: "Cricket",
-    clubName: "Surrey County Cricket Club",
-    competition: "England Cricket",
-    region: "UK",
-    signalType: "Sponsorship",
-    budget: "£250k",
+    signalType: "Hiring",
+    budget: "£45k",
     datePosted: "Today",
     urgency: "New",
-    teamId: "surrey-ccc",
-    description: "Title sponsorship opportunity for 2024 County Championship campaign. Includes shirt branding, ground naming rights, and hospitality packages.",
-    source: "ECB Commercial Network",
-    matchedICPs: ["Technology Procurement Signals"]
+    teamId: "manchester-united",
+    description: "Academy Assistant Performance Analyst (Casual) – MUFC careers portal lists live roles across Football & Performance. Opens pathway contacts in analysis/medical; good wedge for performance tech & video tooling vendors.",
+    source: "Manchester United careers portal",
+    matchedICPs: ["High-Budget Premier League Clubs", "Technology Procurement Signals"]
   },
+  // Arsenal
   {
-    id: "3",
-    sport: "Rugby",
-    clubName: "Leinster Rugby",
-    competition: "Pro14",
-    region: "Ireland",
-    signalType: "Procurement",
-    budget: "£75k",
-    description: "Advanced recovery technology procurement for player wellness center. Seeking cryotherapy, compression therapy, and sports science equipment suppliers.",
-    datePosted: "1 week ago",
-    urgency: "Normal",
-    teamId: "leinster-rugby",
-    source: "Irish Rugby Union",
-    matchedICPs: ["Technology Procurement Signals"]
-  },
-  {
-    id: "4",
+    id: "2",
     sport: "Football",
     clubName: "Arsenal",
     competition: "Premier League",
     region: "UK",
-    signalType: "Tender",
-    budget: "£2.5M",
-    datePosted: "1 day ago",
+    signalType: "Hiring",
+    budget: "£65k",
+    datePosted: "Today",
     urgency: "New",
     teamId: "arsenal",
-    description: "Emirates Stadium sound system upgrade tender. Next-generation audio technology for enhanced matchday experience and commercial events.",
-    source: "Premier League Suppliers Network",
-    matchedICPs: ["High-Budget Premier League Clubs", "Technology Procurement Signals"]
+    description: "Licensing Manager (Commercial) – active vacancy. Licensing = merch, retail, IP partners; ideal for fan-merch, ecommerce, and brand collab vendors.",
+    source: "Arsenal Football Club jobs board",
+    matchedICPs: ["High-Budget Premier League Clubs"]
   },
+  // Liverpool
   {
-    id: "5",
+    id: "3",
     sport: "Football",
     clubName: "Liverpool",
     competition: "Premier League",
     region: "UK",
-    signalType: "Procurement",
-    budget: "£500k",
-    datePosted: "6 days ago",
-    urgency: "Expiring Soon",
+    signalType: "Hiring",
+    budget: "£55k",
+    datePosted: "1 day ago",
+    urgency: "New",
     teamId: "liverpool",
-    description: "Anfield pitch maintenance equipment procurement. Specialized turf management systems for optimal playing surface throughout the season.",
-    source: "Grounds Management Association",
+    description: "LFCW Education & Player Care Lead and Casual Physio/Sports Therapist – both just posted. Direct entry to women's pathway staff; good ICP for player-care, edtech, and medical vendors.",
+    source: "jobsearch.liverpoolfc.com",
+    matchedICPs: ["High-Budget Premier League Clubs", "Technology Procurement Signals"]
+  },
+  // Chelsea
+  {
+    id: "4",
+    sport: "Football",
+    clubName: "Chelsea",
+    competition: "Premier League",
+    region: "UK",
+    signalType: "Hiring",
+    budget: "£50k",
+    datePosted: "1 day ago",
+    urgency: "New",
+    teamId: "chelsea",
+    description: "Social Inclusion Manager (Foundation) – active role. CSR/community budgets; opens doors for grassroots tech and measurement tools.",
+    source: "Jobs In Football",
     matchedICPs: ["High-Budget Premier League Clubs"]
+  },
+  // Tottenham
+  {
+    id: "5",
+    sport: "Football",
+    clubName: "Tottenham Hotspur",
+    competition: "Premier League",
+    region: "UK",
+    signalType: "Funding",
+    budget: "£500M",
+    datePosted: "Today",
+    urgency: "New",
+    teamId: "tottenham",
+    description: "Club publicly rebuffed US consortium takeover approach; must clarify by 24 Oct 2025. Stability/strategy signal; potential governance, finance, and advisory ICPs.",
+    source: "The Guardian",
+    matchedICPs: ["High-Budget Premier League Clubs"]
+  },
+  // Manchester City
+  {
+    id: "6",
+    sport: "Football",
+    clubName: "Manchester City",
+    competition: "Premier League",
+    region: "UK",
+    signalType: "Sponsorship",
+    budget: "£1B",
+    datePosted: "2 months ago",
+    urgency: "Normal",
+    teamId: "manchester-city",
+    description: "New 10-year £1bn Puma kit deal reported this summer; OKX sleeve partnership confirmed/ongoing. Mega commercial cycle; procurement & hospitality scale-up often follows.",
+    source: "The Guardian",
+    matchedICPs: ["High-Budget Premier League Clubs"]
+  },
+  // Newcastle United
+  {
+    id: "7",
+    sport: "Football",
+    clubName: "Newcastle United",
+    competition: "Premier League",
+    region: "UK",
+    signalType: "Hiring",
+    budget: "£35k",
+    datePosted: "3 days ago",
+    urgency: "Expiring Soon",
+    teamId: "newcastle",
+    description: "Security Officer (closing 30 Sept 2025) & Principal Scientist – both live. Direct ops & performance-science contacts.",
+    source: "careers.newcastleunited.com",
+    matchedICPs: ["High-Budget Premier League Clubs", "Technology Procurement Signals"]
+  },
+  // Aston Villa
+  {
+    id: "8",
+    sport: "Football",
+    clubName: "Aston Villa",
+    competition: "Premier League",
+    region: "UK",
+    signalType: "Hiring",
+    budget: "£30k",
+    datePosted: "Today",
+    urgency: "New",
+    teamId: "aston-villa",
+    description: "Multiple live roles incl. Maintenance Technician (Plumbing) and Retail Supervisors. FM/estates procurement and retail systems conversations.",
+    source: "careers.avfc.co.uk",
+    matchedICPs: ["High-Budget Premier League Clubs"]
+  },
+  // West Ham United
+  {
+    id: "9",
+    sport: "Football",
+    clubName: "West Ham United",
+    competition: "Premier League",
+    region: "UK",
+    signalType: "Hiring",
+    budget: "£2M",
+    datePosted: "Today",
+    urgency: "New",
+    teamId: "west-ham",
+    description: "Head coach change – Nuno Espírito Santo appointed on 3-year deal. Backroom rebuild → analyst/med/ops hires, new vendor evaluations.",
+    source: "The Guardian",
+    matchedICPs: ["High-Budget Premier League Clubs", "Technology Procurement Signals"]
+  },
+  // Everton
+  {
+    id: "10",
+    sport: "Football",
+    clubName: "Everton",
+    competition: "Premier League",
+    region: "UK",
+    signalType: "Hiring",
+    budget: "£40k",
+    datePosted: "Today",
+    urgency: "New",
+    teamId: "everton",
+    description: "Club & Foundation vacancies page listing current roles. Community programs + matchday ops = event tech, ticketing, workforce mgmt.",
+    source: "Everton FC",
+    matchedICPs: ["High-Budget Premier League Clubs", "Technology Procurement Signals"]
+  },
+  // Brentford
+  {
+    id: "11",
+    sport: "Football",
+    clubName: "Brentford",
+    competition: "Premier League",
+    region: "UK",
+    signalType: "Sponsorship",
+    budget: "£2M",
+    datePosted: "3 months ago",
+    urgency: "Normal",
+    teamId: "brentford",
+    description: "New multi-year Joma kit partnership began July 2025; current openings include Academy Director (closes 3 Oct). Fresh merchandise cycle + academy leadership hire = apparel/retail and pathway tech ICP.",
+    source: "Brentford FC",
+    matchedICPs: ["Technology Procurement Signals"]
+  },
+  // Brighton
+  {
+    id: "12",
+    sport: "Football",
+    clubName: "Brighton & Hove Albion",
+    competition: "Premier League",
+    region: "UK",
+    signalType: "Hiring",
+    budget: "£60k",
+    datePosted: "2 days ago",
+    urgency: "New",
+    teamId: "brighton",
+    description: "Technology Project & Governance Manager (FT) listed this week. Strong wedge for SaaS/infrastructure vendors.",
+    source: "Jobs In Football",
+    matchedICPs: ["Technology Procurement Signals"]
+  },
+  // Crystal Palace
+  {
+    id: "13",
+    sport: "Football",
+    clubName: "Crystal Palace",
+    competition: "Premier League",
+    region: "UK",
+    signalType: "Hiring",
+    budget: "£50k",
+    datePosted: "1 day ago",
+    urgency: "Expiring Soon",
+    teamId: "crystal-palace",
+    description: "Head of Academy Player Recruitment (deadline 28 Sept 2025) + Women's Lead Physiotherapist. Direct recruitment/med contacts in academy & women's program.",
+    source: "Crystal Palace F.C.",
+    matchedICPs: ["Technology Procurement Signals"]
+  },
+  // Fulham
+  {
+    id: "14",
+    sport: "Football",
+    clubName: "Fulham",
+    competition: "Premier League",
+    region: "UK",
+    signalType: "Hiring",
+    budget: "£45k",
+    datePosted: "Today",
+    urgency: "New",
+    teamId: "fulham",
+    description: "Multiple open roles incl. Academy Nutritionist and PDP Physiotherapist. Pathway science/performance ICP.",
+    source: "careers.fulhamfc.com",
+    matchedICPs: ["Technology Procurement Signals"]
+  },
+  // Nottingham Forest
+  {
+    id: "15",
+    sport: "Football",
+    clubName: "Nottingham Forest",
+    competition: "Premier League",
+    region: "UK",
+    signalType: "Hiring",
+    budget: "£35k",
+    datePosted: "Today",
+    urgency: "New",
+    teamId: "nottingham-forest",
+    description: "IT Support Technician + multiple academy coaching roles live on club careers. IT & academy procurement lines open.",
+    source: "Nottingham Forest Football Club",
+    matchedICPs: ["Technology Procurement Signals"]
+  },
+  // Leeds United
+  {
+    id: "16",
+    sport: "Football",
+    clubName: "Leeds United",
+    competition: "Championship",
+    region: "UK",
+    signalType: "Sponsorship",
+    budget: "£15M",
+    datePosted: "1 month ago",
+    urgency: "Normal",
+    teamId: "leeds-united",
+    description: "New Red Bull front-of-shirt partner and Parimatch sleeve extension for 2025/26. Sponsor ecosystem refresh → brand activations & hospitality spend.",
+    source: "Wikipedia",
+    matchedICPs: ["Technology Procurement Signals"]
+  },
+  // Burnley
+  {
+    id: "17",
+    sport: "Football",
+    clubName: "Burnley",
+    competition: "Championship",
+    region: "UK",
+    signalType: "Sponsorship",
+    budget: "£8M",
+    datePosted: "Today",
+    urgency: "New",
+    teamId: "burnley",
+    description: "Castore kit deal + new front-of-shirt partner 96.com (both 2024); brand activity with Sure For Men (Sept 2025). Apparel & brand activation cycles in flight.",
+    source: "Wikipedia",
+    matchedICPs: ["Technology Procurement Signals"]
+  },
+  // Sunderland
+  {
+    id: "18",
+    sport: "Football",
+    clubName: "Sunderland",
+    competition: "Championship",
+    region: "UK",
+    signalType: "Sponsorship",
+    budget: "£5M",
+    datePosted: "1 month ago",
+    urgency: "Normal",
+    teamId: "sunderland",
+    description: "Hummel kit; W88 front-of-shirt listed for 2025/26 season summaries. Sponsorship stack suggests active commercial team; good entry for betting/alcohol-alt compliance tech or replacements.",
+    source: "Wikipedia",
+    matchedICPs: ["Technology Procurement Signals"]
+  },
+  // Wolves
+  {
+    id: "19",
+    sport: "Football",
+    clubName: "Wolverhampton Wanderers",
+    competition: "Premier League",
+    region: "UK",
+    signalType: "Tender",
+    budget: "£500k",
+    datePosted: "1 week ago",
+    urgency: "Normal",
+    teamId: "wolves",
+    description: "Club in poor run of form per season data; likely pressure on staff changes (watchlist). Pre-trigger for hiring & vendor reshuffles.",
+    source: "Wikipedia",
+    matchedICPs: ["High-Budget Premier League Clubs", "Technology Procurement Signals"]
+  },
+  // Bournemouth
+  {
+    id: "20",
+    sport: "Football",
+    clubName: "Bournemouth",
+    competition: "Premier League",
+    region: "UK",
+    signalType: "Procurement",
+    budget: "£200k",
+    datePosted: "1 week ago",
+    urgency: "Normal",
+    teamId: "bournemouth",
+    description: "Club comms highlight Umbro kit and recent commercial partners; keep warm for retail & stadium ops hiring cycles.",
+    source: "Wikipedia",
+    matchedICPs: ["Technology Procurement Signals"]
+  },
+  // ECB
+  {
+    id: "21",
+    sport: "Cricket",
+    clubName: "ECB",
+    competition: "England Cricket",
+    region: "UK",
+    signalType: "Hiring",
+    budget: "£75k",
+    datePosted: "1 month ago",
+    urgency: "Normal",
+    teamId: "ecb",
+    description: "Central careers hub and long-list of board/club roles; updated Governing Body Endorsement criteria for International Sportsperson route (effective 1 Sept 2025). HR & compliance contacts; immigration policy update affects staffing workflows and support vendors.",
+    source: "ECB",
+    matchedICPs: ["Technology Procurement Signals"]
+  },
+  // Surrey CCC
+  {
+    id: "22",
+    sport: "Cricket",
+    clubName: "Surrey County Cricket Club",
+    competition: "England Cricket",
+    region: "UK",
+    signalType: "Hiring",
+    budget: "£80k",
+    datePosted: "1 week ago",
+    urgency: "Normal",
+    teamId: "surrey-ccc",
+    description: "Director of Operations (recent LinkedIn listing) plus multiple pathway roles on club careers. Operations + pathway = procurement across venues, scheduling, performance.",
+    source: "Kia Oval",
+    matchedICPs: ["Technology Procurement Signals"]
+  },
+  // Somerset CCC
+  {
+    id: "23",
+    sport: "Cricket",
+    clubName: "Somerset CCC",
+    competition: "England Cricket",
+    region: "UK",
+    signalType: "Hiring",
+    budget: "£50k",
+    datePosted: "4 days ago",
+    urgency: "Expiring Soon",
+    teamId: "somerset-ccc",
+    description: "Women's Head Coach (closes 1 Oct 2025) and Consultant Nutritionist on the Somerset careers hub. Direct performance & coaching contacts.",
+    source: "The PCA",
+    matchedICPs: ["Technology Procurement Signals"]
+  },
+  // Hampshire Cricket
+  {
+    id: "24",
+    sport: "Cricket",
+    clubName: "Hampshire Cricket",
+    competition: "England Cricket",
+    region: "UK",
+    signalType: "Hiring",
+    budget: "£65k",
+    datePosted: "2 days ago",
+    urgency: "New",
+    teamId: "hampshire-cricket",
+    description: "Group Financial Controller listed this week via venue careers page. Senior finance owner for multi-entity group → strong procurement gatekeeper.",
+    source: "Utilita Bowl",
+    matchedICPs: ["Technology Procurement Signals"]
+  },
+  // Middlesex Cricket
+  {
+    id: "25",
+    sport: "Cricket",
+    clubName: "Middlesex Cricket",
+    competition: "England Cricket",
+    region: "UK",
+    signalType: "Hiring",
+    budget: "£45k",
+    datePosted: "2 days ago",
+    urgency: "New",
+    teamId: "middlesex-cricket",
+    description: "Player Pathway Physiotherapist posted 2 days ago; club also in advanced talks to fund new Uxbridge ground (Aug 2025). Hiring + capex project → suppliers across performance, venue, and financing.",
+    source: "Middlesex County Cricket Club",
+    matchedICPs: ["Technology Procurement Signals"]
+  },
+  // Warwickshire CCC
+  {
+    id: "26",
+    sport: "Cricket",
+    clubName: "Warwickshire CCC",
+    competition: "England Cricket",
+    region: "UK",
+    signalType: "Hiring",
+    budget: "£55k",
+    datePosted: "3 days ago",
+    urgency: "Normal",
+    teamId: "warwickshire-cricket",
+    description: "Commercial Partnerships Manager – The Hundred, Birmingham Phoenix (recruiter-led); Community Schools Coach on Edgbaston site. Direct partnership & community budget owners.",
+    source: "LinkedIn",
+    matchedICPs: ["Technology Procurement Signals"]
   }
 ];
 
@@ -173,63 +514,529 @@ const SignalsPage = () => {
   // Mock contacts data for each signal
   const getContactsForSignal = (signalId: string): Contact[] => {
     const contactsMap: Record<string, Contact[]> = {
+      // Manchester United - Academy Assistant Performance Analyst
       "1": [
         {
           id: "c1",
-          name: "Sarah Johnson",
-          position: "Commercial Director",
-          email: "s.johnson@manutd.com",
+          name: "Dr. Sarah Mitchell",
+          position: "Head of Academy Performance",
+          email: "s.mitchell@manutd.com",
           phone: "+44 161 868 8000",
-          linkedin: "https://linkedin.com/in/sarahjohnson",
-          department: "Commercial",
+          linkedin: "https://linkedin.com/in/sarahmitchell",
+          department: "Academy",
           revealed: false,
           cost: 5
         },
         {
           id: "c2", 
-          name: "David Martinez",
-          position: "Head of Procurement",
-          email: "d.martinez@manutd.com",
+          name: "James Richardson",
+          position: "Performance Analysis Manager",
+          email: "j.richardson@manutd.com",
           phone: "+44 161 868 8001",
-          linkedin: "https://linkedin.com/in/davidmartinez",
-          department: "Operations",
-          revealed: false,
-          cost: 3
-        },
-        {
-          id: "c3",
-          name: "Emma Wilson",
-          position: "Partnerships Manager",
-          email: "e.wilson@manutd.com",
-          phone: "+44 161 868 8002",
-          linkedin: "https://linkedin.com/in/emmawilson",
-          department: "Partnerships",
+          linkedin: "https://linkedin.com/in/jamesrichardson",
+          department: "Performance",
           revealed: false,
           cost: 4
         }
       ],
+      // Arsenal - Licensing Manager
       "2": [
         {
           id: "c4",
-          name: "James Thompson",
-          position: "Marketing Director",
-          email: "j.thompson@surreyccc.co.uk",
-          phone: "+44 20 7719 4000",
-          linkedin: "https://linkedin.com/in/jamesthompson",
-          department: "Marketing",
+          name: "Emma Thompson",
+          position: "Commercial Director",
+          email: "e.thompson@arsenal.com",
+          phone: "+44 20 7619 5000",
+          linkedin: "https://linkedin.com/in/emmathompson",
+          department: "Commercial",
+          revealed: false,
+          cost: 5
+        },
+        {
+          id: "c5",
+          name: "Mark Davies",
+          position: "Head of Licensing",
+          email: "m.davies@arsenal.com",
+          phone: "+44 20 7619 5001",
+          linkedin: "https://linkedin.com/in/markdavies",
+          department: "Licensing",
+          revealed: false,
+          cost: 4
+        }
+      ],
+      // Liverpool - LFCW Education & Player Care
+      "3": [
+        {
+          id: "c6",
+          name: "Dr. Claire Wilson",
+          position: "Women's Football Director",
+          email: "c.wilson@liverpoolfc.com",
+          phone: "+44 151 263 2361",
+          linkedin: "https://linkedin.com/in/clairewilson",
+          department: "Women's Football",
+          revealed: false,
+          cost: 5
+        },
+        {
+          id: "c7",
+          name: "Rachel Green",
+          position: "Player Care Manager",
+          email: "r.green@liverpoolfc.com",
+          phone: "+44 151 263 2362",
+          linkedin: "https://linkedin.com/in/rachelgreen",
+          department: "Player Care",
+          revealed: false,
+          cost: 4
+        }
+      ],
+      // Chelsea - Social Inclusion Manager
+      "4": [
+        {
+          id: "c8",
+          name: "Michael Foster",
+          position: "Foundation Director",
+          email: "m.foster@chelseafc.com",
+          phone: "+44 20 7386 9373",
+          linkedin: "https://linkedin.com/in/michaelfoster",
+          department: "Foundation",
+          revealed: false,
+          cost: 5
+        },
+        {
+          id: "c9",
+          name: "Sophie Turner",
+          position: "Community Manager",
+          email: "s.turner@chelseafc.com",
+          phone: "+44 20 7386 9374",
+          linkedin: "https://linkedin.com/in/sophieturner",
+          department: "Community",
+          revealed: false,
+          cost: 3
+        }
+      ],
+      // Tottenham - Corporate/Ownership
+      "5": [
+        {
+          id: "c10",
+          name: "Jonathan Stevens",
+          position: "Chief Financial Officer",
+          email: "j.stevens@tottenhamhotspur.com",
+          phone: "+44 20 8365 5000",
+          linkedin: "https://linkedin.com/in/jonathanstevens",
+          department: "Finance",
+          revealed: false,
+          cost: 6
+        },
+        {
+          id: "c11",
+          name: "David Miller",
+          position: "Head of Corporate Affairs",
+          email: "d.miller@tottenhamhotspur.com",
+          phone: "+44 20 8365 5001",
+          linkedin: "https://linkedin.com/in/davidmiller",
+          department: "Corporate",
+          revealed: false,
+          cost: 5
+        }
+      ],
+      // Manchester City - Sponsorship
+      "6": [
+        {
+          id: "c12",
+          name: "Lisa Chapman",
+          position: "Chief Commercial Officer",
+          email: "l.chapman@mancity.com",
+          phone: "+44 161 444 1894",
+          linkedin: "https://linkedin.com/in/lisachapman",
+          department: "Commercial",
+          revealed: false,
+          cost: 6
+        },
+        {
+          id: "c13",
+          name: "Paul Roberts",
+          position: "Partnerships Director",
+          email: "p.roberts@mancity.com",
+          phone: "+44 161 444 1895",
+          linkedin: "https://linkedin.com/in/paulroberts",
+          department: "Partnerships",
+          revealed: false,
+          cost: 5
+        }
+      ],
+      // Newcastle United - Security & Science
+      "7": [
+        {
+          id: "c14",
+          name: "Andrew Bell",
+          position: "Head of Security",
+          email: "a.bell@nufc.co.uk",
+          phone: "+44 191 201 8400",
+          linkedin: "https://linkedin.com/in/andrewbell",
+          department: "Security",
+          revealed: false,
+          cost: 3
+        },
+        {
+          id: "c15",
+          name: "Dr. Helen Clark",
+          position: "Principal Scientist",
+          email: "h.clark@nufc.co.uk",
+          phone: "+44 191 201 8401",
+          linkedin: "https://linkedin.com/in/helenclark",
+          department: "Sports Science",
+          revealed: false,
+          cost: 5
+        }
+      ],
+      // Aston Villa - Maintenance & Retail
+      "8": [
+        {
+          id: "c16",
+          name: "Tony Williams",
+          position: "Facilities Manager",
+          email: "t.williams@avfc.co.uk",
+          phone: "+44 121 327 2299",
+          linkedin: "https://linkedin.com/in/tonywilliams",
+          department: "Facilities",
+          revealed: false,
+          cost: 3
+        },
+        {
+          id: "c17",
+          name: "Karen Jones",
+          position: "Retail Operations Manager",
+          email: "k.jones@avfc.co.uk",
+          phone: "+44 121 327 2300",
+          linkedin: "https://linkedin.com/in/karenjones",
+          department: "Retail",
+          revealed: false,
+          cost: 4
+        }
+      ],
+      // West Ham - Head Coach Change
+      "9": [
+        {
+          id: "c18",
+          name: "Graham Potter",
+          position: "Director of Football",
+          email: "g.potter@whufc.com",
+          phone: "+44 20 8548 2748",
+          linkedin: "https://linkedin.com/in/grahampotter",
+          department: "Football Operations",
+          revealed: false,
+          cost: 6
+        },
+        {
+          id: "c19",
+          name: "Sarah Edwards",
+          position: "Head of Recruitment",
+          email: "s.edwards@whufc.com",
+          phone: "+44 20 8548 2749",
+          linkedin: "https://linkedin.com/in/sarahedwards",
+          department: "Recruitment",
+          revealed: false,
+          cost: 5
+        }
+      ],
+      // Everton - Club & Foundation
+      "10": [
+        {
+          id: "c20",
+          name: "Kevin Thelwell",
+          position: "Director of Football",
+          email: "k.thelwell@evertonfc.com",
+          phone: "+44 151 556 1878",
+          linkedin: "https://linkedin.com/in/kevinthelwell",
+          department: "Football",
+          revealed: false,
+          cost: 5
+        },
+        {
+          id: "c21",
+          name: "Claire Morgan",
+          position: "Foundation Manager",
+          email: "c.morgan@evertonfc.com",
+          phone: "+44 151 556 1879",
+          linkedin: "https://linkedin.com/in/clairemorgan",
+          department: "Foundation",
+          revealed: false,
+          cost: 4
+        }
+      ],
+      // Brentford - Joma Kit & Academy
+      "11": [
+        {
+          id: "c22",
+          name: "Jon Varney",
+          position: "Chief Executive",
+          email: "j.varney@brentfordfc.com",
+          phone: "+44 20 8847 2511",
+          linkedin: "https://linkedin.com/in/jonvarney",
+          department: "Executive",
+          revealed: false,
+          cost: 6
+        },
+        {
+          id: "c23",
+          name: "Gary Bowyer",
+          position: "Academy Director",
+          email: "g.bowyer@brentfordfc.com",
+          phone: "+44 20 8847 2512",
+          linkedin: "https://linkedin.com/in/garybowyer",
+          department: "Academy",
+          revealed: false,
+          cost: 5
+        }
+      ],
+      // Brighton - Technology Project Manager
+      "12": [
+        {
+          id: "c24",
+          name: "Dan Ashworth",
+          position: "Technical Director",
+          email: "d.ashworth@brightonandhovealbion.com",
+          phone: "+44 1273 695 400",
+          linkedin: "https://linkedin.com/in/danashworth",
+          department: "Technology",
+          revealed: false,
+          cost: 6
+        },
+        {
+          id: "c25",
+          name: "Rebecca Harrison",
+          position: "IT Director",
+          email: "r.harrison@brightonandhovealbion.com",
+          phone: "+44 1273 695 401",
+          linkedin: "https://linkedin.com/in/rebeccaharrison",
+          department: "IT",
+          revealed: false,
+          cost: 5
+        }
+      ],
+      // Crystal Palace - Academy Recruitment
+      "13": [
+        {
+          id: "c26",
+          name: "Gary Issott",
+          position: "Academy Director",
+          email: "g.issott@cpfc.co.uk",
+          phone: "+44 20 8768 6000",
+          linkedin: "https://linkedin.com/in/garyissott",
+          department: "Academy",
+          revealed: false,
+          cost: 5
+        },
+        {
+          id: "c27",
+          name: "Dr. Emma Lewis",
+          position: "Lead Physiotherapist",
+          email: "e.lewis@cpfc.co.uk",
+          phone: "+44 20 8768 6001",
+          linkedin: "https://linkedin.com/in/emmalewis",
+          department: "Medical",
+          revealed: false,
+          cost: 4
+        }
+      ],
+      // Fulham - Academy Nutritionist
+      "14": [
+        {
+          id: "c28",
+          name: "Huw Jennings",
+          position: "Academy Director",
+          email: "h.jennings@fulhamfc.com",
+          phone: "+44 20 7893 8383",
+          linkedin: "https://linkedin.com/in/huwjennings",
+          department: "Academy",
+          revealed: false,
+          cost: 5
+        },
+        {
+          id: "c29",
+          name: "Dr. Kate Robinson",
+          position: "Head of Performance",
+          email: "k.robinson@fulhamfc.com",
+          phone: "+44 20 7893 8384",
+          linkedin: "https://linkedin.com/in/katerobinson",
+          department: "Performance",
+          revealed: false,
+          cost: 4
+        }
+      ],
+      // Nottingham Forest - IT Support
+      "15": [
+        {
+          id: "c30",
+          name: "Mark Crossley",
+          position: "IT Director",
+          email: "m.crossley@nottinghamforest.co.uk",
+          phone: "+44 115 982 4444",
+          linkedin: "https://linkedin.com/in/markcrossley",
+          department: "IT",
           revealed: false,
           cost: 4
         },
         {
-          id: "c5",
-          name: "Rebecca Smith",
-          position: "Sponsorship Manager", 
-          email: "r.smith@surreyccc.co.uk",
-          phone: "+44 20 7719 4001",
-          linkedin: "https://linkedin.com/in/rebeccasmith",
+          id: "c31",
+          name: "Warren Joyce",
+          position: "Academy Manager",
+          email: "w.joyce@nottinghamforest.co.uk",
+          phone: "+44 115 982 4445",
+          linkedin: "https://linkedin.com/in/warrenjoyce",
+          department: "Academy",
+          revealed: false,
+          cost: 5
+        }
+      ],
+      // ECB - Hiring/Policy
+      "21": [
+        {
+          id: "c60",
+          name: "Tom Harrison",
+          position: "Chief Executive",
+          email: "t.harrison@ecb.co.uk",
+          phone: "+44 20 7432 1200",
+          linkedin: "https://linkedin.com/in/tomharrison",
+          department: "Executive",
+          revealed: false,
+          cost: 6
+        },
+        {
+          id: "c61",
+          name: "Kate Miller",
+          position: "Head of HR",
+          email: "k.miller@ecb.co.uk",
+          phone: "+44 20 7432 1201",
+          linkedin: "https://linkedin.com/in/katemiller",
+          department: "HR",
+          revealed: false,
+          cost: 4
+        }
+      ],
+      // Surrey CCC - Director of Operations
+      "22": [
+        {
+          id: "c62",
+          name: "Steve Elworthy",
+          position: "Chief Executive",
+          email: "s.elworthy@surreyccc.co.uk",
+          phone: "+44 20 7582 7764",
+          linkedin: "https://linkedin.com/in/steveelworthy",
+          department: "Executive",
+          revealed: false,
+          cost: 6
+        },
+        {
+          id: "c63",
+          name: "Richard Thompson",
+          position: "Director of Operations",
+          email: "r.thompson@surreyccc.co.uk",
+          phone: "+44 20 7582 7765",
+          linkedin: "https://linkedin.com/in/richardthompson",
+          department: "Operations",
+          revealed: false,
+          cost: 5
+        }
+      ],
+      // Somerset CCC - Women's Head Coach
+      "23": [
+        {
+          id: "c64",
+          name: "Andy Hurry",
+          position: "Chief Executive",
+          email: "a.hurry@somersetccc.co.uk",
+          phone: "+44 1823 425301",
+          linkedin: "https://linkedin.com/in/andyhurry",
+          department: "Executive",
+          revealed: false,
+          cost: 5
+        },
+        {
+          id: "c65",
+          name: "Sarah Lewis",
+          position: "Head Coach Women",
+          email: "s.lewis@somersetccc.co.uk",
+          phone: "+44 1823 425302",
+          linkedin: "https://linkedin.com/in/sarahlewis",
+          department: "Coaching",
+          revealed: false,
+          cost: 4
+        }
+      ],
+      // Hampshire Cricket - Financial Controller
+      "24": [
+        {
+          id: "c66",
+          name: "David Mann",
+          position: "Chief Executive",
+          email: "d.mann@ageasbowl.com",
+          phone: "+44 23 8047 2002",
+          linkedin: "https://linkedin.com/in/davidmann",
+          department: "Executive",
+          revealed: false,
+          cost: 6
+        },
+        {
+          id: "c67",
+          name: "Jane Cooper",
+          position: "Group Financial Controller",
+          email: "j.cooper@ageasbowl.com",
+          phone: "+44 23 8047 2003",
+          linkedin: "https://linkedin.com/in/janecooper",
+          department: "Finance",
+          revealed: false,
+          cost: 5
+        }
+      ],
+      // Middlesex Cricket - Player Pathway Physiotherapist
+      "25": [
+        {
+          id: "c68",
+          name: "Andrew Cornish",
+          position: "Chief Executive",
+          email: "a.cornish@middlesexccc.com",
+          phone: "+44 20 7289 1300",
+          linkedin: "https://linkedin.com/in/andrewcornish",
+          department: "Executive",
+          revealed: false,
+          cost: 5
+        },
+        {
+          id: "c69",
+          name: "Dr. Mark Phillips",
+          position: "Head of Medical",
+          email: "m.phillips@middlesexccc.com",
+          phone: "+44 20 7289 1301",
+          linkedin: "https://linkedin.com/in/markphillips",
+          department: "Medical",
+          revealed: false,
+          cost: 4
+        }
+      ],
+      // Warwickshire CCC - Commercial Partnerships
+      "26": [
+        {
+          id: "c70",
+          name: "Stuart Cain",
+          position: "Chief Executive",
+          email: "s.cain@edgbaston.com",
+          phone: "+44 121 369 1994",
+          linkedin: "https://linkedin.com/in/stuartcain",
+          department: "Executive",
+          revealed: false,
+          cost: 6
+        },
+        {
+          id: "c71",
+          name: "Helen Watson",
+          position: "Commercial Partnerships Manager",
+          email: "h.watson@edgbaston.com",
+          phone: "+44 121 369 1995",
+          linkedin: "https://linkedin.com/in/helenwatson",
           department: "Commercial",
           revealed: false,
-          cost: 3
+          cost: 5
         }
       ]
     };
