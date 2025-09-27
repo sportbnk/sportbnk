@@ -7,17 +7,13 @@ import { Card } from "@/components/ui/card";
 const About = () => {
   return (
     <PageLayout 
-      pageTitle="About Sportbnk - The Leading Sports Intelligence Platform" 
+      pageTitle="About Sportbnk" 
       metaDescription="Learn about Sportbnk, the premier sports intelligence platform founded in 2025. Discover how we're transforming sports data intelligence with real-time signals and actionable insights."
       metaKeywords="Sportbnk, sports intelligence, sports data platform, B2B sports data, sports industry database, sports signals"
     >
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4 md:px-6">
           <div className="max-w-4xl mx-auto">
-            <h1 className="text-4xl md:text-5xl font-bold text-sportbnk-navy mb-12 text-center">
-              About Sportbnk
-            </h1>
-            
             <div className="mb-16">
               <h2 className="text-3xl font-bold text-sportbnk-navy mb-6">
                 Our Story
