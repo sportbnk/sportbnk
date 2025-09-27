@@ -30,14 +30,35 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { Skeleton } from '@/components/ui/skeleton';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Search, 
   Building2, 
   Plus,
   Filter,
-  X
+  X,
+  Users,
+  Mail,
+  Phone,
+  ExternalLink
 } from 'lucide-react';
 import { Team, Sport, Country, City } from '@/types/teams';
+
+// Contact type for people view
+type Contact = {
+  id: string;
+  first_name: string;
+  last_name: string;
+  position: string;
+  team_id: string;
+  email: string;
+  mobile: string;
+  phone: string;
+  linkedin: string;
+  teams?: {
+    name: string;
+  };
+};
 
 // Import team logos
 import arsenalLogo from "@/assets/team-logos/arsenal.png";
@@ -49,479 +70,910 @@ import tottenhamLogo from "@/assets/team-logos/tottenham.png";
 import newcastleLogo from "@/assets/team-logos/newcastle.png";
 import brightonLogo from "@/assets/team-logos/brighton.png";
 import astonVillaLogo from "@/assets/team-logos/aston-villa.png";
-import westHamLogo from "@/assets/team-logos/west-ham.png";
 import brentfordLogo from "@/assets/team-logos/brentford.png";
+import bournemouthLogo from "@/assets/team-logos/bournemouth.png";
+import burnleyLogo from "@/assets/team-logos/burnley.png";
+import cardiffCityLogo from "@/assets/team-logos/cardiff-city.png";
+import coventryLogo from "@/assets/team-logos/coventry-city.png";
 import crystalPalaceLogo from "@/assets/team-logos/crystal-palace.png";
+import derbyCountyLogo from "@/assets/team-logos/derby-county.png";
 import evertonLogo from "@/assets/team-logos/everton.png";
 import fulhamLogo from "@/assets/team-logos/fulham.png";
-import bournemouthLogo from "@/assets/team-logos/bournemouth.png";
-import nottinghamForestLogo from "@/assets/team-logos/nottingham-forest.png";
-import wolvesLogo from "@/assets/team-logos/wolves.png";
+import huddersLogo from "@/assets/team-logos/huddersfield-town.png";
+import hullCityLogo from "@/assets/team-logos/hull-city.png";
+import ipswichLogo from "@/assets/team-logos/ipswich-town.png";
+import leedsLogo from "@/assets/team-logos/leeds-united.png";
 import leicesterLogo from "@/assets/team-logos/leicester.png";
-import burnleyLogo from "@/assets/team-logos/burnley.png";
+import lutonLogo from "@/assets/team-logos/luton-town.png";
+import middlesbroughLogo from "@/assets/team-logos/middlesbrough.png";
+import millwallLogo from "@/assets/team-logos/millwall.png";
+import norwichLogo from "@/assets/team-logos/norwich-city.png";
+import nottinghamForestLogo from "@/assets/team-logos/nottingham-forest.png";
+import plymouthLogo from "@/assets/team-logos/plymouth-argyle.png";
+import prestonLogo from "@/assets/team-logos/preston-north-end.png";
+import qprLogo from "@/assets/team-logos/queens-park-rangers.png";
 import sheffieldUnitedLogo from "@/assets/team-logos/sheffield-united.png";
+import sheffieldWedLogo from "@/assets/team-logos/sheffield-wednesday.png";
+import stokeLogo from "@/assets/team-logos/stoke-city.png";
+import sunderlandLogo from "@/assets/team-logos/sunderland.png";
+import swanseaLogo from "@/assets/team-logos/swansea-city.png";
+import watfordLogo from "@/assets/team-logos/watford.png";
+import westBromLogo from "@/assets/team-logos/west-bromwich-albion.png";
+import westHamLogo from "@/assets/team-logos/west-ham.png";
+import wolvesLogo from "@/assets/team-logos/wolves.png";
+import rotherhamLogo from "@/assets/team-logos/rotherham-united.png";
+import readingLogo from "@/assets/team-logos/reading.png";
+import blackburnLogo from "@/assets/team-logos/blackburn-rovers.png";
+import boltonLogo from "@/assets/team-logos/bolton-wanderers.png";
+import charltonLogo from "@/assets/team-logos/charlton-athletic.png";
+import birminghamLogo from "@/assets/team-logos/birmingham-city.png";
+import bristolCityLogo from "@/assets/team-logos/bristol-city.png";
+import barnsley from "@/assets/team-logos/barnsley.png";
+import bradfordLogo from "@/assets/team-logos/bradford-city.png";
+import blackpoolLogo from "@/assets/team-logos/blackpool.png";
+import burtonLogo from "@/assets/team-logos/burton-albion.png";
+import bristolRoversLogo from "@/assets/team-logos/bristol-rovers.png";
+import carlisleLogo from "@/assets/team-logos/carlisle-united.png";
+import cambridgeLogo from "@/assets/team-logos/cambridge-united.png";
+import chesterfieldLogo from "@/assets/team-logos/chesterfield.png";
+import colchesterLogo from "@/assets/team-logos/colchester-united.png";
+import creweAlexLogo from "@/assets/team-logos/crewe-alexandra.png";
+import crawleyLogo from "@/assets/team-logos/crawley-town.png";
+import cheltenhamLogo from "@/assets/team-logos/cheltenham-town.png";
+import doncasterLogo from "@/assets/team-logos/doncaster-rovers.png";
+import exeterLogo from "@/assets/team-logos/exeter-city.png";
+import fleetwoodLogo from "@/assets/team-logos/fleetwood-town.png";
+import gillinghamLogo from "@/assets/team-logos/gillingham.png";
+import grimsbyLogo from "@/assets/team-logos/grimsby-town.png";
+import harrogatelogo from "@/assets/team-logos/harrogate-town.png";
+import leytonOrientLogo from "@/assets/team-logos/leyton-orient.png";
+import lincolnLogo from "@/assets/team-logos/lincoln-city.png";
+import mkDonsLogo from "@/assets/team-logos/mk-dons.png";
+import morecambeLogo from "@/assets/team-logos/morecambe.png";
+import newportLogo from "@/assets/team-logos/newport-county.png";
+import northamptonLogo from "@/assets/team-logos/northampton-town.png";
+import nottsCountyLogo from "@/assets/team-logos/notts-county.png";
+import oxfordLogo from "@/assets/team-logos/oxford-united.png";
+import peterboroughLogo from "@/assets/team-logos/peterborough-united.png";
+import portValeLogo from "@/assets/team-logos/port-vale.png";
+import portsmouthLogo from "@/assets/team-logos/portsmouth.png";
+import salfordLogo from "@/assets/team-logos/salford-city.png";
+import shrewsburyLogo from "@/assets/team-logos/shrewsbury-town.png";
+import stevenageLogo from "@/assets/team-logos/stevenage.png";
+import stockportLogo from "@/assets/team-logos/stockport-county.png";
+import swindonLogo from "@/assets/team-logos/swindon-town.png";
+import tranmereLogo from "@/assets/team-logos/tranmere-rovers.png";
+import walsallLogo from "@/assets/team-logos/walsall.png";
+import wiganLogo from "@/assets/team-logos/wigan-athletic.png";
+import wrexhamLogo from "@/assets/team-logos/wrexham.png";
+import accringtonLogo from "@/assets/team-logos/accrington-stanley.png";
+import afcWimbledonLogo from "@/assets/team-logos/afc-wimbledon.png";
+import barrowLogo from "@/assets/team-logos/barrow.png";
+import bromleyLogo from "@/assets/team-logos/bromley.png";
 
-// Logo mapping function (simplified for demo)
-const getTeamLogo = (teamName: string) => {
-  const logoMap: Record<string, string> = {
-    'Arsenal': arsenalLogo,
-    'Chelsea': chelseaLogo,
-    'Liverpool': liverpoolLogo,
-    'Manchester United': manchesterUnitedLogo,
-    'Manchester City': manchesterCityLogo,
-    'Tottenham Hotspur': tottenhamLogo,
-    'Newcastle United': newcastleLogo,
-    'Brighton & Hove Albion': brightonLogo,
-    'Aston Villa': astonVillaLogo,
-    'West Ham United': westHamLogo,
-    'Brentford': brentfordLogo,
-    'Crystal Palace': crystalPalaceLogo,
-    'Everton': evertonLogo,
-    'Fulham': fulhamLogo,
-    'Bournemouth': bournemouthLogo,
-    'Nottingham Forest': nottinghamForestLogo,
-    'Wolverhampton Wanderers': wolvesLogo,
-    'Leicester City': leicesterLogo,
-    'Burnley': burnleyLogo,
-    'Sheffield United': sheffieldUnitedLogo,
+// Cricket logos
+import bedfordshireCricketLogo from "@/assets/team-logos/bedfordshire-cricket.png";
+import berkshireCricketLogo from "@/assets/team-logos/berkshire-cricket.png";
+import buckinghamshireCricketLogo from "@/assets/team-logos/buckinghamshire-cricket.png";
+import cambridgeshireCricketLogo from "@/assets/team-logos/cambridgeshire-cricket.png";
+import cheshireCricketLogo from "@/assets/team-logos/cheshire-cricket.png";
+import cornwallCricketLogo from "@/assets/team-logos/cornwall-cricket.png";
+import cumberlandCricketLogo from "@/assets/team-logos/cumberland-cricket.png";
+import derbyshireCricketLogo from "@/assets/team-logos/derbyshire-cricket.png";
+import devonCricketLogo from "@/assets/team-logos/devon-cricket.png";
+import dorsetCricketLogo from "@/assets/team-logos/dorset-cricket.png";
+import durhamCricketLogo from "@/assets/team-logos/durham-cricket.png";
+import essexCricketLogo from "@/assets/team-logos/essex-cricket.png";
+import glamorganCricketLogo from "@/assets/team-logos/glamorgan-cricket.png";
+import gloucestershireCricketLogo from "@/assets/team-logos/gloucestershire-cricket.png";
+import hampshireCricketLogo from "@/assets/team-logos/hampshire-cricket.png";
+import hertfordshireCricketLogo from "@/assets/team-logos/hertfordshire-cricket.png";
+import kentCricketLogo from "@/assets/team-logos/kent-cricket.png";
+import lancashireCricketLogo from "@/assets/team-logos/lancashire-cricket.png";
+import leicestershireCricketLogo from "@/assets/team-logos/leicestershire-cricket.png";
+import leinsterLightningCricketLogo from "@/assets/team-logos/leinster-lightning-cricket.png";
+import lincolnshireCricketLogo from "@/assets/team-logos/lincolnshire-cricket.png";
+import middlesexCricketLogo from "@/assets/team-logos/middlesex-cricket.png";
+import munsterCricketLogo from "@/assets/team-logos/munster-cricket.png";
+import ncuCricketLogo from "@/assets/team-logos/ncu-cricket.png";
+import norfolkCricketLogo from "@/assets/team-logos/norfolk-cricket.png";
+import northWestWarriorsCricketLogo from "@/assets/team-logos/north-west-warriors-cricket.png";
+import northamptonshireCricketLogo from "@/assets/team-logos/northamptonshire-cricket.png";
+import northumberlandCricketLogo from "@/assets/team-logos/northumberland-cricket.png";
+import nottinghamshireCricketLogo from "@/assets/team-logos/nottinghamshire-cricket.png";
+import oxfordshireCricketLogo from "@/assets/team-logos/oxfordshire-cricket.png";
+import shropshireCricketLogo from "@/assets/team-logos/shropshire-cricket.png";
+import somersetCricketLogo from "@/assets/team-logos/somerset-cricket.png";
+import staffordshireCricketLogo from "@/assets/team-logos/staffordshire-cricket.png";
+import suffolkCricketLogo from "@/assets/team-logos/suffolk-cricket.png";
+import surreyCricketLogo from "@/assets/team-logos/surrey-cricket.png";
+import sussexCricketLogo from "@/assets/team-logos/sussex-cricket.png";
+import walesMinorCountiesCricketLogo from "@/assets/team-logos/wales-minor-counties-cricket.png";
+import warwickshireCricketLogo from "@/assets/team-logos/warwickshire-cricket.png";
+import wiltshireCricketLogo from "@/assets/team-logos/wiltshire-cricket.png";
+import worcestershireCricketLogo from "@/assets/team-logos/worcestershire-cricket.png";
+import yorkshireCricketLogo from "@/assets/team-logos/yorkshire-cricket.png";
+
+// National team logos
+import englandNationalLogo from "@/assets/team-logos/england-national.png";
+import englandCricketNationalLogo from "@/assets/team-logos/england-cricket-national.png";
+import irelandNationalLogo from "@/assets/team-logos/ireland-national.png";
+import irelandCricketNationalLogo from "@/assets/team-logos/ireland-cricket-national.png";
+import northernIrelandNationalLogo from "@/assets/team-logos/northern-ireland-national.png";
+import scotlandNationalLogo from "@/assets/team-logos/scotland-national.png";
+import scotlandCricketNationalLogo from "@/assets/team-logos/scotland-cricket-national.png";
+import walesNationalLogo from "@/assets/team-logos/wales-national.png";
+
+// Team logo mapping function
+const getTeamLogo = (teamName: string): string | null => {
+  const logoMap: { [key: string]: string } = {
+    // Premier League and Championship teams
+    "Arsenal": arsenalLogo,
+    "Chelsea": chelseaLogo,
+    "Liverpool": liverpoolLogo,
+    "Manchester United": manchesterUnitedLogo,
+    "Manchester City": manchesterCityLogo,
+    "Tottenham Hotspur": tottenhamLogo,
+    "Newcastle United": newcastleLogo,
+    "Brighton & Hove Albion": brightonLogo,
+    "Aston Villa": astonVillaLogo,
+    "Brentford": brentfordLogo,
+    "AFC Bournemouth": bournemouthLogo,
+    "Burnley": burnleyLogo,
+    "Cardiff City": cardiffCityLogo,
+    "Coventry City": coventryLogo,
+    "Crystal Palace": crystalPalaceLogo,
+    "Derby County": derbyCountyLogo,
+    "Everton": evertonLogo,
+    "Fulham": fulhamLogo,
+    "Huddersfield Town": huddersLogo,
+    "Hull City": hullCityLogo,
+    "Ipswich Town": ipswichLogo,
+    "Leeds United": leedsLogo,
+    "Leicester City": leicesterLogo,
+    "Luton Town": lutonLogo,
+    "Middlesbrough": middlesbroughLogo,
+    "Millwall": millwallLogo,
+    "Norwich City": norwichLogo,
+    "Nottingham Forest": nottinghamForestLogo,
+    "Plymouth Argyle": plymouthLogo,
+    "Preston North End": prestonLogo,
+    "Queens Park Rangers": qprLogo,
+    "Sheffield United": sheffieldUnitedLogo,
+    "Sheffield Wednesday": sheffieldWedLogo,
+    "Stoke City": stokeLogo,
+    "Sunderland": sunderlandLogo,
+    "Swansea City": swanseaLogo,
+    "Watford": watfordLogo,
+    "West Bromwich Albion": westBromLogo,
+    "West Ham United": westHamLogo,
+    "Wolverhampton Wanderers": wolvesLogo,
+    "Rotherham United": rotherhamLogo,
+    "Reading": readingLogo,
+    "Blackburn Rovers": blackburnLogo,
+    "Bolton Wanderers": boltonLogo,
+    "Charlton Athletic": charltonLogo,
+    "Birmingham City": birminghamLogo,
+    "Bristol City": bristolCityLogo,
+    "Barnsley": barnsley,
+    "Bradford City": bradfordLogo,
+    "Blackpool": blackpoolLogo,
+    "Burton Albion": burtonLogo,
+    "Bristol Rovers": bristolRoversLogo,
+    "Carlisle United": carlisleLogo,
+    "Cambridge United": cambridgeLogo,
+    "Chesterfield": chesterfieldLogo,
+    "Colchester United": colchesterLogo,
+    "Crewe Alexandra": creweAlexLogo,
+    "Crawley Town": crawleyLogo,
+    "Cheltenham Town": cheltenhamLogo,
+    "Doncaster Rovers": doncasterLogo,
+    "Exeter City": exeterLogo,
+    "Fleetwood Town": fleetwoodLogo,
+    "Gillingham": gillinghamLogo,
+    "Grimsby Town": grimsbyLogo,
+    "Harrogate Town": harrogatelogo,
+    "Leyton Orient": leytonOrientLogo,
+    "Lincoln City": lincolnLogo,
+    "MK Dons": mkDonsLogo,
+    "Morecambe": morecambeLogo,
+    "Newport County": newportLogo,
+    "Northampton Town": northamptonLogo,
+    "Notts County": nottsCountyLogo,
+    "Oxford United": oxfordLogo,
+    "Peterborough United": peterboroughLogo,
+    "Port Vale": portValeLogo,
+    "Portsmouth": portsmouthLogo,
+    "Salford City": salfordLogo,
+    "Shrewsbury Town": shrewsburyLogo,
+    "Stevenage": stevenageLogo,
+    "Stockport County": stockportLogo,
+    "Swindon Town": swindonLogo,
+    "Tranmere Rovers": tranmereLogo,
+    "Walsall": walsallLogo,
+    "Wigan Athletic": wiganLogo,
+    "Wrexham": wrexhamLogo,
+    "Accrington Stanley": accringtonLogo,
+    "AFC Wimbledon": afcWimbledonLogo,
+    "Barrow": barrowLogo,
+    "Bromley": bromleyLogo,
+
+    // Cricket teams
+    "Bedfordshire Cricket": bedfordshireCricketLogo,
+    "Berkshire Cricket": berkshireCricketLogo,
+    "Buckinghamshire Cricket": buckinghamshireCricketLogo,
+    "Cambridgeshire Cricket": cambridgeshireCricketLogo,
+    "Cheshire Cricket": cheshireCricketLogo,
+    "Cornwall Cricket": cornwallCricketLogo,
+    "Cumberland Cricket": cumberlandCricketLogo,
+    "Derbyshire Cricket": derbyshireCricketLogo,
+    "Devon Cricket": devonCricketLogo,
+    "Dorset Cricket": dorsetCricketLogo,
+    "Durham Cricket": durhamCricketLogo,
+    "Essex Cricket": essexCricketLogo,
+    "Glamorgan Cricket": glamorganCricketLogo,
+    "Gloucestershire Cricket": gloucestershireCricketLogo,
+    "Hampshire Cricket": hampshireCricketLogo,
+    "Hertfordshire Cricket": hertfordshireCricketLogo,
+    "Kent Cricket": kentCricketLogo,
+    "Lancashire Cricket": lancashireCricketLogo,
+    "Leicestershire Cricket": leicestershireCricketLogo,
+    "Leinster Lightning Cricket": leinsterLightningCricketLogo,
+    "Lincolnshire Cricket": lincolnshireCricketLogo,
+    "Middlesex Cricket": middlesexCricketLogo,
+    "Munster Cricket": munsterCricketLogo,
+    "NCU Cricket": ncuCricketLogo,
+    "Norfolk Cricket": norfolkCricketLogo,
+    "North West Warriors Cricket": northWestWarriorsCricketLogo,
+    "Northamptonshire Cricket": northamptonshireCricketLogo,
+    "Northumberland Cricket": northumberlandCricketLogo,
+    "Nottinghamshire Cricket": nottinghamshireCricketLogo,
+    "Oxfordshire Cricket": oxfordshireCricketLogo,
+    "Shropshire Cricket": shropshireCricketLogo,
+    "Somerset Cricket": somersetCricketLogo,
+    "Staffordshire Cricket": staffordshireCricketLogo,
+    "Suffolk Cricket": suffolkCricketLogo,
+    "Surrey Cricket": surreyCricketLogo,
+    "Sussex Cricket": sussexCricketLogo,
+    "Wales Minor Counties Cricket": walesMinorCountiesCricketLogo,
+    "Warwickshire Cricket": warwickshireCricketLogo,
+    "Wiltshire Cricket": wiltshireCricketLogo,
+    "Worcestershire Cricket": worcestershireCricketLogo,
+    "Yorkshire Cricket": yorkshireCricketLogo,
+
+    // National teams
+    "England National Team": englandNationalLogo,
+    "England Cricket National Team": englandCricketNationalLogo,
+    "Ireland National Team": irelandNationalLogo,
+    "Ireland Cricket National Team": irelandCricketNationalLogo,
+    "Northern Ireland National Team": northernIrelandNationalLogo,
+    "Scotland National Team": scotlandNationalLogo,
+    "Scotland Cricket National Team": scotlandCricketNationalLogo,
+    "Wales National Team": walesNationalLogo,
   };
-  
+
   return logoMap[teamName] || null;
+};
+
+// Fetch data function
+const fetchData = async () => {
+  try {
+    const [teamsResult, contactsResult, sportsResult, countriesResult, citiesResult] = await Promise.all([
+      supabase
+        .from('teams')
+        .select(`
+          *,
+          sports(name),
+          countries(name),
+          cities(name, countries(name))
+        `),
+      supabase
+        .from('contacts')
+        .select(`
+          *,
+          teams(name)
+        `),
+      supabase.from('sports').select('*'),
+      supabase.from('countries').select('*'),
+      supabase.from('cities').select('*, countries(name)')
+    ]);
+
+    if (teamsResult.error) throw teamsResult.error;
+    if (contactsResult.error) throw contactsResult.error;
+    if (sportsResult.error) throw sportsResult.error;
+    if (countriesResult.error) throw countriesResult.error;
+    if (citiesResult.error) throw citiesResult.error;
+
+    return {
+      teams: teamsResult.data || [],
+      contacts: contactsResult.data || [],
+      sports: sportsResult.data || [],
+      countries: countriesResult.data || [],
+      cities: citiesResult.data || []
+    };
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    return {
+      teams: [],
+      contacts: [],
+      sports: [],
+      countries: [],
+      cities: []
+    };
+  }
 };
 
 const Discover = () => {
   const navigate = useNavigate();
-  
-  // State
+  const [activeTab, setActiveTab] = useState("organizations");
   const [teams, setTeams] = useState<Team[]>([]);
+  const [contacts, setContacts] = useState<Contact[]>([]);
   const [filteredTeams, setFilteredTeams] = useState<Team[]>([]);
+  const [filteredContacts, setFilteredContacts] = useState<Contact[]>([]);
   const [sports, setSports] = useState<Sport[]>([]);
   const [countries, setCountries] = useState<Country[]>([]);
   const [cities, setCities] = useState<City[]>([]);
   const [loading, setLoading] = useState(true);
   
-  // Filter state
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedSport, setSelectedSport] = useState<string>('all');
-  const [selectedCountry, setSelectedCountry] = useState<string>('all');
-  const [selectedCity, setSelectedCity] = useState<string>('all');
-  const [selectedLevel, setSelectedLevel] = useState<string>('all');
+  // Filter states for organizations
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedSport, setSelectedSport] = useState<string>("");
+  const [selectedCountry, setSelectedCountry] = useState<string>("");
+  const [selectedCity, setSelectedCity] = useState<string>("");
+  const [selectedLevel, setSelectedLevel] = useState<string>("");
+  
+  // Filter states for people
+  const [peopleSearchQuery, setPeopleSearchQuery] = useState("");
+  const [selectedTeam, setSelectedTeam] = useState<string>("");
+  const [selectedRole, setSelectedRole] = useState<string>("");
+
+  // Pagination for organizations
   const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 20;
   
-  const ITEMS_PER_PAGE = 50;
+  // Pagination for people
+  const [peopleCurrentPage, setPeopleCurrentPage] = useState(1);
 
-  // Get unique levels from teams
-  const levels = [...new Set(teams.map(team => team.level).filter(Boolean))];
-  
-  // Calculate pagination values
-  const totalPages = Math.ceil(filteredTeams.length / ITEMS_PER_PAGE);
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const endIndex = startIndex + ITEMS_PER_PAGE;
-  const paginatedTeams = filteredTeams.slice(startIndex, endIndex);
-
-  // Fetch data
-  const fetchData = async () => {
-    try {
-      const [teamsResponse, sportsResponse, countriesResponse, citiesResponse] = await Promise.all([
-        supabase
-          .from('teams')
-          .select(`
-            *,
-            sport:sports(*),
-            city:cities(*),
-            country:countries(*)
-          `),
-        supabase.from('sports').select('*'),
-        supabase.from('countries').select('*'),
-        supabase.from('cities').select('*')
-      ]);
-
-      if (teamsResponse.error) throw teamsResponse.error;
-      if (sportsResponse.error) throw sportsResponse.error;
-      if (countriesResponse.error) throw countriesResponse.error;
-      if (citiesResponse.error) throw citiesResponse.error;
-
-      setTeams(teamsResponse.data || []);
-      setSports((sportsResponse.data || []).filter(sport => sport.name.toLowerCase() !== 'rugby'));
-      setCountries((countriesResponse.data || []).filter(country => !country.name.toLowerCase().includes('multi')));
-      setCities(citiesResponse.data || []);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  // Load data on component mount
   useEffect(() => {
-    fetchData();
+    const loadData = async () => {
+      setLoading(true);
+      const data = await fetchData();
+      setTeams(data.teams);
+      setContacts(data.contacts);
+      setSports(data.sports);
+      setCountries(data.countries);
+      setCities(data.cities);
+      setLoading(false);
+    };
+
+    loadData();
   }, []);
 
-  // Filter teams
+  // Filter teams effect
   useEffect(() => {
     let filtered = teams;
 
     if (searchQuery) {
       filtered = filtered.filter(team =>
         team.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        team.league?.toLowerCase().includes(searchQuery.toLowerCase())
+        team.league?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        team.division?.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
 
-    if (selectedSport !== 'all') {
+    if (selectedSport) {
       filtered = filtered.filter(team => team.sport_id === selectedSport);
     }
 
-    if (selectedCountry !== 'all') {
+    if (selectedCountry) {
       filtered = filtered.filter(team => team.country_id === selectedCountry);
     }
 
-    if (selectedCity !== 'all') {
+    if (selectedCity) {
       filtered = filtered.filter(team => team.city_id === selectedCity);
     }
 
-    if (selectedLevel !== 'all') {
+    if (selectedLevel) {
       filtered = filtered.filter(team => team.level === selectedLevel);
     }
 
     setFilteredTeams(filtered);
+    setCurrentPage(1);
   }, [teams, searchQuery, selectedSport, selectedCountry, selectedCity, selectedLevel]);
-  
-  useEffect(() => {
-    // Reset to first page when filters change
-    setCurrentPage(1);
-  }, [searchQuery, selectedSport, selectedCountry, selectedCity, selectedLevel]);
 
+  // Filter contacts effect
+  useEffect(() => {
+    let filtered = contacts;
+
+    if (peopleSearchQuery) {
+      filtered = filtered.filter(contact =>
+        `${contact.first_name} ${contact.last_name}`.toLowerCase().includes(peopleSearchQuery.toLowerCase()) ||
+        contact.position?.toLowerCase().includes(peopleSearchQuery.toLowerCase()) ||
+        contact.email?.toLowerCase().includes(peopleSearchQuery.toLowerCase()) ||
+        contact.teams?.name?.toLowerCase().includes(peopleSearchQuery.toLowerCase())
+      );
+    }
+
+    if (selectedTeam) {
+      filtered = filtered.filter(contact => contact.team_id === selectedTeam);
+    }
+
+    if (selectedRole) {
+      filtered = filtered.filter(contact => 
+        contact.position?.toLowerCase().includes(selectedRole.toLowerCase())
+      );
+    }
+
+    setFilteredContacts(filtered);
+    setPeopleCurrentPage(1);
+  }, [contacts, peopleSearchQuery, selectedTeam, selectedRole]);
+
+  // Pagination calculations for organizations
+  const totalPages = Math.ceil(filteredTeams.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedTeams = filteredTeams.slice(startIndex, endIndex);
+
+  // Pagination calculations for people  
+  const peopleTotalPages = Math.ceil(filteredContacts.length / itemsPerPage);
+  const peopleStartIndex = (peopleCurrentPage - 1) * itemsPerPage;
+  const peopleEndIndex = peopleStartIndex + itemsPerPage;
+  const paginatedContacts = filteredContacts.slice(peopleStartIndex, peopleEndIndex);
+
+  // Clear filters functions
   const clearFilters = () => {
-    setSearchQuery('');
-    setSelectedSport('all');
-    setSelectedCountry('all');
-    setSelectedCity('all');
-    setSelectedLevel('all');
-    setCurrentPage(1);
+    setSearchQuery("");
+    setSelectedSport("");
+    setSelectedCountry("");
+    setSelectedCity("");
+    setSelectedLevel("");
   };
 
-  const hasActiveFilters = searchQuery || selectedSport !== 'all' || 
-                           selectedCountry !== 'all' || selectedCity !== 'all' || 
-                           selectedLevel !== 'all';
+  const clearPeopleFilters = () => {
+    setPeopleSearchQuery("");
+    setSelectedTeam("");
+    setSelectedRole("");
+  };
+
+  const hasActiveFilters = searchQuery || selectedSport || selectedCountry || selectedCity || selectedLevel;
+  const hasPeopleActiveFilters = peopleSearchQuery || selectedTeam || selectedRole;
+
+  // Get unique roles from contacts
+  const uniqueRoles = Array.from(new Set(contacts.map(contact => contact.position).filter(Boolean)));
 
   if (loading) {
     return (
-      <div className="flex gap-6 h-full">
-        {/* Sidebar Skeleton */}
-        <div className="w-80 space-y-4">
-          <Skeleton className="h-10 w-full" />
-          <Skeleton className="h-40 w-full" />
-          <Skeleton className="h-32 w-full" />
-        </div>
-        {/* Content Skeleton */}
-        <div className="flex-1 space-y-4">
-          <Skeleton className="h-8 w-48" />
-          <Skeleton className="h-96 w-full" />
+      <div className="p-6 space-y-6">
+        <Skeleton className="h-8 w-64" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <Skeleton key={i} className="h-32 w-full" />
+          ))}
         </div>
       </div>
     );
   }
 
   return (
-    <div className="flex gap-4 h-full">
-      {/* Left Sidebar - Filters */}
-      <div className="w-64 flex-shrink-0">
-        <Card className="shadow-sm border-border sticky top-4">
-          <CardHeader className="pb-3">
-            <CardTitle className="flex items-center gap-2 text-foreground text-base">
-              <Filter className="h-4 w-4 text-primary" />
-              Filters
-              {hasActiveFilters && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={clearFilters}
-                  className="ml-auto h-6 px-2 text-xs"
-                >
-                  <X className="h-3 w-3 mr-1" />
-                  Clear
-                </Button>
-              )}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {/* Search */}
-            <div className="space-y-1">
-              <label className="text-xs font-medium text-foreground">Search</label>
-              <div className="relative">
-                <Search className="absolute left-2.5 top-1/2 transform -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
-                <Input
-                  placeholder="Search teams..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-8 bg-background border-border h-8 text-xs"
-                />
-              </div>
-            </div>
+    <div className="p-6 space-y-6">
+      <div className="flex flex-col lg:flex-row gap-6">
+        {/* Filters Sidebar */}
+        <div className="w-full lg:w-80 space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Filter className="h-5 w-5" />
+                Filters
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="organizations" className="flex items-center gap-2">
+                    <Building2 className="h-4 w-4" />
+                    Organizations
+                  </TabsTrigger>
+                  <TabsTrigger value="people" className="flex items-center gap-2">
+                    <Users className="h-4 w-4" />
+                    People
+                  </TabsTrigger>
+                </TabsList>
 
-            {/* Sport Filter */}
-            <div className="space-y-1">
-              <label className="text-xs font-medium text-foreground">Sport</label>
-              <Select value={selectedSport} onValueChange={setSelectedSport}>
-                <SelectTrigger className="bg-background border-border h-8 text-xs">
-                  <SelectValue placeholder="All Sports" />
-                </SelectTrigger>
-                <SelectContent className="bg-popover border-border">
-                  <SelectItem value="all">All Sports</SelectItem>
-                  {sports.map((sport) => (
-                    <SelectItem key={sport.id} value={sport.id}>
-                      {sport.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+                <TabsContent value="organizations" className="space-y-4 mt-4">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                    <Input
+                      placeholder="Search organizations..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="pl-10"
+                    />
+                  </div>
 
-            {/* Country Filter */}
-            <div className="space-y-1">
-              <label className="text-xs font-medium text-foreground">Country</label>
-              <Select value={selectedCountry} onValueChange={setSelectedCountry}>
-                <SelectTrigger className="bg-background border-border h-8 text-xs">
-                  <SelectValue placeholder="All Countries" />
-                </SelectTrigger>
-                <SelectContent className="bg-popover border-border">
-                  <SelectItem value="all">All Countries</SelectItem>
-                  {countries.map((country) => (
-                    <SelectItem key={country.id} value={country.id}>
-                      {country.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+                  <Select value={selectedSport} onValueChange={setSelectedSport}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select sport" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="">All Sports</SelectItem>
+                      {sports.map((sport) => (
+                        <SelectItem key={sport.id} value={sport.id}>
+                          {sport.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
 
-            {/* City Filter */}
-            <div className="space-y-1">
-              <label className="text-xs font-medium text-foreground">City</label>
-              <Select value={selectedCity} onValueChange={setSelectedCity}>
-                <SelectTrigger className="bg-background border-border h-8 text-xs">
-                  <SelectValue placeholder="All Cities" />
-                </SelectTrigger>
-                <SelectContent className="bg-popover border-border">
-                  <SelectItem value="all">All Cities</SelectItem>
-                  {cities.map((city) => (
-                    <SelectItem key={city.id} value={city.id}>
-                      {city.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+                  <Select value={selectedCountry} onValueChange={setSelectedCountry}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select country" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="">All Countries</SelectItem>
+                      {countries.map((country) => (
+                        <SelectItem key={country.id} value={country.id}>
+                          {country.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
 
-            {/* Level Filter */}
-            {levels.length > 0 && (
-              <div className="space-y-1">
-                <label className="text-xs font-medium text-foreground">Level</label>
-                <Select value={selectedLevel} onValueChange={setSelectedLevel}>
-                  <SelectTrigger className="bg-background border-border h-8 text-xs">
-                    <SelectValue placeholder="All Levels" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-popover border-border">
-                    <SelectItem value="all">All Levels</SelectItem>
-                    {levels.map((level) => (
-                      <SelectItem key={level} value={level}>
-                        {level}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            )}
+                  <Select value={selectedCity} onValueChange={setSelectedCity}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select city" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="">All Cities</SelectItem>
+                      {cities.map((city) => (
+                        <SelectItem key={city.id} value={city.id}>
+                          {city.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
 
-            {/* Results Count */}
-            <div className="pt-3 border-t border-border">
-              <p className="text-xs text-muted-foreground">
-                Showing {startIndex + 1}-{Math.min(endIndex, filteredTeams.length)} of {filteredTeams.length} organisations
-                {totalPages > 1 && (
-                  <span className="block mt-1">
-                    Page {currentPage} of {totalPages}
-                  </span>
-                )}
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+                  <Select value={selectedLevel} onValueChange={setSelectedLevel}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select level" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="">All Levels</SelectItem>
+                      <SelectItem value="Professional">Professional</SelectItem>
+                      <SelectItem value="Semi-Professional">Semi-Professional</SelectItem>
+                      <SelectItem value="Amateur">Amateur</SelectItem>
+                      <SelectItem value="Youth">Youth</SelectItem>
+                      <SelectItem value="Academy">Academy</SelectItem>
+                    </SelectContent>
+                  </Select>
 
-      {/* Main Content */}
-      <div className="flex-1 space-y-4">
-        {/* Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-xl font-bold text-foreground">Discover</h1>
-            <p className="text-muted-foreground text-sm">
-              Discover and explore sports organizations in your database
-            </p>
-          </div>
-          <Button size="sm" className="shadow-sm h-9">
-            <Plus className="h-4 w-4 mr-2" />
-            Add to List
-          </Button>
+                  {hasActiveFilters && (
+                    <Button 
+                      variant="outline" 
+                      onClick={clearFilters}
+                      className="w-full flex items-center gap-2"
+                    >
+                      <X className="h-4 w-4" />
+                      Clear Filters
+                    </Button>
+                  )}
+                </TabsContent>
+
+                <TabsContent value="people" className="space-y-4 mt-4">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                    <Input
+                      placeholder="Search people..."
+                      value={peopleSearchQuery}
+                      onChange={(e) => setPeopleSearchQuery(e.target.value)}
+                      className="pl-10"
+                    />
+                  </div>
+
+                  <Select value={selectedTeam} onValueChange={setSelectedTeam}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select team" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="">All Teams</SelectItem>
+                      {teams.map((team) => (
+                        <SelectItem key={team.id} value={team.id}>
+                          {team.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+
+                  <Select value={selectedRole} onValueChange={setSelectedRole}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select role" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="">All Roles</SelectItem>
+                      {uniqueRoles.map((role) => (
+                        <SelectItem key={role} value={role}>
+                          {role}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+
+                  {hasPeopleActiveFilters && (
+                    <Button 
+                      variant="outline" 
+                      onClick={clearPeopleFilters}
+                      className="w-full flex items-center gap-2"
+                    >
+                      <X className="h-4 w-4" />
+                      Clear Filters
+                    </Button>
+                  )}
+                </TabsContent>
+              </Tabs>
+            </CardContent>
+          </Card>
         </div>
 
-        {/* Results Table */}
-        <Card className="shadow-sm border-border">
-          <div className="rounded-lg overflow-hidden">
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-muted/30">
-                  <TableHead className="font-semibold">Organisation</TableHead>
-                  <TableHead className="font-semibold">Sport</TableHead>
-                  <TableHead className="font-semibold">Level</TableHead>
-                  <TableHead className="font-semibold">Country</TableHead>
-                  <TableHead className="font-semibold">City</TableHead>
-                  <TableHead className="font-semibold text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {paginatedTeams.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={6} className="text-center py-12">
-                      <div className="flex flex-col items-center gap-3">
-                        <Building2 className="h-12 w-12 text-muted-foreground" />
-                        <div>
-                          <p className="font-medium text-foreground">No organisations found</p>
-                          <p className="text-sm text-muted-foreground">
-                            Try adjusting your filters or search terms
-                          </p>
-                        </div>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  paginatedTeams.map((team) => (
-                    <TableRow 
-                      key={team.id} 
-                      className="hover:bg-muted/50 cursor-pointer transition-colors"
-                    >
-                      <TableCell>
-                        <div className="flex items-center gap-3">
-                          {(() => {
-                            const generatedLogo = getTeamLogo(team.name);
-                            if (generatedLogo) {
-                              return (
-                                <img 
-                                  src={generatedLogo} 
-                                  alt={`${team.name} logo`}
-                                  className="w-10 h-10 rounded-lg object-cover shadow-soft"
-                                />
-                              );
-                            } else if (team.logo_url) {
-                              return (
-                                <img 
-                                  src={team.logo_url} 
-                                  alt={`${team.name} logo`}
-                                  className="w-10 h-10 rounded-lg object-cover shadow-soft"
-                                  onError={(e) => {
-                                    e.currentTarget.style.display = 'none';
-                                  }}
-                                />
-                              );
-                            } else {
-                              return (
-                                <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center shadow-soft">
-                                  <Building2 className="h-5 w-5 text-muted-foreground" />
-                                </div>
-                              );
-                            }
-                          })()}
-                          <div>
-                            <p className="font-medium text-foreground">{team.name}</p>
-                          </div>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        {team.sport?.name ? (
-                          <Badge variant="secondary" className="font-medium">
-                            {team.sport.name}
-                          </Badge>
-                        ) : (
-                          <span className="text-muted-foreground">-</span>
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant="secondary" className="font-medium">
-                          {team.level || 'Professional'}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        <span className="text-foreground font-medium">
-                          {team.country?.name || '-'}
-                        </span>
-                      </TableCell>
-                      <TableCell>
-                        <span className="text-foreground">
-                          {team.city?.name || '-'}
-                        </span>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex items-center justify-end gap-2">
-                          <Button
-                            variant="outline"
-                            size="icon"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              // Add to list functionality
-                            }}
-                            className="h-8 w-8"
-                          >
-                            <Plus className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </div>
-        </Card>
+        {/* Main Content */}
+        <div className="flex-1 space-y-4">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <TabsContent value="organizations" className="space-y-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Building2 className="h-5 w-5" />
+                    Organizations ({filteredTeams.length})
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {paginatedTeams.length === 0 ? (
+                    <div className="text-center py-8 text-muted-foreground">
+                      No organizations found matching your criteria.
+                    </div>
+                  ) : (
+                    <div className="rounded-md border">
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead className="w-16">Logo</TableHead>
+                            <TableHead>Name</TableHead>
+                            <TableHead>Sport</TableHead>
+                            <TableHead>Level</TableHead>
+                            <TableHead>Country</TableHead>
+                            <TableHead>City</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {paginatedTeams.map((team) => {
+                            const logoUrl = getTeamLogo(team.name);
+                            return (
+                              <TableRow 
+                                key={team.id} 
+                                className="cursor-pointer hover:bg-muted/50"
+                                onClick={() => navigate(`/crm/teams/${team.id}`)}
+                              >
+                                <TableCell>
+                                  <div className="w-8 h-8 rounded-full overflow-hidden bg-muted flex items-center justify-center">
+                                    {logoUrl ? (
+                                      <img 
+                                        src={logoUrl} 
+                                        alt={`${team.name} logo`}
+                                        className="w-full h-full object-cover"
+                                      />
+                                    ) : (
+                                      <Building2 className="h-4 w-4 text-muted-foreground" />
+                                    )}
+                                  </div>
+                                </TableCell>
+                                <TableCell className="font-medium">{team.name}</TableCell>
+                                <TableCell>
+                                  <Badge variant="secondary">
+                                    {team.sport?.name || 'Unknown'}
+                                  </Badge>
+                                </TableCell>
+                                <TableCell>
+                                  <Badge variant="outline">
+                                    {team.level || 'Not specified'}
+                                  </Badge>
+                                </TableCell>
+                                <TableCell>{team.country?.name || 'Unknown'}</TableCell>
+                                <TableCell>{team.city?.name || 'Unknown'}</TableCell>
+                              </TableRow>
+                            );
+                          })}
+                        </TableBody>
+                      </Table>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
 
-        {/* Pagination */}
-        {totalPages > 1 && (
-          <div className="flex justify-center">
-            <Pagination>
-              <PaginationContent>
-                <PaginationItem>
-                  <PaginationPrevious 
-                    className={currentPage <= 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
-                    onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-                  />
-                </PaginationItem>
-                {[...Array(Math.min(5, totalPages))].map((_, i) => {
-                  const pageNumber = i + 1;
-                  return (
-                    <PaginationItem key={pageNumber}>
-                      <PaginationLink
-                        onClick={() => setCurrentPage(pageNumber)}
-                        isActive={currentPage === pageNumber}
-                        className="cursor-pointer"
-                      >
-                        {pageNumber}
-                      </PaginationLink>
-                    </PaginationItem>
-                  );
-                })}
-                {totalPages > 5 && (
-                  <PaginationItem>
-                    <PaginationEllipsis />
-                  </PaginationItem>
-                )}
-                <PaginationItem>
-                  <PaginationNext 
-                    className={currentPage >= totalPages ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
-                    onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
-                  />
-                </PaginationItem>
-              </PaginationContent>
-            </Pagination>
-          </div>
-        )}
+              {/* Organizations Pagination */}
+              {totalPages > 1 && (
+                <div className="flex justify-center">
+                  <Pagination>
+                    <PaginationContent>
+                      <PaginationItem>
+                        <PaginationPrevious 
+                          href="#" 
+                          onClick={(e) => {
+                            e.preventDefault();
+                            if (currentPage > 1) setCurrentPage(currentPage - 1);
+                          }}
+                          className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
+                        />
+                      </PaginationItem>
+                      
+                      {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                        const page = i + 1;
+                        return (
+                          <PaginationItem key={page}>
+                            <PaginationLink
+                              href="#"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                setCurrentPage(page);
+                              }}
+                              isActive={currentPage === page}
+                            >
+                              {page}
+                            </PaginationLink>
+                          </PaginationItem>
+                        );
+                      })}
+                      
+                      <PaginationItem>
+                        <PaginationNext 
+                          href="#" 
+                          onClick={(e) => {
+                            e.preventDefault();
+                            if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+                          }}
+                          className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
+                        />
+                      </PaginationItem>
+                    </PaginationContent>
+                  </Pagination>
+                </div>
+              )}
+            </TabsContent>
+
+            <TabsContent value="people" className="space-y-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Users className="h-5 w-5" />
+                    People ({filteredContacts.length})
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {paginatedContacts.length === 0 ? (
+                    <div className="text-center py-8 text-muted-foreground">
+                      No people found matching your criteria.
+                    </div>
+                  ) : (
+                    <div className="rounded-md border">
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>Name</TableHead>
+                            <TableHead>Role</TableHead>
+                            <TableHead>Team</TableHead>
+                            <TableHead>Email</TableHead>
+                            <TableHead>Phone</TableHead>
+                            <TableHead>LinkedIn</TableHead>
+                            <TableHead>Action</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {paginatedContacts.map((contact) => (
+                            <TableRow key={contact.id} className="hover:bg-muted/50">
+                              <TableCell className="font-medium">
+                                {contact.first_name} {contact.last_name}
+                              </TableCell>
+                              <TableCell>
+                                <Badge variant="secondary">
+                                  {contact.position || 'Not specified'}
+                                </Badge>
+                              </TableCell>
+                              <TableCell>{contact.teams?.name || 'Unknown'}</TableCell>
+                              <TableCell>
+                                {contact.email ? (
+                                  <div className="flex items-center gap-2">
+                                    <Mail className="h-4 w-4 text-muted-foreground" />
+                                    <span className="truncate max-w-[200px]">{contact.email}</span>
+                                  </div>
+                                ) : (
+                                  <span className="text-muted-foreground">-</span>
+                                )}
+                              </TableCell>
+                              <TableCell>
+                                {contact.mobile || contact.phone ? (
+                                  <div className="flex items-center gap-2">
+                                    <Phone className="h-4 w-4 text-muted-foreground" />
+                                    <span>{contact.mobile || contact.phone}</span>
+                                  </div>
+                                ) : (
+                                  <span className="text-muted-foreground">-</span>
+                                )}
+                              </TableCell>
+                              <TableCell>
+                                {contact.linkedin ? (
+                                  <Button variant="ghost" size="sm" asChild>
+                                    <a href={contact.linkedin} target="_blank" rel="noopener noreferrer">
+                                      <ExternalLink className="h-4 w-4" />
+                                    </a>
+                                  </Button>
+                                ) : (
+                                  <span className="text-muted-foreground">-</span>
+                                )}
+                              </TableCell>
+                              <TableCell>
+                                <Button variant="outline" size="sm">
+                                  <Plus className="h-4 w-4 mr-2" />
+                                  Add to List
+                                </Button>
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* People Pagination */}
+              {peopleTotalPages > 1 && (
+                <div className="flex justify-center">
+                  <Pagination>
+                    <PaginationContent>
+                      <PaginationItem>
+                        <PaginationPrevious 
+                          href="#" 
+                          onClick={(e) => {
+                            e.preventDefault();
+                            if (peopleCurrentPage > 1) setPeopleCurrentPage(peopleCurrentPage - 1);
+                          }}
+                          className={peopleCurrentPage === 1 ? "pointer-events-none opacity-50" : ""}
+                        />
+                      </PaginationItem>
+                      
+                      {Array.from({ length: Math.min(5, peopleTotalPages) }, (_, i) => {
+                        const page = i + 1;
+                        return (
+                          <PaginationItem key={page}>
+                            <PaginationLink
+                              href="#"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                setPeopleCurrentPage(page);
+                              }}
+                              isActive={peopleCurrentPage === page}
+                            >
+                              {page}
+                            </PaginationLink>
+                          </PaginationItem>
+                        );
+                      })}
+                      
+                      <PaginationItem>
+                        <PaginationNext 
+                          href="#" 
+                          onClick={(e) => {
+                            e.preventDefault();
+                            if (peopleCurrentPage < peopleTotalPages) setPeopleCurrentPage(peopleCurrentPage + 1);
+                          }}
+                          className={peopleCurrentPage === peopleTotalPages ? "pointer-events-none opacity-50" : ""}
+                        />
+                      </PaginationItem>
+                    </PaginationContent>
+                  </Pagination>
+                </div>
+              )}
+            </TabsContent>
+          </Tabs>
+        </div>
       </div>
     </div>
   );
