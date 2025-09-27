@@ -82,7 +82,7 @@ const Navbar = () => {
                           </li>
                           <li>
                             <NavigationMenuLink asChild>
-                              <Link to="/crm/signals" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
+                              <Link to="/products/signals" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-sportbnk-lightGrey focus:bg-sportbnk-lightGrey">
                                 <div className="text-sm font-medium text-sportbnk-navy flex items-center">
                                   <Activity className="h-4 w-4 mr-2" /> Signals
                                 </div>
@@ -283,7 +283,7 @@ const Navbar = () => {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link to="/crm/signals" className="w-full flex items-center">
+                  <Link to="/products/signals" className="w-full flex items-center">
                     <Activity className="h-4 w-4 mr-2" />Signals
                   </Link>
                 </DropdownMenuItem>

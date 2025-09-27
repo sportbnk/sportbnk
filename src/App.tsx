@@ -51,6 +51,7 @@ import CrmLayout from "./components/CrmLayout";
 // Product pages
 import Discover from "./pages/products/Discover";
 import ProductEnrich from "./pages/products/Enrich";
+import ProductSignals from "./pages/products/Signals";
 import Api from "./pages/products/Api";
 
 // Case pages
@@ -131,6 +132,7 @@ function App() {
                        {/* Product sub-pages */}
                       <Route path="/products/discover" element={<Discover />} />
                       <Route path="/products/enrich" element={<ProductEnrich />} />
+                      <Route path="/products/signals" element={<ProductSignals />} />
                       <Route path="/products/api" element={<Api />} />
                       
                       {/* Case sub-pages */}
