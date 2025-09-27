@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { 
   Search, 
   Download, 
@@ -16,7 +16,8 @@ import {
   Mail,
   Phone,
   MapPin,
-  ExternalLink
+  ExternalLink,
+  Trash2
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
@@ -32,83 +33,14 @@ interface Person {
   department: string;
   avatarUrl?: string;
   linkedinUrl?: string;
+  addedDate: string;
 }
-
-const mockPeople: Person[] = [
-  {
-    id: '1',
-    name: 'Sarah Johnson',
-    position: 'Commercial Director',
-    company: 'Manchester United FC',
-    email: 's.johnson@manutd.com',
-    phone: '+44 161 868 8000',
-    location: 'Manchester, UK',
-    sport: 'Football',
-    department: 'Commercial',
-    linkedinUrl: 'https://linkedin.com/in/sarahjohnson'
-  },
-  {
-    id: '2',
-    name: 'David Martinez',
-    position: 'Head of Procurement',
-    company: 'Real Madrid CF',
-    email: 'd.martinez@realmadrid.com',
-    phone: '+34 91 398 4300',
-    location: 'Madrid, Spain',
-    sport: 'Football',
-    department: 'Operations'
-  },
-  {
-    id: '3',
-    name: 'Emma Thompson',
-    position: 'Marketing Director',
-    company: 'Surrey County Cricket Club',
-    email: 'e.thompson@surreyccc.co.uk',
-    phone: '+44 20 8398 1000',
-    location: 'London, UK',
-    sport: 'Cricket',
-    department: 'Marketing'
-  },
-  {
-    id: '4',
-    name: 'James Wilson',
-    position: 'Partnership Manager',
-    company: 'Liverpool FC',
-    email: 'j.wilson@liverpoolfc.com',
-    phone: '+44 151 263 2361',
-    location: 'Liverpool, UK',
-    sport: 'Football',
-    department: 'Partnerships'
-  },
-  {
-    id: '5',
-    name: 'Maria Rodriguez',
-    position: 'Head of Digital Marketing',
-    company: 'FC Barcelona',
-    email: 'm.rodriguez@fcbarcelona.com',
-    phone: '+34 93 496 3600',
-    location: 'Barcelona, Spain',
-    sport: 'Football',
-    department: 'Marketing'
-  },
-  {
-    id: '6',
-    name: 'Tom Brown',
-    position: 'Commercial Manager',
-    company: 'Yorkshire County Cricket Club',
-    email: 't.brown@yorkshireccc.com',
-    phone: '+44 113 278 7394',
-    location: 'Leeds, UK',
-    sport: 'Cricket',
-    department: 'Commercial'
-  }
-];
 
 const People = () => {
   const { toast } = useToast();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedPeople, setSelectedPeople] = useState<string[]>([]);
-  const [people, setPeople] = useState<Person[]>(mockPeople);
+  const [people, setPeople] = useState<Person[]>([]);
 
   const filteredPeople = people.filter(person =>
     person.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -133,38 +65,42 @@ const People = () => {
     }
   };
 
-  const handleAddToCRM = () => {
+  const handleRemoveSelected = () => {
     if (selectedPeople.length === 0) {
       toast({
         title: "No Selection",
-        description: "Please select people to add to CRM.",
+        description: "Please select people to remove.",
         variant: "destructive"
       });
       return;
     }
 
-    toast({
-      title: "Added to CRM",
-      description: `Successfully added ${selectedPeople.length} ${selectedPeople.length === 1 ? 'person' : 'people'} to CRM.`,
-    });
-    
+    setPeople(prev => prev.filter(person => !selectedPeople.includes(person.id)));
     setSelectedPeople([]);
+
+    toast({
+      title: "Removed from List",
+      description: `Successfully removed ${selectedPeople.length} ${selectedPeople.length === 1 ? 'person' : 'people'} from your list.`,
+    });
   };
 
   const handleExportCSV = () => {
-    if (selectedPeople.length === 0) {
+    if (people.length === 0) {
       toast({
-        title: "No Selection",
-        description: "Please select people to export.",
+        title: "Empty List",
+        description: "No contacts to export. Add some contacts first.",
         variant: "destructive"
       });
       return;
     }
 
-    const selectedData = people.filter(person => selectedPeople.includes(person.id));
+    const exportData = selectedPeople.length > 0 
+      ? people.filter(person => selectedPeople.includes(person.id))
+      : people;
+
     const csvContent = [
-      ['Name', 'Position', 'Company', 'Email', 'Phone', 'Location', 'Sport', 'Department'],
-      ...selectedData.map(person => [
+      ['Name', 'Position', 'Company', 'Email', 'Phone', 'Location', 'Sport', 'Department', 'Added Date'],
+      ...exportData.map(person => [
         person.name,
         person.position,
         person.company,
@@ -172,7 +108,8 @@ const People = () => {
         person.phone,
         person.location,
         person.sport,
-        person.department
+        person.department,
+        person.addedDate
       ])
     ].map(row => row.join(',')).join('\n');
 
@@ -180,13 +117,13 @@ const People = () => {
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `people-export-${new Date().toISOString().split('T')[0]}.csv`;
+    link.download = `my-contacts-${new Date().toISOString().split('T')[0]}.csv`;
     link.click();
     window.URL.revokeObjectURL(url);
 
     toast({
       title: "Export Successful",
-      description: `Exported ${selectedPeople.length} ${selectedPeople.length === 1 ? 'person' : 'people'} to CSV.`,
+      description: `Exported ${exportData.length} ${exportData.length === 1 ? 'contact' : 'contacts'} to CSV.`,
     });
   };
 
@@ -200,10 +137,56 @@ const People = () => {
       'Marketing': 'bg-green-100 text-green-800',
       'Operations': 'bg-yellow-100 text-yellow-800',
       'Partnerships': 'bg-purple-100 text-purple-800',
-      'Digital': 'bg-pink-100 text-pink-800'
+      'Executive': 'bg-red-100 text-red-800',
+      'Communications': 'bg-orange-100 text-orange-800',
+      'Academy': 'bg-indigo-100 text-indigo-800',
+      'Football Operations': 'bg-pink-100 text-pink-800',
+      'Finance': 'bg-cyan-100 text-cyan-800'
     };
     return colors[department] || 'bg-gray-100 text-gray-800';
   };
+
+  if (people.length === 0) {
+    return (
+      <div className="min-h-screen bg-gray-50 p-6" style={{ fontFamily: 'Poppins, sans-serif' }}>
+        <div className="max-w-7xl mx-auto">
+          {/* Header */}
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">My Contacts</h1>
+              <p className="text-gray-600 mt-1">Build and manage your contact lists</p>
+            </div>
+            <div className="flex items-center gap-3">
+              <Button 
+                disabled
+                variant="outline"
+              >
+                <Download className="h-4 w-4 mr-2" />
+                Export CSV
+              </Button>
+            </div>
+          </div>
+
+          {/* Empty State */}
+          <Card>
+            <CardContent className="p-12">
+              <div className="text-center">
+                <Users className="h-16 w-16 text-gray-300 mx-auto mb-6" />
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">No contacts in your list yet</h3>
+                <p className="text-gray-500 mb-6 max-w-md mx-auto">
+                  Start building your contact list by discovering and adding people from Premier League football teams.
+                </p>
+                <Button className="bg-blue-600 hover:bg-blue-700">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Discover Contacts
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 p-6" style={{ fontFamily: 'Poppins, sans-serif' }}>
@@ -211,25 +194,26 @@ const People = () => {
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">People</h1>
-            <p className="text-gray-600 mt-1">Build and manage your people lists</p>
+            <h1 className="text-3xl font-bold text-gray-900">My Contacts</h1>
+            <p className="text-gray-600 mt-1">Build and manage your contact lists • {people.length} contacts</p>
           </div>
           <div className="flex items-center gap-3">
-            <Button 
-              onClick={handleAddToCRM}
-              disabled={selectedPeople.length === 0}
-              className="bg-blue-600 hover:bg-blue-700"
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              Add to CRM ({selectedPeople.length})
-            </Button>
+            {selectedPeople.length > 0 && (
+              <Button 
+                onClick={handleRemoveSelected}
+                variant="outline"
+                className="text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300"
+              >
+                <Trash2 className="h-4 w-4 mr-2" />
+                Remove ({selectedPeople.length})
+              </Button>
+            )}
             <Button 
               onClick={handleExportCSV}
-              disabled={selectedPeople.length === 0}
               variant="outline"
             >
               <Download className="h-4 w-4 mr-2" />
-              Export CSV
+              Export {selectedPeople.length > 0 ? `Selected (${selectedPeople.length})` : 'All'}
             </Button>
           </div>
         </div>
@@ -241,7 +225,7 @@ const People = () => {
               <div className="flex-1 relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                 <Input
-                  placeholder="Search people by name, company, position, or department..."
+                  placeholder="Search contacts by name, company, position, or department..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-10"
@@ -276,7 +260,7 @@ const People = () => {
           </CardContent>
         </Card>
 
-        {/* People List */}
+        {/* Contacts List */}
         <Card>
           <CardContent className="p-0">
             <Table>
@@ -295,7 +279,8 @@ const People = () => {
                   <TableHead>Sport</TableHead>
                   <TableHead>Location</TableHead>
                   <TableHead>Contact</TableHead>
-                  <TableHead className="w-20">LinkedIn</TableHead>
+                  <TableHead>LinkedIn</TableHead>
+                  <TableHead>Added</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -310,7 +295,6 @@ const People = () => {
                     <TableCell>
                       <div className="flex items-center gap-3">
                         <Avatar className="h-8 w-8">
-                          <AvatarImage src={person.avatarUrl} />
                           <AvatarFallback className="bg-blue-100 text-blue-700 text-sm">
                             {getInitials(person.name)}
                           </AvatarFallback>
@@ -373,6 +357,9 @@ const People = () => {
                         </a>
                       )}
                     </TableCell>
+                    <TableCell>
+                      <span className="text-xs text-gray-500">{person.addedDate}</span>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -381,7 +368,7 @@ const People = () => {
             {filteredPeople.length === 0 && searchQuery && (
               <div className="text-center py-12">
                 <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">No people found</h3>
+                <h3 className="text-lg font-medium text-gray-900 mb-2">No contacts found</h3>
                 <p className="text-gray-600">Try adjusting your search criteria</p>
               </div>
             )}
