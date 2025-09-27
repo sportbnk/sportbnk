@@ -15,9 +15,9 @@ import {
 } from "@/components/ui/table";
 import { Search, Users, Mail, Phone, Building2, Plus, Filter, Download, MapPin, Globe2, Eye, DollarSign } from "lucide-react";
 
-// Import Teams and People components
-import Teams from "@/pages/crm/Teams";
+// Import People and Search components
 import People from "@/pages/crm/People";
+import SearchPage from "@/pages/crm/Search";
 
 const ContactsList = () => {
   const [activeTab, setActiveTab] = useState("organizations");
@@ -46,7 +46,7 @@ const ContactsList = () => {
         </TabsList>
         
         <TabsContent value="organizations" className="mt-6">
-          <Teams />
+          <SearchPage />
         </TabsContent>
         
         <TabsContent value="people" className="mt-6">

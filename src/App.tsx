@@ -30,7 +30,7 @@ import FreeTrial from "./pages/FreeTrial";
 
 import Profile from "./pages/crm/Profile";
 import CrmSettings from "./pages/crm/Settings";
-import Teams from "./pages/crm/Teams";
+
 import TeamDetails from "./pages/crm/TeamDetails";
 import People from "./pages/crm/People";
 import Organisations from "./pages/crm/Organisations";
@@ -106,7 +106,7 @@ function App() {
                        {/* CRM System - Protected with Trial Guard */}
                        <Route path="/crm/profile" element={<ProtectedRoute><CrmLayout pageTitle="Profile"><Profile /></CrmLayout></ProtectedRoute>} />
                        <Route path="/crm/settings" element={<ProtectedRoute><CrmLayout pageTitle="Settings"><CrmSettings /></CrmLayout></ProtectedRoute>} />
-                       <Route path="/crm/teams" element={<ProtectedRoute><CrmLayout pageTitle="Organisations"><Teams /></CrmLayout></ProtectedRoute>} />
+                       
                        
                        <Route path="/crm/my-contacts" element={<ProtectedRoute><CrmLayout pageTitle="My Contacts"><People /></CrmLayout></ProtectedRoute>} />
                        <Route path="/crm/lists" element={<ProtectedRoute><CrmLayout pageTitle="Lists"><Lists /></CrmLayout></ProtectedRoute>} />
