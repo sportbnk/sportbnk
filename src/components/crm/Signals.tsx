@@ -294,33 +294,6 @@ const Signals = () => {
       {/* Filters Row */}
       <div className="bg-white border-b border-gray-200 px-6 py-4">
         <div className="flex gap-4 items-center">
-          <span className="text-sm font-medium text-gray-700 whitespace-nowrap">Filter by:</span>
-          
-          {/* Search Bar */}
-          <div className="flex-1 max-w-md">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-              <Input
-                placeholder="Search signals..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 bg-gray-50 border-gray-200"
-              />
-            </div>
-          </div>
-
-          {/* Profile Icon */}
-          <Avatar className="h-9 w-9">
-            <AvatarFallback style={{ backgroundColor: '#0b1a51', color: 'white' }}>
-              <User className="h-4 w-4" />
-            </AvatarFallback>
-          </Avatar>
-        </div>
-      </div>
-
-      {/* Filters Row */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4">
-        <div className="flex gap-4 items-center">
           <span className="text-sm font-medium text-gray-700 whitespace-nowrap">Types:</span>
           
           <Select value={selectedSport} onValueChange={setSelectedSport}>
@@ -373,6 +346,26 @@ const Signals = () => {
               <SelectItem value="Procurement">Procurement</SelectItem>
             </SelectContent>
           </Select>
+
+          {/* Search Bar next to All Types */}
+          <div className="flex-1 max-w-md ml-4">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Input
+                placeholder="Search signals..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10 bg-gray-50 border-gray-200"
+              />
+            </div>
+          </div>
+
+          {/* Profile Icon */}
+          <Avatar className="h-9 w-9 ml-auto">
+            <AvatarFallback style={{ backgroundColor: '#0b1a51', color: 'white' }}>
+              <User className="h-4 w-4" />
+            </AvatarFallback>
+          </Avatar>
         </div>
       </div>
 
