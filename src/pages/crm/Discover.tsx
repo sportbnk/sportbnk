@@ -44,6 +44,14 @@ import southamptonLogo from "@/assets/team-logos/west-ham.png"; // Using as plac
 import westHamLogo from "@/assets/team-logos/west-ham.png";
 import wolvesLogo from "@/assets/team-logos/wolves.png";
 
+// Import cricket team logos
+import somersetLogo from "@/assets/team-logos/somerset-cricket.png";
+import surreyLogo from "@/assets/team-logos/surrey-cricket.png";
+import hampshireLogo from "@/assets/team-logos/hampshire-cricket.png";
+import middlesexLogo from "@/assets/team-logos/middlesex-cricket.png";
+import warwickshireLogo from "@/assets/team-logos/warwickshire-cricket.png";
+import ecbLogo from "@/assets/team-logos/england-cricket-national.png";
+
 interface Organisation {
   id: string;
   name: string;
@@ -72,7 +80,7 @@ interface Person {
   department: string;
 }
 
-const premierLeagueTeams: Organisation[] = [
+const sportsTeams: Organisation[] = [
   {
     id: '1',
     name: 'Arsenal FC',
@@ -352,6 +360,91 @@ const premierLeagueTeams: Organisation[] = [
     website: 'https://www.wolves.co.uk',
     email: 'info@wolves.co.uk',
     phone: '+44 871 222 2220'
+  },
+  // Cricket Teams
+  {
+    id: '21',
+    name: 'Somerset County Cricket Club',
+    level: 'Professional',
+    sport: 'Cricket',
+    league: 'County Championship',
+    location: 'Taunton, United Kingdom',
+    country: 'England',
+    foundedYear: 1875,
+    employees: '100-200',
+    website: 'https://www.somersetcricket.co.uk',
+    email: 'info@somersetcricket.co.uk',
+    phone: '+44 1823 425 301'
+  },
+  {
+    id: '22',
+    name: 'Surrey County Cricket Club',
+    level: 'Professional',
+    sport: 'Cricket',
+    league: 'County Championship',
+    location: 'London, United Kingdom',
+    country: 'England',
+    foundedYear: 1845,
+    employees: '200-500',
+    website: 'https://www.surreycricket.com',
+    email: 'info@surreycricket.com',
+    phone: '+44 20 8643 8613'
+  },
+  {
+    id: '23',
+    name: 'Hampshire County Cricket Club',
+    level: 'Professional',
+    sport: 'Cricket',
+    league: 'County Championship',
+    location: 'Southampton, United Kingdom',
+    country: 'England',
+    foundedYear: 1863,
+    employees: '100-200',
+    website: 'https://www.hampshirecricket.co.uk',
+    email: 'enquiries@hampshirecricket.co.uk',
+    phone: '+44 23 8047 2002'
+  },
+  {
+    id: '24',
+    name: 'Middlesex County Cricket Club',
+    level: 'Professional',
+    sport: 'Cricket',
+    league: 'County Championship',
+    location: 'London, United Kingdom',
+    country: 'England',
+    foundedYear: 1864,
+    employees: '100-200',
+    website: 'https://www.middlesexccc.com',
+    email: 'enquiries@middlesexccc.com',
+    phone: '+44 20 7289 1300'
+  },
+  {
+    id: '25',
+    name: 'Warwickshire County Cricket Club',
+    level: 'Professional',
+    sport: 'Cricket',
+    league: 'County Championship',
+    location: 'Birmingham, United Kingdom',
+    country: 'England',
+    foundedYear: 1882,
+    employees: '100-200',
+    website: 'https://www.warwickshireccc.com',
+    email: 'info@warwickshireccc.com',
+    phone: '+44 121 446 4422'
+  },
+  {
+    id: '26',
+    name: 'England and Wales Cricket Board',
+    level: 'Professional',
+    sport: 'Cricket',
+    league: 'National Governing Body',
+    location: 'London, United Kingdom',
+    country: 'England',
+    foundedYear: 1997,
+    employees: '500-1000',
+    website: 'https://www.ecb.co.uk',
+    email: 'feedback@ecb.co.uk',
+    phone: '+44 20 7432 1200'
   }
 ];
 
@@ -899,7 +992,7 @@ const convertEmployeesToPeople = (): Person[] => {
   const people: Person[] = [];
   
   Object.entries(employeesData).forEach(([orgId, employees]) => {
-    const organization = premierLeagueTeams.find(org => org.id === orgId);
+    const organization = sportsTeams.find(org => org.id === orgId);
     if (!organization) return;
     
     employees.forEach((employee) => {
@@ -947,7 +1040,14 @@ const getTeamLogo = (teamName: string) => {
     'Nottingham Forest FC': nottinghamForestLogo,
     'Southampton FC': southamptonLogo,
     'West Ham United FC': westHamLogo,
-    'Wolverhampton Wanderers FC': wolvesLogo
+    'Wolverhampton Wanderers FC': wolvesLogo,
+    // Cricket teams
+    'Somerset County Cricket Club': somersetLogo,
+    'Surrey County Cricket Club': surreyLogo,
+    'Hampshire County Cricket Club': hampshireLogo,
+    'Middlesex County Cricket Club': middlesexLogo,
+    'Warwickshire County Cricket Club': warwickshireLogo,
+    'England and Wales Cricket Board': ecbLogo
   };
   return logoMap[teamName] || arsenalLogo;
 };
@@ -978,10 +1078,10 @@ const Discover = () => {
 
   // Get unique values for filter options
   const getUniqueOrgValues = () => {
-    const sports = [...new Set(premierLeagueTeams.map(org => org.sport))];
-    const levels = [...new Set(premierLeagueTeams.map(org => org.level))];
-    const cities = [...new Set(premierLeagueTeams.map(org => org.location.split(',')[0].trim()))];
-    const countries = [...new Set(premierLeagueTeams.map(org => org.country))];
+    const sports = [...new Set(sportsTeams.map(org => org.sport))];
+    const levels = [...new Set(sportsTeams.map(org => org.level))];
+    const cities = [...new Set(sportsTeams.map(org => org.location.split(',')[0].trim()))];
+    const countries = [...new Set(sportsTeams.map(org => org.country))];
     return { sports, levels, cities, countries };
   };
 
@@ -995,7 +1095,7 @@ const Discover = () => {
   const { sports, levels, cities, countries } = getUniqueOrgValues();
   const { roles, teams, locations } = getUniquePeopleValues();
 
-  const filteredOrganisations = premierLeagueTeams.filter(org => {
+  const filteredOrganisations = sportsTeams.filter(org => {
     // Search filter
     const matchesSearch = org.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       org.level.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -1161,7 +1261,7 @@ const Discover = () => {
         <div className="flex items-center justify-between mb-6">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">Discover</h1>
-            <p className="text-gray-600 mt-1">Explore and discover Premier League football teams and contacts</p>
+            <p className="text-gray-600 mt-1">Explore and discover UK sports teams and contacts across football and cricket</p>
           </div>
           <div className="flex items-center gap-3">
             <Button 
