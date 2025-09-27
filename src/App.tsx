@@ -30,6 +30,8 @@ import FreeTrial from "./pages/FreeTrial";
 
 import Profile from "./pages/crm/Profile";
 import CrmSettings from "./pages/crm/Settings";
+import Help from "./pages/crm/Help";
+import Upgrade from "./pages/crm/Upgrade";
 
 import TeamDetails from "./pages/crm/TeamDetails";
 import People from "./pages/crm/People";
@@ -119,6 +121,8 @@ function App() {
                        <Route path="/crm/meetings" element={<ProtectedRoute><CrmLayout pageTitle="Meetings"><Meetings /></CrmLayout></ProtectedRoute>} />
                        <Route path="/crm/emails" element={<ProtectedRoute><CrmLayout pageTitle="Emails"><Emails /></CrmLayout></ProtectedRoute>} />
                        <Route path="/crm/integrations" element={<ProtectedRoute><CrmLayout pageTitle="Integrations"><Integrations /></CrmLayout></ProtectedRoute>} />
+                       <Route path="/crm/help" element={<ProtectedRoute><Help /></ProtectedRoute>} />
+                       <Route path="/crm/upgrade" element={<ProtectedRoute><Upgrade /></ProtectedRoute>} />
                       
                       {/* Product sub-pages */}
                       <Route path="/products/discover" element={<Discover />} />

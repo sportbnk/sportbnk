@@ -4,10 +4,20 @@ import { CrmSidebar } from '@/components/CrmSidebar';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
-import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Search, Bot, Menu } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Bot, Menu, User, LogOut, Settings, HelpCircle, Crown } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/components/auth/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Sheet,
   SheetContent,
@@ -25,6 +35,13 @@ interface CrmLayoutProps {
 const CrmLayout: React.FC<CrmLayoutProps> = ({ children, pageTitle }) => {
   const fullTitle = pageTitle ? `${pageTitle} | Sportbnk` : 'Sportbnk';
   const [aiChatOpen, setAiChatOpen] = useState(false);
+  const { signOut } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/');
+  };
 
   return (
     <ThemeProvider>
@@ -52,14 +69,36 @@ const CrmLayout: React.FC<CrmLayoutProps> = ({ children, pageTitle }) => {
                   {/* Theme Toggle */}
                   <ThemeToggle />
                   
-                  {/* Global Search */}
-                  <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                    <Input
-                      placeholder="Search anything..."
-                      className="pl-10 w-64 h-9 bg-background border-border shadow-sm text-sm"
-                    />
-                  </div>
+                  {/* Profile Dropdown */}
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className="relative h-9 w-9 rounded-full">
+                        <Avatar className="h-9 w-9">
+                          <AvatarFallback className="bg-accent text-accent-foreground font-semibold">
+                            J
+                          </AvatarFallback>
+                        </Avatar>
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-56" align="end" forceMount>
+                      <DropdownMenuItem onClick={() => navigate('/crm/profile')}>
+                        <User className="mr-2 h-4 w-4" />
+                        My Profile
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={handleSignOut}>
+                        <LogOut className="mr-2 h-4 w-4" />
+                        Log Out
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => navigate('/crm/integrations')}>
+                        <Settings className="mr-2 h-4 w-4" />
+                        Integrations
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => navigate('/crm/settings')}>
+                        <Settings className="mr-2 h-4 w-4" />
+                        Settings
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                   
                   {/* Ask Sportbnk AI Button */}
                   <Sheet open={aiChatOpen} onOpenChange={setAiChatOpen}>

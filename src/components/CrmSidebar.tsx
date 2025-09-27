@@ -7,7 +7,7 @@ import {
   List,
   User,
   Settings,
-  LogOut,
+  HelpCircle,
   Bot,
   FileText,
   Zap,
@@ -53,8 +53,8 @@ const pipelineNavItems = [
 ];
 
 const bottomNavItems = [
-  { title: 'My Profile', url: '/crm/profile', icon: User },
-  { title: 'Settings', url: '/crm/settings', icon: Settings },
+  { title: 'Help', url: '/crm/help', icon: HelpCircle },
+  { title: 'Upgrade', url: '/crm/upgrade', icon: Crown },
 ];
 
 export function CrmSidebar() {
@@ -206,20 +206,7 @@ export function CrmSidebar() {
         "border-t border-sidebar-border space-y-1",
         open ? "p-3" : "p-1"
       )}>
-        {/* Upgrade Button */}
-        <Button
-          variant="default"
-          size="sm"
-          className={cn(
-            "w-full font-medium bg-green-600 text-white hover:bg-green-700 mb-2",
-            open ? "justify-start gap-3" : "justify-center px-3 py-3"
-          )}
-        >
-          <Crown className="h-5 w-5" />
-          {open && <span>Upgrade</span>}
-        </Button>
-        
-        {/* Profile and Settings */}
+        {/* Help and Upgrade */}
         {bottomNavItems.map((item) => (
           <NavLink
             key={item.title}
@@ -236,20 +223,6 @@ export function CrmSidebar() {
             {open && <span className="text-sm">{item.title}</span>}
           </NavLink>
         ))}
-        
-        {/* Sign Out */}
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={handleSignOut}
-          className={cn(
-            "w-full font-medium text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-            open ? "justify-start gap-3" : "justify-center px-3 py-3"
-          )}
-        >
-          <LogOut className="h-5 w-5" />
-          {open && <span>Log Out</span>}
-        </Button>
       </div>
     </Sidebar>
   );
