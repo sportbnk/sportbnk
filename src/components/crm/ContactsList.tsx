@@ -15,9 +15,8 @@ import {
 } from "@/components/ui/table";
 import { Search, Users, Mail, Phone, Building2, Plus, Filter, Download, MapPin, Globe2, Eye, DollarSign } from "lucide-react";
 
-// Import People and Search components
+// Import People component
 import People from "@/pages/crm/People";
-import SearchPage from "@/pages/crm/Search";
 
 const ContactsList = () => {
   const [activeTab, setActiveTab] = useState("organizations");
@@ -46,7 +45,11 @@ const ContactsList = () => {
         </TabsList>
         
         <TabsContent value="organizations" className="mt-6">
-          <SearchPage />
+          <div className="text-center py-12">
+            <Building2 className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 mb-2">Organizations</h3>
+            <p className="text-gray-600">Organizations content will be displayed here</p>
+          </div>
         </TabsContent>
         
         <TabsContent value="people" className="mt-6">

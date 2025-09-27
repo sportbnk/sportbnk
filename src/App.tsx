@@ -39,9 +39,7 @@ import Organisations from "./pages/crm/Organisations";
 
 import SignalsPage from "./pages/crm/SignalsPage";
 import ICPs from "./pages/crm/ICPs";
-import Search from "./pages/crm/Search";
-import DiscoverOrganisations from "./pages/crm/discover/Organisations";
-import DiscoverPeople from "./pages/crm/discover/People";
+import Discover from "./pages/crm/Discover";
 import Integrations from "./pages/crm/Integrations";
 import Enrich from "./pages/crm/Enrich";
 import Tasks from "./pages/crm/Tasks";
@@ -51,7 +49,7 @@ import CrmLayout from "./components/CrmLayout";
 
 
 // Product pages
-import Discover from "./pages/products/Discover";
+import ProductDiscover from "./pages/products/Discover";
 import ProductEnrich from "./pages/products/Enrich";
 import ProductSignals from "./pages/products/Signals";
 import Api from "./pages/products/Api";
@@ -120,9 +118,7 @@ function App() {
                        
                        <Route path="/crm/my-contacts" element={<ProtectedRoute><CrmLayout pageTitle="My Contacts"><People /></CrmLayout></ProtectedRoute>} />
                        <Route path="/crm/my-organisations" element={<ProtectedRoute><CrmLayout pageTitle="My Lists"><Organisations /></CrmLayout></ProtectedRoute>} />
-                       <Route path="/crm/discover" element={<ProtectedRoute><CrmLayout pageTitle="Discover"><Search /></CrmLayout></ProtectedRoute>} />
-                       <Route path="/crm/discover/organisations" element={<ProtectedRoute><CrmLayout pageTitle="Discover Organisations"><DiscoverOrganisations /></CrmLayout></ProtectedRoute>} />
-                       <Route path="/crm/discover/people" element={<ProtectedRoute><CrmLayout pageTitle="Discover People"><DiscoverPeople /></CrmLayout></ProtectedRoute>} />
+                        <Route path="/crm/discover" element={<ProtectedRoute><CrmLayout pageTitle="Discover"><Discover /></CrmLayout></ProtectedRoute>} />
                         <Route path="/crm/my-organisations" element={<ProtectedRoute><CrmLayout pageTitle="My Organisations"><Organisations /></CrmLayout></ProtectedRoute>} />
                        <Route path="/crm/enrich" element={<ProtectedRoute><CrmLayout pageTitle="Data Enrichment"><Enrich /></CrmLayout></ProtectedRoute>} />
                        <Route path="/crm/tasks" element={<ProtectedRoute><CrmLayout pageTitle="Tasks"><Tasks /></CrmLayout></ProtectedRoute>} />
@@ -133,7 +129,7 @@ function App() {
                        <Route path="/crm/upgrade" element={<ProtectedRoute><Upgrade /></ProtectedRoute>} />
                       
                        {/* Product sub-pages */}
-                      <Route path="/products/discover" element={<Discover />} />
+                      <Route path="/products/discover" element={<ProductDiscover />} />
                       <Route path="/products/enrich" element={<ProductEnrich />} />
                       <Route path="/products/signals" element={<ProductSignals />} />
                       <Route path="/products/api" element={<Api />} />
