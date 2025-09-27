@@ -42,7 +42,7 @@ const Data = () => {
             </p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
+          <div className="space-y-12">
             <DataFeature 
               icon={<Database size={24} />}
               title="Data Collection"
