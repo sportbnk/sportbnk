@@ -984,6 +984,239 @@ const employeesData: Record<string, any[]> = {
       joinedDate: 'Aug 2019',
       isKeyContact: true
     }
+  ],
+  // Cricket Teams Employee Data
+  '21': [
+    {
+      id: 'c1',
+      name: 'Andy Hurry',
+      position: 'Chief Executive',
+      department: 'Executive',
+      email: 'a.hurry@somersetcricket.co.uk',
+      phone: '+44 1823 425 302',
+      linkedin: 'https://linkedin.com/in/andyhurry',
+      joinedDate: 'Mar 2018',
+      isKeyContact: true
+    },
+    {
+      id: 'c2',
+      name: 'Steve Pearce',
+      position: 'Commercial Manager',
+      department: 'Commercial',
+      email: 's.pearce@somersetcricket.co.uk',
+      phone: '+44 1823 425 303',
+      joinedDate: 'Jun 2020',
+      isKeyContact: true
+    },
+    {
+      id: 'c3',
+      name: 'Lewis McManus',
+      position: 'Marketing Director',
+      department: 'Marketing',
+      email: 'l.mcmanus@somersetcricket.co.uk',
+      phone: '+44 1823 425 304',
+      joinedDate: 'Jan 2021',
+      isKeyContact: false
+    }
+  ],
+  '22': [
+    {
+      id: 'c4',
+      name: 'Steve Elworthy',
+      position: 'Chief Executive',
+      department: 'Executive',
+      email: 's.elworthy@surreycricket.com',
+      phone: '+44 20 8643 8614',
+      linkedin: 'https://linkedin.com/in/steveelworthy',
+      joinedDate: 'Feb 2017',
+      isKeyContact: true
+    },
+    {
+      id: 'c5',
+      name: 'Oli Slipper',
+      position: 'Commercial Director',
+      department: 'Commercial',
+      email: 'o.slipper@surreycricket.com',
+      phone: '+44 20 8643 8615',
+      linkedin: 'https://linkedin.com/in/olislipper',
+      joinedDate: 'Aug 2019',
+      isKeyContact: true
+    },
+    {
+      id: 'c6',
+      name: 'Brian Murgatroyd',
+      position: 'Communications Manager',
+      department: 'Marketing',
+      email: 'b.murgatroyd@surreycricket.com',
+      phone: '+44 20 8643 8616',
+      joinedDate: 'May 2018',
+      isKeyContact: false
+    },
+    {
+      id: 'c7',
+      name: 'Richard Thompson',
+      position: 'Head of Partnerships',
+      department: 'Commercial',
+      email: 'r.thompson@surreycricket.com',
+      phone: '+44 20 8643 8617',
+      joinedDate: 'Nov 2020',
+      isKeyContact: true
+    }
+  ],
+  '23': [
+    {
+      id: 'c8',
+      name: 'Tim Tremlett',
+      position: 'Chief Executive',
+      department: 'Executive',
+      email: 't.tremlett@hampshirecricket.co.uk',
+      phone: '+44 23 8047 2003',
+      linkedin: 'https://linkedin.com/in/timtremlett',
+      joinedDate: 'Jan 2020',
+      isKeyContact: true
+    },
+    {
+      id: 'c9',
+      name: 'David Mann',
+      position: 'Commercial Director',
+      department: 'Commercial',
+      email: 'd.mann@hampshirecricket.co.uk',
+      phone: '+44 23 8047 2004',
+      joinedDate: 'Mar 2018',
+      isKeyContact: true
+    },
+    {
+      id: 'c10',
+      name: 'Tony Baker',
+      position: 'Operations Manager',
+      department: 'Operations',
+      email: 't.baker@hampshirecricket.co.uk',
+      phone: '+44 23 8047 2005',
+      joinedDate: 'Jul 2019',
+      isKeyContact: false
+    }
+  ],
+  '24': [
+    {
+      id: 'c11',
+      name: 'Andrew Cornish',
+      position: 'Chief Executive',
+      department: 'Executive',
+      email: 'a.cornish@middlesexccc.com',
+      phone: '+44 20 7289 1301',
+      linkedin: 'https://linkedin.com/in/andrewcornish',
+      joinedDate: 'Sep 2019',
+      isKeyContact: true
+    },
+    {
+      id: 'c12',
+      name: 'James Pipe',
+      position: 'Commercial Manager',
+      department: 'Commercial',
+      email: 'j.pipe@middlesexccc.com',
+      phone: '+44 20 7289 1302',
+      joinedDate: 'Feb 2021',
+      isKeyContact: true
+    },
+    {
+      id: 'c13',
+      name: 'Michael Vockins',
+      position: 'Marketing Director',
+      department: 'Marketing',
+      email: 'm.vockins@middlesexccc.com',
+      phone: '+44 20 7289 1303',
+      joinedDate: 'Oct 2020',
+      isKeyContact: false
+    }
+  ],
+  '25': [
+    {
+      id: 'c14',
+      name: 'Stuart Cain',
+      position: 'Chief Executive',
+      department: 'Executive',
+      email: 's.cain@warwickshireccc.com',
+      phone: '+44 121 446 4423',
+      linkedin: 'https://linkedin.com/in/stuartcain',
+      joinedDate: 'Apr 2017',
+      isKeyContact: true
+    },
+    {
+      id: 'c15',
+      name: 'Craig Flindall',
+      position: 'Commercial Director',
+      department: 'Commercial',
+      email: 'c.flindall@warwickshireccc.com',
+      phone: '+44 121 446 4424',
+      joinedDate: 'Jan 2019',
+      isKeyContact: true
+    },
+    {
+      id: 'c16',
+      name: 'Paul Farbrace',
+      position: 'Strategy & Operations',
+      department: 'Operations',
+      email: 'p.farbrace@warwickshireccc.com',
+      phone: '+44 121 446 4425',
+      linkedin: 'https://linkedin.com/in/paulfarbrace',
+      joinedDate: 'Jun 2021',
+      isKeyContact: false
+    }
+  ],
+  '26': [
+    {
+      id: 'c17',
+      name: 'Richard Gould',
+      position: 'Chief Executive',
+      department: 'Executive',
+      email: 'r.gould@ecb.co.uk',
+      phone: '+44 20 7432 1201',
+      linkedin: 'https://linkedin.com/in/richardgould',
+      joinedDate: 'Jan 2024',
+      isKeyContact: true
+    },
+    {
+      id: 'c18',
+      name: 'Vikram Banerjee',
+      position: 'Commercial Director',
+      department: 'Commercial',
+      email: 'v.banerjee@ecb.co.uk',
+      phone: '+44 20 7432 1202',
+      linkedin: 'https://linkedin.com/in/vikrambanerjee',
+      joinedDate: 'Sep 2021',
+      isKeyContact: true
+    },
+    {
+      id: 'c19',
+      name: 'Danny Reuben',
+      position: 'Head of Communications',
+      department: 'Marketing',
+      email: 'd.reuben@ecb.co.uk',
+      phone: '+44 20 7432 1203',
+      joinedDate: 'Mar 2020',
+      isKeyContact: false
+    },
+    {
+      id: 'c20',
+      name: 'Beth Barrett-Wild',
+      position: 'Strategy & Insights Director',
+      department: 'Operations',
+      email: 'b.barrett-wild@ecb.co.uk',
+      phone: '+44 20 7432 1204',
+      linkedin: 'https://linkedin.com/in/bethbarrettwild',
+      joinedDate: 'Nov 2019',
+      isKeyContact: true
+    },
+    {
+      id: 'c21',
+      name: 'David Mahoney',
+      position: 'Partnerships Director',
+      department: 'Commercial',
+      email: 'd.mahoney@ecb.co.uk',
+      phone: '+44 20 7432 1205',
+      joinedDate: 'Jul 2018',
+      isKeyContact: true
+    }
   ]
 };
 
