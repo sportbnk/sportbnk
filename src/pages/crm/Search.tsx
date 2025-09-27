@@ -646,7 +646,7 @@ const Discover = () => {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="all">All Sports</SelectItem>
-                      {sports.map((sport) => (
+                      {sports.filter(sport => sport.name.toLowerCase() !== 'rugby').map((sport) => (
                         <SelectItem key={sport.id} value={sport.id}>
                           {sport.name}
                         </SelectItem>
