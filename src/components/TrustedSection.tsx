@@ -1,6 +1,6 @@
 
 import { useEffect, useRef } from 'react';
-import { Shield, Users, Globe, Award } from 'lucide-react';
+import { Shield, Award, Activity } from 'lucide-react';
 
 const TrustedSection = () => {
   const contentRef = useRef<HTMLDivElement>(null);
@@ -30,18 +30,6 @@ const TrustedSection = () => {
 
   const stats = [
     {
-      icon: Users,
-      number: "750,000+",
-      label: "Sports Teams",
-      description: "Connected worldwide"
-    },
-    {
-      icon: Globe,
-      number: "3.5M+",
-      label: "Employees",
-      description: "In our database"
-    },
-    {
       icon: Shield,
       number: "99.9%",
       label: "Data Accuracy",
@@ -52,6 +40,12 @@ const TrustedSection = () => {
       number: "#1",
       label: "B2B Platform",
       description: "In sports intelligence"
+    },
+    {
+      icon: Activity,
+      number: "Real-Time",
+      label: "Signals",
+      description: "Opportunities tracked as they happen"
     }
   ];
 
@@ -72,7 +66,7 @@ const TrustedSection = () => {
         
         <div 
           ref={statsRef}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 animate-when-visible"
+          className="grid grid-cols-1 md:grid-cols-3 gap-8 animate-when-visible"
         >
           {stats.map((stat, index) => (
             <div 
