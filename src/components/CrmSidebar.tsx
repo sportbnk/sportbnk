@@ -94,13 +94,15 @@ export function CrmSidebar() {
       </div>
 
       <SidebarContent className="flex-1 py-4">
-        {/* Main Navigation */}
-        <SidebarGroup>
-          {open && (
-            <SidebarGroupLabel className="text-sidebar-foreground/70 font-medium px-6 mb-2">
+        {/* Main Section */}
+        {open && (
+          <div className="px-6 py-2">
+            <h3 className="text-sidebar-foreground font-semibold text-sm uppercase tracking-wide">
               Main
-            </SidebarGroupLabel>
-          )}
+            </h3>
+          </div>
+        )}
+        <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu className={cn(open ? "px-3" : "px-1")}>
               {mainNavItems.map((item) => (
@@ -110,14 +112,14 @@ export function CrmSidebar() {
                       to={item.url} 
                       className={({ isActive }) => cn(
                         "flex items-center rounded-lg transition-all duration-200 font-medium w-full",
-                        open ? "gap-3 px-3 py-3" : "justify-center px-3 py-3",
+                        open ? "gap-3 px-3 py-2.5" : "justify-center px-3 py-2.5",
                         isActive 
                           ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-soft" 
                           : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                       )}
                     >
-                      <item.icon className="h-5 w-5" />
-                      {open && <span>{item.title}</span>}
+                      <item.icon className="h-4 w-4" />
+                      {open && <span className="text-sm">{item.title}</span>}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -126,13 +128,15 @@ export function CrmSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        {/* Deals Navigation */}
-        <SidebarGroup>
-          {open && (
-            <SidebarGroupLabel className="text-sidebar-foreground/70 font-medium px-6 mb-2">
+        {/* Deals Section */}
+        {open && (
+          <div className="px-6 py-2 mt-4">
+            <h3 className="text-sidebar-foreground font-semibold text-sm uppercase tracking-wide">
               Deals
-            </SidebarGroupLabel>
-          )}
+            </h3>
+          </div>
+        )}
+        <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu className={cn(open ? "px-3" : "px-1")}>
               {dealsNavItems.map((item) => (
@@ -142,14 +146,14 @@ export function CrmSidebar() {
                       to={item.url} 
                       className={({ isActive }) => cn(
                         "flex items-center rounded-lg transition-all duration-200 font-medium w-full",
-                        open ? "gap-3 px-3 py-3" : "justify-center px-3 py-3",
+                        open ? "gap-3 px-3 py-2.5" : "justify-center px-3 py-2.5",
                         isActive 
                           ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-soft" 
                           : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                       )}
                     >
-                      <item.icon className="h-5 w-5" />
-                      {open && <span>{item.title}</span>}
+                      <item.icon className="h-4 w-4" />
+                      {open && <span className="text-sm">{item.title}</span>}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
