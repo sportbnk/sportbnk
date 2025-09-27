@@ -40,6 +40,8 @@ import Organisations from "./pages/crm/Organisations";
 import SignalsPage from "./pages/crm/SignalsPage";
 import ICPs from "./pages/crm/ICPs";
 import Search from "./pages/crm/Search";
+import DiscoverOrganisations from "./pages/crm/discover/Organisations";
+import DiscoverPeople from "./pages/crm/discover/People";
 import Integrations from "./pages/crm/Integrations";
 import Enrich from "./pages/crm/Enrich";
 import Tasks from "./pages/crm/Tasks";
@@ -117,10 +119,10 @@ function App() {
                        
                        
                        <Route path="/crm/my-contacts" element={<ProtectedRoute><CrmLayout pageTitle="My Contacts"><People /></CrmLayout></ProtectedRoute>} />
-                       
-                       <Route path="/crm/signals" element={<ProtectedRoute><CrmLayout pageTitle="Signals Feed"><SignalsPage /></CrmLayout></ProtectedRoute>} />
-                       <Route path="/crm/icps" element={<ProtectedRoute><CrmLayout pageTitle="My ICPs"><ICPs /></CrmLayout></ProtectedRoute>} />
-                        <Route path="/crm/discover" element={<ProtectedRoute><CrmLayout pageTitle="Discover"><Search /></CrmLayout></ProtectedRoute>} />
+                       <Route path="/crm/my-organisations" element={<ProtectedRoute><CrmLayout pageTitle="My Lists"><Organisations /></CrmLayout></ProtectedRoute>} />
+                       <Route path="/crm/discover" element={<ProtectedRoute><CrmLayout pageTitle="Discover"><Search /></CrmLayout></ProtectedRoute>} />
+                       <Route path="/crm/discover/organisations" element={<ProtectedRoute><CrmLayout pageTitle="Discover Organisations"><DiscoverOrganisations /></CrmLayout></ProtectedRoute>} />
+                       <Route path="/crm/discover/people" element={<ProtectedRoute><CrmLayout pageTitle="Discover People"><DiscoverPeople /></CrmLayout></ProtectedRoute>} />
                         <Route path="/crm/my-organisations" element={<ProtectedRoute><CrmLayout pageTitle="My Organisations"><Organisations /></CrmLayout></ProtectedRoute>} />
                        <Route path="/crm/enrich" element={<ProtectedRoute><CrmLayout pageTitle="Data Enrichment"><Enrich /></CrmLayout></ProtectedRoute>} />
                        <Route path="/crm/tasks" element={<ProtectedRoute><CrmLayout pageTitle="Tasks"><Tasks /></CrmLayout></ProtectedRoute>} />
