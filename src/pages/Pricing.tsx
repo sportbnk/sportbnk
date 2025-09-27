@@ -222,7 +222,7 @@ const Pricing = () => {
             <PricingCard 
               title="Standard Plan"
               price={formatPrice(49)}
-              annualPrice={formatPrice(isAnnual ? 470 : 49)}
+              annualPrice={formatPrice(isAnnual ? 750 : 49)}
               description="For small teams starting to target and sell in sport."
               features={standardFeatures}
               isAnnual={isAnnual}
@@ -232,7 +232,7 @@ const Pricing = () => {
             <PricingCard 
               title="Pro Plan"
               price={formatPrice(99)}
-              annualPrice={formatPrice(isAnnual ? 950 : 99)}
+              annualPrice={formatPrice(isAnnual ? 2500 : 99)}
               description="For growing teams who need deeper signals and integrations."
               features={proFeatures}
               highlighted={true}
