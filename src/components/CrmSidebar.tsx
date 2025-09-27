@@ -134,7 +134,7 @@ export function CrmSidebar() {
 
         {/* My Contacts Section */}
         {open && (
-          <div className="px-6 pt-3 pb-1">
+          <div className="px-6 pt-3 pb-[3px]">
             <h3 className="text-sidebar-foreground font-semibold text-sm uppercase tracking-wide">
               My Contacts
             </h3>
