@@ -5,7 +5,6 @@ import {
   Building2,
   Users,
   List,
-  Puzzle,
   User,
   Settings,
   LogOut,
@@ -36,7 +35,6 @@ const mainNavItems = [
   { title: 'My ICPs', url: '/crm/icps', icon: Target },
   { title: 'Contacts', url: '/crm/contacts', icon: Users },
   { title: 'Lists', url: '/crm/lists', icon: List },
-  { title: 'Integrations', url: '/crm/integrations', icon: Puzzle },
 ];
 
 const bottomNavItems = [

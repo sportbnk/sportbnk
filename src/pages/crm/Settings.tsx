@@ -14,10 +14,12 @@ import {
   Palette,
   Download,
   Trash2,
-  AlertTriangle
+  AlertTriangle,
+  Puzzle
 } from "lucide-react";
 import { useAuth } from "@/components/auth/AuthContext";
 import { toast } from "sonner";
+import IntegrationSettings from "@/components/settings/IntegrationSettings";
 
 const Settings = () => {
   const { user } = useAuth();
@@ -42,10 +44,11 @@ const Settings = () => {
       </div>
 
       <Tabs defaultValue="general" className="w-full">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="general">General</TabsTrigger>
           <TabsTrigger value="notifications">Notifications</TabsTrigger>
           <TabsTrigger value="security">Security</TabsTrigger>
+          <TabsTrigger value="integrations">Integrations</TabsTrigger>
           <TabsTrigger value="data">Data</TabsTrigger>
         </TabsList>
 
@@ -184,6 +187,23 @@ const Settings = () => {
                 />
                 <p className="text-sm text-gray-600">Email changes require verification</p>
               </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="integrations" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Puzzle className="h-5 w-5" />
+                Integrations & API Access
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-gray-600 mb-4">
+                Connect Sportbnk with your favorite tools and services to streamline your workflow.
+              </p>
+              <IntegrationSettings />
             </CardContent>
           </Card>
         </TabsContent>
