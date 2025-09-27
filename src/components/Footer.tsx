@@ -8,7 +8,7 @@ const Footer = () => {
   return (
     <footer className="bg-white py-12 border-t">
       <div className="container mx-auto px-4 md:px-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-8 mb-12">
           <div>
             <Link to="/" className="flex items-center mb-4">
               <img 
@@ -23,12 +23,11 @@ const Footer = () => {
           </div>
           
           <div>
-            <h3 className="font-semibold text-sportbnk-navy mb-4">Links</h3>
+            <h3 className="font-semibold text-sportbnk-navy mb-4">Products</h3>
             <ul className="space-y-2">
+              <li><Link to="/products/signals" className="text-gray-600 hover:text-sportbnk-green transition-colors">Signals</Link></li>
               <li><Link to="/products/discover" className="text-gray-600 hover:text-sportbnk-green transition-colors">Discover</Link></li>
-              <li><Link to="/products/boost" className="text-gray-600 hover:text-sportbnk-green transition-colors">Boost</Link></li>
-              <li><Link to="/products/recruit" className="text-gray-600 hover:text-sportbnk-green transition-colors">Recruit</Link></li>
-              <li><Link to="/products/api" className="text-gray-600 hover:text-sportbnk-green transition-colors">API</Link></li>
+              <li><Link to="/products/enrich" className="text-gray-600 hover:text-sportbnk-green transition-colors">Enrich</Link></li>
               <li><Link to="/data" className="text-gray-600 hover:text-sportbnk-green transition-colors">Data</Link></li>
               <li><Link to="/company" className="text-gray-600 hover:text-sportbnk-green transition-colors">Company</Link></li>
               <li><Link to="/pricing" className="text-gray-600 hover:text-sportbnk-green transition-colors">Pricing</Link></li>
@@ -36,11 +35,20 @@ const Footer = () => {
           </div>
           
           <div>
+            <h3 className="font-semibold text-sportbnk-navy mb-4">Cases</h3>
+            <ul className="space-y-2">
+              <li><Link to="/cases/sales" className="text-gray-600 hover:text-sportbnk-green transition-colors">Sales</Link></li>
+              <li><Link to="/cases/marketing" className="text-gray-600 hover:text-sportbnk-green transition-colors">Marketing</Link></li>
+              <li><Link to="/cases/hiring" className="text-gray-600 hover:text-sportbnk-green transition-colors">Hiring</Link></li>
+            </ul>
+          </div>
+          
+          <div>
             <h3 className="font-semibold text-sportbnk-navy mb-4">Resources</h3>
             <ul className="space-y-2">
               <li><Link to="/resources/startups" className="text-gray-600 hover:text-sportbnk-green transition-colors">Sportbnk for Startups</Link></li>
-              <li><Link to="/resources/community" className="text-gray-600 hover:text-sportbnk-green transition-colors">Community</Link></li>
               <li><Link to="/resources/help-center" className="text-gray-600 hover:text-sportbnk-green transition-colors">Help Center</Link></li>
+              <li><Link to="/resources/partnership" className="text-gray-600 hover:text-sportbnk-green transition-colors">Partner with Us</Link></li>
               <li><Link to="/contact" className="text-gray-600 hover:text-sportbnk-green transition-colors">Contact</Link></li>
             </ul>
           </div>
