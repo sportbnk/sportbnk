@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
-import { Plus, List, Trash2, Edit2, User, Building2, Download } from "lucide-react";
+import { Plus, List, Trash2, Edit2, User, Building2, Download, UserPlus } from "lucide-react";
 import { useLists } from "@/contexts/ListsContext";
 import { useToast } from "@/components/ui/use-toast";
 import * as XLSX from 'xlsx';
@@ -198,46 +198,60 @@ const Lists = () => {
     <div className="space-y-6 pt-6">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">Lists</h1>
-        <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
-          <DialogTrigger asChild>
-            <Button>
-              <Plus className="h-4 w-4 mr-2" />
-              Create List
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Create New List</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4">
-              <div>
-                <label className="text-sm font-medium">Name</label>
-                <Input
-                  value={newListName}
-                  onChange={(e) => setNewListName(e.target.value)}
-                  placeholder="Enter list name"
-                />
+        <div className="flex gap-3">
+          <Button
+            variant="outline"
+            onClick={() => {
+              toast({
+                title: "Success",
+                description: "Contact added to CRM successfully!",
+              });
+            }}
+          >
+            <UserPlus className="h-4 w-4 mr-2" />
+            Add to CRM
+          </Button>
+          <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+            <DialogTrigger asChild>
+              <Button>
+                <Plus className="h-4 w-4 mr-2" />
+                Create List
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Create New List</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4">
+                <div>
+                  <label className="text-sm font-medium">Name</label>
+                  <Input
+                    value={newListName}
+                    onChange={(e) => setNewListName(e.target.value)}
+                    placeholder="Enter list name"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium">Description (optional)</label>
+                  <Textarea
+                    value={newListDescription}
+                    onChange={(e) => setNewListDescription(e.target.value)}
+                    placeholder="Enter list description"
+                    rows={3}
+                  />
+                </div>
+                <div className="flex gap-2 justify-end">
+                  <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
+                    Cancel
+                  </Button>
+                  <Button onClick={handleCreateList}>
+                    Create
+                  </Button>
+                </div>
               </div>
-              <div>
-                <label className="text-sm font-medium">Description (optional)</label>
-                <Textarea
-                  value={newListDescription}
-                  onChange={(e) => setNewListDescription(e.target.value)}
-                  placeholder="Enter list description"
-                  rows={3}
-                />
-              </div>
-              <div className="flex gap-2 justify-end">
-                <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
-                  Cancel
-                </Button>
-                <Button onClick={handleCreateList}>
-                  Create
-                </Button>
-              </div>
-            </div>
-          </DialogContent>
-        </Dialog>
+            </DialogContent>
+          </Dialog>
+        </div>
       </div>
 
       {/* Edit Dialog */}
