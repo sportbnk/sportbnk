@@ -16,12 +16,9 @@ import {
   ExternalLink,
   Globe,
   Mail,
-  Phone,
-  Sparkles,
-  Loader2
+  Phone
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
 
 interface Organisation {
   id: string;
@@ -328,7 +325,6 @@ const Organisations = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedOrganisations, setSelectedOrganisations] = useState<string[]>([]);
   const [organisations, setOrganisations] = useState<Organisation[]>(mockOrganisations);
-  const [isClassifying, setIsClassifying] = useState(false);
 
   const filteredOrganisations = organisations.filter(org =>
     org.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -428,58 +424,6 @@ const Organisations = () => {
     return <Building2 className="h-6 w-6 text-blue-600" />;
   };
 
-  const classifyAllSports = async () => {
-    setIsClassifying(true);
-    const updatedOrganisations = [...organisations];
-    
-    try {
-      for (let i = 0; i < updatedOrganisations.length; i++) {
-        const org = updatedOrganisations[i];
-        
-        try {
-          const { data, error } = await supabase.functions.invoke('classify-sport', {
-            body: {
-              organizationName: org.name,
-              type: org.type,
-              league: org.league,
-              location: org.location
-            }
-          });
-
-          if (error) {
-            console.error('Error classifying sport for', org.name, error);
-            continue;
-          }
-
-          if (data?.sport) {
-            updatedOrganisations[i] = {
-              ...org,
-              sport: data.sport,
-              type: data.sport === 'Cricket' ? 'Cricket Club' : 'Football Club'
-            };
-          }
-        } catch (err) {
-          console.error('Error classifying sport for', org.name, err);
-        }
-      }
-      
-      setOrganisations(updatedOrganisations);
-      toast({
-        title: "Classification Complete",
-        description: "All organizations have been classified using AI!",
-      });
-    } catch (error) {
-      console.error('Error during classification:', error);
-      toast({
-        title: "Classification Error",
-        description: "There was an error classifying the organizations.",
-        variant: "destructive"
-      });
-    } finally {
-      setIsClassifying(false);
-    }
-  };
-
   return (
     <div className="min-h-screen bg-gray-50 p-6" style={{ fontFamily: 'Poppins, sans-serif' }}>
       <div className="max-w-7xl mx-auto">
@@ -490,19 +434,6 @@ const Organisations = () => {
             <p className="text-gray-600 mt-1">Build and manage your organisation lists</p>
           </div>
           <div className="flex items-center gap-3">
-            <Button 
-              onClick={classifyAllSports}
-              disabled={isClassifying}
-              variant="secondary"
-              className="bg-purple-600 hover:bg-purple-700 text-white"
-            >
-              {isClassifying ? (
-                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              ) : (
-                <Sparkles className="h-4 w-4 mr-2" />
-              )}
-              {isClassifying ? 'Classifying...' : 'AI Classify Sports'}
-            </Button>
             <Button 
               onClick={handleAddToCRM}
               disabled={selectedOrganisations.length === 0}
