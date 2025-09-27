@@ -22,6 +22,28 @@ import {
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
+// Import team logos
+import arsenalLogo from "@/assets/team-logos/arsenal.png";
+import chelseaLogo from "@/assets/team-logos/chelsea.png";
+import liverpoolLogo from "@/assets/team-logos/liverpool.png";
+import manchesterUnitedLogo from "@/assets/team-logos/manchester-united.png";
+import manchesterCityLogo from "@/assets/team-logos/manchester-city.png";
+import tottenhamLogo from "@/assets/team-logos/tottenham.png";
+import newcastleLogo from "@/assets/team-logos/newcastle.png";
+import astonVillaLogo from "@/assets/team-logos/aston-villa.png";
+import bournemouthLogo from "@/assets/team-logos/bournemouth.png";
+import brentfordLogo from "@/assets/team-logos/brentford.png";
+import brightonLogo from "@/assets/team-logos/brighton.png";
+import crystalPalaceLogo from "@/assets/team-logos/crystal-palace.png";
+import evertonLogo from "@/assets/team-logos/everton.png";
+import fulhamLogo from "@/assets/team-logos/fulham.png";
+import ipswichLogo from "@/assets/team-logos/ipswich-town.png";
+import leicesterLogo from "@/assets/team-logos/leicester.png";
+import nottinghamForestLogo from "@/assets/team-logos/nottingham-forest.png";
+import southamptonLogo from "@/assets/team-logos/west-ham.png"; // Using as placeholder
+import westHamLogo from "@/assets/team-logos/west-ham.png";
+import wolvesLogo from "@/assets/team-logos/wolves.png";
+
 interface Organisation {
   id: string;
   name: string;
@@ -446,6 +468,32 @@ const mockPeople: Person[] = [
   }
 ];
 
+const getTeamLogo = (teamName: string) => {
+  const logoMap: Record<string, string> = {
+    'Arsenal FC': arsenalLogo,
+    'Chelsea FC': chelseaLogo,
+    'Liverpool FC': liverpoolLogo,
+    'Manchester United FC': manchesterUnitedLogo,
+    'Manchester City FC': manchesterCityLogo,
+    'Tottenham Hotspur FC': tottenhamLogo,
+    'Newcastle United FC': newcastleLogo,
+    'Aston Villa FC': astonVillaLogo,
+    'AFC Bournemouth': bournemouthLogo,
+    'Brentford FC': brentfordLogo,
+    'Brighton & Hove Albion FC': brightonLogo,
+    'Crystal Palace FC': crystalPalaceLogo,
+    'Everton FC': evertonLogo,
+    'Fulham FC': fulhamLogo,
+    'Ipswich Town FC': ipswichLogo,
+    'Leicester City FC': leicesterLogo,
+    'Nottingham Forest FC': nottinghamForestLogo,
+    'Southampton FC': southamptonLogo,
+    'West Ham United FC': westHamLogo,
+    'Wolverhampton Wanderers FC': wolvesLogo
+  };
+  return logoMap[teamName] || arsenalLogo;
+};
+
 const Discover = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -655,11 +703,15 @@ const Discover = () => {
                             onCheckedChange={() => handleSelectOrganisation(org.id)}
                           />
                         </TableCell>
-                        <TableCell>
-                          <div className="flex items-center gap-3">
-                            <div className="flex items-center justify-center w-8 h-8 rounded bg-gray-100">
-                              <Building2 className="h-4 w-4 text-blue-600" />
-                            </div>
+                         <TableCell>
+                           <div className="flex items-center gap-3">
+                             <div className="flex items-center justify-center w-10 h-10 rounded-lg overflow-hidden border border-gray-200 bg-white">
+                               <img 
+                                 src={getTeamLogo(org.name)} 
+                                 alt={`${org.name} logo`}
+                                 className="w-8 h-8 object-contain"
+                               />
+                             </div>
                              <div>
                                <button 
                                  onClick={() => navigate(`/crm/discover/organisation/${org.id}`)}
