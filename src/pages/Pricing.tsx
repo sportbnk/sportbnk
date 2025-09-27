@@ -109,47 +109,38 @@ const Pricing = () => {
   };
 
   const freeTrialFeatures = [
-    "Access to Discover tool (basic filters)",
-    "Limited data enrichment with Enrich",
-    "5 searches per day",
-    "Export up to 50 contacts per month",
+    "Define 1 ICP (ideal customer profile)",
+    "Basic Discover filters",
+    "3 intent searches per day",
+    "Export up to 25 contacts per month",
     "Email support",
     "14-day access"
   ];
 
   const standardFeatures = [
-    "Full access to Discover tool (all filters)",
-    "Enrich tool for deeper contact insights",
-    "Unlimited searches",
-    "Export up to 1,000 contacts per month",
-    "CRM integration (HubSpot, Salesforce, Pipedrive)",
-    "Real-time Signals (basic tier)",
-    "Email + chat support",
-    "Cancel anytime"
+    "Define up to 3 ICPs",
+    "All Discover filters",
+    "10 intent searches per day",
+    "Export up to 250 contacts per month",
+    "Basic Signals (hiring + sponsorship)",
+    "Email + chat support"
   ];
 
   const proFeatures = [
-    "All Standard features",
-    "Export up to 5,000 contacts per month",
-    "Advanced analytics dashboard",
-    "Real-time Signals (premium tier: tenders, hiring, sponsorships, funding)",
-    "API access for integrations",
-    "Team collaboration tools",
-    "Custom training sessions",
-    "Priority support response",
-    "Dedicated account manager"
+    "Define up to 10 ICPs",
+    "25 intent searches per day",
+    "Export up to 1,000 contacts per month",
+    "Advanced Signals (tenders, grants, procurement, funding)",
+    "CRM integrations (HubSpot, Salesforce, Pipedrive)",
+    "Priority support"
   ];
 
   const enterpriseFeatures = [
-    "All Pro features",
-    "Unlimited data exports",
-    "Custom data models and integrations",
-    "Advanced security & compliance features",
-    "SLA guarantees",
-    "Dedicated enterprise support team",
-    "White-label options",
-    "Priority feature development",
-    "Strategic onboarding + custom training programme"
+    "Unlimited ICPs",
+    "Unlimited searches + exports",
+    "Custom data integrations",
+    "Dedicated account manager",
+    "Advanced security + compliance"
   ];
 
   const boltOns = [
@@ -220,7 +211,7 @@ const Pricing = () => {
             <PricingCard 
               title="Free Trial"
               price={formatPrice(0)}
-              description="Explore Sportbnk with limited access — no credit card required"
+              description="Try Sportbnk with limited features — no credit card required."
               features={freeTrialFeatures}
               isFree={true}
               isAnnual={isAnnual}
@@ -232,7 +223,7 @@ const Pricing = () => {
               title="Standard Plan"
               price={formatPrice(49)}
               annualPrice={formatPrice(isAnnual ? 470 : 49)}
-              description="Everything you need to start selling smarter in sport"
+              description="For small teams starting to target and sell in sport."
               features={standardFeatures}
               isAnnual={isAnnual}
               buttonText="Get Started"
@@ -242,7 +233,7 @@ const Pricing = () => {
               title="Pro Plan"
               price={formatPrice(99)}
               annualPrice={formatPrice(isAnnual ? 950 : 99)}
-              description="Advanced features and intelligence for growing teams"
+              description="For growing teams who need deeper signals and integrations."
               features={proFeatures}
               highlighted={true}
               isAnnual={isAnnual}
@@ -253,7 +244,7 @@ const Pricing = () => {
               title="Enterprise"
               price="Custom Pricing"
               period=""
-              description="Tailored solutions for large organisations with custom requirements"
+              description="For organisations with complex needs."
               features={enterpriseFeatures}
               isEnterprise={true}
               isAnnual={isAnnual}
