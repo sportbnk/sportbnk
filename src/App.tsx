@@ -122,7 +122,9 @@ function App() {
                          <Route path="/crm/discover" element={<ProtectedRoute><CrmLayout pageTitle="Discover"><Discover /></CrmLayout></ProtectedRoute>} />
                          <Route path="/crm/discover/organisation/:id" element={<ProtectedRoute><CrmLayout pageTitle="Organisation Details"><OrganisationDetail /></CrmLayout></ProtectedRoute>} />
                         <Route path="/crm/my-organisations" element={<ProtectedRoute><CrmLayout pageTitle="My Organisations"><Organisations /></CrmLayout></ProtectedRoute>} />
-                       <Route path="/crm/enrich" element={<ProtectedRoute><CrmLayout pageTitle="Data Enrichment"><Enrich /></CrmLayout></ProtectedRoute>} />
+                        <Route path="/crm/icps" element={<ProtectedRoute><CrmLayout pageTitle="My ICPs"><ICPs /></CrmLayout></ProtectedRoute>} />
+                        <Route path="/crm/signals" element={<ProtectedRoute><CrmLayout pageTitle="Signals Feed"><SignalsPage /></CrmLayout></ProtectedRoute>} />
+                        <Route path="/crm/enrich" element={<ProtectedRoute><CrmLayout pageTitle="Data Enrichment"><Enrich /></CrmLayout></ProtectedRoute>} />
                        <Route path="/crm/tasks" element={<ProtectedRoute><CrmLayout pageTitle="Tasks"><Tasks /></CrmLayout></ProtectedRoute>} />
                        <Route path="/crm/meetings" element={<ProtectedRoute><CrmLayout pageTitle="Meetings"><Meetings /></CrmLayout></ProtectedRoute>} />
                        <Route path="/crm/emails" element={<ProtectedRoute><CrmLayout pageTitle="Emails"><Emails /></CrmLayout></ProtectedRoute>} />
