@@ -291,18 +291,13 @@ const Signals = () => {
 
   return (
     <div className="min-h-screen bg-gray-50" style={{ fontFamily: 'Poppins, sans-serif' }}>
-      {/* Header Bar */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-50">
-        <div className="px-6 py-4 flex items-center justify-between">
-          {/* Logo */}
-          <div className="flex items-center gap-3">
-            <div className="text-2xl font-bold" style={{ color: '#0b1a51' }}>
-              Sportbnk
-            </div>
-          </div>
-
+      {/* Filters Row */}
+      <div className="bg-white border-b border-gray-200 px-6 py-4">
+        <div className="flex gap-4 items-center">
+          <span className="text-sm font-medium text-gray-700 whitespace-nowrap">Filter by:</span>
+          
           {/* Search Bar */}
-          <div className="flex-1 max-w-md mx-8">
+          <div className="flex-1 max-w-md">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
               <Input
@@ -326,7 +321,7 @@ const Signals = () => {
       {/* Filters Row */}
       <div className="bg-white border-b border-gray-200 px-6 py-4">
         <div className="flex gap-4 items-center">
-          <span className="text-sm font-medium text-gray-700 whitespace-nowrap">Filter by:</span>
+          <span className="text-sm font-medium text-gray-700 whitespace-nowrap">Types:</span>
           
           <Select value={selectedSport} onValueChange={setSelectedSport}>
             <SelectTrigger className="w-40">
