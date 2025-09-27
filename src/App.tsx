@@ -69,7 +69,7 @@ import ScottMcKecknieArticle from "./pages/company/ScottMcKecknieArticle";
 import Startups from "./pages/resources/Startups";
 
 import SportBnkVsSportBankArticle from "./pages/resources/SportBnkVsSportBankArticle";
-import Community from "./pages/resources/Community";
+
 import HelpCenter from "./pages/resources/HelpCenter";
 
 // Legal pages
@@ -150,7 +150,7 @@ function App() {
                       <Route path="/resources/startups" element={<Startups />} />
                       
                       <Route path="/resources/articles/sportbnk-vs-sportbank" element={<SportBnkVsSportBankArticle />} />
-                      <Route path="/resources/community" element={<Community />} />
+                      
                       <Route path="/resources/help-center" element={<HelpCenter />} />
                       
                       {/* Legal pages */}
