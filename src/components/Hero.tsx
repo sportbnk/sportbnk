@@ -41,13 +41,13 @@ const Hero = () => {
             </div>
             
             <h1 className={`text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-tight transition-all duration-700 delay-100 text-sportbnk-navy ${isVisible ? 'opacity-100' : 'opacity-0 translate-y-8'}`}>
-              We connect you with 
-              <span className="bg-gradient-to-r from-sportbnk-green to-teal-400 bg-clip-text text-transparent"> the right people to grow your business in sports</span>
+              We use AI to connect you with 
+              <span className="bg-gradient-to-r from-sportbnk-green to-teal-400 bg-clip-text text-transparent"> the right signals to grow your business in sports</span>
             </h1>
             
             {/* Subheading - Updated */}
             <p className={`text-xl text-gray-600 transition-all duration-700 delay-200 ${isVisible ? 'opacity-100' : 'opacity-0 translate-y-8'}`}>
-              Expand your business with Sportbnk today:
+              Expand your business with Sportbnk today.
             </p>
             
             <div className={`flex flex-col gap-4 max-w-sm transition-all duration-700 delay-300 ${isVisible ? 'opacity-100' : 'opacity-0 translate-y-8'}`}>
