@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Search, User, X, Mail, Phone, Linkedin } from "lucide-react";
+import { toast } from "sonner";
 
 // Import team logos
 import arsenalLogo from "@/assets/team-logos/arsenal.png";
@@ -575,6 +576,16 @@ const Signals = () => {
                       </Button>
                       <Button variant="outline" size="sm" className="flex-1 text-xs">
                         Add to List
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="flex-1 text-xs"
+                        onClick={() => {
+                          toast.success(`${contact.name} added to CRM`);
+                        }}
+                      >
+                        Add to CRM
                       </Button>
                     </div>
                   </CardContent>
