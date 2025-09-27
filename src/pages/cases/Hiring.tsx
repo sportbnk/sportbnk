@@ -2,6 +2,7 @@ import PageLayout from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
 import { Users } from "lucide-react";
 import { WaitlistDialog } from "@/components/WaitlistDialog";
+import hiringSearchImage from "@/assets/hiring-employee-search.jpg";
 
 const Hiring = () => {
   return (
@@ -32,8 +33,8 @@ const Hiring = () => {
             </div>
             <div>
               <img 
-                src="/lovable-uploads/c506ab85-1e88-47f8-941f-cb182443bf55.png" 
-                alt="Hiring with Sportbnk" 
+                src={hiringSearchImage} 
+                alt="Employee search interface showing sports industry professionals with names, roles, teams and contact details" 
                 className="rounded-lg shadow-lg"
               />
             </div>
